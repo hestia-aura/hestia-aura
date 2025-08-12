@@ -24,11 +24,11 @@ a{color:#fff}
   border-bottom:1px solid rgba(255,255,255,.06);
 }
 .header-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700}
-.brand .brand-mark{width:32px;height:32px;border-radius:6px;display:block;object-fit:cover;filter:invert(0)}
-.brand .brand-name{letter-spacing:.3px;color:#fff}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700}
-.brand .brand-mark{width:28px;height:28px;border-radius:6px;display:block;background:#fff;object-fit:cover}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;text-decoration:none;color:#fff}
+.brand .brand-mark{
+  width:32px;height:32px;border-radius:8px;display:block;object-fit:contain;background:#fff;
+  padding:3px;border:1px solid rgba(255,255,255,.12);filter:drop-shadow(0 2px 6px rgba(0,0,0,.25));
+}
 .brand .brand-name{letter-spacing:.3px;color:#fff}
 .nav a{margin:0 8px;color:#e5e7eb;text-decoration:none;font-size:14px}
 .nav .btn--sm{padding:8px 12px;border:1px solid rgba(255,255,255,.14);border-radius:10px}
@@ -46,28 +46,24 @@ a{color:#fff}
 .orb-1{width:180px;height:180px;background:#6366f1;top:20px;left:10px}
 .orb-2{width:120px;height:120px;background:#22d3ee;bottom:10px;right:40px}
 .orb-3{width:80px;height:80px;background:#f472b6;bottom:80px;left:60px;opacity:.5}
+
 /* Carte flottante uniquement dans le hero */
-.hero .card{
-  position:absolute; right:10px; top:20px; background:#0f1117;
-  border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:16px;
-  box-shadow:0 8px 30px rgba(0,0,0,.4); width:300px;
+.kpi-floating{
+  position:absolute;right:10px;top:20px;background:#0f1117;
+  border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px;
+  box-shadow:0 8px 30px rgba(0,0,0,.4);width:300px
 }
 
 /* Style générique des cartes des sections */
-.card{ background:#0f1117; border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:18px; }
-
-.card-kpi{display:flex;align-items:center;justify-content:space-between;margin:6px 0}
-.kpi-label{color:#cbd5e1;font-size:12px}
-.kpi-value{font-weight:700}
+.card{background:#0f1117;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px}
+.card h3{margin:0 0 6px;font-size:18px}
+.card p{margin:0;color:#d1d5db}
 
 .section{padding:64px 0}
 .section.alt{background:#0f1117}
 .section-title{font-size:28px;margin:0 0 24px}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 @media (max-width:900px){.cards{grid-template-columns:1fr}}
-.card{background:#0f1117;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px}
-.card h3{margin:0 0 6px;font-size:18px}
-.card p{margin:0;color:#d1d5db}
 
 .timeline{list-style:none;margin:0;padding:0;display:grid;gap:16px}
 .timeline li{display:flex;gap:12px;align-items:flex-start}

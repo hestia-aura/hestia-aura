@@ -1,32 +1,27 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <div class="brand">
-  <img src="/assets/logo.jpg?v=3" alt="Hestia Aura" class="brand-mark">
-  <span class="brand-name">Hestia <strong>Aura</strong></span>
-</div>
-
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hestia Aura — IA, Automatisation & Data</title>
-  <meta name="description" content="Hestia Aura — intégration IA, automatisation de processus et management des données. Porté par Jérôme Jeannin.">
-<link rel="icon" href="/assets/favicon.ico" sizes="16x16 32x32 48x48">
-<link rel="icon" type="image/png" href="/assets/logo-32.png" sizes="32x32">
-<link rel="icon" type="image/png" href="/assets/logo-192.png" sizes="192x192">
-<link rel="apple-touch-icon" href="/assets/logo-180.png">
+  <meta name="description" content="Hestia Aura — intégration IA, automatisation et management des données.">
+  <!-- Favicons -->
+  <link rel="icon" href="/assets/favicon.ico?v=4" sizes="16x16 32x32 48x48">
+  <link rel="icon" type="image/png" href="/assets/logo-32.png?v=4" sizes="32x32">
+  <link rel="icon" type="image/png" href="/assets/logo-192.png?v=4" sizes="192x192">
+  <link rel="apple-touch-icon" href="/assets/logo-180.png?v=4">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/styles.css?v=4">
 </head>
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <div class="brand">
-        <img src="/assets/logo.jpg" alt="Hestia Aura" class="brand-mark"
-             onerror="this.style.display='none';document.getElementById('brand-text').style.display='inline'">
-        <span id="brand-text" class="brand-name" style="display:none;">Hestia <strong>Aura</strong></span>
-      </div>
+      <a class="brand" href="#top" aria-label="Hestia Aura">
+        <img src="/assets/logo.jpg?v=4" alt="Hestia Aura" class="brand-mark">
+        <span class="brand-name">Hestia <strong>Aura</strong></span>
+      </a>
       <nav class="nav">
         <a href="#expertises">Expertises</a>
         <a href="#demos">Démos</a>
@@ -37,7 +32,8 @@
     </div>
   </header>
 
-  <main>
+  <main id="top">
+    <!-- HERO -->
     <section class="hero">
       <div class="container grid-2">
         <div class="hero-copy reveal">
@@ -57,7 +53,7 @@
           <div class="orb orb-1"></div>
           <div class="orb orb-2"></div>
           <div class="orb orb-3"></div>
-          <div class="card">
+          <div class="card kpi-floating">
             <div class="card-kpi">
               <span class="kpi-label">Heures gagnées / mois</span>
               <span class="kpi-value">+72</span>
@@ -75,6 +71,7 @@
       </div>
     </section>
 
+    <!-- EXPERTISES -->
     <section id="expertises" class="section">
       <div class="container">
         <h2 class="section-title reveal">Ce que je fais</h2>
@@ -95,6 +92,7 @@
       </div>
     </section>
 
+    <!-- DEMOS -->
     <section id="demos" class="section alt">
       <div class="container">
         <h2 class="section-title reveal">Mini-démos (bientôt interactives)</h2>
@@ -115,6 +113,7 @@
       </div>
     </section>
 
+    <!-- PROCESS -->
     <section id="process" class="section">
       <div class="container">
         <h2 class="section-title reveal">Process simple</h2>
@@ -135,6 +134,7 @@
       </div>
     </section>
 
+    <!-- OFFRES -->
     <section id="offres" class="section alt">
       <div class="container">
         <h2 class="section-title reveal">Offres</h2>
@@ -155,6 +155,7 @@
       </div>
     </section>
 
+    <!-- CONTACT -->
     <section id="contact" class="section">
       <div class="container grid-2">
         <div class="reveal">
@@ -180,10 +181,6 @@
     </div>
   </footer>
 
-  <script src="/app.js"></script>
+  <script src="/app.js?v=4"></script>
 </body>
-  <link rel="stylesheet" href="/styles.css?v=3">
-<script src="/app.js?v=3"></script>
-<img src="/assets/logo.jpg?v=3" class="brand-mark" alt="Hestia Aura">
-
 </html>
