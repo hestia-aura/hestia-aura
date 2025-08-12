@@ -43,7 +43,16 @@ a{color:#fff}
 .orb-1{width:180px;height:180px;background:#6366f1;top:20px;left:10px}
 .orb-2{width:120px;height:120px;background:#22d3ee;bottom:10px;right:40px}
 .orb-3{width:80px;height:80px;background:#f472b6;bottom:80px;left:60px;opacity:.5}
-.card{position:absolute;right:10px;top:20px;background:#0f1117;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px;box-shadow:0 8px 30px rgba(0,0,0,.4);width:300px}
+/* Carte flottante uniquement dans le hero */
+.hero .card{
+  position:absolute; right:10px; top:20px; background:#0f1117;
+  border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:16px;
+  box-shadow:0 8px 30px rgba(0,0,0,.4); width:300px;
+}
+
+/* Style générique des cartes des sections */
+.card{ background:#0f1117; border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:18px; }
+
 .card-kpi{display:flex;align-items:center;justify-content:space-between;margin:6px 0}
 .kpi-label{color:#cbd5e1;font-size:12px}
 .kpi-value{font-weight:700}
