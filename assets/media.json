@@ -1,0 +1,20 @@
+[
+  {
+    "type": "image",
+    "src": "/assets/media/sample1.jpg",
+    "title": "Génération d'image IA",
+    "desc": "Exemple de rendu visuel (remplacez par vos images)."
+  },
+  {
+    "type": "image",
+    "src": "/assets/media/sample2.jpg",
+    "title": "Dashboard Power BI",
+    "desc": "Illustration de reporting (placeholder)."
+  },
+  {
+    "type": "image",
+    "src": "/assets/media/sample3.jpg",
+    "title": "OCR de factures",
+    "desc": "Capture d'écran d'un flux d'extraction (placeholder)."
+  }
+]
