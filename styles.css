@@ -44,3 +44,5 @@ a{color:#fff;text-decoration:none}.container{max-width:1080px;margin:0 auto;padd
 @keyframes arrowBounce{0%{transform:translate(-0,-0) rotate(45deg)}
   50%{transform:translate(0,8px) rotate(45deg)}100%{transform:translate(0,0) rotate(45deg)}}
 @media (prefers-reduced-motion: reduce){ .intro-video{display:none} }
+/* Empêche le scroll de passer au dessous pendant l'intro */
+.intro { overscroll-behavior: contain; touch-action: none; }
