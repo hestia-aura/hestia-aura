@@ -66,38 +66,73 @@
     <p>French born in Paris. Passionate about new technologies, I’m detail-oriented and obsessed with smooth workflows: spot repetitive work, remove friction, and turn manual processes into reliable, measurable, maintainable systems. After finance and data/reporting roles, I now apply AI and automation to deliver concrete impact (time, quality, traceability).</p>
     <div class="pills"><span class="pill">Advanced Excel</span><span class="pill">Power BI</span><span class="pill">SQL</span><span class="pill">Salesforce</span></div>
   </div>
-  <div class="reveal delay-1"><div class="card"><h3>Contact</h3><p><a class="btn" href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a></p></div></div>
+
+  <!-- ===== Contact card (updated) ===== -->
+  <div class="reveal delay-1">
+    <div class="card contact-card">
+      <h3>Contact</h3>
+      <p class="muted">Reply within 24 h (FR/EN).</p>
+      <div class="stack">
+        <a class="btn" href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+        <a class="btn btn--outline" href="https://www.linkedin.com/in/j%C3%A9r%C3%B4me-jeannin-151023a6/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+  <!-- ===== /Contact card ===== -->
+
 </div></section>
 
 <section id="contact" class="section"><div class="container grid-2">
-  <div class="reveal"><h2 class="section-title">Work with me</h2><p>Open to roles in Switzerland.</p><p><a class="btn" href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a></p></div>
- <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" class="contact-form">
-  <!-- Required -->
-  <input type="hidden" name="access_key" value="0fd6281b-4d44-4857-8c2f-f70937b432fa">
-  <input type="hidden" name="subject" value="Portfolio contact — Hestia Aura">
-  <input type="hidden" name="from_name" value="Hestia Aura Portfolio">
-  <!-- Honeypot anti-bot -->
-  <input type="checkbox" name="botcheck" class="hidden" style="display:none">
-  <div class="form-row">
-    <label>Name</label>
-    <input type="text" name="name" required>
+
+  <!-- ===== Left column (updated) ===== -->
+  <div class="reveal">
+    <h2 class="section-title">Let’s work together</h2>
+    <p>Open to projects in Switzerland (Romandie) and remote.</p>
+    <ul class="feature-list">
+      <li>Reply within 24 h</li>
+      <li>FR / EN</li>
+      <li>Remote or on-site</li>
+    </ul>
+    <div class="pills">
+      <span class="pill">Azure</span>
+      <span class="pill">Python</span>
+      <span class="pill">Power BI</span>
+      <span class="pill">n8n · Make</span>
+    </div>
   </div>
-  <div class="form-row">
-    <label>Email</label>
-    <input type="email" name="email" required>
-  </div>
-  <div class="form-row">
-    <label>Message</label>
-    <textarea name="message" rows="4" required></textarea>
-  </div>
-  <button type="submit" class="btn">Send</button>
-  <p class="form-status" aria-live="polite"></p>
-</form>
+  <!-- ===== /Left column ===== -->
+
+  <!-- ===== Form (unchanged) ===== -->
+  <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" class="contact-form">
+    <input type="hidden" name="access_key" value="0fd6281b-4d44-4857-8c2f-f70937b432fa">
+    <input type="hidden" name="subject" value="Portfolio contact — Hestia Aura">
+    <input type="hidden" name="from_name" value="Hestia Aura Portfolio">
+    <input type="checkbox" name="botcheck" class="hidden" style="display:none">
+
+    <div class="form-row">
+      <label>Name</label>
+      <input type="text" name="name" required>
+    </div>
+    <div class="form-row">
+      <label>Email</label>
+      <input type="email" name="email" required>
+    </div>
+    <div class="form-row">
+      <label>Message</label>
+      <textarea name="message" rows="4" required></textarea>
+    </div>
+
+    <button type="submit" class="btn">Send</button>
+    <p class="form-status" aria-live="polite"></p>
+  </form>
+  <!-- ===== /Form ===== -->
+
 </div></section>
 </main>
 
 <footer class="site-footer"><div class="container footer-inner">
   <span>© <span id="y"></span> Jérôme J.</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
 </div></footer>
+
 <script src="/app.js?v=final3"></script>
 </body></html>
