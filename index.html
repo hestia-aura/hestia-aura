@@ -65,11 +65,32 @@ Certifié <strong>AI-900</strong>. Compétences : <strong>Excel avancé</strong>
 <div class="reveal delay-1"><div class="card"><h3>Contact</h3><p><a class="btn" href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a></p></div></div></div></section>
 
 <section id="contact" class="section"><div class="container grid-2"><div class="reveal"><h2 class="section-title">Travaillons ensemble</h2><p>Ouvert aux opportunités en Suisse (Romandie) et remote.</p><p><a class="btn" href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a></p></div>
-<form class="contact-card reveal delay-1" action="#" method="POST" onsubmit="alert('Formulaire à connecter.'); return false;">
-  <label>Votre e-mail<input type="email" required></label>
-  <label>Message<textarea rows="4" required></textarea></label>
-  <button class="btn" type="submit">Envoyer</button>
-  <small class="muted">En utilisant ce formulaire, vous acceptez que je vous recontacte par e-mail.</small>
+<form id="contact" action="https://api.web3forms.com/submit" method="POST" class="contact-form">
+  <!-- Obligatoire -->
+  <input type="hidden" name="access_key" value="0fd6281b-4d44-4857-8c2f-f70937b432fa">
+  <input type="hidden" name="subject" value="Portfolio contact — Hestia Aura">
+  <!-- Répondre directement à l'expéditeur -->
+  <input type="hidden" name="from_name" value="Hestia Aura Portfolio">
+  <!-- Honeypot anti-bot -->
+  <input type="checkbox" name="botcheck" class="hidden" style="display:none">
+
+  <div class="form-row">
+    <label>Nom</label>
+    <input type="text" name="name" required>
+  </div>
+
+  <div class="form-row">
+    <label>Email</label>
+    <input type="email" name="email" required>
+  </div>
+
+  <div class="form-row">
+    <label>Message</label>
+    <textarea name="message" rows="4" required></textarea>
+  </div>
+
+  <button type="submit" class="btn">Envoyer</button>
+  <p class="form-status" aria-live="polite"></p>
 </form></div></section>
 </main>
 <footer class="site-footer"><div class="container footer-inner"><span>© <span id="y"></span> Jérôme Jeannin</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a></div></footer>
