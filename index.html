@@ -29,6 +29,7 @@
     <a href="/en/" class="btn btn--sm">EN</a>
   </nav>
 </div></header>
+
 <main id="top">
 <section class="hero"><div class="container grid-2"><div class="hero-copy reveal">
 <h1>Portfolio — <span class="accent">Data/IA & Automatisation</span> (Finance)</h1>
@@ -62,37 +63,73 @@ Certifié <strong>AI-900</strong>. Compétences : <strong>Excel avancé</strong>
 <section class="section"><div class="container grid-2"><div class="reveal"><h2 class="section-title">À propos (en quelques mots)</h2>
 <p>Français originaire de Paris. Passionné de nouvelles technologies, j’ai développé un vrai goût du détail et une obsession pour les flux bien huilés : identifier les tâches répétitives, supprimer les frictions et transformer des processus manuels en systèmes fiables, mesurables et maintenables. Après un parcours en banque/assurance et en data/reporting, je mets aujourd’hui l’IA appliquée et l’automatisation au service de gains concrets (temps, qualité, traçabilité).</p>
 <div class="pills"><span class="pill">Excel avancé</span><span class="pill">Power BI</span><span class="pill">SQL</span><span class="pill">Salesforce</span></div></div>
-<div class="reveal delay-1"><div class="card"><h3>Contact</h3><p><a class="btn" href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a></p></div></div></div></section>
 
-<section id="contact" class="section"><div class="container grid-2"><div class="reveal"><h2 class="section-title">Travaillons ensemble</h2><p>Ouvert aux opportunités en Suisse.</p><p><a class="btn" href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a></p></div>
-<form id="contactForm" action="https://api.web3forms.com/submit" method="POST" class="contact-form">
-  <!-- Obligatoire -->
-  <input type="hidden" name="access_key" value="0fd6281b-4d44-4857-8c2f-f70937b432fa">
-  <input type="hidden" name="subject" value="Portfolio contact — Hestia Aura">
-  <!-- Répondre directement à l'expéditeur -->
-  <input type="hidden" name="from_name" value="Hestia Aura Portfolio">
-  <!-- Honeypot anti-bot -->
-  <input type="checkbox" name="botcheck" class="hidden" style="display:none">
-
-  <div class="form-row">
-    <label>Nom</label>
-    <input type="text" name="name" required>
+<!-- ===== Carte Contact (mise à jour) ===== -->
+<div class="reveal delay-1">
+  <div class="card contact-card">
+    <h3>Contact</h3>
+    <p class="muted">Je réponds sous 24 h (FR/EN).</p>
+    <div class="stack">
+      <a class="btn" href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+      <a class="btn btn--outline" href="https://www.linkedin.com/in/j%C3%A9r%C3%B4me-jeannin-151023a6/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
   </div>
+</div>
+<!-- ===== /Carte Contact ===== -->
 
-  <div class="form-row">
-    <label>Email</label>
-    <input type="email" name="email" required>
+</div></section>
+
+<section id="contact" class="section"><div class="container grid-2">
+
+  <!-- ===== Colonne gauche (mise à jour) ===== -->
+  <div class="reveal">
+    <h2 class="section-title">Travaillons ensemble</h2>
+    <p>Ouvert aux opportunités en Suisse (Romandie) et remote.</p>
+    <ul class="feature-list">
+      <li>Réponse sous 24 h</li>
+      <li>FR / EN</li>
+      <li>Remote ou sur site</li>
+    </ul>
+    <div class="pills">
+      <span class="pill">Azure</span>
+      <span class="pill">Python</span>
+      <span class="pill">Power BI</span>
+      <span class="pill">n8n · Make</span>
+    </div>
   </div>
+  <!-- ===== /Colonne gauche ===== -->
 
-  <div class="form-row">
-    <label>Message</label>
-    <textarea name="message" rows="4" required></textarea>
-  </div>
+  <!-- ===== Formulaire (inchangé) ===== -->
+  <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" class="contact-form">
+    <input type="hidden" name="access_key" value="0fd6281b-4d44-4857-8c2f-f70937b432fa">
+    <input type="hidden" name="subject" value="Portfolio contact — Hestia Aura">
+    <input type="hidden" name="from_name" value="Hestia Aura Portfolio">
+    <input type="checkbox" name="botcheck" class="hidden" style="display:none">
 
-  <button type="submit" class="btn">Envoyer</button>
-  <p class="form-status" aria-live="polite"></p>
-</form></div></section>
+    <div class="form-row">
+      <label>Nom</label>
+      <input type="text" name="name" required>
+    </div>
+    <div class="form-row">
+      <label>Email</label>
+      <input type="email" name="email" required>
+    </div>
+    <div class="form-row">
+      <label>Message</label>
+      <textarea name="message" rows="4" required></textarea>
+    </div>
+
+    <button type="submit" class="btn">Envoyer</button>
+    <p class="form-status" aria-live="polite"></p>
+  </form>
+  <!-- ===== /Formulaire ===== -->
+
+</div></section>
 </main>
-<footer class="site-footer"><div class="container footer-inner"><span>© <span id="y"></span> Jérôme Jeannin</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a></div></footer>
+
+<footer class="site-footer"><div class="container footer-inner">
+  <span>© <span id="y"></span> Jérôme Jeannin</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+</div></footer>
+
 <script src="/app.js?v=final3"></script>
 </body></html>
