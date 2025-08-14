@@ -54,3 +54,23 @@ a{color:#fff;text-decoration:none}.container{max-width:1080px;margin:0 auto;padd
 .contact-form label { font-size: 14px; opacity: .9; }
 .contact-form .btn { margin-top: 8px; }
 .form-status { font-size: 14px; margin-top: 8px; color: #9be9a8; }
+/* Petite pile verticale de boutons dans la carte contact */
+.stack { display: flex; flex-direction: column; gap: 8px; }
+
+.muted { color: #c7ccd3; font-size: 14px; margin: 4px 0 8px; }
+
+.btn--outline {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.18);
+}
+
+.btn--ghost {
+  background: transparent;
+  border: none;
+  color: #a5b4fc;
+  padding: 8px 0;
+  text-align: left;
+}
+
+.feature-list { margin: 12px 0 14px; padding-left: 18px; color: #e5e7eb; }
+.feature-list li { margin: 6px 0; }
