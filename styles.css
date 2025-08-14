@@ -46,3 +46,11 @@ a{color:#fff;text-decoration:none}.container{max-width:1080px;margin:0 auto;padd
 @media (prefers-reduced-motion: reduce){ .intro-video{display:none} }
 /* Empêche le scroll de passer au dessous pendant l'intro */
 .intro { overscroll-behavior: contain; touch-action: none; }
+.contact-form .form-row { margin: 8px 0; }
+.contact-form input, .contact-form textarea {
+  width: 100%; background: #0d1117; color: #e6edf3;
+  border: 1px solid #30363d; border-radius: 8px; padding: 10px;
+}
+.contact-form label { font-size: 14px; opacity: .9; }
+.contact-form .btn { margin-top: 8px; }
+.form-status { font-size: 14px; margin-top: 8px; color: #9be9a8; }
