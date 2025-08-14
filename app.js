@@ -88,4 +88,39 @@ document.addEventListener('DOMContentLoaded',()=>{
   };
   window.addEventListener('keydown', onKey);
 })();
+// Contact form (Web3Forms)
+(function () {
+  const form = document.getElementById('contact');
+  if (!form) return;
+
+  // Si jamais l'action manque, évite l'alerte d'origine
+  form.removeAttribute('data-needs-setup');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const status = form.querySelector('.form-status');
+    const btn = form.querySelector('button[type="submit"]');
+    status.textContent = 'Envoi…';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch(form.action, {
+        method: form.method,
+        body: new FormData(form)
+      });
+      const data = await res.json();
+      if (data.success) {
+        status.textContent = 'Merci, votre message a bien été envoyé ✔';
+        form.reset();
+      } else {
+        status.textContent = 'Erreur : ' + (data.message || 'envoi impossible.');
+      }
+    } catch (err) {
+      status.textContent = 'Erreur réseau. Réessayez plus tard.';
+    } finally {
+      btn.disabled = false;
+      setTimeout(() => (status.textContent = ''), 5000);
+    }
+  });
+})();
 
