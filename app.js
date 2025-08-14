@@ -90,7 +90,8 @@ document.addEventListener('DOMContentLoaded',()=>{
 })();
 // Contact form (Web3Forms)
 (function () {
-  const form = document.getElementById('contact');
+const form = document.getElementById('contactForm') 
+          || document.querySelector('form.contact-form');
   if (!form) return;
 
   // Si jamais l'action manque, évite l'alerte d'origine
