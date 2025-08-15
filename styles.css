@@ -111,3 +111,30 @@ a{color:#fff;text-decoration:none}.container{max-width:1080px;margin:0 auto;padd
 /* Espacement label/valeur dans les mini-KPI de l'en-tête */
 .card-kpi { display: flex; gap: 6px; align-items: baseline; }
 .kpi-label { opacity: .9; }
+/* === Cartes cliquables (Showcase) === */
+.card {
+  cursor: pointer;
+  position: relative;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background-color .18s ease;
+}
+.card:hover,
+.card:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.06) inset;
+  border-color: rgba(255,255,255,.18);
+  outline: none;
+}
+.card::after {
+  content: "→";
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  font-weight: 700;
+  opacity: .6;
+  transition: transform .18s ease, opacity .18s ease;
+}
+.card:hover::after,
+.card:focus-visible::after {
+  transform: translateX(4px);
+  opacity: 1;
+}
