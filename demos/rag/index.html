@@ -1,60 +1,67 @@
 <!DOCTYPE html><html lang="fr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Démo — RAG interne</title>
-<link rel="icon" href="/assets/logo.jpg"><link rel="apple-touch-icon" href="/assets/logo.jpg">
+<title>Démonstration — RAG interne</title>
+<link rel="icon" href="/assets/logo.jpg">
+<link rel="apple-touch-icon" href="/assets/logo.jpg">
 <link rel="stylesheet" href="/styles.css?v=final3">
 <style>
-  .searchbar{display:flex;gap:8px;margin:12px 0}
-  .searchbar input{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#0b0c10;color:#fff}
-  .result{background:#0f1117;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px;margin:10px 0}
-  .result h4{margin:0 0 6px}
-  .muted{opacity:.8}
-  mark{background:#3730a3;color:#fff;padding:0 2px;border-radius:2px}
+  .wrap{max-width:1080px;margin:0 auto;padding:24px 20px}
+  h1{font-size:32px;margin:8px 0 10px}
+  .muted{opacity:.85;margin:0 0 14px}
+  .search{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f1117;color:#e6edf3}
+  .card{background:#0f1117;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px;margin-top:14px}
+  .tags{color:#c7ccd3;margin-top:8px}
 </style>
 </head><body>
 <header class="site-header"><div class="container header-inner">
-  <a class="brand" href="/"><img src="/assets/logo.jpg" class="brand-mark" alt="logo"><span class="brand-name">Hestia <strong>Aura</strong></span></a>
+  <a class="brand" href="/" aria-label="Hestia Aura">
+    <img src="/assets/logo.jpg" alt="logo" class="brand-mark"><span class="brand-name">Hestia <strong>Aura</strong></span>
+  </a>
   <nav class="nav"><a href="/">Accueil</a><a href="/showcase.html">Showcase</a><a class="btn btn--sm" href="/en/">EN</a></nav>
 </div></header>
 
-<main class="section"><div class="container">
-  <h1>Démo — RAG interne</h1>
+<main class="wrap">
+  <h1>Démonstration — RAG interne</h1>
   <p class="muted">Recherche simple sur un petit corpus JSON (front-end uniquement, pas de backend).</p>
 
-  <div class="searchbar">
-    <input id="q" type="search" placeholder="Rechercher (ex: facture, RGPD, dépenses)…">
-  </div>
+  <input id="q" class="search" placeholder="Rechercher (ex : facture, RGPD, dépenses)…">
+  <div id="list"></div>
+</main>
 
-  <div id="results"></div>
-</div></main>
-
-<footer class="site-footer"><div class="container footer-inner"><span>© <span id="y"></span> Jérôme Jeannin</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a></div></footer>
 <script>
-  // année footer
-  document.addEventListener('DOMContentLoaded',()=>{const y=document.getElementById('y'); if(y) y.textContent=new Date().getFullYear()})
+  const list = document.getElementById('list');
+  const q    = document.getElementById('q');
+  let corpus = [];
 
-  // mini RAG "like" (recherche plein texte très simple)
-  const $q=document.getElementById('q'), $results=document.getElementById('results');
-  let corpus=[];
-  fetch('/demos/rag/corpus.json').then(r=>r.json()).then(d=>{ corpus=d; render('') });
-
-  function render(query){
-    const q=query.trim().toLowerCase();
-    const items = !q ? corpus : corpus.filter(it=>{
-      const hay=(it.title+' '+it.content+' '+(it.tags||[]).join(' ')).toLowerCase();
-      return q.split(/\s+/).every(tok=>hay.includes(tok));
+  function render(items){
+    list.innerHTML = '';
+    items.forEach(it => {
+      const div = document.createElement('div');
+      div.className = 'card';
+      div.innerHTML = `
+        <h3 style="margin:0 0 6px">${it.title}</h3>
+        <p style="margin:0 0 6px">${it.content}</p>
+        <div class="tags">Tags: ${it.tags.join(' · ')} • ${it.date}</div>
+      `;
+      list.appendChild(div);
     });
-    $results.innerHTML = items.map(it=>toCard(it,q)).join('') || '<p class="muted">Aucun résultat.</p>';
   }
-  function toCard(it,q){
-    const h=(s)=> q ? s.replace(new RegExp('('+escapeReg(q)+')','gi'),'<mark>$1</mark>') : s;
-    return `<article class="result">
-      <h4>${h(it.title)}</h4>
-      <p>${h(it.content)}</p>
-      <p class="muted">Tags: ${(it.tags||[]).join(' · ')} • ${it.date}</p>
-    </article>`;
+
+  function filter(){
+    const t = q.value.trim().toLowerCase();
+    if(!t){ render(corpus); return; }
+    const res = corpus.filter(it =>
+      it.title.toLowerCase().includes(t) ||
+      it.content.toLowerCase().includes(t) ||
+      it.tags.join(' ').toLowerCase().includes(t)
+    );
+    render(res);
   }
-  function escapeReg(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
-  $q.addEventListener('input', e=>render(e.target.value));
+
+  fetch('./corpus.json')
+    .then(r => r.json())
+    .then(data => { corpus = data; render(corpus); });
+
+  q.addEventListener('input', filter);
 </script>
 </body></html>
