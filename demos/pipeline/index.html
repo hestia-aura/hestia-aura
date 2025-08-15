@@ -5,56 +5,37 @@
 <link rel="apple-touch-icon" href="/assets/logo.jpg">
 <link rel="stylesheet" href="/styles.css?v=final3">
 <style>
-/* Layout général */
 .page {padding: 24px 0}
 .container.narrow{max-width:1060px}
-
-/* Header */
 .header {display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
 .header h1{font-size:28px;margin:0}
 .header .muted{opacity:.8}
-
-/* Ribbon actions */
 .actions{display:flex;gap:8px;flex-wrap:wrap}
 .actions .btn{height:40px;padding:0 16px;border-radius:10px;font-weight:700;display:inline-flex;align-items:center}
 .actions .btn--dark{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:#fff}
-
-/* Grille principale */
 .grid-2-1{display:grid;grid-template-columns: 1.5fr 1fr;gap:18px}
 @media (max-width: 960px){.grid-2-1{grid-template-columns:1fr;}}
 .card{position:relative}
-
-/* Pipeline visuel */
 .pipeline{background:#0b0d12;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px}
 .pipeline svg{width:100%;height:160px;display:block}
 .stage{font-weight:700}
 .badge{display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:4px 8px;border-radius:999px;font-size:12px;margin-left:8px}
-
-/* Table normalisée */
 .table{width:100%;border-collapse:separate;border-spacing:0 8px;margin-top:10px}
 .table th{font-weight:700;text-align:left;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.12)}
 .table td{padding:8px 12px;background:rgba(255,255,255,.04)}
 .table tr td:first-child{border-top-left-radius:10px;border-bottom-left-radius:10px}
 .table tr td:last-child{border-top-right-radius:10px;border-bottom-right-radius:10px}
 .table tfoot td{background:transparent;padding-top:12px}
-
-/* KPI + charts */
 .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 @media (max-width:960px){.kpis{grid-template-columns:1fr}}
 .kpi{background:#0b0d12;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px}
 .kpi .label{opacity:.8;font-size:13px}
 .kpi .value{font-size:22px;font-weight:800;margin:2px 0 8px}
 .spark{width:100%;height:56px;display:block}
-
-/* Encadré ROI */
 .roi{background:#0b1018;border:1px dashed rgba(120,132,255,.5);border-radius:16px;padding:14px}
 .roi strong{font-size:18px}
-
-/* Select + stats */
 .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}
 .stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:6px 10px;font-size:12px}
-
-/* Footer */
 .back{margin-top:16px;display:inline-block}
 </style>
 </head><body>
@@ -63,11 +44,11 @@
     <img src="/assets/logo.jpg" alt="logo" class="brand-mark"><span class="brand-name">Hestia <strong>Aura</strong></span>
   </a>
   <nav class="nav">
-  <a href="/">Accueil</a>
-  <a href="/about.html">À propos</a>
-  <a href="/showcase.html">Showcase</a>
-  <a class="btn btn--sm" href="/en/demos/pipeline/">EN</a>
-</nav>
+    <a href="/">Accueil</a>
+    <a href="/about.html">À propos</a>
+    <a href="/showcase.html">Showcase</a>
+    <a class="btn btn--sm" href="/en/demos/pipeline/">EN</a>
+  </nav>
 </div></header>
 
 <main class="page">
@@ -83,7 +64,6 @@
       </div>
     </div>
 
-    <!-- Toolbar -->
     <div class="toolbar">
       <label for="ds">Exemple :</label>
       <select id="ds" class="btn btn--dark">
@@ -95,45 +75,25 @@
       <span id="statPeriod" class="stat">Période —</span>
     </div>
 
-    <!-- Grille -->
     <div class="grid-2-1">
-      <!-- Colonne gauche : pipeline + table -->
       <section class="card">
         <div class="pipeline">
           <div class="stage">Pipeline <span class="badge" id="badgeStage">Prêt</span></div>
-          <!-- Diagramme SVG animé -->
           <svg viewBox="0 0 800 160" aria-label="Schéma ETL">
-            <defs>
-              <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="#7c74ff"/><stop offset="1" stop-color="#49b1ff"/>
-              </linearGradient>
-            </defs>
-            <!-- Boîtes -->
+            <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7c74ff"/><stop offset="1" stop-color="#49b1ff"/></linearGradient></defs>
             <rect x="20"  y="40" width="180" height="60" rx="12" fill="url(#g1)" opacity=".15"></rect>
             <rect x="310" y="40" width="180" height="60" rx="12" fill="url(#g1)" opacity=".15"></rect>
             <rect x="600" y="40" width="180" height="60" rx="12" fill="url(#g1)" opacity=".15"></rect>
-            <!-- Libellés -->
             <text x="110" y="75" text-anchor="middle" fill="#fff" font-weight="700">Extract</text>
             <text x="400" y="75" text-anchor="middle" fill="#fff" font-weight="700">Transform</text>
             <text x="690" y="75" text-anchor="middle" fill="#fff" font-weight="700">Load</text>
-            <!-- Flèches -->
             <path id="p1" d="M 200 70 L 310 70" stroke="url(#g1)" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
             <path id="p2" d="M 490 70 L 600 70" stroke="url(#g1)" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
-            <defs>
-              <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                <path d="M 0 0 L 10 5 L 0 10 z" fill="#7c74ff"></path>
-              </marker>
-            </defs>
-            <!-- Particules animées -->
-            <circle r="4" fill="#7c74ff">
-              <animateMotion dur="1.8s" repeatCount="indefinite" path="M 200 70 L 310 70"></animateMotion>
-            </circle>
-            <circle r="4" fill="#49b1ff" >
-              <animateMotion dur="1.8s" repeatCount="indefinite" path="M 490 70 L 600 70"></animateMotion>
-            </circle>
+            <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7c74ff"></path></marker></defs>
+            <circle r="4" fill="#7c74ff"><animateMotion dur="1.8s" repeatCount="indefinite" path="M 200 70 L 310 70"></animateMotion></circle>
+            <circle r="4" fill="#49b1ff"><animateMotion dur="1.8s" repeatCount="indefinite" path="M 490 70 L 600 70"></animateMotion></circle>
           </svg>
 
-          <!-- Table normalisée -->
           <table class="table" id="tbl">
             <thead><tr id="thead"></tr></thead>
             <tbody id="tbody"></tbody>
@@ -142,21 +102,20 @@
         </div>
       </section>
 
-      <!-- Colonne droite : KPIs + charts + ROI -->
       <aside class="stack">
         <div class="kpis">
-          <div class="kpi">
-            <div class="label">KPI #1</div>
+          <div class="kpi" title="">
+            <div class="label" id="klabel1">KPI #1</div>
             <div class="value" id="kpi1">—</div>
             <svg id="sp1" class="spark"></svg>
           </div>
-          <div class="kpi">
-            <div class="label">KPI #2</div>
+          <div class="kpi" title="">
+            <div class="label" id="klabel2">KPI #2</div>
             <div class="value" id="kpi2">—</div>
             <svg id="sp2" class="spark"></svg>
           </div>
-          <div class="kpi">
-            <div class="label">KPI #3</div>
+          <div class="kpi" title="">
+            <div class="label" id="klabel3">KPI #3</div>
             <div class="value" id="kpi3">—</div>
             <svg id="sp3" class="spark"></svg>
           </div>
@@ -198,7 +157,12 @@ const datasets = {
       const avg = total/vals.length;
       return {k1:`${total.toLocaleString('fr-CH')} CHF`, s1:vals, k2:`${(growth*100).toFixed(1)} % MoM`, s2:vals.slice(-4), k3:`${avg.toFixed(0)} CHF/m`, s3:vals};
     },
-    roi:{ manual:"6 h / mois", auto:"20 min", pct: "−94 %"}
+    roi:{ manual:"6 h / mois", auto:"20 min", pct: "−94 %"},
+    labels:[
+      {text:"CA total", tip:"Somme des ventes Web + Boutique sur la période."},
+      {text:"Croissance MoM", tip:"Variation du dernier mois vs mois précédent (Month-over-Month)."},
+      {text:"CA moyen mensuel", tip:"Moyenne mensuelle sur la période."}
+    ]
   },
   tickets: {
     label: "Tickets support (SLA)",
@@ -214,7 +178,12 @@ const datasets = {
       const p23 = total-p1;
       return {k1:`${total} résolus`, s1:[p1,p23], k2:`${p1} P1`, s2:[p1], k3:`${p23} P2/P3`, s3:[p23]};
     },
-    roi:{ manual:"3 h / semaine", auto:"10 min", pct: "−95 %"}
+    roi:{ manual:"3 h / semaine", auto:"10 min", pct: "−95 %"},
+    labels:[
+      {text:"Tickets résolus", tip:"Nombre total de tickets résolus sur la période."},
+      {text:"Tickets critiques (P1)", tip:"Tickets de priorité 1 résolus."},
+      {text:"Tickets P2+P3", tip:"Tickets de priorités 2 et 3 résolus."}
+    ]
   },
   invoices: {
     label: "Factures clients (DSO)",
@@ -231,11 +200,16 @@ const datasets = {
       const top = rows.reduce((m,r)=>r[2]>m? r[2]:m,0);
       return {k1:`${total.toLocaleString('fr-CH')} CHF`, s1:rows.map(r=>r[2]), k2:`DSO ${dso.toFixed(0)} j`, s2:rows.map(r=>r[3]), k3:`Ticket max ${top.toLocaleString('fr-CH')} CHF`, s3:[top]};
     },
-    roi:{ manual:"1 j / mois", auto:"30 min", pct: "−94 %"}
+    roi:{ manual:"1 j / mois", auto:"30 min", pct: "−94 %"},
+    labels:[
+      {text:"Montant total facturé", tip:"Somme des montants de toutes les factures de la période."},
+      {text:"DSO moyen (jours)", tip:"Délai moyen de paiement (Days Sales Outstanding)."},
+      {text:"Plus gros ticket", tip:"Montant de la facture la plus élevée."}
+    ]
   }
 };
 
-/* Helpers CSV + UI */
+/* Helpers */
 function toCSV(headers, rows){
   const esc = v => `"${String(v).replaceAll(`"`,`""`)}"`;
   return [headers.map(esc).join(","), ...rows.map(r=>r.map(esc).join(","))].join("\n");
@@ -246,8 +220,6 @@ function el(tag, attrs={}, children=[]){
   children.forEach(c=>e.appendChild(c));
   return e;
 }
-
-/* Render sparkline simple (SVG) */
 function renderSpark(svgId, series){
   const svg = document.getElementById(svgId);
   const w=svg.clientWidth||260, h=svg.clientHeight||56, p=6;
@@ -260,7 +232,7 @@ function renderSpark(svgId, series){
   svg.innerHTML = `<path d="${d}" fill="none" stroke="#7c74ff" stroke-width="2"/>`;
 }
 
-/* App */
+/* UI refs */
 const dsSel = document.getElementById('ds');
 const badge = document.getElementById('badgeStage');
 const thead = document.getElementById('thead');
@@ -269,31 +241,40 @@ const tfoot = document.getElementById('tfoot');
 const statRows = document.getElementById('statRows');
 const statPeriod = document.getElementById('statPeriod');
 const k1 = document.getElementById('kpi1'), k2=document.getElementById('kpi2'), k3=document.getElementById('kpi3');
+const kl1=document.getElementById('klabel1'), kl2=document.getElementById('klabel2'), kl3=document.getElementById('klabel3');
 
+/* Update KPI labels + tooltips */
+function setKpiLabels(cfg){
+  kl1.textContent = cfg[0].text; kl1.parentElement.title = cfg[0].tip;
+  kl2.textContent = cfg[1].text; kl2.parentElement.title = cfg[1].tip;
+  kl3.textContent = cfg[2].text; kl3.parentElement.title = cfg[2].tip;
+}
+
+/* App */
 function load(dsKey){
   const ds = datasets[dsKey];
   badge.textContent="Extraction…";
   setTimeout(()=>{ badge.textContent="Transformation…";
     setTimeout(()=>{ badge.textContent="Chargement OK";
-      // table
       thead.innerHTML=""; ds.headers.forEach(h=>thead.appendChild(el("th",{text:h})));
       tbody.innerHTML="";
       ds.rows.forEach(r=>{
         const tr=el("tr"); r.forEach(v=>tr.appendChild(el("td",{text:v}))); tbody.appendChild(tr);
       });
       statRows.textContent = `${ds.rows.length} lignes`;
-      // période (si date/mois en col 0)
       const first=ds.rows[0]?.[0]||"—", last=ds.rows.at(-1)?.[0]||"—";
       statPeriod.textContent = `Période ${first} → ${last}`;
       tfoot.textContent = ds.label;
-      // KPIs
+
       const kp = ds.kpis(ds.rows);
       k1.textContent = kp.k1; k2.textContent = kp.k2; k3.textContent = kp.k3;
       renderSpark("sp1", kp.s1); renderSpark("sp2", kp.s2); renderSpark("sp3", kp.s3);
-      // ROI
+
       document.getElementById('tMan').textContent = ds.roi.manual;
       document.getElementById('tAuto').textContent = ds.roi.auto;
       document.getElementById('pct').textContent = ds.roi.pct;
+
+      setKpiLabels(ds.labels);
     }, 500);
   }, 500);
 }
@@ -307,7 +288,6 @@ document.getElementById('btnCsv').addEventListener('click', ()=>{
   a.href=url; a.download = "pipeline_export.csv"; a.click();
   URL.revokeObjectURL(url);
 });
-/* init */
 load('sales');
 document.getElementById('y').textContent = new Date().getFullYear();
 </script>
