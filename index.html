@@ -8,21 +8,21 @@
 <link rel="apple-touch-icon" href="/assets/logo.jpg">
 <link rel="stylesheet" href="/styles.css?v=final3">
 <style>
-/* --- Overrides spécifiques à la page d'accueil (FR) --- */
+/* --- Overrides spécifiques à la home FR --- */
 
-/* 1) Carte KPI du hero : un peu plus large pour éviter les retours à la ligne gênants */
-.card.kpi-floating{min-width:420px;}
+/* 1) Carte KPI du hero plus large (évite "BI" seul à la ligne) */
+.card.kpi-floating{min-width:480px;}
+@media (max-width: 720px){ .card.kpi-floating{min-width:auto;} }
 
-/* 2) Retirer la flèche sur les cartes NON cliquables de la home
-      (on garde l'animation au survol car l'ombre/translate restent actifs) */
-#projects .card::after,
-.card.kpi-floating::after{content:none !important;}
+/* 2) Retirer la flèche sur toutes les cartes non cliquables,
+      en conservant l'animation de survol */
+.card:not(a)::after{content:none !important;}
 
 /* 3) Petit lien "Voir plus" sous les démos */
 .more-link{display:inline-block;margin-top:12px;opacity:.85}
 .more-link:hover{opacity:1;text-decoration:underline}
 
-/* 4) Espacement des puces sous les CTAs du hero */
+/* 4) Espacement des bulles techniques sous les CTAs */
 .hero-tech{margin:8px 0 0 0}
 </style>
 </head><body>
@@ -61,6 +61,7 @@
       <div class="hero-cta">
         <a href="mailto:jeanninjerome6@gmail.com" class="btn">Me contacter</a>
         <a href="/showcase.html" class="btn btn--sm">Voir mes démos</a>
+        <a href="/assets/CV_FR.pdf" target="_blank" class="btn btn--outline">Mon CV</a>
       </div>
 
       <!-- Preuves d'usage -->
@@ -70,16 +71,10 @@
         <li>RAG interne FR/EN</li>
       </ul>
 
-      <!-- Bulles techniques supplémentaires (sous les CTAs et au-dessus des CV) -->
+      <!-- Bulles techniques supplémentaires (sous les CTAs) -->
       <div class="pills hero-tech">
         <span class="pill">Azure AI</span><span class="pill">Excel/VBA</span>
         <span class="pill">Power BI</span><span class="pill">SQL</span>
-      </div>
-
-      <!-- Liens CV discrets -->
-      <div class="muted" style="margin-top:6px">
-        <a class="pill" href="/assets/CV_FR.pdf" target="_blank">CV (FR)</a> ·
-        <a class="pill" href="/assets/CV_EN.pdf" target="_blank">CV (EN)</a>
       </div>
     </div>
 
@@ -89,7 +84,7 @@
       <div class="card kpi-floating">
         <div class="card-kpi"><span class="kpi-label">Ouvert&nbsp;:</span><span class="kpi-value">Suisse · On-site/Hybride</span></div>
         <div class="card-kpi"><span class="kpi-label">Stack&nbsp;:</span><span class="kpi-value">Azure AI · Python · Power BI</span></div>
-        <div class="card-kpi"><span class="kpi-label">Certif.&nbsp;:</span><span class="card-kpi"><span class="kpi-value">AI-900 · TOEIC 915 · PCIE Excel</span></span></div>
+        <div class="card-kpi"><span class="kpi-label">Certif.&nbsp;:</span><span class="kpi-value">AI-900 · TOEIC 915 · PCIE Excel</span></div>
       </div>
     </div>
 
@@ -125,8 +120,6 @@
         <p>Fondamentaux IA sur Azure (services cognitifs, IA responsable).</p>
         <div class="pills">
           <span class="pill pill--success">Validé</span>
-          <a class="pill" href="/assets/CV_FR.pdf" target="_blank">CV (FR)</a>
-          <a class="pill" href="/assets/CV_EN.pdf" target="_blank">CV (EN)</a>
         </div>
       </article>
 
@@ -160,8 +153,6 @@
     <li>Contact recrutement : <a href="mailto:jeanninjerome6@gmail.com">jeanninjerome6@gmail.com</a></li>
   </ul>
   <div class="pills">
-    <a class="pill" href="/assets/CV_FR.pdf" target="_blank">CV (FR)</a>
-    <a class="pill" href="/assets/CV_EN.pdf" target="_blank">CV (EN)</a>
     <span class="pill">AI-900</span><span class="pill">TOEIC</span><span class="pill">PCIE</span>
     <span class="pill">Azure</span><span class="pill">Excel/VBA</span><span class="pill">Power BI</span><span class="pill">SQL</span>
   </div>
@@ -226,7 +217,7 @@
 
 <script src="/app.js?v=final3"></script>
 <script>
-/* Filet de sécurité pour l'intro : fin, erreur, clic, ou auto-close après 3,5 s.
+/* Filet de sécurité pour l'intro : fin, erreur, clic, ou auto-fermeture après 3,5 s.
    Désactivation pendant tests : ?intro=0 ou ?nointro=1 */
 (function(){
   const intro = document.getElementById('intro');
