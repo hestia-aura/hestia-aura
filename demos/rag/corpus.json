@@ -53,8 +53,6 @@
     "tags": ["IT", "Incidents", "Support"],
     "date": "2024-05-07"
   },
-
-  // ===== English entries =====
   {
     "title": "FADP (nLPD) — quick summary",
     "content": "Switzerland’s updated data protection law requires transparency, data minimization and security by design. Explicit consent for sensitive data; right of access and deletion.",
