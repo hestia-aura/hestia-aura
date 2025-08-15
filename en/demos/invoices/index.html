@@ -150,6 +150,10 @@ const els = {
   dl: document.getElementById('dl'),
   toggleJson: document.getElementById('toggleJson'),
 };
+// Fallback si l'aperçu image échoue à se charger
+els.thumb.addEventListener('error', () => {
+  els.thumb.src = '/assets/media/invoice-ch.svg';
+});
 
 function format(n){ return new Intl.NumberFormat('en-CH',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n); }
 
