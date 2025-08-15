@@ -5,27 +5,75 @@
 <link rel="apple-touch-icon" href="/assets/logo.jpg">
 <link rel="stylesheet" href="/styles.css?v=final3">
 <style>
-.page{max-width:1200px;margin:32px auto;padding:0 20px}
-.split{display:grid;grid-template-columns:1fr 1.2fr;gap:28px}
-.icon-doc{width:120px;height:160px;border:6px solid rgba(255,255,255,.35);
-  border-radius:14px;position:relative;opacity:.85}
-.icon-doc::before{content:"";position:absolute;right:-2px;top:12px;width:26px;height:26px;border-top:6px solid rgba(255,255,255,.35);border-right:6px solid rgba(255,255,255,.35);border-radius:6px}
-pre{background:#0f1117;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px;white-space:pre-wrap}
-.actions{margin-top:14px}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px 20px}
+  h1{font-size:34px;margin:10px 0 8px}
+  .muted{opacity:.85;margin:0 0 16px}
+  .toolbar{display:flex;gap:12px;align-items:center;margin:8px 0 18px}
+  .toolbar select{background:#0f1117;color:#e6edf3;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:8px 10px}
+  .grid{display:grid;grid-template-columns:1fr 1.2fr;gap:28px}
+  .panel{background:#0f1117;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px}
+  .thumb{width:100%;border-radius:12px;border:1px solid rgba(255,255,255,.08);object-fit:cover}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
+  .kpi{background:#0b0c10;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px}
+  .kpi .label{color:#c7ccd3;font-size:12px}
+  .kpi .val{font-weight:700}
+  table{width:100%;border-collapse:collapse;margin-top:10px}
+  th,td{border-bottom:1px solid rgba(255,255,255,.08);padding:8px 6px;text-align:left}
+  th{color:#c7ccd3;font-weight:600}
+  .actions{display:flex;gap:10px;margin-top:12px}
+  .btn{display:inline-block;background:#6366f1;color:#fff;border:none;border-radius:12px;padding:10px 14px;font-weight:600;box-shadow:0 6px 20px rgba(99,102,241,.35);cursor:pointer}
+  .btn.outline{background:transparent;border:1px solid rgba(255,255,255,.14);color:#e6edf3}
+  pre{margin:10px 0 0;white-space:pre-wrap;word-break:break-word;color:#e6edf3}
+  .json-wrap{margin-top:8px}
+  .json-wrap[hidden]{display:none}
+  @media (max-width:900px){.grid{grid-template-columns:1fr}}
 </style>
 </head><body>
 <header class="site-header"><div class="container header-inner">
-  <a class="brand" href="/en/"><img src="/assets/logo.jpg" class="brand-mark" alt="logo"><span class="brand-name">Hestia <strong>Aura</strong></span></a>
+  <a class="brand" href="/en/" aria-label="Hestia Aura">
+    <img src="/assets/logo.jpg" alt="Hestia Aura — logo" class="brand-mark"><span class="brand-name">Hestia <strong>Aura</strong></span>
+  </a>
   <nav class="nav"><a href="/en/">Home</a><a href="/en/showcase.html">Showcase</a><a class="btn btn--sm" href="/demos/invoices/">FR</a></nav>
 </div></header>
 
-<main class="page">
+<main class="wrap">
   <h1>Invoice → JSON → CSV</h1>
-  <div class="split">
-    <div><div class="icon-doc" aria-hidden="true"></div></div>
-    <div>
-      <pre id="jsonView" aria-live="polite">Loading…</pre>
-      <div class="actions"><button id="dl" class="btn">Download CSV</button></div>
+  <p class="muted">Pick an example to see the extracted JSON, a quick summary, and CSV-ready line items.</p>
+  <div class="toolbar">
+    <label for="sample">Sample:</label>
+    <select id="sample" aria-label="Choose an invoice sample">
+      <option value="ch">Swiss invoice (QR-bill)</option>
+      <option value="eu">EU invoice (VAT)</option>
+      <option value="us">US invoice (sales tax)</option>
+    </select>
+    <button id="dl" class="btn">Download CSV</button>
+    <button id="toggleJson" class="btn outline">Show JSON</button>
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <img id="thumb" src="/assets/media/sample1.jpg" alt="Invoice preview" class="thumb">
+    </div>
+    <div class="panel">
+      <div class="kpis">
+        <div class="kpi"><div class="label">Supplier</div><div class="val" id="k_supplier">—</div></div>
+        <div class="kpi"><div class="label">Invoice #</div><div class="val" id="k_num">—</div></div>
+        <div class="kpi"><div class="label">Date</div><div class="val" id="k_date">—</div></div>
+      </div>
+      <div class="kpis">
+        <div class="kpi"><div class="label">Total</div><div class="val" id="k_total">—</div></div>
+        <div class="kpi"><div class="label">VAT</div><div class="val" id="k_vat">—</div></div>
+        <div class="kpi"><div class="label">Currency</div><div class="val" id="k_currency">—</div></div>
+      </div>
+
+      <table id="lines">
+        <thead><tr><th>Description</th><th>Qty</th><th>Unit</th><th>Amount</th></tr></thead>
+        <tbody></tbody>
+      </table>
+
+      <div id="jsonWrap" class="json-wrap" hidden>
+        <pre id="json"></pre>
+      </div>
     </div>
   </div>
 </main>
@@ -34,25 +82,126 @@ pre{background:#0f1117;border:1px solid rgba(255,255,255,.08);border-radius:16px
   <span>© <span id="y"></span> Jérôme J.</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
 </div></footer>
 
-<script src="/app.js?v=final3"></script>
 <script>
-(async ()=>{
-  const res = await fetch('/demos/invoices/sample.json');
-  const data = await res.json();
-  const j = document.getElementById('jsonView');
-  j.textContent = JSON.stringify(data, null, 2);
-
-  function toCSV(inv){
-    const rows=[["desc","qty","unit","amount"]];
-    for(const line of inv.lines){ rows.push([line.desc,line.qty,line.unit,line.amount]); }
-    return rows.map(r=>r.join(",")).join("\n");
+const samples = {
+  ch: {
+    img: '/assets/media/sample1.jpg',
+    data: {
+      supplier: 'HelvetiaTech SA',
+      invoice_number: 'QR-2024-118',
+      date: '2024-09-01',
+      total: 2150.30,
+      vat: 166.20,
+      currency: 'CHF',
+      reference: 'RF18539007547034',
+      lines: [
+        {desc:'Platform subscription', qty:1, unit:1490.00, amount:1490.00},
+        {desc:'Integration hours (6)', qty:6, unit:85.05, amount:510.30},
+        {desc:'Admin fees', qty:1, unit:150.00, amount:150.00}
+      ]
+    }
+  },
+  eu: {
+    img: '/assets/media/sample2.jpg',
+    data: {
+      supplier: 'ACME SAS',
+      invoice_number: 'FV-2024-031',
+      date: '2024-08-01',
+      total: 1290.50,
+      vat: 107.54,
+      currency: 'EUR',
+      lines: [
+        {desc:'Support package', qty:1, unit:800, amount:800},
+        {desc:'Licenses (3)', qty:3, unit:140.17, amount:420.51},
+        {desc:'Shipping', qty:1, unit:69.99, amount:69.99}
+      ]
+    }
+  },
+  us: {
+    img: '/assets/media/sample3.jpg',
+    data: {
+      supplier: 'Northwind LLC',
+      invoice_number: 'INV-2024-905',
+      date: '2024-07-18',
+      total: 980.00,
+      vat: 0.00,
+      currency: 'USD',
+      sales_tax: 78.40,
+      lines: [
+        {desc:'Data pipeline setup', qty:1, unit:820.00, amount:820.00},
+        {desc:'Cloud storage (month 1)', qty:1, unit:160.00, amount:160.00}
+      ]
+    }
   }
-  document.getElementById('dl').addEventListener('click',()=>{
-    const csv = toCSV(data);
-    const blob=new Blob([csv],{type:'text/csv'});
-    const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-    a.download='invoice_lines.csv'; a.click(); URL.revokeObjectURL(a.href);
+};
+
+const els = {
+  sample: document.getElementById('sample'),
+  thumb: document.getElementById('thumb'),
+  k_supplier: document.getElementById('k_supplier'),
+  k_num: document.getElementById('k_num'),
+  k_date: document.getElementById('k_date'),
+  k_total: document.getElementById('k_total'),
+  k_vat: document.getElementById('k_vat'),
+  k_currency: document.getElementById('k_currency'),
+  lines: document.querySelector('#lines tbody'),
+  json: document.getElementById('json'),
+  jsonWrap: document.getElementById('jsonWrap'),
+  dl: document.getElementById('dl'),
+  toggleJson: document.getElementById('toggleJson'),
+};
+
+function format(n){ return new Intl.NumberFormat('en-CH',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n); }
+
+function render(inv){
+  els.k_supplier.textContent = inv.supplier || '—';
+  els.k_num.textContent = inv.invoice_number || '—';
+  els.k_date.textContent = inv.date || '—';
+  els.k_total.textContent = (inv.total!=null? format(inv.total):'—') + (inv.currency?' '+inv.currency:'');
+  els.k_vat.textContent = inv.vat!=null? format(inv.vat):'—';
+  els.k_currency.textContent = inv.currency || '—';
+
+  els.lines.innerHTML = '';
+  (inv.lines||[]).forEach(l=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML = '<td>'+l.desc+'</td><td>'+l.qty+'</td><td>'+format(l.unit)+'</td><td>'+format(l.amount)+'</td>';
+    els.lines.appendChild(tr);
   });
-})();
+
+  els.json.textContent = JSON.stringify(inv, null, 2);
+}
+
+function toCSV(inv){
+  const rows = [['desc','qty','unit','amount']];
+  for(const l of inv.lines||[]){ rows.push([l.desc,l.qty,l.unit,l.amount]); }
+  return rows.map(r => r.map(v => '\"'+String(v).replace(/\"/g,'\"\"')+'\"').join(',')).join('\\n');
+}
+
+let current = samples.ch;
+
+function applySample(key){
+  current = samples[key];
+  els.thumb.src = current.img;
+  render(current.data);
+}
+
+els.sample.addEventListener('change',e=>applySample(e.target.value));
+els.toggleJson.addEventListener('click',()=>{
+  const h = els.jsonWrap.hasAttribute('hidden');
+  if(h){ els.jsonWrap.removeAttribute('hidden'); els.toggleJson.textContent='Hide JSON'; }
+  else { els.jsonWrap.setAttribute('hidden',''); els.toggleJson.textContent='Show JSON'; }
+});
+els.dl.addEventListener('click',()=>{
+  const csv = toCSV(current.data);
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'invoice_lines.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+// init
+applySample('ch');
 </script>
 </body></html>
