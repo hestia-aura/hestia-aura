@@ -52,5 +52,43 @@
     "content": "Classification P1/P2/P3. P1 = impact client large, engagement interne 30 min. Post-mortem en 48 h avec actions correctives.",
     "tags": ["IT", "Incidents", "Support"],
     "date": "2024-05-07"
+  },
+
+  // ===== English entries =====
+  {
+    "title": "FADP (nLPD) — quick summary",
+    "content": "Switzerland’s updated data protection law requires transparency, data minimization and security by design. Explicit consent for sensitive data; right of access and deletion.",
+    "tags": ["Legal", "FADP", "Switzerland", "Privacy"],
+    "date": "2023-09-01"
+  },
+  {
+    "title": "QR-bill essentials",
+    "content": "The Swiss QR-bill encodes IBAN, amount and a reference (RF…). Validate the IBAN (CH) format and ensure the reference matches the payment slip.",
+    "tags": ["Switzerland", "Payments", "QR-bill"],
+    "date": "2023-12-01"
+  },
+  {
+    "title": "Finance onboarding (KYC) — outline",
+    "content": "Identity collection, proof of address, PEP/sanctions screening. Any alert must be reviewed and documented before account activation.",
+    "tags": ["Compliance", "KYC", "Finance"],
+    "date": "2024-02-20"
+  },
+  {
+    "title": "Incident management basics",
+    "content": "P1/P2/P3 severity. P1 = customer impact, response <30 min. Post-mortem within 48h with corrective actions and owners.",
+    "tags": ["IT", "Incidents", "Operations"],
+    "date": "2024-05-07"
+  },
+  {
+    "title": "Password policy",
+    "content": "12+ characters, password manager recommended, MFA required. Rotate privileged accounts regularly. No customer data in tickets.",
+    "tags": ["IT", "Security"],
+    "date": "2023-10-05"
+  },
+  {
+    "title": "Expense policy 2024",
+    "content": "Hotel cap CHF 220/night in Switzerland, 2nd class trains. Receipts within 10 days via portal. Reimbursement in CHF within 7 days.",
+    "tags": ["HR", "Expenses", "Switzerland"],
+    "date": "2024-01-10"
   }
 ]
