@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="fr"><head>
+<!DOCTYPE html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Email router — démo</title>
+<title>Email router — demo</title>
 <link rel="icon" href="/assets/logo.jpg">
 <link rel="apple-touch-icon" href="/assets/logo.jpg">
 <link rel="stylesheet" href="/styles.css?v=final3">
@@ -24,36 +24,36 @@
 </style>
 </head><body>
 <header class="site-header"><div class="container header-inner">
-  <a class="brand" href="/" aria-label="Hestia Aura">
+  <a class="brand" href="/en/" aria-label="Hestia Aura">
     <img src="/assets/logo.jpg" alt="Hestia Aura — logo" class="brand-mark"><span class="brand-name">Hestia <strong>Aura</strong></span>
   </a>
-  <nav class="nav"><a href="/">Accueil</a><a href="/showcase.html">Showcase</a><a class="btn btn--sm" href="/en/demos/email-router/">EN</a></nav>
+  <nav class="nav"><a href="/en/">Home</a><a href="/en/showcase.html">Showcase</a><a class="btn btn--sm" href="/demos/email-router/">FR</a></nav>
 </div></header>
 
 <main class="wrap">
-  <h1>Email router — démo</h1>
-  <p class="muted">Collez un e-mail ou choisissez un exemple. La classification est 100 % locale (dans votre navigateur).</p>
+  <h1>Email router — demo</h1>
+  <p class="muted">Paste an email or pick a preset. Classification runs locally in your browser.</p>
 
   <div class="toolbar">
-    <label for="preset">Exemples :</label>
-    <select id="preset" aria-label="Choisir un e-mail d'exemple">
-      <option value="">— Aucun —</option>
-      <option value="invoice">Facture en retard de paiement</option>
-      <option value="support">Ticket support (bug)</option>
-      <option value="sales">Demande de devis</option>
-      <option value="hr">Candidature / RH</option>
+    <label for="preset">Presets:</label>
+    <select id="preset" aria-label="Choose a sample email">
+      <option value="">— None —</option>
+      <option value="invoice">Overdue invoice</option>
+      <option value="support">Support ticket (bug)</option>
+      <option value="sales">Quote request</option>
+      <option value="hr">Application / HR</option>
     </select>
-    <button id="run" class="btn">Classer</button>
+    <button id="run" class="btn">Classify</button>
   </div>
 
-  <textarea id="mail" placeholder="Collez ici un e-mail…"></textarea>
+  <textarea id="mail" placeholder="Paste an email here…"></textarea>
 
   <div id="result" class="result"></div>
-  <div class="hint">Labels : Invoice · Support · Sales · HR · Other</div>
+  <div class="hint">Labels: Invoice · Support · Sales · HR · Other</div>
 </main>
 
 <footer class="site-footer"><div class="container footer-inner">
-  <span>© <span id="y"></span> Jérôme Jeannin</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+  <span>© <span id="y"></span> Jérôme J.</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
 </div></footer>
 
 <script>
@@ -63,19 +63,19 @@ const res = document.getElementById('result');
 const preset = document.getElementById('preset');
 
 const presets = {
-  invoice: `Bonjour,\\n\\nSauf erreur de notre part, la facture FV-2024-031 d’un montant de 1’290.50 CHF arrive à échéance le 15 août. Merci de procéder au paiement (IBAN CH…).\\n\\nCordialement, Comptabilité`,
-  support: `Bonjour,\\n\\nNous avons un problème critique : impossible d’exporter les rapports (erreur 500). Pouvez-vous nous aider ? Ticket #4581.\\n\\nMerci, Support IT`,
-  sales: `Bonjour,\\n\\nPouvez-vous nous envoyer une offre pour 20 licences avec support ? Quelles sont vos conditions de pricing et délais ?\\n\\nBien à vous, Achats`,
-  hr: `Bonjour,\\n\\nJe vous transmets mon CV pour le poste de Data Analyst à Genève. Disponible pour un entretien la semaine prochaine.\\n\\nCordialement, Candidat`
+  invoice: `Hello,\\n\\nOur records show invoice FV-2024-031 for CHF 1,290.50 is due on August 15. Please proceed with payment (IBAN CH…).\\n\\nRegards, Accounting`,
+  support: `Hi,\\n\\nWe have a critical issue: report export fails (error 500). Can you help? Ticket #4581.\\n\\nThanks, IT Support`,
+  sales: `Hello,\\n\\nCould you send us a quote for 20 licenses with support? What are your pricing and lead times?\\n\\nBest, Procurement`,
+  hr: `Hello,\\n\\nPlease find attached my resume for the Data Analyst position in Geneva. Available for an interview next week.\\n\\nRegards, Candidate`
 };
 
 function classify(text){
   const t = text.toLowerCase();
   const tests = [
-    {label:'Invoice',  kw:['invoice','facture','bon de commande','tva','payment due','due date']},
-    {label:'Support',  kw:['issue','bug','incident','help','support','problème','erreur']},
-    {label:'Sales',    kw:['offer','quote','pricing','devis','commande','achat']},
-    {label:'HR',       kw:['cv','résumé','recruit','recrut','hr','rh','entretien','contrat','salary','salaire']}
+    {label:'Invoice',  kw:['invoice','facture','purchase order','vat','payment due','due date']},
+    {label:'Support',  kw:['issue','bug','incident','help','support','problem','error']},
+    {label:'Sales',    kw:['offer','quote','pricing','proposal','order','purchase']},
+    {label:'HR',       kw:['cv','resume','recruit','hr','interview','contract','salary']}
   ];
   let best = {label:'Other', score:0};
   for(const r of tests){
@@ -89,17 +89,17 @@ function classify(text){
 
 function suggestedAction(label){
   switch(label){
-    case 'Invoice': return 'Aiguiller vers Comptabilité (AP@…); créer un ticket Finance.';
-    case 'Support': return 'Créer un ticket support P1 ; notifier l’équipe produit.';
-    case 'Sales':   return 'Créer une opportunité CRM ; répondre avec l’offre et délais.';
-    case 'HR':      return 'Transmettre à RH ; déclencher réponse automatique candidat.';
-    default:        return 'Mettre en file “À traiter”.';
+    case 'Invoice': return 'Route to Accounting (AP@…); create a Finance ticket.';
+    case 'Support': return 'Open a P1 support ticket; notify Product.';
+    case 'Sales':   return 'Create a CRM opportunity; reply with quote & lead times.';
+    case 'HR':      return 'Forward to HR; trigger auto-reply to candidate.';
+    default:        return 'Queue in “To triage”.';
   }
 }
 
 function renderResult(out){
   const cls = out.label.toLowerCase();
-  res.innerHTML = '<span class="badge '+cls+'">'+out.label+'</span> Confiance : '+out.confidence+'%<br><div class="hint">'+suggestedAction(out.label)+'</div>';
+  res.innerHTML = '<span class="badge '+cls+'">'+out.label+'</span> Confidence: '+out.confidence+'%<br><div class="hint">'+suggestedAction(out.label)+'</div>';
 }
 
 function onRun(){
