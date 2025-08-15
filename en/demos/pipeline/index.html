@@ -1,0 +1,284 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pipeline & Dashboard — Hestia Aura</title>
+<link rel="icon" href="/assets/logo.jpg">
+<link rel="apple-touch-icon" href="/assets/logo.jpg">
+<link rel="stylesheet" href="/styles.css?v=final3">
+<style>
+.page {padding: 24px 0}
+.container.narrow{max-width:1060px}
+.header {display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
+.header h1{font-size:28px;margin:0}
+.header .muted{opacity:.8}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.actions .btn{height:40px;padding:0 16px;border-radius:10px;font-weight:700;display:inline-flex;align-items:center}
+.actions .btn--dark{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:#fff}
+.grid-2-1{display:grid;grid-template-columns: 1.5fr 1fr;gap:18px}
+@media (max-width: 960px){.grid-2-1{grid-template-columns:1fr;}}
+.card{position:relative}
+.pipeline{background:#0b0d12;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px}
+.pipeline svg{width:100%;height:160px;display:block}
+.stage{font-weight:700}
+.badge{display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:4px 8px;border-radius:999px;font-size:12px;margin-left:8px}
+.table{width:100%;border-collapse:separate;border-spacing:0 8px;margin-top:10px}
+.table th{font-weight:700;text-align:left;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.12)}
+.table td{padding:8px 12px;background:rgba(255,255,255,.04)}
+.table tr td:first-child{border-top-left-radius:10px;border-bottom-left-radius:10px}
+.table tr td:last-child{border-top-right-radius:10px;border-bottom-right-radius:10px}
+.table tfoot td{background:transparent;padding-top:12px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:960px){.kpis{grid-template-columns:1fr}}
+.kpi{background:#0b0d12;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px}
+.kpi .label{opacity:.8;font-size:13px}
+.kpi .value{font-size:22px;font-weight:800;margin:2px 0 8px}
+.spark{width:100%;height:56px;display:block}
+.roi{background:#0b1018;border:1px dashed rgba(120,132,255,.5);border-radius:16px;padding:14px}
+.roi strong{font-size:18px}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:6px 10px;font-size:12px}
+.back{margin-top:16px;display:inline-block}
+</style>
+</head><body>
+<header class="site-header"><div class="container header-inner">
+  <a class="brand" href="/en/" aria-label="Hestia Aura">
+    <img src="/assets/logo.jpg" alt="logo" class="brand-mark"><span class="brand-name">Hestia <strong>Aura</strong></span>
+  </a>
+  <nav class="nav">
+    <a href="/en/">Home</a>
+    <a href="/en/about.html">About</a>
+    <a href="/en/showcase.html">Showcase</a>
+    <a class="btn btn--sm" href="/demos/pipeline/">FR</a>
+  </nav>
+</div></header>
+
+<main class="page">
+  <div class="container narrow">
+    <div class="header">
+      <div>
+        <h1>Pipeline & Dashboard</h1>
+        <div class="muted">ETL (Extract → Transform → Load) on mock data, normalized table, KPIs and charts. CSV export.</div>
+      </div>
+      <div class="actions">
+        <button id="btnCsv" class="btn btn--dark">Download CSV</button>
+        <a href="/en/showcase.html" class="btn">← Back to Showcase</a>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <label for="ds">Dataset:</label>
+      <select id="ds" class="btn btn--dark">
+        <option value="sales">Monthly sales (CH)</option>
+        <option value="tickets">Support tickets (SLA)</option>
+        <option value="invoices">Customer invoices (DSO)</option>
+      </select>
+      <span id="statRows" class="stat">0 rows</span>
+      <span id="statPeriod" class="stat">Period —</span>
+    </div>
+
+    <div class="grid-2-1">
+      <section class="card">
+        <div class="pipeline">
+          <div class="stage">Pipeline <span class="badge" id="badgeStage">Ready</span></div>
+          <svg viewBox="0 0 800 160" aria-label="ETL diagram">
+            <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7c74ff"/><stop offset="1" stop-color="#49b1ff"/></linearGradient></defs>
+            <rect x="20"  y="40" width="180" height="60" rx="12" fill="url(#g1)" opacity=".15"></rect>
+            <rect x="310" y="40" width="180" height="60" rx="12" fill="url(#g1)" opacity=".15"></rect>
+            <rect x="600" y="40" width="180" height="60" rx="12" fill="url(#g1)" opacity=".15"></rect>
+            <text x="110" y="75" text-anchor="middle" fill="#fff" font-weight="700">Extract</text>
+            <text x="400" y="75" text-anchor="middle" fill="#fff" font-weight="700">Transform</text>
+            <text x="690" y="75" text-anchor="middle" fill="#fff" font-weight="700">Load</text>
+            <path d="M 200 70 L 310 70" stroke="url(#g1)" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
+            <path d="M 490 70 L 600 70" stroke="url(#g1)" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
+            <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7c74ff"></path></marker></defs>
+            <circle r="4" fill="#7c74ff"><animateMotion dur="1.8s" repeatCount="indefinite" path="M 200 70 L 310 70"></animateMotion></circle>
+            <circle r="4" fill="#49b1ff"><animateMotion dur="1.8s" repeatCount="indefinite" path="M 490 70 L 600 70"></animateMotion></circle>
+          </svg>
+
+          <table class="table" id="tbl">
+            <thead><tr id="thead"></tr></thead>
+            <tbody id="tbody"></tbody>
+            <tfoot><tr><td id="tfoot" colspan="6"></td></tr></tfoot>
+          </table>
+        </div>
+      </section>
+
+      <aside class="stack">
+        <div class="kpis">
+          <div class="kpi" title="">
+            <div class="label" id="klabel1">KPI #1</div>
+            <div class="value" id="kpi1">—</div>
+            <svg id="sp1" class="spark"></svg>
+          </div>
+          <div class="kpi" title="">
+            <div class="label" id="klabel2">KPI #2</div>
+            <div class="value" id="kpi2">—</div>
+            <svg id="sp2" class="spark"></svg>
+          </div>
+          <div class="kpi" title="">
+            <div class="label" id="klabel3">KPI #3</div>
+            <div class="value" id="kpi3">—</div>
+            <svg id="sp3" class="spark"></svg>
+          </div>
+        </div>
+
+        <div class="roi" id="roi">
+          <strong>Estimated time saved</strong>
+          <div class="muted">Manual process: <span id="tMan">—</span> → Automated: <span id="tAuto">—</span></div>
+          <div style="margin-top:6px">Savings: <span id="pct">—</span></div>
+        </div>
+      </aside>
+    </div>
+
+    <a class="back" href="/en/showcase.html">← Back to Showcase</a>
+  </div>
+</main>
+
+<footer class="site-footer"><div class="container footer-inner">
+  <span>© <span id="y"></span> Jérôme J.</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+</div></footer>
+
+<script>
+const datasets = {
+  sales: {
+    label: "Monthly sales (CH)",
+    headers: ["month","channel","amount_chf"],
+    rows: [
+      ["2024-01","Web", 42150],["2024-02","Web", 43890],["2024-03","Web", 46500],["2024-04","Web", 47820],
+      ["2024-01","Store", 18200],["2024-02","Store", 17650],["2024-03","Store", 21500],["2024-04","Store", 22800]
+    ],
+    kpis:(rows)=>{
+      const byMonth={}; rows.forEach(r=>{byMonth[r[0]]=(byMonth[r[0]]||0)+r[2];});
+      const months=Object.keys(byMonth).sort(); const vals=months.map(m=>byMonth[m]);
+      const total=vals.reduce((a,b)=>a+b,0);
+      const growth=vals.length>1?(vals.at(-1)-vals.at(-2))/vals.at(-2):0;
+      const avg=total/vals.length;
+      return {k1:`${total.toLocaleString('de-CH')} CHF`, s1:vals, k2:`${(growth*100).toFixed(1)} % MoM`, s2:vals.slice(-4), k3:`${avg.toFixed(0)} CHF/m`, s3:vals};
+    },
+    roi:{manual:"6 h / month", auto:"20 min", pct:"−94 %"},
+    labels:[
+      {text:"Total revenue", tip:"Sum of Web + Store sales over the period."},
+      {text:"MoM growth", tip:"Last month vs previous month (Month-over-Month)."},
+      {text:"Avg. monthly revenue", tip:"Average revenue per month over the period."}
+    ]
+  },
+  tickets:{
+    label:"Support tickets (SLA)",
+    headers:["date","priority","resolved"],
+    rows:[
+      ["2024-03-01","P1",3],["2024-03-01","P2",12],["2024-03-01","P3",21],
+      ["2024-03-02","P1",2],["2024-03-02","P2",15],["2024-03-02","P3",18],
+      ["2024-03-03","P1",1],["2024-03-03","P2",9],["2024-03-03","P3",17]
+    ],
+    kpis:(rows)=>{
+      const total=rows.reduce((a,b)=>a+b[2],0);
+      const p1=rows.filter(r=>r[1]==="P1").reduce((a,b)=>a+b[2],0);
+      const p23=total-p1;
+      return {k1:`${total} resolved`, s1:[p1,p23], k2:`${p1} P1`, s2:[p1], k3:`${p23} P2/P3`, s3:[p23]};
+    },
+    roi:{manual:"3 h / week", auto:"10 min", pct:"−95 %"},
+    labels:[
+      {text:"Resolved tickets", tip:"Total resolved tickets over the period."},
+      {text:"Critical tickets (P1)", tip:"Resolved tickets with priority 1."},
+      {text:"Tickets P2+P3", tip:"Resolved tickets with priorities 2 and 3."}
+    ]
+  },
+  invoices:{
+    label:"Customer invoices (DSO)",
+    headers:["date","customer","amount_chf","days_outstanding"],
+    rows:[
+      ["2024-01-15","HelvetiaTech",1490,35],
+      ["2024-01-31","LemanBank",2890,42],
+      ["2024-02-12","RomandieCom",1320,28],
+      ["2024-03-01","Alpine SA",5100,31]
+    ],
+    kpis:(rows)=>{
+      const total=rows.reduce((a,b)=>a+b[2],0);
+      const dso=rows.reduce((a,b)=>a+b[3],0)/rows.length;
+      const top=rows.reduce((m,r)=>r[2]>m?r[2]:m,0);
+      return {k1:`${total.toLocaleString('de-CH')} CHF`, s1:rows.map(r=>r[2]), k2:`Avg. DSO ${dso.toFixed(0)} d`, s2:rows.map(r=>r[3]), k3:`Largest invoice ${top.toLocaleString('de-CH')} CHF`, s3:[top]};
+    },
+    roi:{manual:"1 d / month", auto:"30 min", pct:"−94 %"},
+    labels:[
+      {text:"Total invoiced amount", tip:"Sum of all invoice amounts for the period."},
+      {text:"Avg. DSO (days)", tip:"Average Days Sales Outstanding."},
+      {text:"Largest invoice", tip:"Highest single invoice amount."}
+    ]
+  }
+};
+
+function toCSV(headers, rows){
+  const esc = v => `"${String(v).replaceAll(`"`,`""`)}"`;
+  return [headers.map(esc).join(","), ...rows.map(r=>r.map(esc).join(","))].join("\n");
+}
+function el(tag, attrs={}, children=[]){
+  const e=document.createElement(tag);
+  Object.entries(attrs).forEach(([k,v])=>{ if(k==="text") e.textContent=v; else e.setAttribute(k,v); });
+  children.forEach(c=>e.appendChild(c));
+  return e;
+}
+function renderSpark(svgId, series){
+  const svg = document.getElementById(svgId);
+  const w=svg.clientWidth||260, h=svg.clientHeight||56, p=6;
+  svg.setAttribute("viewBox",`0 0 ${w} ${h}`);
+  if(!series || series.length===0){ svg.innerHTML=""; return; }
+  const min=Math.min(...series), max=Math.max(...series); const span=max-min||1;
+  const step=(w-2*p)/(series.length-1||1);
+  const pts = series.map((v,i)=>[p+i*step, h-p-((v-min)/span)*(h-2*p)]);
+  const d = pts.map((p,i)=> (i? "L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
+  svg.innerHTML = `<path d="${d}" fill="none" stroke="#7c74ff" stroke-width="2"/>`;
+}
+
+const dsSel = document.getElementById('ds');
+const badge = document.getElementById('badgeStage');
+const thead = document.getElementById('thead');
+const tbody = document.getElementById('tbody');
+const tfoot = document.getElementById('tfoot');
+const statRows = document.getElementById('statRows');
+const statPeriod = document.getElementById('statPeriod');
+const k1 = document.getElementById('kpi1'), k2=document.getElementById('kpi2'), k3=document.getElementById('kpi3');
+const kl1=document.getElementById('klabel1'), kl2=document.getElementById('klabel2'), kl3=document.getElementById('klabel3');
+
+function setKpiLabels(cfg){
+  kl1.textContent = cfg[0].text; kl1.parentElement.title = cfg[0].tip;
+  kl2.textContent = cfg[1].text; kl2.parentElement.title = cfg[1].tip;
+  kl3.textContent = cfg[2].text; kl3.parentElement.title = cfg[2].tip;
+}
+
+function load(dsKey){
+  const ds = datasets[dsKey];
+  badge.textContent="Extracting…";
+  setTimeout(()=>{ badge.textContent="Transforming…";
+    setTimeout(()=>{ badge.textContent="Loaded";
+      thead.innerHTML=""; ds.headers.forEach(h=>thead.appendChild(el("th",{text:h})));
+      tbody.innerHTML=""; ds.rows.forEach(r=>{ const tr=el("tr"); r.forEach(v=>tr.appendChild(el("td",{text:v}))); tbody.appendChild(tr); });
+      statRows.textContent = `${ds.rows.length} rows`;
+      const first=ds.rows[0]?.[0]||"—", last=ds.rows.at(-1)?.[0]||"—";
+      statPeriod.textContent = `Period ${first} → ${last}`;
+      tfoot.textContent = ds.label;
+
+      const kp = ds.kpis(ds.rows);
+      k1.textContent = kp.k1; k2.textContent = kp.k2; k3.textContent = kp.k3;
+      renderSpark("sp1", kp.s1); renderSpark("sp2", kp.s2); renderSpark("sp3", kp.s3);
+
+      document.getElementById('tMan').textContent = ds.roi.manual;
+      document.getElementById('tAuto').textContent = ds.roi.auto;
+      document.getElementById('pct').textContent = ds.roi.pct;
+
+      setKpiLabels(ds.labels);
+    }, 500);
+  }, 500);
+}
+dsSel.addEventListener('change', e=>load(e.target.value));
+document.getElementById('btnCsv').addEventListener('click', ()=>{
+  const ds = datasets[dsSel.value];
+  const csv = toCSV(ds.headers, ds.rows);
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href=url; a.download = "pipeline_export.csv"; a.click();
+  URL.revokeObjectURL(url);
+});
+load('sales');
+document.getElementById('y').textContent = new Date().getFullYear();
+</script>
+</body></html>
