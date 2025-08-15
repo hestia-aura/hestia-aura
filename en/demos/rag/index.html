@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo — internal RAG</title>
+<link rel="icon" href="/assets/logo.jpg">
+<link rel="apple-touch-icon" href="/assets/logo.jpg">
+<link rel="stylesheet" href="/styles.css?v=final3">
+<style>
+.page{max-width:1100px;margin:32px auto;padding:0 20px}
+.search{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f1117;color:#fff}
+.card{background:#0f1117;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px;margin-top:14px}
+.meta{color:#94a3b8;font-size:14px;margin-top:6px}
+</style>
+</head><body>
+<header class="site-header"><div class="container header-inner">
+  <a class="brand" href="/en/"><img src="/assets/logo.jpg" class="brand-mark" alt="logo"><span class="brand-name">Hestia <strong>Aura</strong></span></a>
+  <nav class="nav"><a href="/en/">Home</a><a href="/en/showcase.html">Showcase</a><a class="btn btn--sm" href="/demos/rag/">FR</a></nav>
+</div></header>
+
+<main class="page">
+  <h1>Demo — internal RAG</h1>
+  <p>Simple search over a tiny JSON corpus (front-end only, no backend).</p>
+  <input id="q" class="search" placeholder="Search (e.g. invoice, GDPR, expenses)…">
+  <div id="list"></div>
+</main>
+
+<footer class="site-footer"><div class="container footer-inner">
+  <span>© <span id="y"></span> Jérôme J.</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+</div></footer>
+
+<script src="/app.js?v=final3"></script>
+<script>
+let corpus=[];
+const list=document.getElementById('list');
+const q=document.getElementById('q');
+
+function render(items){
+  list.innerHTML='';
+  for(const d of items){
+    const el=document.createElement('article');
+    el.className='card';
+    el.innerHTML = `<h3>${d.title}</h3>
+      <p>${d.content}</p>
+      <div class="meta">Tags: ${d.tags.join(' · ')} • ${d.date}</div>`;
+    list.appendChild(el);
+  }
+}
+
+function search(){
+  const t=(q.value||'').toLowerCase().trim();
+  if(!t){ render(corpus); return; }
+  render(corpus.filter(d=>{
+    const s = (d.title+' '+d.content+' '+(d.tags||[]).join(' ')).toLowerCase();
+    return t.split(/\s+/).every(w=>s.includes(w));
+  }));
+}
+
+(async()=>{
+  const res=await fetch('/demos/rag/corpus.json');
+  corpus=await res.json();
+  render(corpus);
+  q.addEventListener('input',search);
+})();
+</script>
+</body></html>
