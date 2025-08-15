@@ -9,6 +9,19 @@
 <link rel="stylesheet" href="/styles.css?v=final3">
 </head><body>
 
+<!-- Intro video (added) -->
+<div id="intro" class="intro" aria-label="Intro animation" role="dialog" aria-modal="true">
+  <video id="introVideo" class="intro-video" autoplay muted playsinline preload="auto" poster="/assets/intro-poster.jpg">
+    <source src="/assets/intro.webm" type="video/webm">
+    <source src="/assets/intro.mp4" type="video/mp4">
+  </video>
+  <div class="intro-overlay">
+    <h1 class="intro-title">Hestia Aura</h1>
+    <div class="intro-credit">Jérôme Jeannin</div>
+    <button id="introSkip" class="intro-arrow" aria-label="Enter"></button>
+  </div>
+</div>
+
 <header class="site-header"><div class="container header-inner">
   <a class="brand" href="/en/" aria-label="Hestia Aura">
     <img src="/assets/logo.jpg" alt="logo" class="brand-mark"><span class="brand-name">Hestia <strong>Aura</strong></span>
