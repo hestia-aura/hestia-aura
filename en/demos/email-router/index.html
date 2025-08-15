@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Email router — demo</title>
+<link rel="icon" href="/assets/logo.jpg">
+<link rel="apple-touch-icon" href="/assets/logo.jpg">
+<link rel="stylesheet" href="/styles.css?v=final3">
+<style>
+.page{max-width:1100px;margin:32px auto;padding:0 20px}
+textarea{width:100%;min-height:220px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f1117;color:#fff;padding:12px;margin-bottom:0;outline:none;box-shadow:none}
+.result{margin-top:12px;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px;color:#cbd5e1}
+</style>
+</head><body>
+<header class="site-header"><div class="container header-inner">
+  <a class="brand" href="/en/"><img src="/assets/logo.jpg" class="brand-mark" alt="logo"><span class="brand-name">Hestia <strong>Aura</strong></span></a>
+  <nav class="nav"><a href="/en/">Home</a><a href="/en/showcase.html">Showcase</a><a class="btn btn--sm" href="/demos/email-router/">FR</a></nav>
+</div></header>
+
+<main class="page">
+  <h1>Email router — demo</h1>
+  <p>Paste an email. The classification is done 100% in your browser.</p>
+  <textarea id="mail" placeholder="Paste an email…"></textarea>
+  <button id="go" class="btn">Classify</button>
+  <div class="result" id="out">Labels: Invoice · Support · Sales · HR · Other</div>
+</main>
+
+<footer class="site-footer"><div class="container footer-inner">
+  <span>© <span id="y"></span> Jérôme J.</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+</div></footer>
+
+<script src="/app.js?v=final3"></script>
+<script>
+const rules = [
+  {label:'Invoice', kws:['invoice','amount due','payment','VAT','PO','bill']},
+  {label:'Support', kws:['issue','bug','error','cannot','support','help']},
+  {label:'Sales', kws:['quote','pricing','offer','proposal','demo']},
+  {label:'HR', kws:['contract','payroll','leave','vacation','recruitment','HR']}
+];
+function classify(text){
+  const t = text.toLowerCase();
+  for(const r of rules){ if(r.kws.some(k=>t.includes(k))) return r.label; }
+  return 'Other';
+}
+document.getElementById('go').addEventListener('click',()=>{
+  const txt=document.getElementById('mail').value||'';
+  const label=classify(txt);
+  document.getElementById('out').textContent='Label → '+label;
+});
+</script>
+</body></html>
