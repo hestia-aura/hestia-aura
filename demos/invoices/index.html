@@ -208,7 +208,7 @@ els.dl.addEventListener('click',()=>{
 // init (avec lecture du paramètre ?sample=ch|eu|us)
 const urlSample = new URLSearchParams(location.search).get('sample');
 const valid = ['ch','eu','us'];
-const initial = valid.includes(urlSample) ? urlSample : 'ch';
+const initial = valid.includes(urlSample) ? urlSample : 'eu';
 els.sample.value = initial;
 applySample(initial);
 
