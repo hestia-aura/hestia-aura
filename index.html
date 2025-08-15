@@ -164,3 +164,53 @@
 
   <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" class="contact-form">
     <input type="hidden" name="access_key" value="0fd6281b-4d44-4857-8c2f-f70937b432fa">
+    <input type="hidden" name="subject" value="Portfolio contact — Hestia Aura">
+    <input type="hidden" name="from_name" value="Hestia Aura Portfolio">
+    <input type="checkbox" name="botcheck" class="hidden" style="display:none">
+
+    <div class="form-row"><label>Nom</label><input type="text" name="name" required></div>
+    <div class="form-row"><label>Email</label><input type="email" name="email" required></div>
+    <div class="form-row"><label>Message</label><textarea name="message" rows="4" required></textarea></div>
+
+    <button type="submit" class="btn">Envoyer</button>
+    <p class="form-status" aria-live="polite"></p>
+  </form>
+
+</div></section>
+</main>
+
+<footer class="site-footer"><div class="container footer-inner">
+  <span>© <span id="y"></span> Jérôme Jeannin</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+</div></footer>
+
+<script src="/app.js?v=final3"></script>
+<script>
+(function(){
+  const intro = document.getElementById('intro');
+  if(!intro) return;
+  const video = document.getElementById('introVideo');
+  const skip  = document.getElementById('introSkip');
+
+  const close = () => {
+    if (!intro) return;
+    intro.style.pointerEvents = 'none';
+    intro.style.opacity = '0';
+    intro.setAttribute('aria-hidden','true');
+    try { intro.remove(); } catch(e) {}
+  };
+
+  // URL pour désactiver l'intro pendant les tests : ?intro=0 ou ?nointro=1
+  const qs = new URLSearchParams(location.search);
+  if (qs.get('intro') === '0' || qs.get('nointro') === '1') { close(); return; }
+
+  if (skip)  skip.addEventListener('click', (e)=>{ e.preventDefault(); close(); });
+  if (video) {
+    video.addEventListener('ended', close);
+    video.addEventListener('error', close);
+  }
+
+  // Filet de sécurité : auto-fermeture au bout de 3,5 s
+  setTimeout(close, 3500);
+})();
+</script>
+</body></html>
