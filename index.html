@@ -10,20 +10,17 @@
 <style>
 /* --- Overrides spécifiques à la home FR --- */
 
-/* 1) Carte KPI du hero plus large (évite "BI" seul à la ligne) */
+/* Carte KPI du hero plus large (évite un retour à la ligne disgracieux) */
 .card.kpi-floating{min-width:480px;}
 @media (max-width: 720px){ .card.kpi-floating{min-width:auto;} }
 
-/* 2) Retirer la flèche sur toutes les cartes non cliquables,
-      en conservant l'animation de survol */
+/* Retirer la flèche sur TOUTES les cartes non cliquables,
+   tout en conservant l’animation de survol de la carte */
 .card:not(a)::after{content:none !important;}
 
-/* 3) Petit lien "Voir plus" sous les démos */
+/* Lien "Voir plus" sous la section Démos */
 .more-link{display:inline-block;margin-top:12px;opacity:.85}
 .more-link:hover{opacity:1;text-decoration:underline}
-
-/* 4) Espacement des bulles techniques sous les CTAs */
-.hero-tech{margin:8px 0 0 0}
 </style>
 </head><body>
   <!-- Intro video -->
@@ -58,24 +55,19 @@
       <p>Je conçois des POC et des automatisations qui réduisent les coûts. Ouvert à des rôles en Suisse (onsite/hybride). Analyser, Automatiser, Industrialiser.</p>
       <p>Intégration IA & automatisation pragmatique : extraction de documents, RAG interne, routage d’e-mails, pipelines data et tableaux de bord. Certifié <strong>AI-900</strong>. Compétences : <strong>Azure</strong>, <strong>Excel/VBA</strong>, <strong>Power BI</strong>, <strong>SQL</strong>.</p>
 
+      <!-- Boutons: Mon CV (gauche), Démos (milieu), Me contacter (droite) -->
       <div class="hero-cta">
-        <a href="mailto:jeanninjerome6@gmail.com" class="btn">Me contacter</a>
-        <a href="/showcase.html" class="btn btn--sm">Voir mes démos</a>
         <a href="/assets/CV_FR.pdf" target="_blank" class="btn btn--outline">Mon CV</a>
+        <a href="/showcase.html" class="btn btn--sm">Voir mes démos</a>
+        <a href="mailto:jeanninjerome6@gmail.com" class="btn">Me contacter</a>
       </div>
 
-      <!-- Preuves d'usage -->
+      <!-- Preuves d'usage (on garde) -->
       <ul class="hero-badges">
         <li>Extraction facture → JSON/CSV</li>
         <li>Routage d’e-mails → action suivante</li>
         <li>RAG interne FR/EN</li>
       </ul>
-
-      <!-- Bulles techniques supplémentaires (sous les CTAs) -->
-      <div class="pills hero-tech">
-        <span class="pill">Azure AI</span><span class="pill">Excel/VBA</span>
-        <span class="pill">Power BI</span><span class="pill">SQL</span>
-      </div>
     </div>
 
     <!-- visuel + KPI -->
@@ -152,9 +144,15 @@
     <li>Disponibilité : Suisse, onsite/hybride</li>
     <li>Contact recrutement : <a href="mailto:jeanninjerome6@gmail.com">jeanninjerome6@gmail.com</a></li>
   </ul>
+
+  <!-- Toutes les technologies rassemblées ici, triées par importance -->
   <div class="pills">
+    <span class="pill">Azure AI</span><span class="pill">Python</span>
+    <span class="pill">Excel/VBA</span><span class="pill">Power BI</span>
+    <span class="pill">SQL</span><span class="pill">n8n · Make</span>
+    <span class="pill">Salesforce</span>
+    <!-- Certifs conservées ici aussi -->
     <span class="pill">AI-900</span><span class="pill">TOEIC</span><span class="pill">PCIE</span>
-    <span class="pill">Azure</span><span class="pill">Excel/VBA</span><span class="pill">Power BI</span><span class="pill">SQL</span>
   </div>
 </div></section>
 
@@ -162,7 +160,7 @@
   <div class="reveal">
     <h2 class="section-title">À propos (en quelques mots)</h2>
     <p>Français originaire de Paris. Passionné de nouvelles technologies, j’ai développé un vrai goût du détail et une obsession pour les flux bien huilés : identifier les tâches répétitives, supprimer les frictions et transformer des processus manuels en systèmes fiables, mesurables et durables. Après un parcours en banque/assurance et en data/reporting, je mets aujourd’hui l’IA appliquée et l’automatisation au service de gains concrets (temps, qualité, traçabilité).</p>
-    <div class="pills"><span class="pill">Excel avancé</span><span class="pill">Power BI</span><span class="pill">SQL</span><span class="pill">Salesforce</span></div>
+    <!-- (pills retirées ici) -->
   </div>
 
   <div class="reveal delay-1">
@@ -187,10 +185,7 @@
       <li>FR / EN / ES</li>
       <li>Sur site ou hybride</li>
     </ul>
-    <div class="pills">
-      <span class="pill">Azure</span><span class="pill">Python</span>
-      <span class="pill">Power BI</span><span class="pill">n8n · Make</span>
-    </div>
+    <!-- (pills retirées ici) -->
   </div>
 
   <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" class="contact-form">
