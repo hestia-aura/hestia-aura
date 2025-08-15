@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600">
+  <rect width="960" height="600" rx="16" fill="#0f1117"></rect>
+  <rect x="32" y="32" width="896" height="72" rx="12" fill="#111827" stroke="rgba(255,255,255,.12)"></rect>
+  <text x="56" y="78" fill="#e6edf3" font-size="28" font-weight="700" font-family="Segoe UI,Roboto,Arial,sans-serif">
+    ACME SAS — FV-2024-031 • EUR
+  </text>
+  <rect x="32" y="124" width="896" height="340" rx="12" fill="#0b0c10" stroke="rgba(255,255,255,.08)"></rect>
+  <rect x="56" y="152" width="260" height="70" rx="12" fill="#111827" stroke="rgba(255,255,255,.12)"></rect>
+  <rect x="332" y="152" width="260" height="70" rx="12" fill="#111827" stroke="rgba(255,255,255,.12)"></rect>
+  <rect x="608" y="152" width="260" height="70" rx="12" fill="#111827" stroke="rgba(255,255,255,.12)"></rect>
+  <text x="72" y="184" fill="#c7ccd3" font-size="12" font-family="Segoe UI,Roboto,Arial,sans-serif">Supplier</text>
+  <text x="72" y="206" fill="#e6edf3" font-size="18" font-weight="700" font-family="Segoe UI,Roboto,Arial,sans-serif">ACME SAS</text>
+  <text x="348" y="184" fill="#c7ccd3" font-size="12" font-family="Segoe UI,Roboto,Arial,sans-serif">Invoice #</text>
+  <text x="348" y="206" fill="#e6edf3" font-size="18" font-weight="700" font-family="Segoe UI,Roboto,Arial,sans-serif">FV-2024-031</text>
+  <text x="624" y="184" fill="#c7ccd3" font-size="12" font-family="Segoe UI,Roboto,Arial,sans-serif">Date</text>
+  <text x="624" y="206" fill="#e6edf3" font-size="18" font-weight="700" font-family="Segoe UI,Roboto,Arial,sans-serif">2024-08-01</text>
+  <rect x="56" y="246" width="816" height="12" fill="rgba(255,255,255,.08)"></rect>
+  <text x="56" y="288" fill="#e6edf3" font-size="16" font-weight="700" font-family="Segoe UI,Roboto,Arial,sans-serif">
+    Support package • 1 × 800,00
+  </text>
+  <text x="56" y="318" fill="#e6edf3" font-size="16" font-weight="700" font-family="Segoe UI,Roboto,Arial,sans-serif">
+    Licenses (3) • 3 × 140,17
+  </text>
+  <text x="56" y="348" fill="#e6edf3" font-size="16" font-weight="700" font-family="Segoe UI,Roboto,Arial,sans-serif">
+    Shipping • 1 × 69,99
+  </text>
+  <rect x="32" y="476" width="896" height="92" rx="12" fill="#111827" stroke="rgba(255,255,255,.12)"></rect>
+  <text x="56" y="528" fill="#e6edf3" font-size="22" font-weight="700" font-family="Segoe UI,Roboto,Arial,sans-serif">
+    Total 1 290,50 EUR • VAT 107,54
+  </text>
+</svg>
