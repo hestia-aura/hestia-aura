@@ -6,7 +6,12 @@
 </head><body>
 <header class="site-header"><div class="container header-inner">
   <a class="brand" href="/"><img src="/assets/logo.jpg" class="brand-mark" alt="logo"><span class="brand-name">Hestia <strong>Aura</strong></span></a>
-  <nav class="nav"><a href="/">Accueil</a><a href="/about.html">À propos</a><a href="/showcase.html">Showcase</a><a class="btn btn--sm" href="/en/showcase.html">EN</a></nav>
+  <nav class="nav">
+    <a href="/">Accueil</a>
+    <a href="/about.html">À propos</a>
+    <a href="/showcase.html">Showcase</a>
+    <a class="btn btn--sm" href="/en/showcase.html">EN</a>
+  </nav>
 </div></header>
 
 <main id="top">
@@ -18,34 +23,36 @@
 
   <section class="section"><div class="container">
     <div class="cards">
-       <article class="card">
-  <a href="/demos/pipeline/">
-    <h3>Pipeline & Dashboard</h3>
-    <p>ETL mock (Extract → Transform → Load), table normalisée, KPIs et graphiques. Export CSV.</p>
-    <div class="pills">
-      <span class="pill">ETL</span><span class="pill">CSV</span><span class="pill">KPIs</span><span class="pill">Charts</span>
-    </div>
-  </a>
-</article>
-      
+
+      <!-- 1) Pipeline & Dashboard -->
+      <a class="card" href="/demos/pipeline/">
+        <h3>Pipeline & Dashboard</h3>
+        <p>ETL mock (Extract → Transform → Load), table normalisée, KPIs et graphiques. Export CSV.</p>
+        <div class="pills"><span class="pill">ETL</span><span class="pill">CSV</span><span class="pill">KPIs</span><span class="pill">Charts</span></div>
+      </a>
+
+      <!-- 2) Extraction de factures -->
       <a class="card" href="/demos/invoices/">
         <h3>Extraction de factures</h3>
         <p>Exemple d’extraction structurée (JSON / CSV) à partir d’un modèle de facture.</p>
         <div class="pills"><span class="pill">OCR</span><span class="pill">Parsing</span></div>
       </a>
 
+      <!-- 3) Router d’e-mails -->
       <a class="card" href="/demos/email-router/">
         <h3>Router d’e-mails</h3>
         <p>Résumé + classification + aiguillage fictifs vers CRM/support.</p>
         <div class="pills"><span class="pill">LLM</span><span class="pill">Workflow</span></div>
       </a>
 
+      <!-- 4) QR-facture (Suisse) -->
       <a class="card" href="/demos/invoices/?sample=ch">
-  <h3>QR-facture (Suisse)</h3>
+        <h3>QR-facture (Suisse)</h3>
         <p>Aperçu des champs clés et de la référence QR (mock) ; export CSV.</p>
         <div class="pills"><span class="pill">Suisse</span><span class="pill">Paiements</span></div>
       </a>
 
+      <!-- 5) RAG interne -->
       <a class="card" href="/demos/rag/">
         <h3>RAG interne</h3>
         <p>Recherche simplifiée dans un corpus JSON (front-end only).</p>
