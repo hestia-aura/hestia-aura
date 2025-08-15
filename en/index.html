@@ -7,9 +7,34 @@
 <link rel="icon" href="/assets/logo.jpg">
 <link rel="apple-touch-icon" href="/assets/logo.jpg">
 <link rel="stylesheet" href="/styles.css?v=final3">
+<style>
+/* EN overrides mirroring FR */
+
+/* KPI card width tuned to content */
+.card.kpi-floating{width:fit-content;min-width:450px;max-width:560px;}
+@media (max-width: 720px){ .card.kpi-floating{min-width:auto;max-width:none;width:auto;} }
+
+/* Remove arrow on non-clickable cards */
+.card:not(a)::after{content:none !important;}
+
+/* "See more" link */
+.more-link{display:inline-block;margin-top:12px;opacity:.85}
+.more-link:hover{opacity:1;text-decoration:underline}
+
+/* Hero buttons unified */
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.hero-cta .btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  height:48px;padding:0 20px;line-height:1;border-radius:12px;
+  font-weight:700;
+}
+.hero-cta .btn--dark{
+  background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.08);
+}
+</style>
 </head><body>
 
-<!-- Intro video (added) -->
+<!-- Intro video -->
 <div id="intro" class="intro" aria-label="Intro animation" role="dialog" aria-modal="true">
   <video id="introVideo" class="intro-video" autoplay muted playsinline preload="auto" poster="/assets/intro-poster.jpg">
     <source src="/assets/intro.webm" type="video/webm">
@@ -38,18 +63,28 @@
 
     <div class="hero-copy reveal">
       <h1>Portfolio — <span class="accent">Data/AI & Automation</span></h1>
-      <p>Pragmatic AI & automation: document extraction, internal RAG, email routing, data pipelines and dashboards.<br>
-      Certified <strong>AI-900</strong>. Skills: <strong>Azure</strong>, <strong>Advanced Excel</strong>, <strong>Power BI</strong>, <strong>SQL</strong>.</p>
-      <div class="hero-cta"><a href="#projects" class="btn">See projects</a><a href="#contact" class="btn btn--sm">Get in touch</a></div>
-      <ul class="hero-badges"><li>AI-900 — Azure AI Fundamentals</li><li>Python · SQL · Power BI</li><li>n8n · Make · APIs</li></ul>
+      <p>I design PoCs and automations that reduce costs. Open to roles in Switzerland (onsite/hybrid). Analyze, Automate, Industrialize.</p>
+      <p>Pragmatic AI & automation: document extraction, internal RAG, email routing, data pipelines and dashboards. Certified <strong>AI-900</strong>. Skills: <strong>Azure</strong>, <strong>Excel/VBA</strong>, <strong>Power BI</strong>, <strong>SQL</strong>.</p>
+
+      <div class="hero-cta">
+        <a href="/assets/CV_EN.pdf" target="_blank" class="btn btn--outline">My CV</a>
+        <a href="/en/showcase.html" class="btn btn--dark">See my demos</a>
+        <a href="mailto:jeanninjerome6@gmail.com" class="btn">Contact me</a>
+      </div>
+
+      <ul class="hero-badges">
+        <li>Invoice extraction → JSON/CSV</li>
+        <li>Email routing → next action</li>
+        <li>Internal RAG (FR/EN)</li>
+      </ul>
     </div>
 
     <div class="hero-visual reveal delay-1">
       <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
       <div class="card kpi-floating">
         <div class="card-kpi"><span class="kpi-label">Open:</span><span class="kpi-value">Switzerland · On-site/Hybrid</span></div>
-        <div class="card-kpi"><span class="kpi-label">Stack</span><span class="kpi-value">Azure AI · Python · Power BI</span></div>
-        <div class="card-kpi"><span class="kpi-label">Cert.</span><span class="kpi-value">AI-900</span></div>
+        <div class="card-kpi"><span class="kpi-label">Stack:</span><span class="kpi-value">Azure AI · Python · Power BI</span></div>
+        <div class="card-kpi"><span class="kpi-label">Cert.:</span><span class="kpi-value">AI-900 · TOEIC 915 · ICDL/PCIE Excel</span></div>
       </div>
     </div>
 
@@ -57,21 +92,23 @@
 </section>
 
 <section id="expertises" class="section"><div class="container">
-  <h2 class="section-title reveal">What I do</h2>
+  <h2 class="section-title reveal">Analyze · Automate · Industrialize</h2>
   <div class="cards">
-    <article class="card reveal"><h3>AI Integration</h3><p>Document extraction, internal RAG with sources, email routing & summarization, secure by design.</p></article>
-    <article class="card reveal"><h3>Automation</h3><p>No/low-code workflows (n8n/Make) and API integrations to reduce repetitive tasks.</p></article>
-    <article class="card reveal"><h3>Data Management</h3><p>Collection, quality & exposure (ETL/ELT, SQL/warehouse), metrics and observability.</p></article>
+    <article class="card reveal"><h3>Analyze</h3><p>Make data usable: quality, simple schemas, key indicators.</p></article>
+    <article class="card reveal"><h3>Automate</h3><p>Replace repetitive tasks with simple rule-based tools for immediate gains.</p></article>
+    <article class="card reveal"><h3>Industrialize</h3><p>Take a PoC to robust usage: access control, logs, FADP/FINMA compliance.</p></article>
   </div>
 </div></section>
 
 <section id="projects" class="section alt"><div class="container">
-  <h2 class="section-title reveal">Projects (highlights)</h2>
+  <h2 class="section-title reveal">Usage-oriented demos</h2>
+  <p class="muted">Front-end, mock data. The goal is to illustrate business logic. In production, these approaches integrate with the company environment and standards.</p>
   <div class="cards">
-    <article class="card reveal"><h3>Invoice extraction (Azure)</h3><p>Azure AI Document Intelligence → normalized JSON (VAT, totals, items) → CSV/API export to ERP.</p><div class="pills"><span class="pill">Python</span><span class="pill">Azure</span><span class="pill">APIs</span><span class="pill">Power BI</span></div></article>
-    <article class="card reveal"><h3>Email router (n8n + LLM)</h3><p>Summarize, classify, suggest replies; route to CRM/support with tags and priorities.</p><div class="pills"><span class="pill">Python</span><span class="pill">Azure</span><span class="pill">APIs</span><span class="pill">Power BI</span></div></article>
-    <article class="card reveal"><h3>Internal RAG (Azure OpenAI)</h3><p>Hybrid search, source citations, confidentiality controls.</p><div class="pills"><span class="pill">Python</span><span class="pill">Azure</span><span class="pill">APIs</span><span class="pill">Power BI</span></div></article>
+    <article class="card reveal"><h3>Invoice extraction</h3><p>Key fields + line items → structured JSON → CSV export.</p><div class="pills"><span class="pill">CH/EU/US</span><span class="pill">CSV</span><span class="pill">JSON</span></div></article>
+    <article class="card reveal"><h3>Email router</h3><p>Simple classification and next action (ticket/CRM/HR) — 100% local.</p><div class="pills"><span class="pill">Rules</span><span class="pill">Flow</span><span class="pill">Triage</span></div></article>
+    <article class="card reveal"><h3>Internal RAG</h3><p>FR/EN search over a JSON corpus, tags and term highlighting.</p><div class="pills"><span class="pill">FR/EN</span><span class="pill">Tags</span><span class="pill">Highlight</span></div></article>
   </div>
+  <a class="more-link" href="/en/showcase.html">See more →</a>
 </div></section>
 
 <section id="certs" class="section">
@@ -81,39 +118,47 @@
       <article class="card reveal">
         <h3>AI-900 — Microsoft Certified: Azure AI Fundamentals</h3>
         <p>Fundamentals of AI on Azure (cognitive services, responsible AI).</p>
-        <div class="pills">
-          <span class="pill pill--success">Verified</span>
-          <a class="pill" href="/assets/CV_EN.pdf" target="_blank">CV (EN)</a>
-          <a class="pill" href="/assets/CV_FR.pdf" target="_blank">CV (FR)</a>
-        </div>
+        <div class="pills"><span class="pill pill--success">Verified</span></div>
       </article>
 
       <article class="card reveal">
         <h3>TOEIC — Test of English for International Communication</h3>
         <p>Score <strong>915 / 990</strong> (Aug 2023).<br>Operational C1 level.</p>
-        <div class="pills">
-          <span class="pill">Listening & Reading</span>
-          <span class="pill">Business English</span>
-        </div>
+        <div class="pills"><span class="pill">Listening & Reading</span><span class="pill">Business English</span></div>
       </article>
 
       <article class="card reveal">
         <h3>ICDL — Excel (PCIE)</h3>
         <p>Result <strong>75&nbsp;%</strong> (Jul 2018).<br>Advanced Excel skills (tables, pivot tables, functions).</p>
-        <div class="pills">
-          <span class="pill">Advanced Excel</span>
-          <span class="pill">ICDL / PCIE</span>
-        </div>
+        <div class="pills"><span class="pill">Advanced Excel</span><span class="pill">ICDL / PCIE</span></div>
       </article>
     </div>
   </div>
 </section>
 
+<!-- For recruiters -->
+<section id="recruiters" class="section"><div class="container">
+  <h2 class="section-title reveal">For recruiters</h2>
+  <ul class="feature-list">
+    <li>Languages: FR / EN / ES</li>
+    <li>Availability: Switzerland, onsite/hybrid</li>
+    <li>Recruitment contact: <a href="mailto:jeanninjerome6@gmail.com">jeanninjerome6@gmail.com</a></li>
+  </ul>
+
+  <div class="pills">
+    <span class="pill">Azure AI</span><span class="pill">Python</span>
+    <span class="pill">Excel/VBA</span><span class="pill">Power BI</span>
+    <span class="pill">SQL</span><span class="pill">Compliance</span>
+    <span class="pill">Agile</span><span class="pill">n8n · Make</span>
+    <span class="pill">Salesforce</span><span class="pill">Blockchain</span>
+    <span class="pill">AI-900</span><span class="pill">TOEIC</span><span class="pill">ICDL/PCIE</span>
+  </div>
+</div></section>
+
 <section class="section"><div class="container grid-2">
   <div class="reveal">
     <h2 class="section-title">About (a few words about me)</h2>
     <p>French born in Paris. Passionate about new technologies, I’m detail-oriented and obsessed with smooth workflows: spot repetitive work, remove friction, and turn manual processes into reliable, measurable, maintainable systems. After finance and data/reporting roles, I now apply AI and automation to deliver concrete impact (time, quality, traceability).</p>
-    <div class="pills"><span class="pill">Advanced Excel</span><span class="pill">Power BI</span><span class="pill">SQL</span><span class="pill">Salesforce</span></div>
   </div>
 
   <div class="reveal delay-1">
@@ -121,7 +166,7 @@
       <h3>Contact</h3>
       <p class="muted">Reply within 24 h (FR/EN/ES).</p>
       <div class="stack">
-        <a class="btn" href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+        <a class="btn" href="mailto:jeanninjerome6@gmail.com">Email</a>
         <a class="btn btn--outline" href="https://www.linkedin.com/in/j%C3%A9r%C3%B4me-jeannin-151023a6/" target="_blank" rel="noopener">LinkedIn</a>
       </div>
     </div>
@@ -138,13 +183,10 @@
       <li>FR / EN / ES</li>
       <li>On-site or hybrid</li>
     </ul>
-    <div class="pills">
-      <span class="pill">Azure</span><span class="pill">Python</span>
-      <span class="pill">Power BI</span><span class="pill">n8n · Make</span>
-    </div>
   </div>
 
   <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" class="contact-form">
+    <h3 class="section-title" style="margin:0 0 12px 0">Contact form</h3>
     <input type="hidden" name="access_key" value="0fd6281b-4d44-4857-8c2f-f70937b432fa">
     <input type="hidden" name="subject" value="Portfolio contact — Hestia Aura">
     <input type="hidden" name="from_name" value="Hestia Aura Portfolio">
@@ -166,4 +208,30 @@
 </div></footer>
 
 <script src="/app.js?v=final3"></script>
+<script>
+/* Intro safety net: end/error/click/auto-close after 3.5s.
+   Disable while testing: ?intro=0 or ?nointro=1 */
+(function(){
+  const intro = document.getElementById('intro');
+  if(!intro) return;
+  const video = document.getElementById('introVideo');
+  const skip  = document.getElementById('introSkip');
+
+  const close = () => {
+    if (!intro) return;
+    intro.style.pointerEvents = 'none';
+    intro.style.opacity = '0';
+    intro.setAttribute('aria-hidden','true');
+    try { intro.remove(); } catch(e) {}
+  };
+
+  const qs = new URLSearchParams(location.search);
+  if (qs.get('intro') === '0' || qs.get('nointro') === '1') { close(); return; }
+
+  if (skip)  skip.addEventListener('click', (e)=>{ e.preventDefault(); close(); });
+  if (video) { video.addEventListener('ended', close); video.addEventListener('error', close); }
+
+  setTimeout(close, 3500);
+})();
+</script>
 </body></html>
