@@ -1,49 +1,122 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html><html lang="fr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Email router — demo</title>
+<title>Email router — démo</title>
 <link rel="icon" href="/assets/logo.jpg">
 <link rel="apple-touch-icon" href="/assets/logo.jpg">
 <link rel="stylesheet" href="/styles.css?v=final3">
 <style>
-.page{max-width:1100px;margin:32px auto;padding:0 20px}
-textarea{width:100%;min-height:220px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f1117;color:#fff;padding:12px;margin-bottom:0;outline:none;box-shadow:none}
-.result{margin-top:12px;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px;color:#cbd5e1}
+  .wrap{max-width:1080px;margin:0 auto;padding:24px 20px}
+  h1{font-size:32px;margin:8px 0 4px}
+  p.muted{opacity:.85;margin:0 0 14px}
+  .toolbar{display:flex;gap:10px;align-items:center;margin:6px 0 12px}
+  select{background:#0f1117;color:#e6edf3;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:8px 10px}
+  textarea{display:block;width:100%;min-height:220px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f1117;color:#e6edf3;padding:12px}
+  .btn{display:inline-block;background:#6366f1;color:#fff;border:none;border-radius:12px;padding:10px 14px;font-weight:600;box-shadow:0 6px 20px rgba(99,102,241,.35);cursor:pointer}
+  .result{margin-top:14px;padding:12px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:#0f1117}
+  .result:empty{display:none}
+  .badge{display:inline-block;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700;margin-right:8px}
+  .invoice{background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.35);color:#86efac}
+  .support{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.35);color:#93c5fd}
+  .sales{background:rgba(234,179,8,.15);border:1px solid rgba(234,179,8,.35);color:#fde68a}
+  .hr{background:rgba(244,63,94,.15);border:1px solid rgba(244,63,94,.35);color:#fda4af}
+  .other{background:rgba(148,163,184,.15);border:1px solid rgba(148,163,184,.35);color:#cbd5e1}
+  .hint{color:#c7ccd3;margin-top:8px}
 </style>
 </head><body>
 <header class="site-header"><div class="container header-inner">
-  <a class="brand" href="/en/"><img src="/assets/logo.jpg" class="brand-mark" alt="logo"><span class="brand-name">Hestia <strong>Aura</strong></span></a>
-  <nav class="nav"><a href="/en/">Home</a><a href="/en/showcase.html">Showcase</a><a class="btn btn--sm" href="/demos/email-router/">FR</a></nav>
+  <a class="brand" href="/" aria-label="Hestia Aura">
+    <img src="/assets/logo.jpg" alt="Hestia Aura — logo" class="brand-mark"><span class="brand-name">Hestia <strong>Aura</strong></span>
+  </a>
+  <nav class="nav"><a href="/">Accueil</a><a href="/showcase.html">Showcase</a><a class="btn btn--sm" href="/en/demos/email-router/">EN</a></nav>
 </div></header>
 
-<main class="page">
-  <h1>Email router — demo</h1>
-  <p>Paste an email. The classification is done 100% in your browser.</p>
-  <textarea id="mail" placeholder="Paste an email…"></textarea>
-  <button id="go" class="btn">Classify</button>
-  <div class="result" id="out">Labels: Invoice · Support · Sales · HR · Other</div>
+<main class="wrap">
+  <h1>Email router — démo</h1>
+  <p class="muted">Collez un e-mail ou choisissez un exemple. La classification est 100 % locale (dans votre navigateur).</p>
+
+  <div class="toolbar">
+    <label for="preset">Exemples :</label>
+    <select id="preset" aria-label="Choisir un e-mail d'exemple">
+      <option value="">— Aucun —</option>
+      <option value="invoice">Facture en retard de paiement</option>
+      <option value="support">Ticket support (bug)</option>
+      <option value="sales">Demande de devis</option>
+      <option value="hr">Candidature / RH</option>
+    </select>
+    <button id="run" class="btn">Classer</button>
+  </div>
+
+  <textarea id="mail" placeholder="Collez ici un e-mail…"></textarea>
+
+  <div id="result" class="result"></div>
+  <div class="hint">Labels : Invoice · Support · Sales · HR · Other</div>
 </main>
 
 <footer class="site-footer"><div class="container footer-inner">
-  <span>© <span id="y"></span> Jérôme J.</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+  <span>© <span id="y"></span> Jérôme Jeannin</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
 </div></footer>
 
-<script src="/app.js?v=final3"></script>
 <script>
-const rules = [
-  {label:'Invoice', kws:['invoice','amount due','payment','VAT','PO','bill']},
-  {label:'Support', kws:['issue','bug','error','cannot','support','help']},
-  {label:'Sales', kws:['quote','pricing','offer','proposal','demo']},
-  {label:'HR', kws:['contract','payroll','leave','vacation','recruitment','HR']}
-];
+const ta = document.getElementById('mail');
+const btn = document.getElementById('run');
+const res = document.getElementById('result');
+const preset = document.getElementById('preset');
+
+const presets = {
+  invoice: `Bonjour,\\n\\nSauf erreur de notre part, la facture FV-2024-031 d’un montant de 1’290.50 CHF arrive à échéance le 15 août. Merci de procéder au paiement (IBAN CH…).\\n\\nCordialement, Comptabilité`,
+  support: `Bonjour,\\n\\nNous avons un problème critique : impossible d’exporter les rapports (erreur 500). Pouvez-vous nous aider ? Ticket #4581.\\n\\nMerci, Support IT`,
+  sales: `Bonjour,\\n\\nPouvez-vous nous envoyer une offre pour 20 licences avec support ? Quelles sont vos conditions de pricing et délais ?\\n\\nBien à vous, Achats`,
+  hr: `Bonjour,\\n\\nJe vous transmets mon CV pour le poste de Data Analyst à Genève. Disponible pour un entretien la semaine prochaine.\\n\\nCordialement, Candidat`
+};
+
 function classify(text){
   const t = text.toLowerCase();
-  for(const r of rules){ if(r.kws.some(k=>t.includes(k))) return r.label; }
-  return 'Other';
+  const tests = [
+    {label:'Invoice',  kw:['invoice','facture','bon de commande','tva','payment due','due date']},
+    {label:'Support',  kw:['issue','bug','incident','help','support','problème','erreur']},
+    {label:'Sales',    kw:['offer','quote','pricing','devis','commande','achat']},
+    {label:'HR',       kw:['cv','résumé','recruit','recrut','hr','rh','entretien','contrat','salary','salaire']}
+  ];
+  let best = {label:'Other', score:0};
+  for(const r of tests){
+    let s = 0;
+    for(const k of r.kw){ if(t.includes(k)) s++; }
+    if(s>best.score) best = {label:r.label, score:s};
+  }
+  const conf = Math.min(99, 50 + best.score*15);
+  return {label: best.label, confidence: conf};
 }
-document.getElementById('go').addEventListener('click',()=>{
-  const txt=document.getElementById('mail').value||'';
-  const label=classify(txt);
-  document.getElementById('out').textContent='Label → '+label;
+
+function suggestedAction(label){
+  switch(label){
+    case 'Invoice': return 'Aiguiller vers Comptabilité (AP@…); créer un ticket Finance.';
+    case 'Support': return 'Créer un ticket support P1 ; notifier l’équipe produit.';
+    case 'Sales':   return 'Créer une opportunité CRM ; répondre avec l’offre et délais.';
+    case 'HR':      return 'Transmettre à RH ; déclencher réponse automatique candidat.';
+    default:        return 'Mettre en file “À traiter”.';
+  }
+}
+
+function renderResult(out){
+  const cls = out.label.toLowerCase();
+  res.innerHTML = '<span class="badge '+cls+'">'+out.label+'</span> Confiance : '+out.confidence+'%<br><div class="hint">'+suggestedAction(out.label)+'</div>';
+}
+
+function onRun(){
+  const text = ta.value.trim();
+  res.textContent = '';
+  if(!text) return;
+  const out = classify(text);
+  renderResult(out);
+}
+
+btn.addEventListener('click', onRun);
+preset.addEventListener('change', (e)=>{
+  const v = e.target.value;
+  if(!v){ ta.value=''; res.textContent=''; return; }
+  ta.value = presets[v];
+  onRun();
 });
+ta.addEventListener('input', () => { if(!ta.value.trim()) res.textContent = ''; });
 </script>
 </body></html>
