@@ -12,6 +12,7 @@
     <p>Collez un e-mail. La classification est faite 100% dans votre navigateur.</p>
     <textarea id="txt" rows="10" style="width:100%"></textarea>
     <button class="btn" id="go" style="margin-top:8px">Classer</button>
+    <div id="result" class="pill pill--success" style="margin-top:12px;display:none;"></div>
     <div id="out" class="card" style="margin-top:12px; padding:12px"></div>
     <p class="muted">Labels: Invoice · Support · Sales · HR · Other</p>
   </div>
@@ -21,6 +22,10 @@
 
     let clf;
     const labels = ['Invoice','Support','Sales','HR','Other']; // mapping target
+    const box = document.getElementById('result');
+box.style.display = 'inline-block';
+box.textContent = 'Label : ' + label;
+
     const out = document.getElementById('out');
     document.getElementById('go').addEventListener('click', async () => {
       out.textContent = 'Loading model / predicting…';
