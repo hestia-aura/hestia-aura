@@ -10,24 +10,27 @@
 <style>
 /* --- Overrides spécifiques à la home FR --- */
 
-/* Carte KPI du hero : largeur au plus juste du contenu
-   (évite "BI" seul à la ligne, mais ne parait pas trop large) */
-.card.kpi-floating{
-  width:fit-content;
-  min-width:450px;
-  max-width:560px;
-}
-@media (max-width: 720px){
-  .card.kpi-floating{min-width:auto;max-width:none;width:auto;}
-}
+/* 1) Carte KPI du hero : largeur adaptée au contenu */
+.card.kpi-floating{width:fit-content;min-width:450px;max-width:560px;}
+@media (max-width: 720px){ .card.kpi-floating{min-width:auto;max-width:none;width:auto;} }
 
-/* Retirer la flèche sur TOUTES les cartes non cliquables,
-   tout en conservant l’animation de survol */
+/* 2) Retirer la flèche sur TOUTES les cartes non cliquables, animation conservée */
 .card:not(a)::after{content:none !important;}
 
-/* Lien "Voir plus" sous la section Démos */
+/* 3) Lien "Voir plus" sous la section Démos */
 .more-link{display:inline-block;margin-top:12px;opacity:.85}
 .more-link:hover{opacity:1;text-decoration:underline}
+
+/* 4) Harmonisation des 3 boutons du hero (hauteur/centrage identiques) */
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.hero-cta .btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  height:48px;padding:0 20px;line-height:1;border-radius:12px;
+  font-weight:700;
+}
+.hero-cta .btn--dark{
+  background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.08);
+}
 </style>
 </head><body>
   <!-- Intro video -->
@@ -62,14 +65,14 @@
       <p>Je conçois des POC et des automatisations qui réduisent les coûts. Ouvert à des rôles en Suisse (onsite/hybride). Analyser, Automatiser, Industrialiser.</p>
       <p>Intégration IA & automatisation pragmatique : extraction de documents, RAG interne, routage d’e-mails, pipelines data et tableaux de bord. Certifié <strong>AI-900</strong>. Compétences : <strong>Azure</strong>, <strong>Excel/VBA</strong>, <strong>Power BI</strong>, <strong>SQL</strong>.</p>
 
-      <!-- Boutons: Mon CV (gauche), Démos (milieu), Me contacter (droite) -->
+      <!-- Boutons harmonisés: CV (gauche), Démos (milieu, sombre), Contact (droite, violet) -->
       <div class="hero-cta">
         <a href="/assets/CV_FR.pdf" target="_blank" class="btn btn--outline">Mon CV</a>
-        <a href="/showcase.html" class="btn btn--sm">Voir mes démos</a>
+        <a href="/showcase.html" class="btn btn--dark">Voir mes démos</a>
         <a href="mailto:jeanninjerome6@gmail.com" class="btn">Me contacter</a>
       </div>
 
-      <!-- Preuves d'usage -->
+      <!-- Preuves d'usage (on garde) -->
       <ul class="hero-badges">
         <li>Extraction facture → JSON/CSV</li>
         <li>Routage d’e-mails → action suivante</li>
@@ -117,27 +120,19 @@
       <article class="card reveal">
         <h3>AI-900 — Microsoft Certified: Azure AI Fundamentals</h3>
         <p>Fondamentaux IA sur Azure (services cognitifs, IA responsable).</p>
-        <div class="pills">
-          <span class="pill pill--success">Validé</span>
-        </div>
+        <div class="pills"><span class="pill pill--success">Validé</span></div>
       </article>
 
       <article class="card reveal">
         <h3>TOEIC — Test of English for International Communication</h3>
         <p>Score <strong>915 / 990</strong> (août 2023).<br>Niveau C1 opérationnel.</p>
-        <div class="pills">
-          <span class="pill">Listening & Reading</span>
-          <span class="pill">Anglais professionnel</span>
-        </div>
+        <div class="pills"><span class="pill">Listening & Reading</span><span class="pill">Anglais professionnel</span></div>
       </article>
 
       <article class="card reveal">
         <h3>PCIE — Excel (ICDL)</h3>
         <p>Résultat <strong>75&nbsp;%</strong> (juil. 2018).<br>Maîtrise avancée d’Excel (tableaux, TCD, fonctions, VBA).</p>
-        <div class="pills">
-          <span class="pill">Excel avancé</span>
-          <span class="pill">ICDL / PCIE</span>
-        </div>
+        <div class="pills"><span class="pill">Excel avancé</span><span class="pill">ICDL / PCIE</span></div>
       </article>
     </div>
   </div>
@@ -152,7 +147,7 @@
     <li>Contact recrutement : <a href="mailto:jeanninjerome6@gmail.com">jeanninjerome6@gmail.com</a></li>
   </ul>
 
-  <!-- Technologies & thèmes : ordonnés par pertinence pour le marché CH -->
+  <!-- Technologies & thèmes : triées par pertinence pour le marché CH -->
   <div class="pills">
     <span class="pill">Azure AI</span><span class="pill">Python</span>
     <span class="pill">Excel/VBA</span><span class="pill">Power BI</span>
