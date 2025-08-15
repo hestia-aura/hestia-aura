@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invoice → JSON → CSV</title>
+<link rel="icon" href="/assets/logo.jpg">
+<link rel="apple-touch-icon" href="/assets/logo.jpg">
+<link rel="stylesheet" href="/styles.css?v=final3">
+<style>
+.page{max-width:1200px;margin:32px auto;padding:0 20px}
+.split{display:grid;grid-template-columns:1fr 1.2fr;gap:28px}
+.icon-doc{width:120px;height:160px;border:6px solid rgba(255,255,255,.35);
+  border-radius:14px;position:relative;opacity:.85}
+.icon-doc::before{content:"";position:absolute;right:-2px;top:12px;width:26px;height:26px;border-top:6px solid rgba(255,255,255,.35);border-right:6px solid rgba(255,255,255,.35);border-radius:6px}
+pre{background:#0f1117;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px;white-space:pre-wrap}
+.actions{margin-top:14px}
+</style>
+</head><body>
+<header class="site-header"><div class="container header-inner">
+  <a class="brand" href="/en/"><img src="/assets/logo.jpg" class="brand-mark" alt="logo"><span class="brand-name">Hestia <strong>Aura</strong></span></a>
+  <nav class="nav"><a href="/en/">Home</a><a href="/en/showcase.html">Showcase</a><a class="btn btn--sm" href="/demos/invoices/">FR</a></nav>
+</div></header>
+
+<main class="page">
+  <h1>Invoice → JSON → CSV</h1>
+  <div class="split">
+    <div><div class="icon-doc" aria-hidden="true"></div></div>
+    <div>
+      <pre id="jsonView" aria-live="polite">Loading…</pre>
+      <div class="actions"><button id="dl" class="btn">Download CSV</button></div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer"><div class="container footer-inner">
+  <span>© <span id="y"></span> Jérôme J.</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+</div></footer>
+
+<script src="/app.js?v=final3"></script>
+<script>
+(async ()=>{
+  const res = await fetch('/demos/invoices/sample.json');
+  const data = await res.json();
+  const j = document.getElementById('jsonView');
+  j.textContent = JSON.stringify(data, null, 2);
+
+  function toCSV(inv){
+    const rows=[["desc","qty","unit","amount"]];
+    for(const line of inv.lines){ rows.push([line.desc,line.qty,line.unit,line.amount]); }
+    return rows.map(r=>r.join(",")).join("\n");
+  }
+  document.getElementById('dl').addEventListener('click',()=>{
+    const csv = toCSV(data);
+    const blob=new Blob([csv],{type:'text/csv'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download='invoice_lines.csv'; a.click(); URL.revokeObjectURL(a.href);
+  });
+})();
+</script>
+</body></html>
