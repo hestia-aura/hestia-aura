@@ -201,7 +201,12 @@ els.dl.addEventListener('click',()=>{
   URL.revokeObjectURL(a.href);
 });
 
-// init
-applySample('ch');
+// init (avec lecture du paramètre ?sample=ch|eu|us)
+const urlSample = new URLSearchParams(location.search).get('sample');
+const valid = ['ch','eu','us'];
+const initial = valid.includes(urlSample) ? urlSample : 'ch';
+els.sample.value = initial;
+applySample(initial);
+
 </script>
 </body></html>
