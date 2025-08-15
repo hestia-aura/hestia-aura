@@ -1,0 +1,13 @@
+{
+  "supplier": "ACME SA",
+  "invoice_number": "FV-2024-031",
+  "date": "2024-08-01",
+  "total": 1290.50,
+  "vat": 107.54,
+  "currency": "CHF",
+  "lines": [
+    {"desc": "Support package", "qty": 1, "unit": 800, "amount": 800},
+    {"desc": "Licenses (3)", "qty": 3, "unit": 140.17, "amount": 420.51},
+    {"desc": "Shipping", "qty": 1, "unit": 69.99, "amount": 69.99}
+  ]
+}
