@@ -32,16 +32,15 @@
 .kpi .label{opacity:.8;font-size:13px}
 .kpi .value{font-size:22px;font-weight:800;margin:2px 0 8px}
 .spark{width:100%;height:56px;display:block}
+.legend{margin-top:12px;background:#0b0d12;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px}
+.legend h4{margin:0 0 8px 0;font-size:14px;opacity:.9}
+.legend ul{margin:0;padding-left:18px}
+.legend li{margin:4px 0;opacity:.9}
 .roi{background:#0b1018;border:1px dashed rgba(120,132,255,.5);border-radius:16px;padding:14px}
 .roi strong{font-size:18px}
 .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}
 .stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:6px 10px;font-size:12px}
 .back{margin-top:16px;display:inline-block}
-  .legend{margin-top:12px;background:#0b0d12;border:1px solid rgba(255,255,255,.06);
-  border-radius:12px;padding:12px}
-.legend h4{margin:0 0 8px 0;font-size:14px;opacity:.9}
-.legend ul{margin:0;padding-left:18px}
-.legend li{margin:4px 0;opacity:.9}
 </style>
 </head><body>
 <header class="site-header"><div class="container header-inner">
@@ -92,8 +91,8 @@
             <text x="110" y="75" text-anchor="middle" fill="#fff" font-weight="700">Extract</text>
             <text x="400" y="75" text-anchor="middle" fill="#fff" font-weight="700">Transform</text>
             <text x="690" y="75" text-anchor="middle" fill="#fff" font-weight="700">Load</text>
-            <path id="p1" d="M 200 70 L 310 70" stroke="url(#g1)" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
-            <path id="p2" d="M 490 70 L 600 70" stroke="url(#g1)" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
+            <path d="M 200 70 L 310 70" stroke="url(#g1)" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
+            <path d="M 490 70 L 600 70" stroke="url(#g1)" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
             <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7c74ff"></path></marker></defs>
             <circle r="4" fill="#7c74ff"><animateMotion dur="1.8s" repeatCount="indefinite" path="M 200 70 L 310 70"></animateMotion></circle>
             <circle r="4" fill="#49b1ff"><animateMotion dur="1.8s" repeatCount="indefinite" path="M 490 70 L 600 70"></animateMotion></circle>
@@ -125,9 +124,10 @@
             <svg id="sp3" class="spark"></svg>
           </div>
         </div>
-<div class="legend" id="legend">
-  <!-- la légende est remplie dynamiquement par le JS -->
-</div>
+
+        <!-- LÉGENDE SOUS LES KPI -->
+        <div class="legend" id="legend"></div>
+
         <div class="roi" id="roi">
           <strong>Gain de temps estimé</strong>
           <div class="muted">Processus manuel : <span id="tMan">—</span> → Automatisé : <span id="tAuto">—</span></div>
@@ -239,7 +239,31 @@ function renderSpark(svgId, series){
   svg.innerHTML = `<path d="${d}" fill="none" stroke="#7c74ff" stroke-width="2"/>`;
 }
 
-/* UI refs */
+/* Légende (sous les KPI) */
+function renderLegend(cfg){
+  const el = document.getElementById('legend');
+  el.innerHTML = '';
+  const title = document.createElement('h4');
+  title.textContent = 'Légende des indicateurs';
+  el.appendChild(title);
+  const ul = document.createElement('ul');
+  cfg.forEach(item=>{
+    const li = document.createElement('li');
+    li.textContent = `${item.text} — ${item.tip}`;
+    ul.appendChild(li);
+  });
+  el.appendChild(ul);
+}
+
+/* KPI labels + tooltips */
+const kl1=document.getElementById('klabel1'), kl2=document.getElementById('klabel2'), kl3=document.getElementById('klabel3');
+function setKpiLabels(cfg){
+  kl1.textContent = cfg[0].text; kl1.parentElement.title = cfg[0].tip;
+  kl2.textContent = cfg[1].text; kl2.parentElement.title = cfg[1].tip;
+  kl3.textContent = cfg[2].text; kl3.parentElement.title = cfg[2].tip;
+}
+
+/* UI refs + app */
 const dsSel = document.getElementById('ds');
 const badge = document.getElementById('badgeStage');
 const thead = document.getElementById('thead');
@@ -248,16 +272,7 @@ const tfoot = document.getElementById('tfoot');
 const statRows = document.getElementById('statRows');
 const statPeriod = document.getElementById('statPeriod');
 const k1 = document.getElementById('kpi1'), k2=document.getElementById('kpi2'), k3=document.getElementById('kpi3');
-const kl1=document.getElementById('klabel1'), kl2=document.getElementById('klabel2'), kl3=document.getElementById('klabel3');
 
-/* Update KPI labels + tooltips */
-function setKpiLabels(cfg){
-  kl1.textContent = cfg[0].text; kl1.parentElement.title = cfg[0].tip;
-  kl2.textContent = cfg[1].text; kl2.parentElement.title = cfg[1].tip;
-  kl3.textContent = cfg[2].text; kl3.parentElement.title = cfg[2].tip;
-}
-
-/* App */
 function load(dsKey){
   const ds = datasets[dsKey];
   badge.textContent="Extraction…";
@@ -282,9 +297,11 @@ function load(dsKey){
       document.getElementById('pct').textContent = ds.roi.pct;
 
       setKpiLabels(ds.labels);
+      renderLegend(ds.labels);
     }, 500);
   }, 500);
 }
+
 dsSel.addEventListener('change', e=>load(e.target.value));
 document.getElementById('btnCsv').addEventListener('click', ()=>{
   const ds = datasets[dsSel.value];
@@ -295,6 +312,7 @@ document.getElementById('btnCsv').addEventListener('click', ()=>{
   a.href=url; a.download = "pipeline_export.csv"; a.click();
   URL.revokeObjectURL(url);
 });
+
 load('sales');
 document.getElementById('y').textContent = new Date().getFullYear();
 </script>
