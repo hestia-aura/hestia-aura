@@ -1,1 +1,27 @@
+[
+  {
+    "id": "pol-depenses",
+    "title": "Politique de dépenses 2024",
+    "content": "La politique de dépenses fixe les plafonds : repas 35 CHF, hôtel 180 CHF/nuit en Suisse, transports en 2e classe. Les justificatifs sont requis sous 10 jours.",
+    "tags": ["RH", "Dépenses"],
+    "url": "#",
+    "date": "2024-01-10"
+  },
+  {
+    "id": "proc-factures",
+    "title": "Procédure de facturation clients",
+    "content": "Chaque facture doit inclure l’ID client, le N° de PO et une échéance à 30 jours. Export CSV : date, montant_ht, tva, total, devise, id_client.",
+    "tags": ["Finance", "Facturation"],
+    "url": "#",
+    "date": "2023-11-02"
+  },
+  {
+    "id": "guide-rgpd",
+    "title": "Guide RGPD interne",
+    "content": "Les données personnelles (nom, email, IP) sont conservées 12 mois pour l’analyse. Toute extraction nécessite la validation du DPO. Droits d’accès/suppression garantis.",
+    "tags": ["Legal", "RGPD"],
+    "url": "#",
+    "date": "2024-03-01"
+  }
+]
 
