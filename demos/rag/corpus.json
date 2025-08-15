@@ -1,20 +1,56 @@
 [
   {
+    "title": "Procédure de facturation clients",
+    "content": "Chaque facture inclut l’ID client, le numéro de commande et la devise. Pour la Suisse, privilégier la QR-facture avec référence. Export CSV : date, montant_ht, tva, total, devise, id_client.",
+    "tags": ["Finance", "Facturation", "Suisse", "QR-facture"],
+    "date": "2024-06-12"
+  },
+  {
+    "title": "QR-facture — rappel express",
+    "content": "La QR-facture remplace les bulletins orange/rouge. Elle contient un QR avec l’IBAN, le montant et la référence (RF…). Vérifier la référence et le format IBAN CH.",
+    "tags": ["Suisse", "Paiements", "QR-facture"],
+    "date": "2023-12-01"
+  },
+  {
+    "title": "nLPD (FADP) — principes",
+    "content": "La nouvelle loi fédérale sur la protection des données impose transparence, minimisation et sécurité. Consentement explicite pour les données sensibles, droits d’accès et de suppression.",
+    "tags": ["Legal", "nLPD", "Suisse", "Protection des données"],
+    "date": "2023-09-01"
+  },
+  {
+    "title": "FINMA — exigences (résumé non officiel)",
+    "content": "Pour les prestataires financiers : gouvernance des risques, continuité, journalisation et contrôles d’accès. Pour un POC data/IA, inclure un plan de tests et de traçabilité.",
+    "tags": ["Compliance", "FINMA", "Suisse"],
+    "date": "2024-04-10"
+  },
+  {
     "title": "Politique de dépenses 2024",
-    "content": "La politique de dépenses fixe les plafonds : repas 35 CHF, hôtel 180 CHF/nuit en Suisse, transports en 2e classe. Les justificatifs sont requis sous 10 jours.",
-    "tags": ["RH", "Dépenses"],
+    "content": "Plafonds : hôtels 220 CHF/nuit en Suisse, trains en 2e classe. Les reçus sont requis sous 10 jours via le portail. Remboursement en CHF à J+7.",
+    "tags": ["RH", "Dépenses", "Suisse"],
     "date": "2024-01-10"
   },
   {
-    "title": "Procédure de facturation clients",
-    "content": "Chaque facture doit inclure l’ID client, le N° de PO et une échéance à 30 jours. Export CSV : date, montant_ht, tva, total, devise, id_client.",
-    "tags": ["Finance", "Facturation"],
-    "date": "2023-11-02"
+    "title": "Sécurité — mots de passe",
+    "content": "Longueur 12+, gestionnaire recommandé, MFA obligatoire. Rotation sur comptes à privilèges. Aucune donnée client dans les tickets.",
+    "tags": ["IT", "Sécurité"],
+    "date": "2023-10-05"
   },
   {
-    "title": "Guide RGPD interne",
-    "content": "Les données personnelles (nom, email, IP) sont conservées 12 mois pour l’analyse. Toute extraction nécessite la validation du DPO. Droits d’accès/suppression garantis.",
-    "tags": ["Legal", "RGPD"],
-    "date": "2024-03-01"
+    "title": "BYOD — terminaux personnels",
+    "content": "Appareils conformes (OS à jour, chiffrement activé). Accès aux données clients via VPN et MDM. Révocation à la sortie du collaborateur.",
+    "tags": ["IT", "Sécurité", "BYOD"],
+    "date": "2023-11-18"
+  },
+  {
+    "title": "Onboarding compliance (KYC)",
+    "content": "Collecte d’identité, preuve d’adresse, screening PEP/sanctions. Toute alerte doit être analysée et documentée avant activation du compte.",
+    "tags": ["Compliance", "KYC", "Finance"],
+    "date": "2024-02-20"
+  },
+  {
+    "title": "Gestion des incidents",
+    "content": "Classification P1/P2/P3. P1 = impact client large, engagement interne 30 min. Post-mortem en 48 h avec actions correctives.",
+    "tags": ["IT", "Incidents", "Support"],
+    "date": "2024-05-07"
   }
 ]
