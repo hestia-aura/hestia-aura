@@ -10,12 +10,19 @@
 <style>
 /* --- Overrides spécifiques à la home FR --- */
 
-/* Carte KPI du hero plus large (évite un retour à la ligne disgracieux) */
-.card.kpi-floating{min-width:480px;}
-@media (max-width: 720px){ .card.kpi-floating{min-width:auto;} }
+/* Carte KPI du hero : largeur au plus juste du contenu
+   (évite "BI" seul à la ligne, mais ne parait pas trop large) */
+.card.kpi-floating{
+  width:fit-content;
+  min-width:450px;
+  max-width:560px;
+}
+@media (max-width: 720px){
+  .card.kpi-floating{min-width:auto;max-width:none;width:auto;}
+}
 
 /* Retirer la flèche sur TOUTES les cartes non cliquables,
-   tout en conservant l’animation de survol de la carte */
+   tout en conservant l’animation de survol */
 .card:not(a)::after{content:none !important;}
 
 /* Lien "Voir plus" sous la section Démos */
@@ -62,7 +69,7 @@
         <a href="mailto:jeanninjerome6@gmail.com" class="btn">Me contacter</a>
       </div>
 
-      <!-- Preuves d'usage (on garde) -->
+      <!-- Preuves d'usage -->
       <ul class="hero-badges">
         <li>Extraction facture → JSON/CSV</li>
         <li>Routage d’e-mails → action suivante</li>
@@ -145,13 +152,13 @@
     <li>Contact recrutement : <a href="mailto:jeanninjerome6@gmail.com">jeanninjerome6@gmail.com</a></li>
   </ul>
 
-  <!-- Toutes les technologies rassemblées ici, triées par importance -->
+  <!-- Technologies & thèmes : ordonnés par pertinence pour le marché CH -->
   <div class="pills">
     <span class="pill">Azure AI</span><span class="pill">Python</span>
     <span class="pill">Excel/VBA</span><span class="pill">Power BI</span>
-    <span class="pill">SQL</span><span class="pill">n8n · Make</span>
-    <span class="pill">Salesforce</span>
-    <!-- Certifs conservées ici aussi -->
+    <span class="pill">SQL</span><span class="pill">Compliance</span>
+    <span class="pill">Agile</span><span class="pill">n8n · Make</span>
+    <span class="pill">Salesforce</span><span class="pill">Blockchain</span>
     <span class="pill">AI-900</span><span class="pill">TOEIC</span><span class="pill">PCIE</span>
   </div>
 </div></section>
@@ -160,7 +167,6 @@
   <div class="reveal">
     <h2 class="section-title">À propos (en quelques mots)</h2>
     <p>Français originaire de Paris. Passionné de nouvelles technologies, j’ai développé un vrai goût du détail et une obsession pour les flux bien huilés : identifier les tâches répétitives, supprimer les frictions et transformer des processus manuels en systèmes fiables, mesurables et durables. Après un parcours en banque/assurance et en data/reporting, je mets aujourd’hui l’IA appliquée et l’automatisation au service de gains concrets (temps, qualité, traçabilité).</p>
-    <!-- (pills retirées ici) -->
   </div>
 
   <div class="reveal delay-1">
@@ -185,7 +191,6 @@
       <li>FR / EN / ES</li>
       <li>Sur site ou hybride</li>
     </ul>
-    <!-- (pills retirées ici) -->
   </div>
 
   <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" class="contact-form">
