@@ -1,51 +1,71 @@
-<!doctype html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Email router (client-side)</title>
-  <link rel="stylesheet" href="/styles.css?v=final3">
-</head>
-<body class="section">
-  <div class="container">
-    <h1>Email router — démo</h1>
-    <p>Collez un e-mail. La classification est faite 100% dans votre navigateur.</p>
-    <textarea id="txt" rows="10" style="width:100%"></textarea>
-    <button class="btn" id="go" style="margin-top:8px">Classer</button>
-    <div id="result" class="pill pill--success" style="margin-top:12px;display:none;"></div>
-    <div id="out" class="card" style="margin-top:12px; padding:12px"></div>
-    <p class="muted">Labels: Invoice · Support · Sales · HR · Other</p>
-  </div>
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Email router — démo</title>
+<link rel="icon" href="/assets/logo.jpg">
+<link rel="apple-touch-icon" href="/assets/logo.jpg">
+<link rel="stylesheet" href="/styles.css?v=final3">
+<style>
+  .wrap{max-width:1080px;margin:0 auto;padding:24px 20px}
+  h1{font-size:32px;margin:8px 0 4px}
+  p.muted{opacity:.85;margin:0 0 16px}
+  textarea{display:block;width:100%;min-height:220px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f1117;color:#e6edf3;padding:12px}
+  .btn{display:inline-block;background:#6366f1;color:#fff;border:none;border-radius:12px;padding:10px 16px;font-weight:600;box-shadow:0 6px 20px rgba(99,102,241,.35);cursor:pointer;margin-top:12px}
+  .result{margin-top:16px;padding:12px;border:1px solid rgba(255,255,255,.08);border-radius:10px;background:#0f1117}
+  .result:empty{display:none} /* <-- masque la boîte quand elle est vide (corrige le glitch) */
+  .labels{margin-top:16px;color:#c7ccd3}
+</style>
+</head><body>
+<header class="site-header"><div class="container header-inner">
+  <a class="brand" href="/" aria-label="Hestia Aura">
+    <img src="/assets/logo.jpg" alt="logo" class="brand-mark"><span class="brand-name">Hestia <strong>Aura</strong></span>
+  </a>
+  <nav class="nav"><a href="/">Accueil</a><a href="/showcase.html">Showcase</a><a class="btn btn--sm" href="/en/">EN</a></nav>
+</div></header>
 
-  <script type="module">
-    import { pipeline } from "https://cdn.jsdelivr.net/npm/@xenova/transformers@2.15.0";
+<main class="wrap">
+  <h1>Email router — démo</h1>
+  <p class="muted">Collez un e-mail. La classification est faite 100 % dans votre navigateur.</p>
 
-    let clf;
-    const labels = ['Invoice','Support','Sales','HR','Other']; // mapping target
-    const box = document.getElementById('result');
-box.style.display = 'inline-block';
-box.textContent = 'Label : ' + label;
+  <textarea id="mail" placeholder="Collez ici un e-mail…"></textarea>
+  <button id="run" class="btn">Classer</button>
 
-    const out = document.getElementById('out');
-    document.getElementById('go').addEventListener('click', async () => {
-      out.textContent = 'Loading model / predicting…';
-      if (!clf) clf = await pipeline('text-classification', 'Xenova/distilbert-base-uncased-finetuned-sst-2-english'); // demo model
-      const text = document.getElementById('txt').value || 'Hello, I have an issue with my invoice…';
-      const res = await clf(text, { topk: 1 });
-      // Map demo labels heuristically (simple rule, fine for a demo)
-      const t = text.toLowerCase();
-      let label = 'Other';
-      if (t.includes('invoice') || t.includes('bill')) label = 'Invoice';
-      else if (t.includes('issue') || t.includes('bug') || t.includes('problem') || t.includes('support')) label = 'Support';
-      else if (t.includes('quote') || t.includes('pricing') || t.includes('demo')) label = 'Sales';
-      else if (t.includes('payroll') || t.includes('vacation') || t.includes('contract')) label = 'HR';
-      out.innerHTML = `
-        <strong>Predicted route:</strong> ${label}<br>
-        <small>Next step: <em>${label === 'Invoice' ? 'Create ticket: Finance/AP' :
-                                label === 'Support' ? 'Create ticket: Helpdesk' :
-                                label === 'Sales'   ? 'Create lead/opportunity (CRM)' :
-                                label === 'HR'      ? 'Forward to HR mailbox' : 'Triage backlog'}</em></small>`;
-    });
-  </script>
-</body>
-</html>
+  <div id="result" class="result"></div>
+  <div class="labels">Labels : Invoice · Support · Sales · HR · Other</div>
+</main>
+
+<script>
+  const ta = document.getElementById('mail');
+  const btn = document.getElementById('run');
+  const res = document.getElementById('result');
+
+  function classify(text){
+    const t = text.toLowerCase();
+    const tests = [
+      {label:'Invoice',  kw:['invoice','facture','bon de commande','tv a','tva','payment due','due date']},
+      {label:'Support',  kw:['issue','bug','incident','help','support','problème','erreur']},
+      {label:'Sales',    kw:['offer','quote','pricing','devis','commande','achat','pricing']},
+      {label:'HR',       kw:['cv','résumé','recruit','recrut','hr','rh','entretien','contrat','salary','salaire']}
+    ];
+    let best = {label:'Other', score:0};
+    for(const r of tests){
+      let s = 0;
+      for(const k of r.kw){ if(t.includes(k)) s++; }
+      if(s>best.score) best = {label:r.label, score:s};
+    }
+    // score “confiance” très simple
+    const conf = Math.min(99, 50 + best.score*15);
+    return {label: best.label, confidence: conf};
+  }
+
+  function onRun(){
+    const text = ta.value.trim();
+    res.textContent = '';           // <- on vide d’abord (pour masquer la boîte si rien)
+    if(!text) return;
+    const out = classify(text);
+    res.textContent = `Label : ${out.label} • Confiance : ${out.confidence}%`;
+  }
+
+  btn.addEventListener('click', onRun);
+  ta.addEventListener('input', () => { if(!ta.value.trim()) res.textContent = ''; });
+</script>
+</body></html>
