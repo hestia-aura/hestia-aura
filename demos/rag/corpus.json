@@ -6,9 +6,21 @@
     "date": "2024-06-12"
   },
   {
+    "title": "FADP (nLPD) — quick summary",
+    "content": "Switzerland’s updated data protection law requires transparency, data minimization and security by design. Explicit consent for sensitive data; right of access and deletion.",
+    "tags": ["Legal", "FADP", "Switzerland", "Privacy"],
+    "date": "2023-09-01"
+  },
+  {
     "title": "QR-facture — rappel express",
     "content": "La QR-facture remplace les bulletins orange/rouge. Elle contient un QR avec l’IBAN, le montant et la référence (RF…). Vérifier la référence et le format IBAN CH.",
     "tags": ["Suisse", "Paiements", "QR-facture"],
+    "date": "2023-12-01"
+  },
+  {
+    "title": "QR-bill essentials",
+    "content": "The Swiss QR-bill encodes IBAN, amount and a reference (RF…). Validate the IBAN (CH) format and ensure the reference matches the payment slip.",
+    "tags": ["Switzerland", "Payments", "QR-bill"],
     "date": "2023-12-01"
   },
   {
@@ -18,58 +30,16 @@
     "date": "2023-09-01"
   },
   {
-    "title": "FINMA — exigences (résumé non officiel)",
-    "content": "Pour les prestataires financiers : gouvernance des risques, continuité, journalisation et contrôles d’accès. Pour un POC data/IA, inclure un plan de tests et de traçabilité.",
-    "tags": ["Compliance", "FINMA", "Suisse"],
-    "date": "2024-04-10"
-  },
-  {
-    "title": "Politique de dépenses 2024",
-    "content": "Plafonds : hôtels 220 CHF/nuit en Suisse, trains en 2e classe. Les reçus sont requis sous 10 jours via le portail. Remboursement en CHF à J+7.",
-    "tags": ["RH", "Dépenses", "Suisse"],
-    "date": "2024-01-10"
-  },
-  {
-    "title": "Sécurité — mots de passe",
-    "content": "Longueur 12+, gestionnaire recommandé, MFA obligatoire. Rotation sur comptes à privilèges. Aucune donnée client dans les tickets.",
-    "tags": ["IT", "Sécurité"],
-    "date": "2023-10-05"
-  },
-  {
-    "title": "BYOD — terminaux personnels",
-    "content": "Appareils conformes (OS à jour, chiffrement activé). Accès aux données clients via VPN et MDM. Révocation à la sortie du collaborateur.",
-    "tags": ["IT", "Sécurité", "BYOD"],
-    "date": "2023-11-18"
-  },
-  {
-    "title": "Onboarding compliance (KYC)",
-    "content": "Collecte d’identité, preuve d’adresse, screening PEP/sanctions. Toute alerte doit être analysée et documentée avant activation du compte.",
-    "tags": ["Compliance", "KYC", "Finance"],
-    "date": "2024-02-20"
-  },
-  {
-    "title": "Gestion des incidents",
-    "content": "Classification P1/P2/P3. P1 = impact client large, engagement interne 30 min. Post-mortem en 48 h avec actions correctives.",
-    "tags": ["IT", "Incidents", "Support"],
-    "date": "2024-05-07"
-  },
-  {
-    "title": "FADP (nLPD) — quick summary",
-    "content": "Switzerland’s updated data protection law requires transparency, data minimization and security by design. Explicit consent for sensitive data; right of access and deletion.",
-    "tags": ["Legal", "FADP", "Switzerland", "Privacy"],
-    "date": "2023-09-01"
-  },
-  {
-    "title": "QR-bill essentials",
-    "content": "The Swiss QR-bill encodes IBAN, amount and a reference (RF…). Validate the IBAN (CH) format and ensure the reference matches the payment slip.",
-    "tags": ["Switzerland", "Payments", "QR-bill"],
-    "date": "2023-12-01"
-  },
-  {
     "title": "Finance onboarding (KYC) — outline",
     "content": "Identity collection, proof of address, PEP/sanctions screening. Any alert must be reviewed and documented before account activation.",
     "tags": ["Compliance", "KYC", "Finance"],
     "date": "2024-02-20"
+  },
+  {
+    "title": "FINMA — exigences (résumé non officiel)",
+    "content": "Pour les prestataires financiers : gouvernance des risques, continuité, journalisation et contrôles d’accès. Pour un POC data/IA, inclure un plan de tests et de traçabilité.",
+    "tags": ["Compliance", "FINMA", "Suisse"],
+    "date": "2024-04-10"
   },
   {
     "title": "Incident management basics",
@@ -78,9 +48,21 @@
     "date": "2024-05-07"
   },
   {
+    "title": "Politique de dépenses 2024",
+    "content": "Plafonds : hôtels 220 CHF/nuit en Suisse, trains en 2e classe. Les reçus sont requis sous 10 jours via le portail. Remboursement en CHF à J+7.",
+    "tags": ["RH", "Dépenses", "Suisse"],
+    "date": "2024-01-10"
+  },
+  {
     "title": "Password policy",
     "content": "12+ characters, password manager recommended, MFA required. Rotate privileged accounts regularly. No customer data in tickets.",
     "tags": ["IT", "Security"],
+    "date": "2023-10-05"
+  },
+  {
+    "title": "Sécurité — mots de passe",
+    "content": "Longueur 12+, gestionnaire recommandé, MFA obligatoire. Rotation sur comptes à privilèges. Aucune donnée client dans les tickets.",
+    "tags": ["IT", "Sécurité"],
     "date": "2023-10-05"
   },
   {
@@ -88,5 +70,41 @@
     "content": "Hotel cap CHF 220/night in Switzerland, 2nd class trains. Receipts within 10 days via portal. Reimbursement in CHF within 7 days.",
     "tags": ["HR", "Expenses", "Switzerland"],
     "date": "2024-01-10"
+  },
+  {
+    "title": "BYOD — terminaux personnels",
+    "content": "Appareils conformes (OS à jour, chiffrement activé). Accès aux données clients via VPN et MDM. Révocation à la sortie du collaborateur.",
+    "tags": ["IT", "Sécurité", "BYOD"],
+    "date": "2023-11-18"
+  },
+  {
+    "title": "Swiss IBAN validation — mod 97",
+    "content": "Ensure CH IBAN format and checksum using mod 97. Reject invalid length/characters; log failed validations for review.",
+    "tags": ["Switzerland", "Payments", "IBAN"],
+    "date": "2024-03-15"
+  },
+  {
+    "title": "Onboarding compliance (KYC)",
+    "content": "Collecte d’identité, preuve d’adresse, screening PEP/sanctions. Toute alerte doit être analysée et documentée avant activation du compte.",
+    "tags": ["Compliance", "KYC", "Finance"],
+    "date": "2024-02-20"
+  },
+  {
+    "title": "Data retention — finance records",
+    "content": "Keep accounting and audit-relevant records for extended periods as required by regulation. Define owners, retention periods and deletion workflows.",
+    "tags": ["Compliance", "Records", "Switzerland"],
+    "date": "2024-01-31"
+  },
+  {
+    "title": "Gestion des incidents",
+    "content": "Classification P1/P2/P3. P1 = impact client large, engagement interne 30 min. Post-mortem en 48 h avec actions correctives.",
+    "tags": ["IT", "Incidents", "Support"],
+    "date": "2024-05-07"
+  },
+  {
+    "title": "Change management (CAB) — outline",
+    "content": "Document changes, risk-level, rollback plan; approvals via CAB for high-risk releases. Freeze periods for critical business dates.",
+    "tags": ["IT", "Change", "Operations"],
+    "date": "2024-04-22"
   }
 ]
