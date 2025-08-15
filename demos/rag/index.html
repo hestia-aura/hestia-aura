@@ -7,61 +7,100 @@
 <style>
   .wrap{max-width:1080px;margin:0 auto;padding:24px 20px}
   h1{font-size:32px;margin:8px 0 10px}
-  .muted{opacity:.85;margin:0 0 14px}
+  .muted{opacity:.85;margin:0 0 10px}
+  .filters{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 10px}
+  .chip{border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:6px 10px;cursor:pointer}
+  .chip.active{background:#1f2330}
   .search{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f1117;color:#e6edf3}
+  .meta{color:#94a3b8;font-size:14px;margin-top:6px}
   .card{background:#0f1117;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px;margin-top:14px}
-  .tags{color:#c7ccd3;margin-top:8px}
+  mark{background:rgba(99,102,241,.25);padding:0 2px;border-radius:2px}
+  #count{color:#c7ccd3;margin-top:6px}
 </style>
 </head><body>
 <header class="site-header"><div class="container header-inner">
   <a class="brand" href="/" aria-label="Hestia Aura">
-    <img src="/assets/logo.jpg" alt="logo" class="brand-mark"><span class="brand-name">Hestia <strong>Aura</strong></span>
+    <img src="/assets/logo.jpg" alt="Hestia Aura — logo" class="brand-mark"><span class="brand-name">Hestia <strong>Aura</strong></span>
   </a>
-  <nav class="nav"><a href="/">Accueil</a><a href="/showcase.html">Showcase</a><a class="btn btn--sm" href="/en/">EN</a></nav>
+  <nav class="nav"><a href="/">Accueil</a><a href="/showcase.html">Showcase</a><a class="btn btn--sm" href="/en/demos/rag/">EN</a></nav>
 </div></header>
 
 <main class="wrap">
   <h1>Démonstration — RAG interne</h1>
   <p class="muted">Recherche simple sur un petit corpus JSON (front-end uniquement, pas de backend).</p>
 
-  <input id="q" class="search" placeholder="Rechercher (ex : facture, RGPD, dépenses)…">
+  <input id="q" class="search" placeholder="Rechercher (ex : QR-facture, nLPD, dépenses)…">
+  <div id="tags" class="filters"></div>
+  <div id="count"></div>
   <div id="list"></div>
 </main>
 
-<script>
-  const list = document.getElementById('list');
-  const q    = document.getElementById('q');
-  let corpus = [];
+<footer class="site-footer"><div class="container footer-inner">
+  <span>© <span id="y"></span> Jérôme Jeannin</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+</div></footer>
 
-  function render(items){
+<script>
+  const list  = document.getElementById('list');
+  const q     = document.getElementById('q');
+  const tagsEl= document.getElementById('tags');
+  const count = document.getElementById('count');
+  let corpus  = [];
+  let activeTags = new Set();
+
+  function highlight(text, terms){
+    if(!terms) return text;
+    const esc = s => s.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&');
+    const rx = new RegExp('('+terms.split(/\\s+/).filter(Boolean).map(esc).join('|')+')','gi');
+    return text.replace(rx, '<mark>$1</mark>');
+  }
+
+  function render(items, terms){
     list.innerHTML = '';
+    count.textContent = items.length + ' résultat' + (items.length>1?'s':'');
     items.forEach(it => {
       const div = document.createElement('div');
       div.className = 'card';
-      div.innerHTML = `
-        <h3 style="margin:0 0 6px">${it.title}</h3>
-        <p style="margin:0 0 6px">${it.content}</p>
-        <div class="tags">Tags: ${it.tags.join(' · ')} • ${it.date}</div>
-      `;
+      div.innerHTML = '<h3>'+highlight(it.title, terms)+'</h3>'
+        + '<div class="meta">'+it.date+' • '+(it.tags||[]).join(', ')+'</div>'
+        + '<p>'+highlight(it.content, terms)+'</p>';
       list.appendChild(div);
     });
   }
 
-  function filter(){
-    const t = q.value.trim().toLowerCase();
-    if(!t){ render(corpus); return; }
-    const res = corpus.filter(it =>
-      it.title.toLowerCase().includes(t) ||
-      it.content.toLowerCase().includes(t) ||
-      it.tags.join(' ').toLowerCase().includes(t)
-    );
-    render(res);
+  function renderTags(allTags){
+    tagsEl.innerHTML='';
+    allTags.forEach(t=>{
+      const b=document.createElement('button');
+      b.className='chip'+(activeTags.has(t)?' active':'');
+      b.textContent=t;
+      b.addEventListener('click', ()=>{
+        if(activeTags.has(t)) activeTags.delete(t); else activeTags.add(t);
+        doSearch();
+      });
+      tagsEl.appendChild(b);
+    });
   }
 
-  fetch('./corpus.json')
-    .then(r => r.json())
-    .then(data => { corpus = data; render(corpus); });
+  function doSearch(){
+    const t = q.value.toLowerCase().trim();
+    const res = corpus.filter(it=>{
+      const hay = (it.title+' '+it.content+' '+(it.tags||[]).join(' ')).toLowerCase();
+      const okText = t ? t.split(/\\s+/).every(w=>hay.includes(w)) : true;
+      const okTags = activeTags.size? (it.tags||[]).some(tag=>activeTags.has(tag)) : true;
+      return okText && okTags;
+    });
+    render(res, t);
+  }
 
-  q.addEventListener('input', filter);
+  fetch('/demos/rag/corpus.json')
+    .then(r => r.json())
+    .then(data => {
+      corpus = data;
+      const allTags = Array.from(new Set(corpus.flatMap(it=>it.tags||[]))).sort();
+      renderTags(allTags);
+      render(corpus, '');
+    });
+
+  q.addEventListener('input', doSearch);
 </script>
 </body></html>
