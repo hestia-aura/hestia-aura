@@ -5,7 +5,6 @@
 <link rel="apple-touch-icon" href="/assets/logo.jpg">
 <link rel="stylesheet" href="/styles.css?v=final3">
 <style>
-/* mêmes styles que FR + légende */
 .page {padding: 24px 0}
 .container.narrow{max-width:1060px}
 .header {display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
@@ -17,28 +16,37 @@
 .grid-2-1{display:grid;grid-template-columns: 1.5fr 1fr;gap:18px}
 @media (max-width: 960px){.grid-2-1{grid-template-columns:1fr;}}
 .card{position:relative}
+/* Disable hover lift + hide decorative arrow on this page only */
+.card:hover{transform:none!important}
+.card::after{display:none!important}
+
 .pipeline{background:#0b0d12;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px}
 .pipeline svg{width:100%;height:160px;display:block}
 .stage{font-weight:700}
 .badge{display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:4px 8px;border-radius:999px;font-size:12px;margin-left:8px}
+
 .table{width:100%;border-collapse:separate;border-spacing:0 8px;margin-top:10px}
 .table th{font-weight:700;text-align:left;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.12)}
 .table td{padding:8px 12px;background:rgba(255,255,255,.04)}
 .table tr td:first-child{border-top-left-radius:10px;border-bottom-left-radius:10px}
 .table tr td:last-child{border-top-right-radius:10px;border-bottom-right-radius:10px}
 .table tfoot td{background:transparent;padding-top:12px}
+
 .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 @media (max-width:960px){.kpis{grid-template-columns:1fr}}
 .kpi{background:#0b0d12;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px}
 .kpi .label{opacity:.8;font-size:13px}
 .kpi .value{font-size:22px;font-weight:800;margin:2px 0 8px}
 .spark{width:100%;height:56px;display:block}
+
 .legend{margin-top:12px;background:#0b0d12;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px}
 .legend h4{margin:0 0 8px 0;font-size:14px;opacity:.9}
 .legend ul{margin:0;padding-left:18px}
 .legend li{margin:4px 0;opacity:.9}
+
 .roi{background:#0b1018;border:1px dashed rgba(120,132,255,.5);border-radius:16px;padding:14px}
 .roi strong{font-size:18px}
+
 .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}
 .stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:6px 10px;font-size:12px}
 .back{margin-top:16px;display:inline-block}
@@ -111,22 +119,21 @@
         <div class="kpis">
           <div class="kpi" title="">
             <div class="label" id="klabel1">KPI #1</div>
-            <div class="value" id="kpi1">—</div>
+            <div class="value kpi-value" id="kpi1">—</div>
             <svg id="sp1" class="spark"></svg>
           </div>
           <div class="kpi" title="">
             <div class="label" id="klabel2">KPI #2</div>
-            <div class="value" id="kpi2">—</div>
+            <div class="value kpi-value" id="kpi2">—</div>
             <svg id="sp2" class="spark"></svg>
           </div>
           <div class="kpi" title="">
             <div class="label" id="klabel3">KPI #3</div>
-            <div class="value" id="kpi3">—</div>
+            <div class="value kpi-value" id="kpi3">—</div>
             <svg id="sp3" class="spark"></svg>
           </div>
         </div>
 
-        <!-- LEGEND UNDER KPI -->
         <div class="legend" id="legend"></div>
 
         <div class="roi" id="roi">
@@ -146,6 +153,8 @@
 </div></footer>
 
 <script>
+const nfCH = new Intl.NumberFormat('de-CH'); // séparateur ’ (CH), affichage côté EN
+
 const datasets = {
   sales: {
     label: "Monthly sales (CH)",
@@ -160,7 +169,11 @@ const datasets = {
       const total=vals.reduce((a,b)=>a+b,0);
       const growth=vals.length>1?(vals.at(-1)-vals.at(-2))/vals.at(-2):0;
       const avg=total/vals.length;
-      return {k1:`${total.toLocaleString('de-CH')} CHF`, s1:vals, k2:`${(growth*100).toFixed(1)} % MoM`, s2:vals.slice(-4), k3:`${avg.toFixed(0)} CHF/m`, s3:vals};
+      return {
+        k1:`${nfCH.format(total)} CHF`,         s1:vals,
+        k2:`${(growth*100).toFixed(1)} % MoM`,  s2:vals.slice(-4),
+        k3:`${nfCH.format(Math.round(avg))} CHF/m`, s3:vals
+      };
     },
     roi:{manual:"6 h / month", auto:"20 min", pct:"−94 %"},
     labels:[
@@ -181,7 +194,11 @@ const datasets = {
       const total=rows.reduce((a,b)=>a+b[2],0);
       const p1=rows.filter(r=>r[1]==="P1").reduce((a,b)=>a+b[2],0);
       const p23=total-p1;
-      return {k1:`${total} resolved`, s1:[p1,p23], k2:`${p1} P1`, s2:[p1], k3:`${p23} P2/P3`, s3:[p23]};
+      return {
+        k1:`${nfCH.format(total)} resolved`, s1:[p1,p23],
+        k2:`${nfCH.format(p1)} P1`,          s2:[p1],
+        k3:`${nfCH.format(p23)} P2/P3`,      s3:[p23]
+      };
     },
     roi:{manual:"3 h / week", auto:"10 min", pct:"−95 %"},
     labels:[
@@ -195,25 +212,30 @@ const datasets = {
     headers:["date","customer","amount_chf","days_outstanding"],
     rows:[
       ["2024-01-15","HelvetiaTech",1490,35],
-      ["2024-01-31","LemanBank",2890,42],
-      ["2024-02-12","RomandieCom",1320,28],
-      ["2024-03-01","Alpine SA",5100,31]
+      ["2024-01-31","LemanBank",   2890,42],
+      ["2024-02-12","RomandieCom", 1320,28],
+      ["2024-03-01","Alpine SA",   5100,31]
     ],
     kpis:(rows)=>{
       const total=rows.reduce((a,b)=>a+b[2],0);
       const dso=rows.reduce((a,b)=>a+b[3],0)/rows.length;
       const top=rows.reduce((m,r)=>r[2]>m?r[2]:m,0);
-      return {k1:`${total.toLocaleString('de-CH')} CHF`, s1:rows.map(r=>r[2]), k2:`Avg. DSO ${dso.toFixed(0)} d`, s2:rows.map(r=>r[3]), k3:`Largest invoice ${top.toLocaleString('de-CH')} CHF`, s3:[top]};
+      return {
+        k1:`${nfCH.format(total)} CHF`, s1:rows.map(r=>r[2]),
+        k2:`Avg. DSO ${dso.toFixed(0)} d`, s2:rows.map(r=>r[3]),
+        k3:`Largest invoice ${nfCH.format(top)} CHF`, s3:[top]
+      };
     },
     roi:{manual:"1 d / month", auto:"30 min", pct:"−94 %"},
     labels:[
       {text:"Total invoiced amount", tip:"Sum of all invoice amounts for the period."},
-      {text:"Avg. DSO (days)", tip:"Average Days Sales Outstanding."},
-      {text:"Largest invoice", tip:"Highest single invoice amount."}
+      {text:"Avg. DSO (days)",       tip:"Average Days Sales Outstanding."},
+      {text:"Largest invoice",       tip:"Highest single invoice amount."}
     ]
   }
 };
 
+/* Utils */
 function toCSV(headers, rows){
   const esc = v => `"${String(v).replaceAll(`"`,`""`)}"`;
   return [headers.map(esc).join(","), ...rows.map(r=>r.map(esc).join(","))].join("\n");
@@ -236,7 +258,7 @@ function renderSpark(svgId, series){
   svg.innerHTML = `<path d="${d}" fill="none" stroke="#7c74ff" stroke-width="2"/>`;
 }
 
-/* Legend (under KPI) */
+/* Legend */
 function renderLegend(cfg){
   const el = document.getElementById('legend');
   el.innerHTML = '';
@@ -294,7 +316,7 @@ function load(dsKey){
     }, 500);
   }, 500);
 }
-dsSel.addEventListener('change', e=>load(e.target.value));
+
 document.getElementById('btnCsv').addEventListener('click', ()=>{
   const ds = datasets[dsSel.value];
   const csv = toCSV(ds.headers, ds.rows);
@@ -304,6 +326,8 @@ document.getElementById('btnCsv').addEventListener('click', ()=>{
   a.href=url; a.download = "pipeline_export.csv"; a.click();
   URL.revokeObjectURL(url);
 });
+
+dsSel.addEventListener('change', e=>load(e.target.value));
 load('sales');
 document.getElementById('y').textContent = new Date().getFullYear();
 </script>
