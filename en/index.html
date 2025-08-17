@@ -1,27 +1,27 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html><html lang="fr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Data/AI & Automation portfolio: document extraction, RAG, email routing, data pipelines & dashboards. AI-900 certified. Open to roles in Switzerland.">
-<meta property="og:title" content="Portfolio — Data/AI & Automation">
-<meta property="og:description" content="Document extraction, RAG, email routing, data pipelines & dashboards. AI-900 certified. Open to roles in Switzerland.">
-<title>Portfolio — Data/AI & Automation</title>
+<meta name="description" content="Portfolio Data/IA & Automatisation : extraction documentaire, RAG, routage d’e-mails, pipelines & dashboards. Certifié AI-900. Ouvert à des rôles en Suisse.">
+<meta property="og:title" content="Portfolio — Data/IA & Automatisation">
+<meta property="og:description" content="Extraction documentaire, RAG, routage d’e-mails, pipelines & dashboards. Certifié AI-900. Ouvert à des rôles en Suisse.">
+<title>Portfolio — Data/IA & Automatisation</title>
 <link rel="icon" href="/assets/logo.jpg">
 <link rel="apple-touch-icon" href="/assets/logo.jpg">
 <link rel="stylesheet" href="/styles.css?v=final3">
 <style>
-/* EN overrides mirroring FR */
+/* --- Overrides spécifiques à la home FR --- */
 
-/* KPI card width tuned to content */
+/* 1) Carte KPI du hero : largeur adaptée au contenu */
 .card.kpi-floating{width:fit-content;min-width:450px;max-width:560px;}
 @media (max-width: 720px){ .card.kpi-floating{min-width:auto;max-width:none;width:auto;} }
 
-/* Remove arrow on non-clickable cards */
+/* 2) Retirer la flèche sur TOUTES les cartes non cliquables, animation conservée */
 .card:not(a)::after{content:none !important;}
 
-/* "See more" link */
+/* 3) Lien "Voir plus" sous la section Démos */
 .more-link{display:inline-block;margin-top:12px;opacity:.85}
 .more-link:hover{opacity:1;text-decoration:underline}
 
-/* Hero buttons unified */
+/* 4) Harmonisation des 3 boutons du hero (hauteur/centrage identiques) */
 .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
 .hero-cta .btn{
   display:inline-flex;align-items:center;justify-content:center;
@@ -33,8 +33,7 @@
 }
 </style>
 </head><body>
-
-<!-- Intro video -->
+  <!-- Intro video -->
 <div id="intro" class="intro" aria-label="Intro animation" role="dialog" aria-modal="true">
   <video id="introVideo" class="intro-video" autoplay muted playsinline preload="auto" poster="/assets/intro-poster.jpg">
     <source src="/assets/intro.webm" type="video/webm">
@@ -43,17 +42,17 @@
   <div class="intro-overlay">
     <h1 class="intro-title">Hestia Aura</h1>
     <div class="intro-credit">Jérôme Jeannin</div>
-    <button id="introSkip" class="intro-arrow" aria-label="Enter"></button>
+    <button id="introSkip" class="intro-arrow" aria-label="Entrer"></button>
   </div>
 </div>
 
 <header class="site-header"><div class="container header-inner">
-  <a class="brand" href="/en/" aria-label="Hestia Aura">
+  <a class="brand" href="/" aria-label="Hestia Aura">
     <img src="/assets/logo.jpg" alt="logo" class="brand-mark"><span class="brand-name">Hestia <strong>Aura</strong></span>
   </a>
   <nav class="nav">
-    <a href="/en/">Home</a><a href="/en/about.html">About</a><a href="/en/showcase.html">Showcase</a>
-    <a href="/" class="btn btn--sm">FR</a>
+    <a href="/">Accueil</a><a href="/about.html">À propos</a><a href="/showcase.html">Showcase</a>
+    <a href="/en/" class="btn btn--sm">EN</a>
   </nav>
 </div></header>
 
@@ -62,29 +61,32 @@
   <div class="container grid-2">
 
     <div class="hero-copy reveal">
-      <h1>Portfolio — <span class="accent">Data/AI & Automation</span></h1>
-      <p>I design PoCs and automations that reduce costs. Open to roles in Switzerland (onsite/hybrid). Analyze, Automate, Industrialize.</p>
-      <p>Pragmatic AI & automation: document extraction, internal RAG, email routing, data pipelines and dashboards. Certified <strong>AI-900</strong>. Skills: <strong>Azure</strong>, <strong>Excel/VBA</strong>, <strong>Power BI</strong>, <strong>SQL</strong>.</p>
+      <h1>Portfolio — <span class="accent">Data/IA & Automatisation</span></h1>
+      <p>Je conçois des POC et des automatisations qui réduisent les coûts. Ouvert à des rôles en Suisse (onsite/hybride). Analyser, Automatiser, Industrialiser.</p>
+      <p>Intégration IA & automatisation pragmatique : extraction de documents, RAG interne, routage d’e-mails, pipelines data et tableaux de bord. Certifié <strong>AI-900</strong>. Compétences : <strong>Azure</strong>, <strong>Excel/VBA</strong>, <strong>Power BI</strong>, <strong>SQL</strong>.</p>
 
+      <!-- Boutons harmonisés: CV (gauche), Démos (milieu, sombre), Contact (droite, violet) -->
       <div class="hero-cta">
-        <a href="/assets/CV_EN.pdf" target="_blank" class="btn btn--outline">My CV</a>
-        <a href="/en/showcase.html" class="btn btn--dark">See my demos</a>
-        <a href="mailto:jeanninjerome6@gmail.com" class="btn">Contact me</a>
+        <a href="/assets/CV_FR.pdf" target="_blank" class="btn btn--outline">Mon CV</a>
+        <a href="/showcase.html" class="btn btn--dark">Voir mes démos</a>
+        <a href="mailto:jeanninjerome6@gmail.com" class="btn">Me contacter</a>
       </div>
 
+      <!-- Preuves d'usage -->
       <ul class="hero-badges">
-        <li>Invoice extraction → JSON/CSV</li>
-        <li>Email routing → next action</li>
-        <li>Internal RAG (FR/EN)</li>
+        <li>Extraction facture → JSON/CSV</li>
+        <li>Routage d’e-mails → action suivante</li>
+        <li>RAG interne FR/EN</li>
       </ul>
     </div>
 
+    <!-- visuel + KPI -->
     <div class="hero-visual reveal delay-1">
       <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
       <div class="card kpi-floating">
-        <div class="card-kpi"><span class="kpi-label">Open:</span><span class="kpi-value">Switzerland · On-site/Hybrid</span></div>
-        <div class="card-kpi"><span class="kpi-label">Stack:</span><span class="kpi-value">Azure AI · Python · Power BI</span></div>
-        <div class="card-kpi"><span class="kpi-label">Cert.:</span><span class="kpi-value">AI-900 · TOEIC 915 · ICDL/PCIE Excel</span></div>
+        <div class="card-kpi"><span class="kpi-label">Ouvert&nbsp;:</span><span class="kpi-value">Suisse · On-site/Hybride</span></div>
+        <div class="card-kpi"><span class="kpi-label">Stack&nbsp;:</span><span class="kpi-value">Azure AI · Python · Power BI</span></div>
+        <div class="card-kpi"><span class="kpi-label">Certif.&nbsp;:</span><span class="kpi-value">AI-900 · TOEIC 915 · PCIE Excel</span></div>
       </div>
     </div>
 
@@ -92,73 +94,68 @@
 </section>
 
 <section id="expertises" class="section"><div class="container">
-  <h2 class="section-title reveal">Analyze · Automate · Industrialize</h2>
+  <h2 class="section-title reveal">Analyser · Automatiser · Industrialiser</h2>
   <div class="cards">
-    <article class="card reveal"><h3>Analyze</h3><p>Make data usable: quality, simple schemas, key indicators.</p></article>
-    <article class="card reveal"><h3>Automate</h3><p>Replace repetitive tasks with simple rule-based tools for immediate gains.</p></article>
-    <article class="card reveal"><h3>Industrialize</h3><p>Take a PoC to robust usage: access control, logs, FADP/FINMA compliance.</p></article>
+    <article class="card reveal"><h3>Analyser</h3><p>Rendre les données utilisables : qualité, schémas simples, indicateurs clés.</p></article>
+    <article class="card reveal"><h3>Automatiser</h3><p>Remplacer des tâches répétitives par des règles/outils simples avec gains immédiats.</p></article>
+    <article class="card reveal"><h3>Industrialiser</h3><p>Passer du POC à un usage robuste : droits d’accès, logs, conformité nLPD/FINMA.</p></article>
   </div>
 </div></section>
 
 <section id="projects" class="section alt"><div class="container">
-  <h2 class="section-title reveal">Usage-oriented demos</h2>
-  <p class="muted">Front-end, mock data. The goal is to illustrate business logic. In production, these approaches integrate with the company environment and standards.</p>
+  <h2 class="section-title reveal">Démos orientées usage</h2>
+  <p class="muted">Front-end, données fictives. L’objectif est d’illustrer la logique métier. En production, ces approches s’intègrent à l’environnement et aux standards de l’entreprise.</p>
   <div class="cards">
-    <article class="card reveal"><h3>Invoice extraction</h3><p>Key fields + line items → structured JSON → CSV export.</p><div class="pills"><span class="pill">CH/EU/US</span><span class="pill">CSV</span><span class="pill">JSON</span></div></article>
-    <article class="card reveal"><h3>Email router</h3><p>Simple classification and next action (ticket/CRM/HR) — 100% local.</p><div class="pills"><span class="pill">Rules</span><span class="pill">Flow</span><span class="pill">Triage</span></div></article>
-    <article class="card reveal"><h3>Internal RAG</h3><p>FR/EN search over a JSON corpus, tags and term highlighting.</p><div class="pills"><span class="pill">FR/EN</span><span class="pill">Tags</span><span class="pill">Highlight</span></div></article>
+    <article class="card reveal"><h3>Extraction de factures</h3><p>Champs clés + lignes d’articles → JSON exploitable → export CSV.</p><div class="pills"><span class="pill">Suisse/UE/US</span><span class="pill">CSV</span><span class="pill">JSON</span></div></article>
+    <article class="card reveal"><h3>Router d’e-mails</h3><p>Classification simple et action suivante (ticket/CRM/RH) — 100 % local.</p><div class="pills"><span class="pill">Règles</span><span class="pill">Flux</span><span class="pill">Triage</span></div></article>
+    <article class="card reveal"><h3>RAG interne</h3><p>Recherche FR/EN sur corpus JSON, tags et surlignage des termes.</p><div class="pills"><span class="pill">FR/EN</span><span class="pill">Tags</span><span class="pill">Surlignage</span></div></article>
   </div>
-  <a class="more-link" href="/en/showcase.html">See more →</a>
+  <a class="more-link" href="/showcase.html">Voir plus →</a>
 </div></section>
 
 <section id="certs" class="section">
-  <div class="container">
-    <h2 class="section-title reveal">Certifications</h2>
-    <div class="cards">
-      <!-- AI-900 -->
-      <article class="card reveal">
-        <h3>AI-900 — Microsoft Certified: Azure AI Fundamentals</h3>
-        <p>Fundamentals of AI on Azure (cognitive services, responsible AI).</p>
-        <p class="muted" style="margin-top:6px">Earned: 17 Aug 2025</p>
-        <div class="pills">
-          <span class="pill pill--success">AI</span>
-          <a class="pill" href="/assets/certs/ai-900-credentials.pdf" target="_blank" rel="noopener">Statement (PDF)</a>
-        </div>
-      </article>
-
-      <!-- TOEIC -->
-      <article class="card reveal">
-        <h3>TOEIC — Test of English for International Communication</h3>
-        <p>Score <strong>915 / 990</strong>. Operational C1 level.</p>
-        <p class="muted" style="margin-top:6px">Earned: Aug 2023</p>
-        <div class="pills">
-          <span class="pill">Listening & Reading</span>
-          <span class="pill">Business English</span>
-          <a class="pill" href="/assets/certs/toeic-statement.pdf" target="_blank" rel="noopener">Statement (PDF)</a>
-        </div>
-      </article>
-
-      <!-- ICDL / PCIE -->
-      <article class="card reveal">
-        <h3>ICDL — Excel (PCIE)</h3>
-        <p>Advanced Excel skills (tables, pivot tables, functions, VBA).</p>
-        <p class="muted" style="margin-top:6px">Earned: Aug 2018</p>
-        <div class="pills">
-          <span class="pill">Advanced Excel</span>
-          <span class="pill">ICDL / PCIE</span>
-        </div>
-      </article>
+  <!-- AI-900 -->
+  <article class="card reveal">
+    <h3>AI-900 — Microsoft Certified: Azure AI Fundamentals</h3>
+    <p>Fondamentaux IA sur Azure (services cognitifs, IA responsable).</p>
+    <p class="muted" style="margin-top:6px">Obtenue&nbsp;: 17 août 2025</p>
+    <div class="pills">
+      <span class="pill pill--success">IA</span>
+      <a class="pill" href="/assets/certs/ai-900-credentials.pdf" target="_blank" rel="noopener">Attestation (PDF)</a>
     </div>
-  </div>
+  </article>
+
+  <!-- TOEIC -->
+  <article class="card reveal">
+    <h3>TOEIC — Test of English for International Communication</h3>
+    <p>Score <strong>915 / 990</strong>. Niveau C1 opérationnel.</p>
+    <p class="muted" style="margin-top:6px">Obtenu&nbsp;: août 2023</p>
+    <div class="pills">
+      <span class="pill">Listening & Reading</span>
+      <span class="pill">Anglais professionnel</span>
+      <a class="pill" href="/assets/certs/toeic-statement.pdf" target="_blank" rel="noopener">Attestation (PDF)</a>
+    </div>
+  </article>
+
+  <!-- PCIE / ICDL Excel -->
+  <article class="card reveal">
+    <h3>PCIE — Excel (ICDL)</h3>
+    <p>Maîtrise avancée d’Excel (tableaux, TCD, fonctions, VBA).</p>
+    <p class="muted" style="margin-top:6px">Obtenu&nbsp;: août 2018</p>
+    <div class="pills">
+      <span class="pill">Excel avancé</span>
+      <span class="pill">ICDL / PCIE</span>
+    </div>
+  </article>
 </section>
 
-<!-- For recruiters -->
-<section id="recruiters" class="section"><div class="container">
-  <h2 class="section-title reveal">For recruiters</h2>
+<!-- Pour les recruteurs -->
+<section id="recruteurs" class="section"><div class="container">
+  <h2 class="section-title reveal">Pour les recruteurs</h2>
   <ul class="feature-list">
-    <li>Languages: FR / EN / ES</li>
-    <li>Availability: Switzerland, onsite/hybrid</li>
-    <li>Recruitment contact: <a href="mailto:jeanninjerome6@gmail.com">jeanninjerome6@gmail.com</a></li>
+    <li>Langues : FR / EN / ES</li>
+    <li>Disponibilité : Suisse, onsite/hybride</li>
+    <li>Contact recrutement : <a href="mailto:jeanninjerome6@gmail.com">jeanninjerome6@gmail.com</a></li>
   </ul>
 
   <div class="pills">
@@ -167,23 +164,23 @@
     <span class="pill">SQL</span><span class="pill">Compliance</span>
     <span class="pill">Agile</span><span class="pill">n8n · Make</span>
     <span class="pill">Salesforce</span><span class="pill">Blockchain</span>
-    <span class="pill">AI-900</span><span class="pill">TOEIC</span><span class="pill">ICDL/PCIE</span>
+    <span class="pill">AI-900</span><span class="pill">TOEIC</span><span class="pill">PCIE</span>
   </div>
 </div></section>
 
 <section class="section"><div class="container grid-2">
-<div class="reveal">
-  <h2 class="section-title">About (a few words about me)</h2>
-  <p>French, born in Paris, I’m passionate about new technologies and driven by a keen eye for detail and a constant search for efficiency. My approach is to identify repetitive tasks, reduce friction, and turn manual processes into reliable, measurable, and sustainable systems.</p>
+ <div class="reveal">
+  <h2 class="section-title">À propos (en quelques mots)</h2>
+  <p>Français originaire de Paris, je suis passionné par les nouvelles technologies et animé par un sens aigu du détail ainsi qu’une recherche constante d’efficacité. Mon approche consiste à identifier les tâches répétitives, réduire les frictions et transformer des processus manuels en systèmes fiables, mesurables et durables.</p>
 </div>
 
   <div class="reveal delay-1">
     <div class="card contact-card">
       <h3>Contact</h3>
-      <p class="muted">Reply within 24 h (FR/EN/ES).</p>
+      <p class="muted">Réponse sous 24h (FR/EN/ES).</p>
       <div class="stack">
         <a class="btn" href="mailto:jeanninjerome6@gmail.com">Email</a>
-        <a class="btn btn--outline" href="https://www.linkedin.com/in/j%C3%A9r%C3%B4me-jeannin-151023a6/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn btn--outline" href="https://www.linkedin.com/in/j%C3%A9r%C3%B4me-jeannin-151023a6/?locale=fr_FR" target="_blank" rel="noopener">LinkedIn</a>
       </div>
     </div>
   </div>
@@ -192,27 +189,27 @@
 <section id="contact" class="section"><div class="container grid-2">
 
   <div class="reveal">
-    <h2 class="section-title">Let’s work together</h2>
-    <p>Open to roles in Switzerland.</p>
+    <h2 class="section-title">Travaillons ensemble</h2>
+    <p>Ouvert aux opportunités en Suisse.</p>
     <ul class="feature-list">
-      <li>Reply within 24 h</li>
+      <li>Réponse sous 24h</li>
       <li>FR / EN / ES</li>
-      <li>On-site or hybrid</li>
+      <li>Sur site ou hybride</li>
     </ul>
   </div>
 
   <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" class="contact-form">
-    <h3 class="section-title" style="margin:0 0 12px 0">Contact form</h3>
+    <h3 class="section-title" style="margin:0 0 12px 0">Formulaire de contact</h3>
     <input type="hidden" name="access_key" value="0fd6281b-4d44-4857-8c2f-f70937b432fa">
     <input type="hidden" name="subject" value="Portfolio contact — Hestia Aura">
     <input type="hidden" name="from_name" value="Hestia Aura Portfolio">
     <input type="checkbox" name="botcheck" class="hidden" style="display:none">
 
-    <div class="form-row"><label>Name</label><input type="text" name="name" required></div>
+    <div class="form-row"><label>Nom</label><input type="text" name="name" required></div>
     <div class="form-row"><label>Email</label><input type="email" name="email" required></div>
     <div class="form-row"><label>Message</label><textarea name="message" rows="4" required></textarea></div>
 
-    <button type="submit" class="btn">Send</button>
+    <button type="submit" class="btn">Envoyer</button>
     <p class="form-status" aria-live="polite"></p>
   </form>
 
@@ -225,8 +222,8 @@
 
 <script src="/app.js?v=final3"></script>
 <script>
-/* Intro safety net: end/error/click/auto-close after 3.5s.
-   Disable while testing: ?intro=0 or ?nointro=1 */
+/* Filet de sécurité pour l'intro : fin, erreur, clic, ou auto-fermeture après 3,5 s.
+   Désactivation pendant tests : ?intro=0 ou ?nointro=1 */
 (function(){
   const intro = document.getElementById('intro');
   if(!intro) return;
