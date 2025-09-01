@@ -1,75 +1,75 @@
-<!DOCTYPE html><html lang="fr"><head>
+<!DOCTYPE html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Showcase — démos IA</title>
+<title>Showcase — AI demos</title>
 <link rel="icon" href="/assets/logo.jpg"><link rel="apple-touch-icon" href="/assets/logo.jpg">
 <link rel="stylesheet" href="/styles.css?v=final3">
 </head><body>
 <header class="site-header"><div class="container header-inner">
-  <a class="brand" href="/"><img src="/assets/logo.jpg" class="brand-mark" alt="logo"><span class="brand-name">Hestia <strong>Aura</strong></span></a>
-  <nav class="nav"><a href="/">Accueil</a><a href="/about.html">À propos</a><a href="/showcase.html">Showcase</a><a class="btn btn--sm" href="/en/showcase.html">EN</a></nav>
+  <a class="brand" href="/en/"><img src="/assets/logo.jpg" class="brand-mark" alt="logo"><span class="brand-name">Hestia <strong>Aura</strong></span></a>
+  <nav class="nav"><a href="/en/">Home</a><a href="/en/about.html">About</a><a href="/en/showcase.html">Showcase</a><a class="btn btn--sm" href="/showcase.html">FR</a></nav>
 </div></header>
 
 <main id="top">
   <section class="hero"><div class="container">
-    <h1>Showcase — démos IA</h1>
-    <p>Mini-démos front-end (données factices) pour illustrer quelques cas d’usage.</p>
-    <ul class="hero-badges"><li>Azure · Power BI · Python</li><li>Intégrations · n8n/Make</li></ul>
+    <h1>Showcase — AI demos</h1>
+    <p>Small front-end demos (mock data) to illustrate a few use cases.</p>
+    <ul class="hero-badges"><li>Azure · Power BI · Python</li><li>Integrations · n8n/Make</li></ul>
   </div></section>
 
   <section class="section"><div class="container">
     <div class="cards">
 
       <article class="card">
-        <a href="/demos/pipeline/">
+        <a href="/en/demos/pipeline/">
           <h3>Pipeline & Dashboard</h3>
-          <p>ETL mock (Extract → Transform → Load), table normalisée, KPIs et graphiques. Export CSV.</p>
+          <p>Mock ETL (Extract → Transform → Load), normalized table, KPIs and charts. CSV export.</p>
           <div class="pills">
             <span class="pill">ETL</span><span class="pill">CSV</span><span class="pill">KPIs</span><span class="pill">Charts</span>
           </div>
           <p class="muted" style="margin-top:8px">
-            <strong>Étude de cas :</strong> reporting mensuel dispersé → normalisation + KPIs CHF.
-            <em>Résultat attendu :</em> ~50 % de temps de préparation en moins, cohérence des chiffres.
+            <strong>Case study:</strong> scattered monthly reporting → normalization + CHF KPIs.
+            <em>Expected result:</em> ~50% less prep time, consistent figures.
           </p>
         </a>
       </article>
 
-      <a class="card" href="/demos/invoices/">
-        <h3>Extraction de factures</h3>
-        <p>Champs clés + lignes d’articles → JSON exploitable → export CSV.</p>
-        <div class="pills"><span class="pill">Suisse/UE/US</span><span class="pill">CSV</span><span class="pill">JSON</span></div>
+      <a class="card" href="/en/demos/invoices/">
+        <h3>Invoice extraction</h3>
+        <p>Key fields + line items → structured JSON → CSV export.</p>
+        <div class="pills"><span class="pill">CH/EU/US</span><span class="pill">CSV</span><span class="pill">JSON</span></div>
         <p class="muted" style="margin-top:8px">
-          <strong>Étude de cas :</strong> saisie manuelle de factures (CH/EU/US) → extraction structurée.
-          <em>Résultat attendu :</em> moins d’erreurs, intégration ERP plus rapide.
+          <strong>Case study:</strong> manual invoice entry (CH/EU/US) → structured extraction.
+          <em>Expected result:</em> fewer errors, faster ERP integration.
         </p>
       </a>
 
-      <a class="card" href="/demos/email-router/">
-        <h3>Router d’e-mails</h3>
-        <p>Résumé + classification + aiguillage fictifs vers CRM/support.</p>
+      <a class="card" href="/en/demos/email-router/">
+        <h3>Email router</h3>
+        <p>Summarize, classify and route to CRM/support (mock front-end).</p>
         <div class="pills"><span class="pill">LLM</span><span class="pill">Workflow</span></div>
         <p class="muted" style="margin-top:8px">
-          <strong>Étude de cas :</strong> boîte partagée saturée → résumé, classification, routage.
-          <em>Résultat attendu :</em> triage et délais de traitement réduits.
+          <strong>Case study:</strong> overloaded shared inbox → summary, classification, routing.
+          <em>Expected result:</em> faster triage and response times.
         </p>
       </a>
 
-      <a class="card" href="/demos/invoices/?sample=ch">
-        <h3>QR-facture (Suisse)</h3>
-        <p>Aperçu des champs clés et de la référence QR (mock) ; export CSV.</p>
-        <div class="pills"><span class="pill">Suisse</span><span class="pill">Paiements</span></div>
+      <a class="card" href="/en/demos/invoices/?sample=ch">
+        <h3>QR-bill (Switzerland)</h3>
+        <p>Key fields and QR reference (mock); CSV export.</p>
+        <div class="pills"><span class="pill">Switzerland</span><span class="pill">Payments</span></div>
         <p class="muted" style="margin-top:8px">
-          <strong>Étude de cas :</strong> spécificités CH (IBAN, référence QR) → lecture/validation.
-          <em>Résultat attendu :</em> conformité et rapprochement accrus.
+          <strong>Case study:</strong> Swiss specifics (IBAN, QR reference) → read/validate.
+          <em>Expected result:</em> better compliance and reconciliation.
         </p>
       </a>
 
-      <a class="card" href="/demos/rag/">
-        <h3>RAG interne</h3>
-        <p>Recherche simplifiée dans un corpus JSON (front-end only).</p>
+      <a class="card" href="/en/demos/rag/">
+        <h3>Internal RAG</h3>
+        <p>Simplified search over a JSON corpus (front-end only).</p>
         <div class="pills"><span class="pill">Index</span><span class="pill">Search</span></div>
         <p class="muted" style="margin-top:8px">
-          <strong>Étude de cas :</strong> documents internes dispersés → recherche FR/EN + tags + surlignage.
-          <em>Résultat attendu :</em> réponses sourcées plus rapides.
+          <strong>Case study:</strong> scattered internal docs → FR/EN search + tags + highlight.
+          <em>Expected result:</em> faster, sourced answers.
         </p>
       </a>
 
