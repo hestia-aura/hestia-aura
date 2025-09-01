@@ -9,28 +9,15 @@
 <link rel="stylesheet" href="/styles.css?v=final3">
 <style>
 /* EN overrides mirroring FR */
-
-/* KPI card width tuned to content */
 .card.kpi-floating{width:fit-content;min-width:450px;max-width:560px;}
 @media (max-width: 720px){ .card.kpi-floating{min-width:auto;max-width:none;width:auto;} }
-
-/* Remove arrow on non-clickable cards */
 .card:not(a)::after{content:none !important;}
-
-/* "See more" link */
 .more-link{display:inline-block;margin-top:12px;opacity:.85}
 .more-link:hover{opacity:1;text-decoration:underline}
-
-/* Hero buttons unified */
 .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
-.hero-cta .btn{
-  display:inline-flex;align-items:center;justify-content:center;
-  height:48px;padding:0 20px;line-height:1;border-radius:12px;
-  font-weight:700;
-}
-.hero-cta .btn--dark{
-  background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.08);
-}
+.hero-cta .btn{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 20px;line-height:1;border-radius:12px;font-weight:700;}
+.hero-cta .btn--dark{background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.08);}
+a.pill{display:inline-block}
 </style>
 </head><body>
 
@@ -63,9 +50,10 @@
 
     <div class="hero-copy reveal">
       <h1>Portfolio — <span class="accent">Data/AI & Automation</span></h1>
-      <p class="muted" style="margin:.25rem 0 .75rem 0">
-        <strong>Target roles:</strong> Data/BI Analyst · IT Business Analyst · AI/Automation Specialist
-      </p>
+
+      <!-- Target roles (added back) -->
+      <p class="muted"><strong>Target roles:</strong> Data/BI Analyst · IT Business Analyst · Automation/AI Specialist</p>
+
       <p>I design PoCs and automations that reduce costs. Open to roles in Switzerland (onsite/hybrid). Analyze, Automate, Industrialize.</p>
       <p>Pragmatic AI & automation: document extraction, internal RAG, email routing, data pipelines and dashboards. Certified <strong>AI-900</strong>. Skills: <strong>Azure</strong>, <strong>Excel/VBA</strong>, <strong>Power BI</strong>, <strong>SQL</strong>.</p>
 
@@ -75,19 +63,18 @@
         <a href="mailto:jeanninjerome6@gmail.com" class="btn">Contact me</a>
       </div>
 
-      <!-- Quick proofs -->
-      <div class="pills" style="margin-top:10px">
-        <a class="pill" href="/assets/certs/ai-900-credentials.pdf" target="_blank" rel="noopener">AI-900</a>
-        <span class="pill">TOEIC 915</span>
-        <span class="pill">ICDL/PCIE Excel</span>
-        <span class="pill">Finance/Insurance</span>
-      </div>
-
       <ul class="hero-badges">
         <li>Invoice extraction → JSON/CSV</li>
         <li>Email routing → next action</li>
         <li>Internal RAG (FR/EN)</li>
       </ul>
+
+      <!-- Quick pills: AI-900 & TOEIC clickable -->
+      <div class="pills" style="margin-top:8px">
+        <a class="pill" href="/assets/certs/ai-900-credentials.pdf" target="_blank" rel="noopener">AI-900</a>
+        <a class="pill" href="/assets/certs/toeic-statement.pdf" target="_blank" rel="noopener">TOEIC 915</a>
+        <span class="pill">ICDL/PCIE Excel</span>
+      </div>
     </div>
 
     <div class="hero-visual reveal delay-1">
@@ -126,6 +113,7 @@
   <div class="container">
     <h2 class="section-title reveal">Certifications</h2>
     <div class="cards">
+
       <article class="card reveal">
         <h3>AI-900 — Microsoft Certified: Azure AI Fundamentals</h3>
         <p>Fundamentals of AI on Azure (cognitive services, responsible AI).</p>
@@ -138,20 +126,53 @@
 
       <article class="card reveal">
         <h3>TOEIC — Test of English for International Communication</h3>
-        <p>Score <strong>915 / 990</strong> (Aug 2023).<br>Operational C1 level.</p>
-        <div class="pills"><span class="pill">Listening & Reading</span><span class="pill">Business English</span></div>
+        <p>Score <strong>915 / 990</strong>. Operational C1 level.</p>
+        <p class="muted" style="margin-top:6px">Earned: Aug 2023</p>
+        <div class="pills">
+          <span class="pill">Listening & Reading</span>
+          <span class="pill">Business English</span>
+          <a class="pill" href="/assets/certs/toeic-statement.pdf" target="_blank" rel="noopener">Statement (PDF)</a>
+        </div>
       </article>
 
       <article class="card reveal">
         <h3>ICDL — Excel (PCIE)</h3>
-        <p>Result <strong>75&nbsp;%</strong> (Jul 2018).<br>Advanced Excel skills (tables, pivot tables, functions).</p>
-        <div class="pills"><span class="pill">Advanced Excel</span><span class="pill">ICDL / PCIE</span></div>
+        <p>Advanced Excel (tables, pivots, functions, VBA).</p>
+        <p class="muted" style="margin-top:6px">Earned: Aug 2018</p>
+        <div class="pills">
+          <span class="pill">Advanced Excel</span>
+          <span class="pill">ICDL / PCIE</span>
+        </div>
       </article>
+
     </div>
   </div>
 </section>
 
-<!-- For recruiters -->
+<section id="proofs" class="section alt">
+  <div class="container">
+    <h2 class="section-title reveal">Quick proofs</h2>
+    <div class="cards">
+      <a class="card reveal" href="/assets/CV_EN.pdf" target="_blank" rel="noopener">
+        <h3>CV (EN)</h3>
+        <p>Profile, experience, key skills.</p>
+      </a>
+      <a class="card reveal" href="/assets/certs/ai-900-credentials.pdf" target="_blank" rel="noopener">
+        <h3>AI-900 — Statement</h3>
+        <p>Microsoft Certified: Azure AI Fundamentals.</p>
+      </a>
+      <a class="card reveal" href="/assets/certs/toeic-statement.pdf" target="_blank" rel="noopener">
+        <h3>TOEIC — Statement</h3>
+        <p>Score 915/990 (Listening & Reading).</p>
+      </a>
+      <a class="card reveal" href="https://www.linkedin.com/in/j%C3%A9r%C3%B4me-jeannin-151023a6/" target="_blank" rel="noopener">
+        <h3>LinkedIn</h3>
+        <p>Background and recommendations.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
 <section id="recruiters" class="section"><div class="container">
   <h2 class="section-title reveal">For recruiters</h2>
   <ul class="feature-list">
@@ -219,38 +240,21 @@
 </main>
 
 <footer class="site-footer"><div class="container footer-inner">
-  <span>© <span id="y"></span> Jérôme Jeannin</span>
-  <a href="/assets/CV_EN.pdf" target="_blank" rel="noopener">CV (EN)</a>
-  <a href="/assets/CV_FR.pdf" target="_blank" rel="noopener">CV (FR)</a>
-  <a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+  <span>© <span id="y"></span> Jérôme Jeannin</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
 </div></footer>
 
 <script src="/app.js?v=final3"></script>
 <script>
-/* Intro safety net: end/error/click/auto-close after 3.5s.
-   Disable while testing: ?intro=0 or ?nointro=1 */
+/* Intro safety net */
 (function(){
-  const intro = document.getElementById('intro');
-  if(!intro) return;
-  const video = document.getElementById('introVideo');
-  const skip  = document.getElementById('introSkip');
-
-  const close = () => {
-    if (!intro) return;
-    intro.style.pointerEvents = 'none';
-    intro.style.opacity = '0';
-    intro.setAttribute('aria-hidden','true');
-    try { intro.remove(); } catch(e) {}
-  };
-
+  const intro = document.getElementById('intro'); if(!intro) return;
+  const video = document.getElementById('introVideo'); const skip  = document.getElementById('introSkip');
+  const close = () => { intro.style.pointerEvents='none'; intro.style.opacity='0'; intro.setAttribute('aria-hidden','true'); try{intro.remove()}catch(e){} };
   const qs = new URLSearchParams(location.search);
-  if (qs.get('intro') === '0' || qs.get('nointro') === '1') { close(); return; }
-
+  if (qs.get('intro')==='0' || qs.get('nointro')==='1'){ close(); return; }
   if (skip)  skip.addEventListener('click', (e)=>{ e.preventDefault(); close(); });
-  if (video) { video.addEventListener('ended', close); video.addEventListener('error', close); }
-
+  if (video){ video.addEventListener('ended', close); video.addEventListener('error', close); }
   setTimeout(close, 3500);
 })();
-document.getElementById('y').textContent = new Date().getFullYear();
 </script>
 </body></html>
