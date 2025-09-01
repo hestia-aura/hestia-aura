@@ -32,7 +32,7 @@
   background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.08);
 }
 
-/* 5) Pastilles cliquables (ex: TOEIC) gardent le style .pill */
+/* 5) Pastilles cliquables conservent le style .pill */
 a.pill{display:inline-block}
 </style>
 </head><body>
@@ -65,10 +65,14 @@ a.pill{display:inline-block}
 
     <div class="hero-copy reveal">
       <h1>Portfolio — <span class="accent">Data/IA & Automatisation</span></h1>
+
+      <!-- Rôles visés (réintroduit) -->
+      <p class="muted"><strong>Rôles visés :</strong> Data/BI Analyst · Business Analyst IT · Spécialiste IA/Automatisation</p>
+
       <p>Je conçois des POC et des automatisations qui réduisent les coûts. Ouvert à des rôles en Suisse (onsite/hybride). Analyser, Automatiser, Industrialiser.</p>
       <p>Intégration IA & automatisation pragmatique : extraction de documents, RAG interne, routage d’e-mails, pipelines data et tableaux de bord. Certifié <strong>AI-900</strong>. Compétences : <strong>Azure</strong>, <strong>Excel/VBA</strong>, <strong>Power BI</strong>, <strong>SQL</strong>.</p>
 
-      <!-- Boutons harmonisés: CV (gauche), Démos (milieu, sombre), Contact (droite, violet) -->
+      <!-- Boutons -->
       <div class="hero-cta">
         <a href="/assets/CV_FR.pdf" target="_blank" class="btn btn--outline">Mon CV</a>
         <a href="/showcase.html" class="btn btn--dark">Voir mes démos</a>
@@ -82,9 +86,9 @@ a.pill{display:inline-block}
         <li>RAG interne FR/EN</li>
       </ul>
 
-      <!-- Pastilles rapides: TOEIC devient cliquable -->
+      <!-- Pastilles rapides : AI-900 et TOEIC cliquables -->
       <div class="pills" style="margin-top:8px">
-        <span class="pill">AI-900</span>
+        <a class="pill" href="/assets/certs/ai-900-credentials.pdf" target="_blank" rel="noopener">AI-900</a>
         <a class="pill" href="/assets/certs/toeic-statement.pdf" target="_blank" rel="noopener">TOEIC 915</a>
         <span class="pill">PCIE Excel</span>
       </div>
@@ -123,13 +127,12 @@ a.pill{display:inline-block}
   <a class="more-link" href="/showcase.html">Voir plus →</a>
 </div></section>
 
-<!-- Certifications (wrapper rétabli) -->
+<!-- Certifications -->
 <section id="certs" class="section">
   <div class="container">
     <h2 class="section-title reveal">Certifications</h2>
     <div class="cards">
 
-      <!-- AI-900 -->
       <article class="card reveal">
         <h3>AI-900 — Microsoft Certified: Azure AI Fundamentals</h3>
         <p>Fondamentaux IA sur Azure (services cognitifs, IA responsable).</p>
@@ -140,7 +143,6 @@ a.pill{display:inline-block}
         </div>
       </article>
 
-      <!-- TOEIC -->
       <article class="card reveal">
         <h3>TOEIC — Test of English for International Communication</h3>
         <p>Score <strong>915 / 990</strong>. Niveau C1 opérationnel.</p>
@@ -152,7 +154,6 @@ a.pill{display:inline-block}
         </div>
       </article>
 
-      <!-- PCIE / ICDL Excel -->
       <article class="card reveal">
         <h3>PCIE — Excel (ICDL)</h3>
         <p>Maîtrise avancée d’Excel (tableaux, TCD, fonctions, VBA).</p>
