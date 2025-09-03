@@ -278,3 +278,40 @@ a{color:#fff;text-decoration:none}.container{max-width:1080px;margin:0 auto;padd
 
 /* Spécifique page Power BI : largeur utile confortable */
 .powerbi .container{ max-width: 1280px; }
+
+/* ===== Capsules : centrage vertical + style zoom ===== */
+.capsule--lr {
+  display: grid;
+  gap: 18px;
+  align-items: center; /* centre verticalement image et texte */
+}
+.capsule-media img {
+  cursor: zoom-in; /* curseur loupe + */
+}
+
+/* Lightbox image zoom */
+.image-modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.85);
+  justify-content: center;
+  align-items: center;
+}
+.image-modal.open { display: flex; }
+.image-modal img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(0,0,0,0.6);
+}
+.image-modal .close {
+  position: absolute;
+  top: 20px; right: 30px;
+  font-size: 2rem;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
