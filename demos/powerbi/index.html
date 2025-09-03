@@ -1,236 +1,221 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Power BI — Démographie & Économie IDF (2011–2022) | Hestia Aura</title>
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- CSS global -->
-  <link rel="stylesheet" href="/assets/css/style.css" />
+<title>Power BI — Démographie & Économie IDF (2011–2022) | Hestia Aura</title>
+<link rel="icon" href="/assets/logo.jpg">
+<link rel="apple-touch-icon" href="/assets/logo.jpg">
 
-  <!-- SEO de base -->
-  <meta name="description" content="Présentation d’un rapport Power BI combinant Power Query et DAX : P1 Évolution, P2 Répartition, P3 Scénarios. Focus Suisse, résultats chiffrés et captures zoomables." />
-  <link rel="canonical" href="https://hestiaaura.com/demos/powerbi/" />
+<!-- IMPORTANT : ta feuille de style est bien à la racine -->
+<link rel="stylesheet" href="/styles.css?v=final3">
 
-  <!-- Open Graph / Twitter Card -->
-  <meta property="og:site_name" content="Hestia Aura" />
-  <meta property="og:title" content="Power BI — Démographie & Économie IDF (2011–2022)" />
-  <meta property="og:description" content="Cas Power BI : préparation Power Query, modèle DAX, scénarios et indicateurs. Captures zoomables." />
-  <meta property="og:type" content="article" />
-  <meta property="og:image" content="/assets/media/og-cover.jpg" />
-  <meta name="twitter:card" content="summary_large_image" />
+<!-- SEO -->
+<meta name="description" content="Rapport Power BI combinant Power Query et DAX : P1 Évolution, P2 Répartition, P3 Scénarios & indicateurs. Captures zoomables.">
+<meta property="og:site_name" content="Hestia Aura">
+<meta property="og:title" content="Power BI — Démographie & Économie IDF (2011–2022)">
+<meta property="og:description" content="Cas Power BI : préparation Power Query, modèle DAX, scénarios et indicateurs.">
+<meta property="og:type" content="article">
+<meta property="og:image" content="/assets/intro-poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="powerbi">
-  <a class="skip" href="#main">Aller au contenu principal</a>
+<a class="skip" href="#main">Aller au contenu principal</a>
 
-  <!-- ===== HEADER (conserve ta nav simple) ===== -->
-  <header class="site-header">
-    <div class="container header-row">
-      <a class="logo" href="/">Hestia Aura</a>
-      <nav class="site-nav" aria-label="Navigation principale">
-        <a href="/index.html">Accueil</a>
-        <a href="/about.html">À propos</a>
-        <a href="/showcase.html">Showcase</a>
-        <a href="/projects.html">Projects</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/en/demos/powerbi/" hreflang="en" lang="en">EN</a>
-      </nav>
-    </div>
-  </header>
+<!-- Header identique aux autres démos -->
+<header class="site-header"><div class="container header-inner">
+  <a class="brand" href="/" aria-label="Hestia Aura">
+    <img src="/assets/logo.jpg" alt="Hestia Aura — logo" class="brand-mark">
+    <span class="brand-name">Hestia <strong>Aura</strong></span>
+  </a>
+  <nav class="nav">
+    <a href="/">Accueil</a>
+    <a href="/about.html">À propos</a>
+    <a href="/showcase.html">Showcase</a>
+    <!-- Pas de version EN dédiée pour cette page, on renvoie vers la vitrine EN -->
+    <a class="btn btn--sm" href="/en/showcase.html">EN</a>
+  </nav>
+</div></header>
 
-  <main id="main">
+<main id="main">
 
-    <!-- ===== HERO propre et compact ===== -->
-    <!-- BEGIN HERO POWERBI -->
-    <section class="section hero" aria-labelledby="hero-title">
-      <div class="container">
-        <header class="hero-row">
-          <div class="hero-text">
-            <h1 id="hero-title">Power BI — Démographie & Économie IDF (2011–2022)</h1>
-            <p class="muted">
-              Rapport combinant préparation <strong>Power Query</strong> et modèle <strong>DAX</strong>. Trois volets :
-              <em>P1 Évolution</em>, <em>P2 Répartition</em>, <em>P3 Scénarios & indicateurs</em>.
-            </p>
-          </div>
-          <div class="hero-actions">
-            <a class="btn" href="/showcase.html">← Retour au Showcase</a>
-          </div>
-        </header>
-
-        <nav class="pillbar" aria-label="Technologies">
-          <span class="pill">Power BI</span>
-          <span class="pill">Power Query</span>
-          <span class="pill">DAX</span>
-        </nav>
-
-        <ul class="bullet-nav">
-          <li><a href="#p1">P1 — Évolution</a></li>
-          <li><a href="#p2">P2 — Répartition</a></li>
-          <li><a href="#p3">P3 — Scénarios & indicateurs</a></li>
-        </ul>
-      </div>
-    </section>
-    <!-- END HERO POWERBI -->
-
-    <!-- ===== P1 ===== -->
-    <section class="section" id="p1" aria-labelledby="p1-title">
-      <div class="container">
-        <h2 id="p1-title">P1 — Évolution du recensement & économie en Île-de-France (2011–2022)</h2>
-
-        <div class="split">
-          <figure class="figure">
-            <!-- Remplace les images par les tiennes si besoin -->
-            <img src="/assets/media/powerbi/p1-overview.jpg"
-                 alt="Vue d’ensemble : population, chômage, PIB en IDF (2011–2022)"
-                 loading="lazy" />
-            <figcaption>Vue d’ensemble (time-series, carte centrée sur Paris, segments d’années/types).</figcaption>
-          </figure>
-
-          <div class="content">
-            <h3>Contexte & périmètre</h3>
-            <p>Population totale, chômage moyen %, PIB agrégé 2011–2022. Lecture temporelle + géographique.</p>
-
-            <h4>Préparation (Power Query)</h4>
-            <ul>
-              <li>Import RP2011/2016/2022, taux chômage moyen %, PIB annuel.</li>
-              <li>Harmonisation des millésimes, normalisation des libellés, typage des colonnes.</li>
-              <li>Contrôles : unicité année-valeur, gestion des valeurs manquantes.</li>
-            </ul>
-
-            <h4>Modèle DAX (indicateurs)</h4>
-            <ul>
-              <li><em>Population totale</em>, <em>Chômage moyen %</em>, <em>PIB total</em>.</li>
-              <li>Aggregations annuelles/moyennes sur période sélectionnée.</li>
-            </ul>
-
-            <h4>Visualisations & interactions</h4>
-            <ul>
-              <li>Courbe d’évolution de la population.</li>
-              <li>Carte (bulle proportionnelle) centrée sur Paris.</li>
-              <li>Barres horizontales par type de population.</li>
-              <li>Lignes d’évolution chômage % et somme de PIB.</li>
-              <li>Segments d’années et de types de population.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== P2 ===== -->
-    <section class="section" id="p2" aria-labelledby="p2-title">
-      <div class="container">
-        <h2 id="p2-title">P2 — Exploration & détails : Répartition par type de population (2011–2022)</h2>
-
-        <div class="split">
-          <figure class="figure">
-            <img src="/assets/media/powerbi/p2-distribution.jpg"
-                 alt="Répartition détaillée par type de population (2011–2022)"
-                 loading="lazy" />
-            <figcaption>Répartition par type, focus par département, zoom sur les extrêmes.</figcaption>
-          </figure>
-
-          <div class="content">
-            <h4>Préparation (Power Query)</h4>
-            <ul>
-              <li>Nettoyage & correspondances des catégories entre millésimes.</li>
-              <li>Colonnes dérivées pour comparaisons inter-annuelles.</li>
-            </ul>
-
-            <h4>Modèle DAX (indicateurs supplémentaires)</h4>
-            <ul>
-              <li>Part (%) d’un type vs total période/fenêtre glissante.</li>
-              <li>Variation absolue et relative par an.</li>
-            </ul>
-
-            <h4>Focus Suisse (employabilité)</h4>
-            <ul>
-              <li>Logique transposable : table faits (population) + dimensions (année, territoire, type).</li>
-              <li>Documentation & passation pour des équipes non-techniques.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== P3 ===== -->
-    <section class="section" id="p3" aria-labelledby="p3-title">
-      <div class="container">
-        <h2 id="p3-title">P3 — Scénarios & indicateurs</h2>
-
-        <div class="split">
-          <figure class="figure">
-            <img src="/assets/media/powerbi/p3-scenarios.jpg"
-                 alt="Scénarios et indicateurs clés (cartes & graphes)"
-                 loading="lazy" />
-            <figcaption>Paramètres de scénario + indicateurs (mesures DAX documentées).</figcaption>
-          </figure>
-
-          <div class="content">
-            <h4>Indicateurs clés</h4>
-            <ul>
-              <li>6–8 mesures standardisées (KPI de base).</li>
-              <li>Adoption cible : 25+ utilisateurs, −20/30 % d’ad hoc.</li>
-              <li>J+1 à 08:30 CET grâce à planification.</li>
-            </ul>
-
-            <h4>Livrables</h4>
-            <ul>
-              <li>PBIX et documentation (modèle & mesures).</li>
-              <li>Guide d’exploitation (sources, refresh, gouvernance).</li>
-            </ul>
-
-            <div class="buttons">
-              <a class="btn" href="/assets/files/powerbi-overview.pdf" target="_blank" rel="noopener">PDF (si dispo)</a>
-              <a class="btn" href="/projects.html">← Retour aux projets</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ===== FOOTER ===== -->
-  <footer class="site-footer">
+  <!-- HERO -->
+  <section class="section hero" aria-labelledby="hero-title">
     <div class="container">
-      <p>© 2025 Jérôme Jeannin — contact@hestiaaura.com</p>
+      <header class="hero-row">
+        <div class="hero-text">
+          <h1 id="hero-title">Power BI — Démographie & Économie IDF (2011–2022)</h1>
+          <p class="muted">
+            Rapport combinant préparation <strong>Power Query</strong> et modèle <strong>DAX</strong>.
+            Trois volets : <em>P1 Évolution</em>, <em>P2 Répartition</em>, <em>P3 Scénarios & indicateurs</em>.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <a class="btn" href="/showcase.html">← Retour au Showcase</a>
+        </div>
+      </header>
+
+      <nav class="pillbar" aria-label="Technologies">
+        <span class="pill">Power BI</span>
+        <span class="pill">Power Query</span>
+        <span class="pill">DAX</span>
+      </nav>
+
+      <ul class="bullet-nav">
+        <li><a href="#p1">P1 — Évolution</a></li>
+        <li><a href="#p2">P2 — Répartition</a></li>
+        <li><a href="#p3">P3 — Scénarios & indicateurs</a></li>
+      </ul>
     </div>
-  </footer>
+  </section>
 
-  <!-- ===== LIGHTBOX (zoom images) ===== -->
-  <!-- BEGIN LIGHTBOX POWERBI -->
-  <div class="image-modal" id="imgModal" aria-hidden="true">
-    <button class="close" id="imgModalClose" aria-label="Fermer l’image">Fermer ✕</button>
-    <img id="imgModalImg" alt="">
-  </div>
+  <!-- P1 -->
+  <section class="section" id="p1" aria-labelledby="p1-title">
+    <div class="container">
+      <h2 id="p1-title">P1 — Évolution du recensement & économie en Île-de-France (2011–2022)</h2>
 
-  <script>
-    // Ouvre la lightbox au clic sur les images des figures.
-    (function(){
-      const modal = document.getElementById('imgModal');
-      const modalImg = document.getElementById('imgModalImg');
-      const modalClose = document.getElementById('imgModalClose');
+      <div class="split">
+        <figure class="figure">
+          <!-- Les fichiers existent dans /assets/media/ (avec espaces, on encode en %20) -->
+          <img src="/assets/media/PBI%20P1.jpg"
+               alt="Vue d’ensemble : population, chômage et PIB en IDF (2011–2022)"
+               loading="lazy">
+          <figcaption>Vue d’ensemble (time-series, carte centrée sur Paris, segments d’années/types).</figcaption>
+        </figure>
 
-      document.querySelectorAll('.figure img').forEach(img => {
-        img.addEventListener('click', () => {
-          modalImg.src = img.src;
-          modalImg.alt = img.alt || '';
-          modal.classList.add('open');
-          modal.setAttribute('aria-hidden','false');
-        });
-      });
+        <div class="content">
+          <h3>Contexte & périmètre</h3>
+          <p>Population totale, chômage moyen %, PIB agrégé 2011–2022. Lecture temporelle + géographique.</p>
 
-      function closeModal(){
-        modal.classList.remove('open');
-        modal.setAttribute('aria-hidden','true');
-        modalImg.src = '';
-      }
-      modal.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
-      modalClose.addEventListener('click', closeModal);
-      document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeModal(); });
-    })();
-  </script>
-  <!-- END LIGHTBOX POWERBI -->
-</body>
-</html>
+          <h4>Préparation (Power Query)</h4>
+          <ul>
+            <li>Import RP2011/2016/2022, taux chômage moyen %, PIB annuel.</li>
+            <li>Harmonisation des millésimes, normalisation des libellés, typage des colonnes.</li>
+            <li>Contrôles : unicité année-valeur, gestion des valeurs manquantes.</li>
+          </ul>
+
+          <h4>Modèle DAX (indicateurs)</h4>
+          <ul>
+            <li><em>Population totale</em>, <em>Chômage moyen %</em>, <em>PIB total</em>.</li>
+            <li>Agrégations annuelles/moyennes sur période sélectionnée.</li>
+          </ul>
+
+          <h4>Visualisations & interactions</h4>
+          <ul>
+            <li>Courbe d’évolution de la population.</li>
+            <li>Carte (bulle proportionnelle) centrée sur Paris.</li>
+            <li>Barres horizontales par type de population.</li>
+            <li>Lignes d’évolution chômage % et somme de PIB.</li>
+            <li>Segments d’années et de types de population.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- P2 -->
+  <section class="section" id="p2" aria-labelledby="p2-title">
+    <div class="container">
+      <h2 id="p2-title">P2 — Exploration & détails : Répartition par type de population (2011–2022)</h2>
+
+      <div class="split">
+        <figure class="figure">
+          <img src="/assets/media/PBI%20P2.jpg"
+               alt="Répartition détaillée par type de population (2011–2022)"
+               loading="lazy">
+          <figcaption>Répartition par type, focus par département, zoom sur les extrêmes.</figcaption>
+        </figure>
+
+        <div class="content">
+          <h4>Préparation (Power Query)</h4>
+          <ul>
+            <li>Nettoyage & correspondances des catégories entre millésimes.</li>
+            <li>Colonnes dérivées pour comparaisons inter-annuelles.</li>
+          </ul>
+
+          <h4>Modèle DAX (indicateurs supplémentaires)</h4>
+          <ul>
+            <li>Part (%) d’un type vs total (période/fenêtre glissante).</li>
+            <li>Variation absolue et relative par an.</li>
+          </ul>
+
+          <h4>Focus Suisse (employabilité)</h4>
+          <ul>
+            <li>Logique transposable : table faits (population) + dimensions (année, territoire, type).</li>
+            <li>Documentation & passation pour des équipes non-techniques.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- P3 -->
+  <section class="section" id="p3" aria-labelledby="p3-title">
+    <div class="container">
+      <h2 id="p3-title">P3 — Scénarios & indicateurs</h2>
+
+    <div class="split">
+      <figure class="figure">
+        <img src="/assets/media/PBI%20P3.jpg"
+             alt="Scénarios et indicateurs clés (cartes & graphes)"
+             loading="lazy">
+        <figcaption>Paramètres de scénario + indicateurs (mesures DAX documentées).</figcaption>
+      </figure>
+
+      <div class="content">
+        <h4>Indicateurs clés</h4>
+        <ul>
+          <li>6–8 mesures standardisées (KPI de base).</li>
+          <li>Adoption cible : 25+ utilisateurs, −20/30 % d’ad hoc.</li>
+          <li>J+1 à 08:30 CET grâce à planification.</li>
+        </ul>
+
+        <h4>Livrables</h4>
+        <ul>
+          <li>PBIX et documentation (modèle & mesures).</li>
+          <li>Guide d’exploitation (sources, refresh, gouvernance).</li>
+        </ul>
+
+        <div class="buttons">
+          <!-- Mets un PDF si tu en as un -->
+          <!-- <a class="btn" href="/assets/files/powerbi-overview.pdf" target="_blank" rel="noopener">PDF</a> -->
+          <a class="btn" href="/projects.html">← Retour aux projets</a>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer"><div class="container">
+  <p>© 2025 Jérôme Jeannin — contact@hestiaaura.com</p>
+</div></footer>
+
+<!-- Lightbox (zoom images au clic) -->
+<div class="image-modal" id="imgModal" aria-hidden="true">
+  <button class="close" id="imgModalClose" aria-label="Fermer l’image">Fermer ✕</button>
+  <img id="imgModalImg" alt="">
+</div>
+<script>
+(function(){
+  const modal = document.getElementById('imgModal');
+  const modalImg = document.getElementById('imgModalImg');
+  const closeBtn = document.getElementById('imgModalClose');
+
+  document.querySelectorAll('.figure img').forEach(img=>{
+    img.addEventListener('click', ()=>{
+      modalImg.src = img.src;
+      modalImg.alt = img.alt || '';
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden','false');
+    });
+  });
+
+  function close(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); modalImg.src=''; }
+  modal.addEventListener('click', e=>{ if(e.target===modal) close(); });
+  closeBtn.addEventListener('click', close);
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') close(); });
+})();
+</script>
+
+</body></html>
