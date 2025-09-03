@@ -4,23 +4,51 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Power BI — Démographie & Économie IDF (2011–2022)</title>
-  <meta name="description" content="Showcase Power BI : présentation du rapport (Power BI), préparation (Power Query), modèle (DAX). P1 Évolution, P2 Répartition, P3 Scénarios.">
-  <!-- IMPORTANT : même pattern que les autres démos -->
+  <meta name="description" content="Démo Power BI : présentation du rapport (Power BI), préparation (Power Query), modèle (DAX). P1 Évolution, P2 Répartition, P3 Scénarios.">
+  <!-- Suivre le pattern des autres démos : CSS/JS à la racine -->
   <link rel="preload" href="/styles.css" as="style">
   <link rel="stylesheet" href="/styles.css">
   <meta name="color-scheme" content="dark light">
   <script defer src="/app.js"></script>
+
+  <!-- Styles locaux minimaux, SANS toucher aux autres pages -->
   <style>
-    /* Styles locaux minimes pour la mise en forme interne : n'affectent rien d'autre */
-    .subnav{margin-top:.75rem}
-    .subnav .nav-list{display:flex;gap:.5rem;flex-wrap:wrap;list-style:none;margin:0;padding:0}
-    .subnav a{display:inline-block;padding:.4rem .75rem;border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);background:var(--bg-elev)}
-    .subnav a:hover,.subnav a:focus{background:var(--card)}
-    .boxed{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem}
-    .note{font-size:.95rem;color:var(--muted)}
-    .figure{margin:1rem 0}
-    .figure img{width:100%;height:auto;border-radius:12px;border:1px solid var(--border);display:block}
-    .figure figcaption{font-size:.9rem;color:var(--muted);margin-top:.4rem}
+    .toolbar {
+      display:flex; gap:.5rem; align-items:center; flex-wrap:wrap;
+      margin: .5rem 0 1rem;
+    }
+    .toolbar .btn-back {
+      display:inline-block; padding:.5rem .75rem; border:1px solid var(--border);
+      border-radius:10px; text-decoration:none; color:var(--text); background:var(--bg-elev);
+    }
+    .toolbar .btn-back:hover, .toolbar .btn-back:focus { background: var(--card); }
+    .pillbar { display:flex; gap:.5rem; flex-wrap:wrap; }
+    .muted { color: var(--muted); }
+
+    /* Bloc 2 colonnes image gauche / texte droite */
+    .split { display:grid; gap:1rem; align-items:start; }
+    @media (min-width: 980px){ .split { grid-template-columns: 1.25fr 1fr; } }
+
+    .figure {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: .75rem;
+      box-shadow: var(--shadow);
+    }
+    .figure img {
+      width:100%; height:auto; display:block;
+      border-radius: 10px;
+    }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem 1rem;
+      box-shadow: var(--shadow);
+    }
+    .panel h3 { margin-top: 0; }
+    .panel ul { margin: .5rem 0 0 1.1rem; }
   </style>
 </head>
 <body>
@@ -52,6 +80,16 @@
           Présentation d’un rapport <strong>Power BI</strong> combinant <strong>préparation Power Query</strong> et <strong>modèle DAX</strong>.
           Trois volets : <em>P1 Évolution</em>, <em>P2 Répartition</em>, <em>P3 Scénarios</em>.
         </p>
+
+        <div class="toolbar">
+          <a class="btn-back" href="/showcase.html" aria-label="Retour au Showcase">← Retour au Showcase</a>
+          <div class="pillbar">
+            <span class="pill">Power BI</span>
+            <span class="pill">Power Query</span>
+            <span class="pill">DAX</span>
+          </div>
+        </div>
+
         <nav class="subnav" aria-label="Navigation des sections">
           <ul class="nav-list">
             <li><a href="#p1">P1 — Évolution</a></li>
@@ -67,37 +105,39 @@
       <div class="container">
         <h2 id="p1-title">P1 — Évolution du recensement et économie en Île-de-France (2011–2022)</h2>
 
-        <figure class="figure">
-          <!-- NB : espaces dans le nom du fichier => URL encodée en %20 -->
-          <img src="/assets/media/PBI%20P1.jpg" alt="P1 : Évolution population, chômage et PIB en Île-de-France">
-          <figcaption>Vue d’ensemble : population, chômage et PIB (2011–2022), carte centrée sur Paris.</figcaption>
-        </figure>
+        <div class="split">
+          <figure class="figure">
+            <!-- Espaces dans les noms → %20 dans l’URL -->
+            <img src="/assets/media/PBI%20P1.jpg" alt="P1 : Évolution population, chômage et PIB en Île-de-France (carte centrée sur Paris)">
+            <figcaption class="muted">Vue d’ensemble : population, chômage et PIB (2011–2022), carte centrée sur Paris.</figcaption>
+          </figure>
 
-        <div class="boxed">
-          <h3>Contexte & périmètre</h3>
-          <p>Population totale, chômage moyen et PIB agrégé sur 2011–2022. Lecture <strong>temporelle</strong> et <strong>géographique</strong>.</p>
+          <div class="panel">
+            <h3>Contexte & périmètre</h3>
+            <p>Population totale, chômage moyen et PIB agrégé sur 2011–2022. Lecture <strong>temporelle</strong> et <strong>géographique</strong>.</p>
 
-          <h3>Préparation (Power Query)</h3>
-          <ul>
-            <li>Import RP2011/2016/2022, taux de chômage moyen %, PIB régional annuel.</li>
-            <li>Harmonisation des millésimes, normalisation des libellés, typage des colonnes.</li>
-            <li>Contrôles : unicité année-valeur, gestion des valeurs manquantes.</li>
-          </ul>
+            <h3>Préparation (Power Query)</h3>
+            <ul>
+              <li>Import RP2011/2016/2022, taux de chômage moyen %, PIB régional annuel.</li>
+              <li>Harmonisation des millésimes, normalisation des libellés, typage des colonnes.</li>
+              <li>Contrôles : unicité année-valeur, gestion des valeurs manquantes.</li>
+            </ul>
 
-          <h3>Modèle & DAX (indicateurs)</h3>
-          <ul>
-            <li>Mesures : <em>Population totale</em>, <em>Chômage moyen %</em>, <em>PIB total</em>.</li>
-            <li>Agrégations annuelles et moyennes sur période sélectionnée.</li>
-          </ul>
+            <h3>Modèle & DAX (indicateurs)</h3>
+            <ul>
+              <li>Mesures : <em>Population totale</em>, <em>Chômage moyen %</em>, <em>PIB total</em>.</li>
+              <li>Agrégations annuelles et moyennes sur période sélectionnée.</li>
+            </ul>
 
-          <h3>Visualisations & interactions</h3>
-          <ul>
-            <li>Ligne d’évolution de la population.</li>
-            <li>Carte (bulle proportionnelle) centrée sur Paris.</li>
-            <li>Barres horizontales par type de population.</li>
-            <li>Lignes d’évolution chômage % et somme de PIB.</li>
-            <li>Segments d’années et de types de population.</li>
-          </ul>
+            <h3>Visualisations & interactions</h3>
+            <ul>
+              <li>Ligne d’évolution de la population.</li>
+              <li>Carte (bulle proportionnelle) centrée sur Paris.</li>
+              <li>Barres horizontales par type de population.</li>
+              <li>Lignes d’évolution chômage % et somme de PIB.</li>
+              <li>Segments d’années et de types de population.</li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -107,24 +147,34 @@
       <div class="container">
         <h2 id="p2-title">P2 — Exploration & détails : Répartition par type de population (2011–2022)</h2>
 
-        <figure class="figure">
-          <img src="/assets/media/PBI%20P2.jpg" alt="P2 : Répartition par type de population (IDF)">
-          <figcaption>Exploration : arbre de décomposition, anneau des parts, totaux par année.</figcaption>
-        </figure>
+        <div class="split">
+          <figure class="figure">
+            <img src="/assets/media/PBI%20P2.jpg" alt="P2 : Répartition par type de population IDF — arbre, anneau, totaux par année">
+            <figcaption class="muted">Exploration : arbre de décomposition, anneau des parts, totaux par année.</figcaption>
+          </figure>
 
-        <div class="boxed">
-          <h3>Préparation (Power Query)</h3>
-          <ul>
-            <li>Concaténation des millésimes et standardisation des catégories.</li>
-            <li>Table de correspondance “type de pop. → libellé clair”.</li>
-            <li>Vérification des totaux et cohérence inter-sources.</li>
-          </ul>
+          <div class="panel">
+            <h3>Préparation (Power Query)</h3>
+            <ul>
+              <li>Concaténation des millésimes et standardisation des catégories.</li>
+              <li>Table de correspondance “type de pop. → libellé clair”.</li>
+              <li>Vérification des totaux et cohérence inter-sources.</li>
+            </ul>
 
-          <h3>Modèle & DAX (indicateurs)</h3>
-          <ul>
-            <li><em>Population municipale moyenne</em> et <em>Population comptée à part moyenne</em>.</li>
-            <li>Totaux par année et parts relatives par type.</li>
-          </ul>
+            <h3>Modèle & DAX (indicateurs)</h3>
+            <ul>
+              <li><em>Population municipale moyenne</em> et <em>Population comptée à part moyenne</em>.</li>
+              <li>Totaux par année et parts relatives par type.</li>
+            </ul>
+
+            <h3>Visualisations & interactions</h3>
+            <ul>
+              <li>Arbre de décomposition (type de population × année).</li>
+              <li>Anneau des parts relatives, segments synchronisés.</li>
+              <li>Tableau des totaux + ligne de tendance.</li>
+              <li>Indicateurs chiffrés (moyennes) en exergue.</li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -134,28 +184,32 @@
       <div class="container">
         <h2 id="p3-title">P3 — Scénarios et indicateurs (DAX)</h2>
 
-        <figure class="figure">
-          <img src="/assets/media/PBI%20P3.jpg" alt="P3 : Scénarios DAX et indicateurs PIB, population, chômage">
-          <figcaption>Simulation : curseur Variation PIB %, indicateurs DAX, comparaison réel vs scénario.</figcaption>
-        </figure>
+        <div class="split">
+          <figure class="figure">
+            <img src="/assets/media/PBI%20P3.jpg" alt="P3 : Scénarios DAX — variation PIB %, KPI et comparaison réel vs scénario">
+            <figcaption class="muted">Simulation : curseur Variation PIB %, indicateurs DAX, comparaison réel vs scénario.</figcaption>
+          </figure>
 
-        <div class="boxed">
-          <h3>Préparation (Power Query)</h3>
-          <ul>
-            <li>Alignement des séries PIB/Population/Chômage.</li>
-            <li>Table de paramètres pour la <em>Variation PIB %</em>.</li>
-          </ul>
+          <div class="panel">
+            <h3>Préparation (Power Query)</h3>
+            <ul>
+              <li>Alignement des séries PIB/Population/Chômage.</li>
+              <li>Table de paramètres pour la <em>Variation PIB %</em>.</li>
+            </ul>
 
-          <h3>Modèle & DAX (indicateurs)</h3>
-          <ul>
-            <li><em>PIB total (réel)</em>, <em>PIB total (scénario)</em> = PIB × (1 + Variation %).</li>
-            <li><em>CAGR PIB %</em> et <em>CAGR Population %</em>.</li>
-            <li><em>Population (année sélectionnée)</em>, <em>Chômage moyen %</em>.</li>
-            <li>Variations <em>YoY %</em> pour PIB et Population.</li>
-          </ul>
+            <h3>Modèle & DAX (indicateurs)</h3>
+            <ul>
+              <li><em>PIB total (réel)</em> et <em>PIB total (scénario)</em> = PIB × (1 + Variation %).</li>
+              <li><em>CAGR PIB %</em> et <em>CAGR Population %</em>.</li>
+              <li><em>Population (année sélectionnée)</em> et <em>Chômage moyen %</em>.</li>
+              <li>Variations <em>YoY %</em> pour PIB et Population.</li>
+            </ul>
 
-          <p class="note">Sources : Insee RP2011/2016/2022, séries PIB et chômage agrégées (millésime au 01/01/2024).</p>
+            <p class="muted">Sources : Insee RP2011/2016/2022, séries PIB et chômage agrégées (millésime au 01/01/2024).</p>
+          </div>
         </div>
+
+        <p><a class="btn-back" href="/showcase.html" aria-label="Retour au Showcase">← Retour au Showcase</a></p>
       </div>
     </section>
   </main>
