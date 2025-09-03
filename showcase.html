@@ -1,84 +1,108 @@
-<!DOCTYPE html><html lang="fr"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Showcase — démos IA</title>
-<link rel="icon" href="/assets/logo.jpg"><link rel="apple-touch-icon" href="/assets/logo.jpg">
-<link rel="stylesheet" href="/styles.css?v=final3">
-</head><body>
-<header class="site-header"><div class="container header-inner">
-  <a class="brand" href="/"><img src="/assets/logo.jpg" class="brand-mark" alt="logo"><span class="brand-name">Hestia <strong>Aura</strong></span></a>
-  <nav class="nav"><a href="/">Accueil</a><a href="/about.html">À propos</a><a href="/showcase.html">Showcase</a><a class="btn btn--sm" href="/en/showcase.html">EN</a></nav>
-</div></header>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Showcase — Hestia Aura</title>
+  <meta name="description" content="Showcases Hestia Aura : démos et présentations détaillées, dont le reporting Power BI.">
+  <link rel="stylesheet" href="/styles.css">
+  <meta name="color-scheme" content="dark light">
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Aller au contenu principal</a>
 
-<main id="top">
-  <section class="hero"><div class="container">
-    <h1>Showcase — démos IA</h1>
-    <p>Mini-démos front-end (données factices) pour illustrer quelques cas d’usage.</p>
-    <ul class="hero-badges"><li>Azure · Power BI · Python</li><li>Intégrations · n8n/Make</li></ul>
-  </div></section>
-
-  <section class="section"><div class="container">
-    <div class="cards">
-
-      <article class="card">
-        <a href="/demos/pipeline/">
-          <h3>Pipeline & Dashboard</h3>
-          <p>ETL mock (Extract → Transform → Load), table normalisée, KPIs et graphiques. Export CSV.</p>
-          <div class="pills">
-            <span class="pill">ETL</span><span class="pill">CSV</span><span class="pill">KPIs</span><span class="pill">Charts</span>
-          </div>
-          <p class="muted" style="margin-top:8px">
-            <strong>Étude de cas :</strong> reporting mensuel dispersé → normalisation + KPIs CHF.
-            <em>Résultat attendu :</em> ~50 % de temps de préparation en moins, cohérence des chiffres.
-          </p>
-        </a>
-      </article>
-
-      <a class="card" href="/demos/invoices/">
-        <h3>Extraction de factures</h3>
-        <p>Champs clés + lignes d’articles → JSON exploitable → export CSV.</p>
-        <div class="pills"><span class="pill">Suisse/UE/US</span><span class="pill">CSV</span><span class="pill">JSON</span></div>
-        <p class="muted" style="margin-top:8px">
-          <strong>Étude de cas :</strong> saisie manuelle de factures (CH/EU/US) → extraction structurée.
-          <em>Résultat attendu :</em> moins d’erreurs, intégration ERP plus rapide.
-        </p>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="/" aria-label="Retour à l'accueil Hestia Aura">
+        <span class="brand-mark" aria-hidden="true">HA</span>
+        <span class="brand-text">Hestia Aura</span>
       </a>
-
-      <a class="card" href="/demos/email-router/">
-        <h3>Router d’e-mails</h3>
-        <p>Résumé + classification + aiguillage fictifs vers CRM/support.</p>
-        <div class="pills"><span class="pill">LLM</span><span class="pill">Workflow</span></div>
-        <p class="muted" style="margin-top:8px">
-          <strong>Étude de cas :</strong> boîte partagée saturée → résumé, classification, routage.
-          <em>Résultat attendu :</em> triage et délais de traitement réduits.
-        </p>
-      </a>
-
-      <a class="card" href="/demos/invoices/?sample=ch">
-        <h3>QR-facture (Suisse)</h3>
-        <p>Aperçu des champs clés et de la référence QR (mock) ; export CSV.</p>
-        <div class="pills"><span class="pill">Suisse</span><span class="pill">Paiements</span></div>
-        <p class="muted" style="margin-top:8px">
-          <strong>Étude de cas :</strong> spécificités CH (IBAN, référence QR) → lecture/validation.
-          <em>Résultat attendu :</em> conformité et rapprochement accrus.
-        </p>
-      </a>
-
-      <a class="card" href="/demos/rag/">
-        <h3>RAG interne</h3>
-        <p>Recherche simplifiée dans un corpus JSON (front-end only).</p>
-        <div class="pills"><span class="pill">Index</span><span class="pill">Search</span></div>
-        <p class="muted" style="margin-top:8px">
-          <strong>Étude de cas :</strong> documents internes dispersés → recherche FR/EN + tags + surlignage.
-          <em>Résultat attendu :</em> réponses sourcées plus rapides.
-        </p>
-      </a>
-
+      <nav class="site-nav" role="navigation" aria-label="Navigation principale">
+        <ul class="nav-list">
+          <li><a href="/index.html#projets">Projets</a></li>
+          <li><a href="/about.html">À propos</a></li>
+          <li><a href="/index.html#contact">Contact</a></li>
+        </ul>
+      </nav>
     </div>
-  </div></section>
-</main>
+  </header>
 
-<footer class="site-footer"><div class="container footer-inner">
-  <span>© <span id="y"></span> Jérôme Jeannin</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
-</div></footer>
-<script src="/app.js?v=final3"></script>
-</body></html>
+  <main id="main">
+    <section class="section hero" aria-labelledby="hero-title">
+      <div class="container">
+        <h1 id="hero-title">Showcases</h1>
+        <p class="lead">Démonstrations détaillées. Accédez aux pages dédiées pour comprendre le contexte, la préparation des données et les visualisations.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="grid-title">
+      <div class="container">
+        <h2 id="grid-title">Sélection</h2>
+        <div class="grid cards">
+          <!-- EXISTANTS -->
+          <article class="card reveal">
+            <h3>Extraction de factures</h3>
+            <p>Champs clés + lignes d’articles → JSON exploitable → export CSV.</p>
+            <div class="pills">
+              <span class="pill">Suisse/UE/US</span><span class="pill">CSV</span><span class="pill">JSON</span>
+            </div>
+            <p><a class="btn btn-secondary" href="/invoices/" aria-label="Ouvrir la démo factures">Ouvrir</a></p>
+          </article>
+
+          <article class="card reveal">
+            <h3>Router d’e-mails</h3>
+            <p>Classification simple et action suivante (ticket/CRM/RH) — 100 % local.</p>
+            <div class="pills">
+              <span class="pill">Règles</span><span class="pill">Flux</span><span class="pill">Triage</span>
+            </div>
+            <p><a class="btn btn-secondary" href="/email-router/" aria-label="Ouvrir la démo router emails">Ouvrir</a></p>
+          </article>
+
+          <article class="card reveal">
+            <h3>RAG interne</h3>
+            <p>Recherche FR/EN sur corpus JSON, tags et surlignage des termes.</p>
+            <div class="pills">
+              <span class="pill">FR/EN</span><span class="pill">Tags</span><span class="pill">JSON</span>
+            </div>
+            <p><a class="btn btn-secondary" href="/rag/" aria-label="Ouvrir la démo RAG interne">Ouvrir</a></p>
+          </article>
+
+          <article class="card reveal">
+            <h3>Pipelines</h3>
+            <p>Chaînes de traitement et automatisations planifiées (exécution fiable).</p>
+            <div class="pills">
+              <span class="pill">Planif</span><span class="pill">Logs</span><span class="pill">Alertes</span>
+            </div>
+            <p><a class="btn btn-secondary" href="/pipeline/" aria-label="Ouvrir la démo pipelines">Ouvrir</a></p>
+          </article>
+
+          <!-- NOUVEAU : POWER BI -->
+          <article class="card reveal">
+            <h3>Power BI — IDF (2011–2022)</h3>
+            <p>Évolution, répartition, scénarios. Préparation <strong>Power Query</strong> et modèle <strong>DAX</strong>.</p>
+            <div class="pills">
+              <span class="pill">P1 Évolution</span><span class="pill">P2 Répartition</span><span class="pill">P3 Scénarios</span>
+            </div>
+            <figure class="figure" style="margin:0 0 .75rem 0">
+              <img src="/assets/media/PBI%20P1.jpg" alt="Aperçu Power BI P1" style="width:100%;height:auto;border-radius:12px;border:1px solid var(--border)">
+            </figure>
+            <p><a class="btn" href="/powerbi/" aria-label="Ouvrir la page Power BI">Voir la page</a></p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <p>© <span id="y"></span> Hestia Aura. Tous droits réservés.</p>
+      <p class="small">Propulsé par GitHub Pages.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){ document.getElementById('y').textContent = new Date().getFullYear(); })();
+  </script>
+</body>
+</html>
