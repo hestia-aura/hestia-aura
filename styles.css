@@ -167,3 +167,31 @@ a{color:#fff;text-decoration:none}.container{max-width:1080px;margin:0 auto;padd
   .powerbi .split--lr { grid-template-columns: 1.5fr 1fr; }
   .powerbi .split--lr .figure img { max-height: 600px; }
 }
+/* ==== Power BI : image à gauche / texte à droite, harmonisé ==== */
+.powerbi .split--lr { gap: 22px; }
+
+@media (min-width: 980px) {
+  /* force le layout LR uniquement sur cette page */
+  .powerbi .split.split--lr {
+    grid-template-columns: 1.8fr 1fr !important; /* image plus large */
+    align-items: start;
+  }
+  /* image lisible mais pas écrasante */
+  .powerbi .split--lr .figure img {
+    width: 100%;
+    height: auto;
+    max-height: 560px;        /* ajuste à 520/600 si tu veux plus/moins grand */
+    object-fit: contain;
+    display: block;
+  }
+  /* confort de lecture du texte */
+  .powerbi .split--lr .content {
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+}
+
+@media (min-width: 1440px) {
+  .powerbi .split.split--lr { grid-template-columns: 1.6fr 1fr !important; }
+  .powerbi .split--lr .figure img { max-height: 600px; }
+}
