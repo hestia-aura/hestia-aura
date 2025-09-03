@@ -1,1 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Power BI — Démographie & Économie IDF (2011–2022)</title>
+  <meta name="description" content="Showcase Power BI : préparation Power Query, modèle DAX, P1 Évolution, P2 Répartition, P3 Scénarios.">
+  <!-- Chemins relatifs car ce fichier est dans /powerbi/ -->
+  <link rel="stylesheet" href="../styles.css">
+  <meta name="color-scheme" content="dark light">
+  <style>
+    /* styles locaux minimalistes, cohérents avec styles.css */
+    .subnav{margin-top:.75rem}
+    .subnav .nav-list{display:flex;gap:.5rem;flex-wrap:wrap;list-style:none;margin:0;padding:0}
+    .subnav a{display:inline-block;padding:.4rem .75rem;border:1px solid var(--border);
+      border-radius:10px;text-decoration:none;color:var(--text);background:var(--bg-elev)}
+    .subnav a:hover,.subnav a:focus{background:var(--card)}
+    .boxed{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem}
+    .note{font-size:.95rem;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Aller au contenu principal</a>
+
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a class="brand" href="../" aria-label="Retour à l'accueil Hestia Aura">
+        <span class="brand-mark" aria-hidden="true">HA</span>
+        <span class="brand-text">Hestia Aura</span>
+      </a>
+      <!-- BEGIN SECTION: NAV (LOCAL) -->
+      <nav class="site-nav" role="navigation" aria-label="Navigation principale">
+        <ul class="nav-list">
+          <li><a href="../index.html#projets">Projets</a></li>
+          <li><a href="../index.html#contact">Contact</a></li>
+          <li><a aria-current="page" href="./">Power BI</a></li>
+          <li><a href="../email-router/">Email Router</a></li>
+          <li><a href="../invoices/">Invoices</a></li>
+        </ul>
+      </nav>
+      <!-- END SECTION: NAV (LOCAL) -->
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="section hero" aria-labelledby="hero-title">
+      <div class="container">
+        <h1 id="hero-title">Reporting Power BI — démographie & économie IDF (2011–2022)</h1>
+        <p class="lead">
+          Présentation d’un rapport <strong>Power BI</strong> combinant <strong>préparation Power Query</strong>, <strong>modèle DAX</strong> et visualisations interactives autour de trois volets : <em>P1 Évolution</em>, <em>P2 Répartition</em>, <em>P3 Scénarios</em>.
+        </p>
+        <!-- NAVIGATION INTERNE -->
+        <nav class="subnav" aria-label="Navigation des sections">
+          <ul class="nav-list">
+            <li><a href="#p1">P1 — Évolution</a></li>
+            <li><a href="#p2">P2 — Répartition</a></li>
+            <li><a href="#p3">P3 — Scénarios & indicateurs</a></li>
+          </ul>
+        </nav>
+      </div>
+    </section>
+
+    <!-- P1 -->
+    <section id="p1" class="section" aria-labelledby="p1-title">
+      <div class="container">
+        <h2 id="p1-title">P1 — Évolution du recensement et économie en Île-de-France (2011–2022)</h2>
+        <div class="boxed">
+          <h3>Contexte & périmètre</h3>
+          <p>Rapport régional couvrant population totale, chômage moyen et PIB agrégé sur la période 2011–2022. La page combine lecture <strong>temporelle</strong> et <strong>géographique</strong>.</p>
+
+          <h3>Jeu de données & préparation (Power Query)</h3>
+          <ul>
+            <li>Import des séries Population (RP2011/2016/2022), Taux de chômage moyen %, PIB régional annuel.</li>
+            <li>Harmonisation des millésimes, normalisation des libellés, typage des colonnes (dates/nombres).</li>
+            <li>Contrôles simples : unicité année-valeur, gestion des valeurs manquantes.</li>
+          </ul>
+
+          <h3>Modèle & DAX (principaux indicateurs)</h3>
+          <ul>
+            <li>Mesures : <em>Population totale</em>, <em>Chômage moyen %</em>, <em>PIB total</em>.</li>
+            <li>DAX pour agrégations annuelles et lissage des évolutions (moyennes sur période sélectionnée).</li>
+          </ul>
+
+          <h3>Visualisations & interactions</h3>
+          <ul>
+            <li>Ligne d’évolution de la <strong>population totale</strong> (2011 → 2022).</li>
+            <li>Carte centrée sur Paris (bulle proportionnelle) pour lecture géographique.</li>
+            <li>Barres horizontales par <strong>type de population</strong> (municipale vs comptée à part).</li>
+            <li>Lignes d’évolution <strong>chômage moyen %</strong> et <strong>somme de PIB</strong>.</li>
+            <li>Segments d’années et de types de population pour filtrer l’ensemble.</li>
+          </ul>
+
+          <h3>Questions adressées</h3>
+          <ul>
+            <li>Comment population, chômage et PIB évoluent-ils sur 2011–2022 ?</li>
+            <li>Quel est le poids de la <em>population municipale</em> vs <em>comptée à part</em> ?</li>
+            <li>Quelle lecture géographique simple peut-on faire à l’échelle IDF ?</li>
+          </ul>
+
+          <p class="note">Valeur : vision d’ensemble rapide, filtrable, cohérente entre séries démographiques et économiques.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- P2 -->
+    <section id="p2" class="section" aria-labelledby="p2-title">
+      <div class="container">
+        <h2 id="p2-title">P2 — Exploration & détails : Répartition par type de population (2011–2022)</h2>
+        <div class="boxed">
+          <h3>Contexte & périmètre</h3>
+          <p>Page d’exploration pour analyser la répartition par <strong>type de population</strong> sur les millésimes 2011/2016/2022.</p>
+
+          <h3>Préparation (Power Query)</h3>
+          <ul>
+            <li>Concaténation des millésimes, standardisation des catégories, table de correspondance “type de pop. → libellé clair”.</li>
+            <li>Vérification des totaux et cohérence inter-sources.</li>
+          </ul>
+
+          <h3>Modèle & DAX (principaux indicateurs)</h3>
+          <ul>
+            <li><em>Population municipale moyenne</em> et <em>Population comptée à part moyenne</em>.</li>
+            <li>Totaux par année et parts relatives par type.</li>
+          </ul>
+
+          <h3>Visualisations & interactions</h3>
+          <ul>
+            <li><strong>Arbre de décomposition</strong> par type de population et année.</li>
+            <li><strong>Anneau</strong> des parts relatives, synchronisé avec les segments.</li>
+            <li>Tableau des totaux par année + ligne de tendance.</li>
+            <li>Indicateurs chiffrés (moyennes) mis en évidence.</li>
+            <li>Panneau d’aide : définition de la <em>population comptée à part</em>.</li>
+          </ul>
+
+          <h3>Questions adressées</h3>
+          <ul>
+            <li>Quelle est la part de chaque type de population ?</li>
+            <li>Comment ces parts évoluent-elles entre 2011, 2016 et 2022 ?</li>
+            <li>Quelles années ou catégories “tirent” les variations ?</li>
+          </ul>
+
+          <p class="note">Valeur : lecture détaillée et rapide de la structure démographique, avec définitions intégrées.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- P3 -->
+    <section id="p3" class="section" aria-labelledby="p3-title">
+      <div class="container">
+        <h2 id="p3-title">P3 — Scénarios et indicateurs (DAX)</h2>
+        <div class="boxed">
+          <h3>Contexte & périmètre</h3>
+          <p>Illustration d’un <strong>scénario sur le PIB</strong> et comparaison <strong>réel vs scénario</strong>.</p>
+
+          <h3>Préparation (Power Query)</h3>
+          <ul>
+            <li>Alignement des séries PIB/Population/Chômage sur les mêmes années.</li>
+            <li>Table de paramètres pour la <em>Variation PIB %</em> (pilotée par un curseur).</li>
+          </ul>
+
+          <h3>Modèle & DAX (principaux indicateurs)</h3>
+          <ul>
+            <li><em>PIB total (réel)</em>, <em>PIB total (scénario)</em> = PIB × (1 + Variation %).</li>
+            <li><em>CAGR PIB %</em> et <em>CAGR Population %</em> sur la plage sélectionnée.</li>
+            <li><em>Population (année sélectionnée)</em>, <em>Chômage moyen %</em>.</li>
+            <li>Variations <em>YoY %</em> (année sur année) pour PIB et Population.</li>
+          </ul>
+
+          <h3>Visualisations & interactions</h3>
+          <ul>
+            <li>Cartes indicateurs : PIB (scénario), PIB (réel), Population (sélection), Chômage moyen %, CAGR PIB %, CAGR Population %.</li>
+            <li>Colonnes <strong>PIB réel vs PIB scénario</strong> par année.</li>
+            <li>Tableau détaillé (PIB, population, chômage, YoY, valeur de variation appliquée).</li>
+            <li>Curseur <em>Variation PIB %</em> pour simuler des chocs négatifs/positifs.</li>
+          </ul>
+
+          <h3>Questions adressées</h3>
+          <ul>
+            <li>Quel est l’impact d’une variation du PIB (ex. −5 % / +3 %) ?</li>
+            <li>Comment se comparent les trajectoires <em>réelle</em> et <em>simulée</em> ?</li>
+            <li>Quelles années s’écartent le plus ?</li>
+          </ul>
+
+          <p class="note">Valeur : sensibilisation aux effets d’un choc macro sur une série agrégée, avec calculs traçables.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOURCES / CTA -->
+    <section class="section" aria-labelledby="sources-title">
+      <div class="container">
+        <h2 id="sources-title">Sources & liens</h2>
+        <ul>
+          <li>Sources : Insee RP2011/2016/2022, séries PIB et chômage agrégées (millésime au 01/01/2024).</li>
+          <li><a class="btn btn-secondary" href="#" aria-label="Ouvrir le fichier PBIX (placeholder)">Ouvrir la démo (.pbix)</a></li>
+        </ul>
+        <p><a class="btn btn-ghost" href="#hero-title" aria-label="Revenir en haut de la page">Retour en haut</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <p>© <span id="y"></span> Hestia Aura. Tous droits réservés.</p>
+      <p class="small">Propulsé par GitHub Pages. <a href="https://github.com" rel="noopener">GitHub</a></p>
+    </div>
+  </footer>
+
+  <script>
+    (function(){ document.getElementById('y').textContent = new Date().getFullYear(); })();
+  </script>
+</body>
+</html>
 
