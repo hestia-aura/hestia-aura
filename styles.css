@@ -138,3 +138,26 @@ a{color:#fff;text-decoration:none}.container{max-width:1080px;margin:0 auto;padd
   transform: translateX(4px);
   opacity: 1;
 }
+/* 1) Largeur utile plus grande UNIQUEMENT pour cette page */
+.powerbi .container { max-width: 1280px; }
+
+/* 2) Colonnes avec image plus large à gauche (desktop) */
+@media (min-width: 980px){
+  .split { grid-template-columns: 1.6fr 1fr; } /* au lieu de 1.25fr/1fr */
+}
+
+/* 3) Figures + images cliquables avec zoom (lightbox) */
+.figure { position: relative; }
+.figure img { cursor: zoom-in; }
+.image-modal {
+  position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+  background: rgba(0,0,0,.8); z-index: 9999; padding: 24px;
+}
+.image-modal.open { display: flex; }
+.image-modal img {
+  max-width: 95vw; max-height: 90vh; width: auto; height: auto; border-radius: 12px;
+}
+.image-modal .close {
+  position: absolute; top: 16px; right: 16px; padding: 8px 12px;
+  border:1px solid var(--border); border-radius:10px; background: var(--bg-elev); color: var(--text);
+}
