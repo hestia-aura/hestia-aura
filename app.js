@@ -151,4 +151,24 @@ const form = document.getElementById('contactForm')
     }
   });
 })();
+// Gestion du switch FR/EN
+document.addEventListener("DOMContentLoaded", () => {
+  const langSwitch = document.querySelector(".lang-switch");
+  if (!langSwitch) return;
+
+  langSwitch.addEventListener("click", (e) => {
+    e.preventDefault();
+    const currentPath = window.location.pathname;
+
+    if (currentPath.startsWith("/en/")) {
+      // Si on est côté EN → aller côté FR (en enlevant "/en")
+      const target = currentPath.replace("/en", "");
+      window.location.href = target || "/";
+    } else {
+      // Si on est côté FR → aller côté EN (en ajoutant "/en")
+      const target = "/en" + currentPath;
+      window.location.href = target;
+    }
+  });
+});
 
