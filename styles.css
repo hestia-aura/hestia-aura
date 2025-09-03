@@ -138,3 +138,32 @@ a{color:#fff;text-decoration:none}.container{max-width:1080px;margin:0 auto;padd
   transform: translateX(4px);
   opacity: 1;
 }
+/* ==== Power BI : disposition image à gauche / texte à droite ==== */
+/* Mobile : reste en une colonne (comportement actuel) */
+.powerbi .split--lr { gap: 22px; }
+
+/* Desktop : passe en deux colonnes équilibrées */
+@media (min-width: 1100px) {
+  .powerbi .split--lr {
+    grid-template-columns: 1.6fr 1fr;  /* image plus large que le texte */
+    align-items: start;
+  }
+  /* Harmoniser la taille visuelle de l'image */
+  .powerbi .split--lr .figure img {
+    max-height: 560px;      /* évite une image trop haute */
+    width: 100%;
+    height: auto;
+    object-fit: contain;    /* conserve les proportions */
+  }
+  /* Bloc texte : lisibilité confortable */
+  .powerbi .split--lr .content {
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+}
+
+/* Grand écran : léger ajustement pour ne pas “écraser” le texte */
+@media (min-width: 1440px) {
+  .powerbi .split--lr { grid-template-columns: 1.5fr 1fr; }
+  .powerbi .split--lr .figure img { max-height: 600px; }
+}
