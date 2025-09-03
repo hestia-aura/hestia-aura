@@ -1,124 +1,294 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hestia Aura — Démos & Showcases</title>
-  <meta name="description" content="Démonstrations Hestia Aura : extraction de factures, router d’e-mails, RAG interne, pipelines, reporting Power BI.">
-  <link rel="preload" href="/styles.css" as="style">
-  <link rel="stylesheet" href="/styles.css">
-  <meta name="color-scheme" content="dark light">
-  <script defer src="/app.js"></script>
-</head>
-<body>
-  <a class="skip-link" href="#main">Aller au contenu principal</a>
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Portfolio Data/IA & Automatisation : extraction documentaire, RAG, routage d’e-mails, pipelines & dashboards. Certifié AI-900. Ouvert à des rôles en Suisse.">
+<meta property="og:title" content="Portfolio — Data/IA & Automatisation">
+<meta property="og:description" content="Extraction documentaire, RAG, routage d’e-mails, pipelines & dashboards. Certifié AI-900. Ouvert à des rôles en Suisse.">
+<title>Portfolio — Data/IA & Automatisation</title>
+<link rel="icon" href="/assets/logo.jpg">
+<link rel="apple-touch-icon" href="/assets/logo.jpg">
+<link rel="stylesheet" href="/styles.css?v=final3">
+<style>
+/* --- Overrides spécifiques à la home FR --- */
 
-  <header class="site-header" role="banner">
-    <div class="container header-inner">
-      <a class="brand" href="/" aria-label="Retour à l'accueil Hestia Aura">
-        <span class="brand-mark" aria-hidden="true">HA</span>
-        <span class="brand-text">Hestia Aura</span>
-      </a>
-      <nav class="site-nav" role="navigation" aria-label="Navigation principale">
-        <ul class="nav-list">
-          <li><a href="/showcase.html">Showcase</a></li>
-          <li><a href="/about.html">À propos</a></li>
-          <li><a href="#contact">Contact</a></li>
-          <li><a href="/en/">EN</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+/* 1) Carte KPI du hero : largeur adaptée au contenu */
+.card.kpi-floating{width:fit-content;min-width:450px;max-width:560px;}
+@media (max-width: 720px){ .card.kpi-floating{min-width:auto;max-width:none;width:auto;} }
 
-  <main id="main">
-    <!-- HERO -->
-    <section class="section hero" aria-labelledby="hero-title">
-      <div class="container">
-        <h1 id="hero-title">Démos techniques — Data/Reporting/BI & IA</h1>
-        <p class="lead">Sélection de cas concrets : extraction de factures, tri d’e-mails, RAG interne, pipelines et <strong>reporting Power BI</strong>.</p>
+/* 2) Retirer la flèche sur TOUTES les cartes non cliquables, animation conservée */
+.card:not(a)::after{content:none !important;}
+
+/* 3) Lien "Voir plus" sous la section Démos */
+.more-link{display:inline-block;margin-top:12px;opacity:.85}
+.more-link:hover{opacity:1;text-decoration:underline}
+
+/* 4) Harmonisation des 3 boutons du hero (hauteur/centrage identiques) */
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.hero-cta .btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  height:48px;padding:0 20px;line-height:1;border-radius:12px;
+  font-weight:700;
+}
+.hero-cta .btn--dark{
+  background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.08);
+}
+
+/* 5) Pastilles cliquables conservent le style .pill */
+a.pill{display:inline-block}
+</style>
+</head><body>
+  <!-- Intro video -->
+<div id="intro" class="intro" aria-label="Intro animation" role="dialog" aria-modal="true">
+  <video id="introVideo" class="intro-video" autoplay muted playsinline preload="auto" poster="/assets/intro-poster.jpg">
+    <source src="/assets/intro.webm" type="video/webm">
+    <source src="/assets/intro.mp4" type="video/mp4">
+  </video>
+  <div class="intro-overlay">
+    <h1 class="intro-title">Hestia Aura</h1>
+    <div class="intro-credit">Jérôme Jeannin</div>
+    <button id="introSkip" class="intro-arrow" aria-label="Entrer"></button>
+  </div>
+</div>
+
+<header class="site-header"><div class="container header-inner">
+  <a class="brand" href="/" aria-label="Hestia Aura">
+    <img src="/assets/logo.jpg" alt="logo" class="brand-mark"><span class="brand-name">Hestia <strong>Aura</strong></span>
+  </a>
+  <nav class="nav">
+    <a href="/">Accueil</a><a href="/about.html">À propos</a><a href="/showcase.html">Showcase</a>
+    <a href="/en/" class="btn btn--sm">EN</a>
+  </nav>
+</div></header>
+
+<main id="top">
+<section class="hero">
+  <div class="container grid-2">
+
+    <div class="hero-copy reveal">
+      <h1>Portfolio — <span class="accent">Data/IA & Automatisation</span></h1>
+
+      <!-- Rôles visés (réintroduit) -->
+      <p class="muted"><strong>Rôles visés :</strong> Data/BI Analyst · Business Analyst IT · Spécialiste IA/Automatisation</p>
+
+      <p>Je conçois des POC et des automatisations qui réduisent les coûts. Ouvert à des rôles en Suisse (onsite/hybride). Analyser, Automatiser, Industrialiser.</p>
+      <p>Intégration IA & automatisation pragmatique : extraction de documents, RAG interne, routage d’e-mails, pipelines data et tableaux de bord. Certifié <strong>AI-900</strong>. Compétences : <strong>Azure</strong>, <strong>Excel/VBA</strong>, <strong>Power BI</strong>, <strong>SQL</strong>.</p>
+
+      <!-- Boutons -->
+      <div class="hero-cta">
+        <a href="/assets/CV_FR.pdf" target="_blank" class="btn btn--outline">Mon CV</a>
+        <a href="/showcase.html" class="btn btn--dark">Voir mes démos</a>
+        <a href="mailto:jeanninjerome6@gmail.com" class="btn">Me contacter</a>
       </div>
-    </section>
 
-    <!-- PROJETS (cartes) -->
-    <section id="projets" class="section" aria-labelledby="projects-title">
-      <div class="container">
-        <h2 id="projects-title">Projets</h2>
-        <div class="grid cards">
-          <!-- Invoices -->
-          <article class="card reveal">
-            <h3>Extraction de factures</h3>
-            <p>Champs clés + lignes d’articles → JSON exploitable → export CSV.</p>
-            <div class="pills">
-              <span class="pill">Suisse/UE/US</span><span class="pill">CSV</span><span class="pill">JSON</span>
-            </div>
-            <p><a class="btn btn-secondary" href="/invoices/" aria-label="Ouvrir la démo extraction de factures">Ouvrir</a></p>
-          </article>
+      <!-- Preuves d'usage -->
+      <ul class="hero-badges">
+        <li>Extraction facture → JSON/CSV</li>
+        <li>Routage d’e-mails → action suivante</li>
+        <li>RAG interne FR/EN</li>
+      </ul>
 
-          <!-- Email Router -->
-          <article class="card reveal">
-            <h3>Router d’e-mails</h3>
-            <p>Classification simple et action suivante (ticket/CRM/RH) — 100 % local.</p>
-            <div class="pills">
-              <span class="pill">Règles</span><span class="pill">Flux</span><span class="pill">Triage</span>
-            </div>
-            <p><a class="btn btn-secondary" href="/email-router/" aria-label="Ouvrir la démo router d'e-mails">Ouvrir</a></p>
-          </article>
+      <!-- Pastilles rapides : AI-900 et TOEIC cliquables -->
+      <div class="pills" style="margin-top:8px">
+        <a class="pill" href="/assets/certs/ai-900-credentials.pdf" target="_blank" rel="noopener">AI-900</a>
+        <a class="pill" href="/assets/certs/toeic-statement.pdf" target="_blank" rel="noopener">TOEIC 915</a>
+        <span class="pill">PCIE Excel</span>
+      </div>
+    </div>
 
-          <!-- RAG -->
-          <article class="card reveal">
-            <h3>RAG interne</h3>
-            <p>Recherche FR/EN sur corpus JSON, tags et surlignage des termes.</p>
-            <div class="pills">
-              <span class="pill">FR/EN</span><span class="pill">Tags</span><span class="pill">JSON</span>
-            </div>
-            <p><a class="btn btn-secondary" href="/rag/" aria-label="Ouvrir la démo RAG interne">Ouvrir</a></p>
-          </article>
+    <!-- visuel + KPI -->
+    <div class="hero-visual reveal delay-1">
+      <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+      <div class="card kpi-floating">
+        <div class="card-kpi"><span class="kpi-label">Ouvert&nbsp;:</span><span class="kpi-value">Suisse · On-site/Hybride</span></div>
+        <div class="card-kpi"><span class="kpi-label">Stack&nbsp;:</span><span class="kpi-value">Azure AI · Python · Power BI</span></div>
+        <div class="card-kpi"><span class="kpi-label">Certif.&nbsp;:</span><span class="kpi-value">AI-900 · TOEIC 915 · PCIE Excel</span></div>
+      </div>
+    </div>
 
-          <!-- Pipeline -->
-          <article class="card reveal">
-            <h3>Pipelines</h3>
-            <p>Chaînes de traitement et automatisations planifiées (exécution fiable).</p>
-            <div class="pills">
-              <span class="pill">Planif</span><span class="pill">Logs</span><span class="pill">Alertes</span>
-            </div>
-            <p><a class="btn btn-secondary" href="/pipeline/" aria-label="Ouvrir la démo pipelines">Ouvrir</a></p>
-          </article>
+  </div>
+</section>
 
-          <!-- NOUVELLE CARTE : Power BI -->
-          <article class="card reveal">
-            <h3>Power BI — IDF (2011–2022)</h3>
-            <p>Évolution, répartition, scénarios. Préparation <strong>Power Query</strong> et modèle <strong>DAX</strong>.</p>
-            <div class="pills">
-              <span class="pill">P1 Évolution</span><span class="pill">P2 Répartition</span><span class="pill">P3 Scénarios</span>
-            </div>
-            <p><a class="btn" href="/powerbi/" aria-label="Ouvrir la page Power BI">Ouvrir</a></p>
-          </article>
+<section id="expertises" class="section"><div class="container">
+  <h2 class="section-title reveal">Analyser · Automatiser · Industrialiser</h2>
+  <div class="cards">
+    <article class="card reveal"><h3>Analyser</h3><p>Rendre les données utilisables : qualité, schémas simples, indicateurs clés.</p></article>
+    <article class="card reveal"><h3>Automatiser</h3><p>Remplacer des tâches répétitives par des règles/outils simples avec gains immédiats.</p></article>
+    <article class="card reveal"><h3>Industrialiser</h3><p>Passer du POC à un usage robuste : droits d’accès, logs, conformité nLPD/FINMA.</p></article>
+  </div>
+</div></section>
+
+<section id="projects" class="section alt"><div class="container">
+  <h2 class="section-title reveal">Démos orientées usage</h2>
+  <p class="muted">Front-end, données fictives. L’objectif est d’illustrer la logique métier. En production, ces approches s’intègrent à l’environnement et aux standards de l’entreprise.</p>
+  <div class="cards">
+    <article class="card reveal"><h3>Extraction de factures</h3><p>Champs clés + lignes d’articles → JSON exploitable → export CSV.</p><div class="pills"><span class="pill">Suisse/UE/US</span><span class="pill">CSV</span><span class="pill">JSON</span></div></article>
+    <article class="card reveal"><h3>Router d’e-mails</h3><p>Classification simple et action suivante (ticket/CRM/RH) — 100 % local.</p><div class="pills"><span class="pill">Règles</span><span class="pill">Flux</span><span class="pill">Triage</span></div></article>
+    <article class="card reveal"><h3>RAG interne</h3><p>Recherche FR/EN sur corpus JSON, tags et surlignage des termes.</p><div class="pills"><span class="pill">FR/EN</span><span class="pill">Tags</span><span class="pill">Surlignage</span></div></article>
+  </div>
+  <a class="more-link" href="/showcase.html">Voir plus →</a>
+</div></section>
+
+<!-- Certifications -->
+<section id="certs" class="section">
+  <div class="container">
+    <h2 class="section-title reveal">Certifications</h2>
+    <div class="cards">
+
+      <article class="card reveal">
+        <h3>AI-900 — Microsoft Certified: Azure AI Fundamentals</h3>
+        <p>Fondamentaux IA sur Azure (services cognitifs, IA responsable).</p>
+        <p class="muted" style="margin-top:6px">Obtenue&nbsp;: 17 août 2025</p>
+        <div class="pills">
+          <span class="pill pill--success">IA</span>
+          <a class="pill" href="/assets/certs/ai-900-credentials.pdf" target="_blank" rel="noopener">Attestation (PDF)</a>
         </div>
-      </div>
-    </section>
+      </article>
 
-    <!-- CONTACT -->
-    <section id="contact" class="section" aria-labelledby="contact-title">
-      <div class="container">
-        <h2 id="contact-title">Contact</h2>
-        <p>Discutons d’un cas d’usage Data/BI & IA ou d’un pilote rapide.</p>
-        <p>
-          <a class="btn" href="mailto:contact@hestiaaura.com" aria-label="Envoyer un email à Hestia Aura">Email</a>
-          <a class="btn btn-secondary" href="/showcase.html" aria-label="Voir la page Showcase">Showcase</a>
-        </p>
-      </div>
-    </section>
-  </main>
+      <article class="card reveal">
+        <h3>TOEIC — Test of English for International Communication</h3>
+        <p>Score <strong>915 / 990</strong>. Niveau C1 opérationnel.</p>
+        <p class="muted" style="margin-top:6px">Obtenu&nbsp;: août 2023</p>
+        <div class="pills">
+          <span class="pill">Listening & Reading</span>
+          <span class="pill">Anglais professionnel</span>
+          <a class="pill" href="/assets/certs/toeic-statement.pdf" target="_blank" rel="noopener">Attestation (PDF)</a>
+        </div>
+      </article>
 
-  <footer class="site-footer" role="contentinfo">
-    <div class="container footer-inner">
-      <p>© <span id="y"></span> Hestia Aura. Tous droits réservés.</p>
-      <p class="small">Propulsé par GitHub Pages.</p>
+      <article class="card reveal">
+        <h3>PCIE — Excel (ICDL)</h3>
+        <p>Maîtrise avancée d’Excel (tableaux, TCD, fonctions, VBA).</p>
+        <p class="muted" style="margin-top:6px">Obtenu&nbsp;: août 2018</p>
+        <div class="pills">
+          <span class="pill">Excel avancé</span>
+          <span class="pill">ICDL / PCIE</span>
+        </div>
+      </article>
+
     </div>
-  </footer>
+  </div>
+</section>
 
-  <script>
-    (function(){ document.getElementById('y').textContent = new Date().getFullYear(); })();
-  </script>
-</body>
-</html>
+<!-- Preuves rapides -->
+<section id="proofs" class="section alt">
+  <div class="container">
+    <h2 class="section-title reveal">Preuves rapides</h2>
+    <div class="cards">
+      <a class="card reveal" href="/assets/CV_FR.pdf" target="_blank" rel="noopener">
+        <h3>CV (FR)</h3>
+        <p>Profil, expériences, compétences clés.</p>
+      </a>
+      <a class="card reveal" href="/assets/certs/ai-900-credentials.pdf" target="_blank" rel="noopener">
+        <h3>AI-900 — Attestation</h3>
+        <p>Microsoft Certified: Azure AI Fundamentals.</p>
+      </a>
+      <a class="card reveal" href="/assets/certs/toeic-statement.pdf" target="_blank" rel="noopener">
+        <h3>TOEIC — Attestation</h3>
+        <p>Score 915/990 (Listening & Reading).</p>
+      </a>
+      <a class="card reveal" href="https://www.linkedin.com/in/j%C3%A9r%C3%B4me-jeannin-151023a6/?locale=fr_FR" target="_blank" rel="noopener">
+        <h3>LinkedIn</h3>
+        <p>Parcours et recommandations.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Pour les recruteurs -->
+<section id="recruteurs" class="section"><div class="container">
+  <h2 class="section-title reveal">Pour les recruteurs</h2>
+  <ul class="feature-list">
+    <li>Langues : FR / EN / ES</li>
+    <li>Disponibilité : Suisse, onsite/hybride</li>
+    <li>Contact recrutement : <a href="mailto:jeanninjerome6@gmail.com">jeanninjerome6@gmail.com</a></li>
+  </ul>
+
+  <div class="pills">
+    <span class="pill">Azure AI</span><span class="pill">Python</span>
+    <span class="pill">Excel/VBA</span><span class="pill">Power BI</span>
+    <span class="pill">SQL</span><span class="pill">Compliance</span>
+    <span class="pill">Agile</span><span class="pill">n8n · Make</span>
+    <span class="pill">Salesforce</span><span class="pill">Blockchain</span>
+    <span class="pill">AI-900</span><span class="pill">TOEIC</span><span class="pill">PCIE</span>
+  </div>
+</div></section>
+
+<section class="section"><div class="container grid-2">
+ <div class="reveal">
+  <h2 class="section-title">À propos (en quelques mots)</h2>
+  <p>Français originaire de Paris, je suis passionné par les nouvelles technologies et animé par un sens aigu du détail ainsi qu’une recherche constante d’efficacité. Mon approche consiste à identifier les tâches répétitives, réduire les frictions et transformer des processus manuels en systèmes fiables, mesurables et durables.</p>
+</div>
+
+  <div class="reveal delay-1">
+    <div class="card contact-card">
+      <h3>Contact</h3>
+      <p class="muted">Réponse sous 24h (FR/EN/ES).</p>
+      <div class="stack">
+        <a class="btn" href="mailto:jeanninjerome6@gmail.com">Email</a>
+        <a class="btn btn--outline" href="https://www.linkedin.com/in/j%C3%A9r%C3%B4me-jeannin-151023a6/?locale=fr_FR" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section id="contact" class="section"><div class="container grid-2">
+
+  <div class="reveal">
+    <h2 class="section-title">Travaillons ensemble</h2>
+    <p>Ouvert aux opportunités en Suisse.</p>
+    <ul class="feature-list">
+      <li>Réponse sous 24h</li>
+      <li>FR / EN / ES</li>
+      <li>Sur site ou hybride</li>
+    </ul>
+  </div>
+
+  <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" class="contact-form">
+    <h3 class="section-title" style="margin:0 0 12px 0">Formulaire de contact</h3>
+    <input type="hidden" name="access_key" value="0fd6281b-4d44-4857-8c2f-f70937b432fa">
+    <input type="hidden" name="subject" value="Portfolio contact — Hestia Aura">
+    <input type="hidden" name="from_name" value="Hestia Aura Portfolio">
+    <input type="checkbox" name="botcheck" class="hidden" style="display:none">
+
+    <div class="form-row"><label>Nom</label><input type="text" name="name" required></div>
+    <div class="form-row"><label>Email</label><input type="email" name="email" required></div>
+    <div class="form-row"><label>Message</label><textarea name="message" rows="4" required></textarea></div>
+
+    <button type="submit" class="btn">Envoyer</button>
+    <p class="form-status" aria-live="polite"></p>
+  </form>
+
+</div></section>
+</main>
+
+<footer class="site-footer"><div class="container footer-inner">
+  <span>© <span id="y"></span> Jérôme Jeannin</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+</div></footer>
+
+<script src="/app.js?v=final3"></script>
+<script>
+/* Filet de sécurité pour l'intro : fin, erreur, clic, ou auto-fermeture après 3,5 s.
+   Désactivation pendant tests : ?intro=0 ou ?nointro=1 */
+(function(){
+  const intro = document.getElementById('intro');
+  if(!intro) return;
+  const video = document.getElementById('introVideo');
+  const skip  = document.getElementById('introSkip');
+
+  const close = () => {
+    if (!intro) return;
+    intro.style.pointerEvents = 'none';
+    intro.style.opacity = '0';
+    intro.setAttribute('aria-hidden','true');
+    try { intro.remove(); } catch(e) {}
+  };
+
+  const qs = new URLSearchParams(location.search);
+  if (qs.get('intro') === '0' || qs.get('nointro') === '1') { close(); return; }
+
+  if (skip)  skip.addEventListener('click', (e)=>{ e.preventDefault(); close(); });
+  if (video) { video.addEventListener('ended', close); video.addEventListener('error', close); }
+
+  setTimeout(close, 3500);
+})();
+</script>
+</body></html>
