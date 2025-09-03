@@ -4,12 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Power BI — Démographie & Économie IDF (2011–2022)</title>
-  <meta name="description" content="Showcase Power BI : préparation Power Query, modèle DAX. P1 Évolution, P2 Répartition, P3 Scénarios.">
-  <link rel="stylesheet" href="../styles.css">
+  <meta name="description" content="Showcase Power BI : présentation du rapport (Power BI), préparation (Power Query), modèle (DAX). P1 Évolution, P2 Répartition, P3 Scénarios.">
+  <!-- IMPORTANT : même pattern que les autres démos -->
+  <link rel="preload" href="/styles.css" as="style">
+  <link rel="stylesheet" href="/styles.css">
   <meta name="color-scheme" content="dark light">
-  <script defer src="../app.js"></script>
+  <script defer src="/app.js"></script>
   <style>
-    /* Styles locaux très légers pour ne rien casser */
+    /* Styles locaux minimes pour la mise en forme interne : n'affectent rien d'autre */
     .subnav{margin-top:.75rem}
     .subnav .nav-list{display:flex;gap:.5rem;flex-wrap:wrap;list-style:none;margin:0;padding:0}
     .subnav a{display:inline-block;padding:.4rem .75rem;border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);background:var(--bg-elev)}
@@ -17,7 +19,7 @@
     .boxed{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem}
     .note{font-size:.95rem;color:var(--muted)}
     .figure{margin:1rem 0}
-    .figure img{width:100%;height:auto;border-radius:12px;border:1px solid var(--border)}
+    .figure img{width:100%;height:auto;border-radius:12px;border:1px solid var(--border);display:block}
     .figure figcaption{font-size:.9rem;color:var(--muted);margin-top:.4rem}
   </style>
 </head>
@@ -26,17 +28,16 @@
 
   <header class="site-header" role="banner">
     <div class="container header-inner">
-      <a class="brand" href="../" aria-label="Retour à l'accueil Hestia Aura">
+      <a class="brand" href="/" aria-label="Retour à l'accueil Hestia Aura">
         <span class="brand-mark" aria-hidden="true">HA</span>
         <span class="brand-text">Hestia Aura</span>
       </a>
-      <!-- On garde la nav existante : uniquement des liens relatifs, pas de libellés nouveaux -->
       <nav class="site-nav" role="navigation" aria-label="Navigation principale">
         <ul class="nav-list">
-          <li><a href="../showcase.html">Showcase</a></li>
-          <li><a href="../about.html">À propos</a></li>
-          <li><a href="../index.html#projets">Projets</a></li>
-          <li><a href="../index.html#contact">Contact</a></li>
+          <li><a href="/showcase.html">Showcase</a></li>
+          <li><a href="/about.html">À propos</a></li>
+          <li><a href="/index.html#projets">Projets</a></li>
+          <li><a href="/index.html#contact">Contact</a></li>
         </ul>
       </nav>
     </div>
@@ -47,7 +48,10 @@
     <section class="section hero" aria-labelledby="hero-title">
       <div class="container">
         <h1 id="hero-title">Reporting Power BI — démographie & économie IDF (2011–2022)</h1>
-        <p class="lead">Rapport Power BI combinant <strong>préparation Power Query</strong>, <strong>modèle DAX</strong> et visualisations interactives (P1 Évolution, P2 Répartition, P3 Scénarios).</p>
+        <p class="lead">
+          Présentation d’un rapport <strong>Power BI</strong> combinant <strong>préparation Power Query</strong> et <strong>modèle DAX</strong>.
+          Trois volets : <em>P1 Évolution</em>, <em>P2 Répartition</em>, <em>P3 Scénarios</em>.
+        </p>
         <nav class="subnav" aria-label="Navigation des sections">
           <ul class="nav-list">
             <li><a href="#p1">P1 — Évolution</a></li>
@@ -64,7 +68,8 @@
         <h2 id="p1-title">P1 — Évolution du recensement et économie en Île-de-France (2011–2022)</h2>
 
         <figure class="figure">
-          <img src="../assets/media/PBI%20P1.jpg" alt="Page P1 Power BI — Évolution population, chômage et PIB en Île-de-France">
+          <!-- NB : espaces dans le nom du fichier => URL encodée en %20 -->
+          <img src="/assets/media/PBI%20P1.jpg" alt="P1 : Évolution population, chômage et PIB en Île-de-France">
           <figcaption>Vue d’ensemble : population, chômage et PIB (2011–2022), carte centrée sur Paris.</figcaption>
         </figure>
 
@@ -74,7 +79,7 @@
 
           <h3>Préparation (Power Query)</h3>
           <ul>
-            <li>Import RP2011/2016/2022, Taux de chômage moyen %, PIB régional annuel.</li>
+            <li>Import RP2011/2016/2022, taux de chômage moyen %, PIB régional annuel.</li>
             <li>Harmonisation des millésimes, normalisation des libellés, typage des colonnes.</li>
             <li>Contrôles : unicité année-valeur, gestion des valeurs manquantes.</li>
           </ul>
@@ -93,8 +98,6 @@
             <li>Lignes d’évolution chômage % et somme de PIB.</li>
             <li>Segments d’années et de types de population.</li>
           </ul>
-
-          <p class="note">Vue d’ensemble cohérente et filtrable entre séries démographiques et économiques.</p>
         </div>
       </div>
     </section>
@@ -105,7 +108,7 @@
         <h2 id="p2-title">P2 — Exploration & détails : Répartition par type de population (2011–2022)</h2>
 
         <figure class="figure">
-          <img src="../assets/media/PBI%20P2.jpg" alt="Page P2 Power BI — Répartition par type de population IDF">
+          <img src="/assets/media/PBI%20P2.jpg" alt="P2 : Répartition par type de population (IDF)">
           <figcaption>Exploration : arbre de décomposition, anneau des parts, totaux par année.</figcaption>
         </figure>
 
@@ -122,14 +125,6 @@
             <li><em>Population municipale moyenne</em> et <em>Population comptée à part moyenne</em>.</li>
             <li>Totaux par année et parts relatives par type.</li>
           </ul>
-
-          <h3>Visualisations & interactions</h3>
-          <ul>
-            <li>Arbre de décomposition (type de population × année).</li>
-            <li>Anneau des parts relatives, segments synchronisés.</li>
-            <li>Tableau des totaux + ligne de tendance.</li>
-            <li>Indicateurs chiffrés (moyennes) en exergue.</li>
-          </ul>
         </div>
       </div>
     </section>
@@ -139,36 +134,28 @@
       <div class="container">
         <h2 id="p3-title">P3 — Scénarios et indicateurs (DAX)</h2>
 
-      <figure class="figure">
-        <img src="../assets/media/PBI%20P3.jpg" alt="Page P3 Power BI — Scénarios DAX et indicateurs PIB, population, chômage">
-        <figcaption>Simulation : curseur Variation PIB %, indicateurs DAX, comparaison réel vs scénario.</figcaption>
-      </figure>
+        <figure class="figure">
+          <img src="/assets/media/PBI%20P3.jpg" alt="P3 : Scénarios DAX et indicateurs PIB, population, chômage">
+          <figcaption>Simulation : curseur Variation PIB %, indicateurs DAX, comparaison réel vs scénario.</figcaption>
+        </figure>
 
-      <div class="boxed">
-        <h3>Préparation (Power Query)</h3>
-        <ul>
-          <li>Alignement des séries PIB/Population/Chômage.</li>
-          <li>Table de paramètres pour la <em>Variation PIB %</em>.</li>
-        </ul>
+        <div class="boxed">
+          <h3>Préparation (Power Query)</h3>
+          <ul>
+            <li>Alignement des séries PIB/Population/Chômage.</li>
+            <li>Table de paramètres pour la <em>Variation PIB %</em>.</li>
+          </ul>
 
-        <h3>Modèle & DAX (indicateurs)</h3>
-        <ul>
-          <li><em>PIB total (réel)</em>, <em>PIB total (scénario)</em> = PIB × (1 + Variation %).</li>
-          <li><em>CAGR PIB %</em> et <em>CAGR Population %</em>.</li>
-          <li><em>Population (année sélectionnée)</em>, <em>Chômage moyen %</em>.</li>
-          <li>Variations <em>YoY %</em> pour PIB et Population.</li>
-        </ul>
+          <h3>Modèle & DAX (indicateurs)</h3>
+          <ul>
+            <li><em>PIB total (réel)</em>, <em>PIB total (scénario)</em> = PIB × (1 + Variation %).</li>
+            <li><em>CAGR PIB %</em> et <em>CAGR Population %</em>.</li>
+            <li><em>Population (année sélectionnée)</em>, <em>Chômage moyen %</em>.</li>
+            <li>Variations <em>YoY %</em> pour PIB et Population.</li>
+          </ul>
 
-        <h3>Visualisations & interactions</h3>
-        <ul>
-          <li>Cartes indicateurs (PIB réel/scénario, population, chômage, CAGR).</li>
-          <li>Colonnes PIB réel vs PIB scénario par année.</li>
-          <li>Tableau détaillé (PIB, population, chômage, YoY, valeur de variation).</li>
-          <li>Curseur <em>Variation PIB %</em> pour chocs négatifs/positifs.</li>
-        </ul>
-      </div>
-
-      <p class="note">Sources : Insee RP2011/2016/2022, séries PIB et chômage agrégées (millésime au 01/01/2024).</p>
+          <p class="note">Sources : Insee RP2011/2016/2022, séries PIB et chômage agrégées (millésime au 01/01/2024).</p>
+        </div>
       </div>
     </section>
   </main>
