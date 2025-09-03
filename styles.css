@@ -315,3 +315,26 @@ a{color:#fff;text-decoration:none}.container{max-width:1080px;margin:0 auto;padd
   border: none;
   cursor: pointer;
 }
+/* ===== Tags (petites bulles) ===== */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+  padding: 0;
+  list-style: none;
+}
+.tags li {
+  margin: 0;
+}
+.tags li span {
+  display: inline-block;
+  background: rgba(120,130,255,0.15);
+  color: #9aa5ff;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(120,130,255,0.4);
+  white-space: nowrap;
+}
