@@ -71,40 +71,44 @@
       <h2 id="p1-title">P1 — Évolution du recensement & économie en Île-de-France (2011–2022)</h2>
 
        <figure class="figure">
-      <div class="split split--lr">
-          <!-- Fichiers existants avec espaces => encodés en %20 -->
-          <img src="/assets/media/PBI%20P1.jpg"
-               alt="Vue d’ensemble : population, chômage et PIB en IDF (2011–2022)"
-               loading="lazy">
-          <figcaption>Vue d’ensemble (time-series, carte centrée sur Paris, segments d’années/types).</figcaption>
-        </figure>
+      <!-- BEGIN P1 CAPSULE -->
+<div class="capsule capsule--lr">
+  <figure class="capsule-media">
+    <img src="/assets/media/PBI%20P1.jpg"
+         alt="Vue d’ensemble : population, chômage et PIB en IDF (2011–2022)"
+         loading="lazy">
+    <figcaption>Vue d’ensemble (time-series, carte centrée sur Paris, segments d’années/types).</figcaption>
+  </figure>
 
-        <div class="content">
-          <h3>Contexte & périmètre</h3>
-          <p>Population totale, chômage moyen %, PIB agrégé 2011–2022. Lecture temporelle + géographique.</p>
+  <div class="capsule-body">
+    <h3>Contexte & périmètre</h3>
+    <p>Population totale, chômage moyen %, PIB agrégé 2011–2022. Lecture temporelle + géographique.</p>
 
-          <h4>Préparation (Power Query)</h4>
-          <ul>
-            <li>Import RP2011/2016/2022, taux chômage moyen %, PIB annuel.</li>
-            <li>Harmonisation des millésimes, normalisation des libellés, typage des colonnes.</li>
-            <li>Contrôles : unicité année-valeur, gestion des valeurs manquantes.</li>
-          </ul>
+    <h4>Préparation (Power Query)</h4>
+    <ul>
+      <li>Import RP2011/2016/2022, taux chômage moyen %, PIB annuel.</li>
+      <li>Harmonisation des millésimes, normalisation des libellés, typage des colonnes.</li>
+      <li>Contrôles : unicité année-valeur, gestion des valeurs manquantes.</li>
+    </ul>
 
-          <h4>Modèle DAX (indicateurs)</h4>
-          <ul>
-            <li><em>Population totale</em>, <em>Chômage moyen %</em>, <em>PIB total</em>.</li>
-            <li>Agrégations annuelles/moyennes sur période sélectionnée.</li>
-          </ul>
+    <h4>Modèle DAX (indicateurs)</h4>
+    <ul>
+      <li><em>Population totale</em>, <em>Chômage moyen %</em>, <em>PIB total</em>.</li>
+      <li>Agrégations annuelles/moyennes sur période sélectionnée.</li>
+    </ul>
 
-          <h4>Visualisations & interactions</h4>
-          <ul>
-            <li>Courbe d’évolution de la population.</li>
-            <li>Carte (bulle proportionnelle) centrée sur Paris.</li>
-            <li>Barres horizontales par type de population.</li>
-            <li>Lignes d’évolution chômage % et somme de PIB.</li>
-            <li>Segments d’années et de types de population.</li>
-          </ul>
-        </div>
+    <h4>Visualisations & interactions</h4>
+    <ul>
+      <li>Courbe d’évolution de la population.</li>
+      <li>Carte (bulle proportionnelle) centrée sur Paris.</li>
+      <li>Barres horizontales par type de population.</li>
+      <li>Lignes d’évolution chômage % et somme de PIB.</li>
+      <li>Segments d’années et de types de population.</li>
+    </ul>
+  </div>
+</div>
+<!-- END P1 CAPSULE -->
+
       </div>
     </div>
   </section>
@@ -114,32 +118,37 @@
     <div class="container">
       <h2 id="p2-title">P2 — Exploration & détails : Répartition par type de population (2011–2022)</h2>
  <figure class="figure">
-      <div class="split split--lr">
-          <img src="/assets/media/PBI%20P2.jpg"
-               alt="Répartition détaillée par type de population (2011–2022)"
-               loading="lazy">
-          <figcaption>Répartition par type, focus par département, zoom sur les extrêmes.</figcaption>
-        </figure>
+     <!-- BEGIN P2 CAPSULE -->
+<div class="capsule capsule--lr">
+  <figure class="capsule-media">
+    <img src="/assets/media/PBI%20P2.jpg"
+         alt="Répartition détaillée par type de population (2011–2022)"
+         loading="lazy">
+    <figcaption>Répartition par type, focus par département, zoom sur les extrêmes.</figcaption>
+  </figure>
 
-        <div class="content">
-          <h4>Préparation (Power Query)</h4>
-          <ul>
-            <li>Nettoyage & correspondances des catégories entre millésimes.</li>
-            <li>Colonnes dérivées pour comparaisons inter-annuelles.</li>
-          </ul>
+  <div class="capsule-body">
+    <h4>Préparation (Power Query)</h4>
+    <ul>
+      <li>Nettoyage & correspondances des catégories entre millésimes.</li>
+      <li>Colonnes dérivées pour comparaisons inter-annuelles.</li>
+    </ul>
 
-          <h4>Modèle DAX (indicateurs supplémentaires)</h4>
-          <ul>
-            <li>Part (%) d’un type vs total (période/fenêtre glissante).</li>
-            <li>Variation absolue et relative par an.</li>
-          </ul>
+    <h4>Modèle DAX (indicateurs supplémentaires)</h4>
+    <ul>
+      <li>Part (%) d’un type vs total (période/fenêtre glissante).</li>
+      <li>Variation absolue et relative par an.</li>
+    </ul>
 
-          <h4>Focus Suisse (employabilité)</h4>
-          <ul>
-            <li>Logique transposable : table faits (population) + dimensions (année, territoire, type).</li>
-            <li>Documentation & passation pour des équipes non-techniques.</li>
-          </ul>
-        </div>
+    <h4>Focus Suisse (employabilité)</h4>
+    <ul>
+      <li>Table faits (population) + dimensions (année, territoire, type).</li>
+      <li>Documentation & passation pour des équipes non-techniques.</li>
+    </ul>
+  </div>
+</div>
+<!-- END P2 CAPSULE -->
+
       </div>
     </div>
   </section>
@@ -149,30 +158,36 @@
     <div class="container">
       <h2 id="p3-title">P3 — Scénarios & indicateurs</h2>
  <figure class="figure">
-      <div class="split split--lr">
-          <img src="/assets/media/PBI%20P3.jpg"
-               alt="Scénarios et indicateurs clés (cartes & graphes)"
-               loading="lazy">
-          <figcaption>Paramètres de scénario + indicateurs (mesures DAX documentées).</figcaption>
-        </figure>
+      <!-- BEGIN P3 CAPSULE -->
+<div class="capsule capsule--lr">
+  <figure class="capsule-media">
+    <img src="/assets/media/PBI%20P3.jpg"
+         alt="Scénarios et indicateurs clés (cartes & graphes)"
+         loading="lazy">
+    <figcaption>Paramètres de scénario + indicateurs (mesures DAX documentées).</figcaption>
+  </figure>
 
-        <div class="content">
-          <h4>Indicateurs clés</h4>
-          <ul>
-            <li>6–8 mesures standardisées (KPI de base).</li>
-            <li>Adoption cible : 25+ utilisateurs, −20/30 % d’ad hoc.</li>
-            <li>J+1 à 08:30 CET grâce à planification.</li>
-          </ul>
+  <div class="capsule-body">
+    <h4>Indicateurs clés</h4>
+    <ul>
+      <li>6–8 mesures standardisées (KPI de base).</li>
+      <li>Adoption cible : 25+ utilisateurs, −20/30 % d’ad hoc.</li>
+      <li>J+1 à 08:30 CET grâce à planification.</li>
+    </ul>
 
-          <h4>Livrables</h4>
-          <ul>
-            <li>PBIX et documentation (modèle & mesures).</li>
-            <li>Guide d’exploitation (sources, refresh, gouvernance).</li>
-          </ul>
+    <h4>Livrables</h4>
+    <ul>
+      <li>PBIX et documentation (modèle & mesures).</li>
+      <li>Guide d’exploitation (sources, refresh, gouvernance).</li>
+    </ul>
 
-          <div class="buttons">
-            <a class="btn" href="/projects.html">← Retour aux projets</a>
-          </div>
+    <div class="buttons">
+      <a class="btn" href="/projects.html">← Retour aux projets</a>
+    </div>
+  </div>
+</div>
+<!-- END P3 CAPSULE -->
+
         </div>
       </div>
     </div>
