@@ -51,7 +51,7 @@
     .panel ul { margin: .5rem 0 0 1.1rem; }
   </style>
 </head>
-<body>
+<body class="powerbi">
   <a class="skip-link" href="#main">Aller au contenu principal</a>
 
   <header class="site-header" role="banner">
@@ -75,20 +75,23 @@
     <!-- HERO -->
     <section class="section hero" aria-labelledby="hero-title">
       <div class="container">
-        <h1 id="hero-title">Reporting Power BI — démographie & économie IDF (2011–2022)</h1>
-        <p class="lead">
-          Présentation d’un rapport <strong>Power BI</strong> combinant <strong>préparation Power Query</strong> et <strong>modèle DAX</strong>.
-          Trois volets : <em>P1 Évolution</em>, <em>P2 Répartition</em>, <em>P3 Scénarios</em>.
-        </p>
-
-        <div class="toolbar">
-          <a class="btn-back" href="/showcase.html" aria-label="Retour au Showcase">← Retour au Showcase</a>
-          <div class="pillbar">
-            <span class="pill">Power BI</span>
-            <span class="pill">Power Query</span>
-            <span class="pill">DAX</span>
+        <header class="header" style="display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:12px">
+          <div>
+            <h1 id="hero-title" style="margin:0">Power BI — Démographie & Économie IDF (2011–2022)</h1>
+            <p class="muted" style="margin:.25rem 0 0">Présentation d’un rapport Power BI combinant préparation <strong>Power Query</strong> et modèle <strong>DAX</strong>. Trois volets : <em>P1 Évolution</em>, <em>P2 Répartition</em>, <em>P3 Scénarios</em>.</p>
           </div>
-        </div>
+          <div class="actions" style="display:flex;gap:8px;flex-wrap:wrap">
+            <a class="btn-back" href="/showcase.html" style="display:inline-block;padding:.5rem .75rem;border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);background:var(--bg-elev)">← Retour au Showcase</a>
+          </div>
+        </header>
+
+        <nav aria-label="Sections de la page" class="pillbar" style="display:flex;gap:.5rem;flex-wrap:wrap">
+          <span class="pill">Power BI</span>
+          <span class="pill">Power Query</span>
+          <span class="pill">DAX</span>
+        </nav>
+      </div>
+    </section>
 
         <nav class="subnav" aria-label="Navigation des sections">
           <ul class="nav-list">
