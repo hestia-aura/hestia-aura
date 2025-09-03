@@ -5,8 +5,8 @@
 <link rel="icon" href="/assets/logo.jpg">
 <link rel="apple-touch-icon" href="/assets/logo.jpg">
 
-<!-- IMPORTANT : ta feuille de style est bien à la racine -->
-<link rel="stylesheet" href="/styles.css?v=final3">
+<!-- IMPORTANT : la feuille de style correcte est à la racine -->
+<link rel="stylesheet" href="/styles.css">
 
 <!-- SEO -->
 <meta name="description" content="Rapport Power BI combinant Power Query et DAX : P1 Évolution, P2 Répartition, P3 Scénarios & indicateurs. Captures zoomables.">
@@ -21,7 +21,7 @@
 <body class="powerbi">
 <a class="skip" href="#main">Aller au contenu principal</a>
 
-<!-- Header identique aux autres démos -->
+<!-- Header identique aux autres pages -->
 <header class="site-header"><div class="container header-inner">
   <a class="brand" href="/" aria-label="Hestia Aura">
     <img src="/assets/logo.jpg" alt="Hestia Aura — logo" class="brand-mark">
@@ -31,7 +31,6 @@
     <a href="/">Accueil</a>
     <a href="/about.html">À propos</a>
     <a href="/showcase.html">Showcase</a>
-    <!-- Pas de version EN dédiée pour cette page, on renvoie vers la vitrine EN -->
     <a class="btn btn--sm" href="/en/showcase.html">EN</a>
   </nav>
 </div></header>
@@ -75,7 +74,7 @@
 
       <div class="split">
         <figure class="figure">
-          <!-- Les fichiers existent dans /assets/media/ (avec espaces, on encode en %20) -->
+          <!-- Fichiers existants avec espaces => encodés en %20 -->
           <img src="/assets/media/PBI%20P1.jpg"
                alt="Vue d’ensemble : population, chômage et PIB en IDF (2011–2022)"
                loading="lazy">
@@ -153,35 +152,33 @@
     <div class="container">
       <h2 id="p3-title">P3 — Scénarios & indicateurs</h2>
 
-    <div class="split">
-      <figure class="figure">
-        <img src="/assets/media/PBI%20P3.jpg"
-             alt="Scénarios et indicateurs clés (cartes & graphes)"
-             loading="lazy">
-        <figcaption>Paramètres de scénario + indicateurs (mesures DAX documentées).</figcaption>
-      </figure>
+      <div class="split">
+        <figure class="figure">
+          <img src="/assets/media/PBI%20P3.jpg"
+               alt="Scénarios et indicateurs clés (cartes & graphes)"
+               loading="lazy">
+          <figcaption>Paramètres de scénario + indicateurs (mesures DAX documentées).</figcaption>
+        </figure>
 
-      <div class="content">
-        <h4>Indicateurs clés</h4>
-        <ul>
-          <li>6–8 mesures standardisées (KPI de base).</li>
-          <li>Adoption cible : 25+ utilisateurs, −20/30 % d’ad hoc.</li>
-          <li>J+1 à 08:30 CET grâce à planification.</li>
-        </ul>
+        <div class="content">
+          <h4>Indicateurs clés</h4>
+          <ul>
+            <li>6–8 mesures standardisées (KPI de base).</li>
+            <li>Adoption cible : 25+ utilisateurs, −20/30 % d’ad hoc.</li>
+            <li>J+1 à 08:30 CET grâce à planification.</li>
+          </ul>
 
-        <h4>Livrables</h4>
-        <ul>
-          <li>PBIX et documentation (modèle & mesures).</li>
-          <li>Guide d’exploitation (sources, refresh, gouvernance).</li>
-        </ul>
+          <h4>Livrables</h4>
+          <ul>
+            <li>PBIX et documentation (modèle & mesures).</li>
+            <li>Guide d’exploitation (sources, refresh, gouvernance).</li>
+          </ul>
 
-        <div class="buttons">
-          <!-- Mets un PDF si tu en as un -->
-          <!-- <a class="btn" href="/assets/files/powerbi-overview.pdf" target="_blank" rel="noopener">PDF</a> -->
-          <a class="btn" href="/projects.html">← Retour aux projets</a>
+          <div class="buttons">
+            <a class="btn" href="/projects.html">← Retour aux projets</a>
+          </div>
         </div>
       </div>
-    </div>
     </div>
   </section>
 
