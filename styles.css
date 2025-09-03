@@ -195,3 +195,43 @@ a{color:#fff;text-decoration:none}.container{max-width:1080px;margin:0 auto;padd
   .powerbi .split.split--lr { grid-template-columns: 1.6fr 1fr !important; }
   .powerbi .split--lr .figure img { max-height: 600px; }
 }
+/* ===== Power BI : image à gauche / texte à droite, vraiment forcé ===== */
+.powerbi .split--lr {
+  display: grid !important;         /* au cas où .split serait modifié ailleurs */
+  gap: 22px;
+}
+
+/* Les deux colonnes doivent pouvoir rétrécir (sinon l'image casse la grille) */
+.powerbi .split--lr > * { min-width: 0; }
+
+/* Desktop : 2 colonnes (image plus large que texte) */
+@media (min-width: 980px) {
+  .powerbi .split.split--lr {
+    grid-template-columns: 1.8fr 1fr !important;  /* force la 2e colonne texte */
+    align-items: start;
+  }
+
+  /* Image : lisible mais pas gigantesque */
+  .powerbi .split--lr .figure {
+    margin: 0;                          /* évite un débordement de marge */
+  }
+  .powerbi .split--lr .figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 560px;                  /* ajuste 520/600 si besoin */
+    object-fit: contain;                /* garde les proportions */
+  }
+
+  /* Texte : confort de lecture */
+  .powerbi .split--lr .content {
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+}
+
+/* Très grands écrans : équilibre un peu plus */
+@media (min-width: 1440px) {
+  .powerbi .split.split--lr { grid-template-columns: 1.6fr 1fr !important; }
+  .powerbi .split--lr .figure img { max-height: 600px; }
+}
