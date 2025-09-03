@@ -4,11 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Power BI — Démographie & Économie IDF (2011–2022)</title>
-  <meta name="description" content="Showcase Power BI : préparation Power Query, modèle DAX. Pages P1 Évolution, P2 Répartition, P3 Scénarios.">
+  <meta name="description" content="Showcase Power BI : préparation Power Query, modèle DAX. P1 Évolution, P2 Répartition, P3 Scénarios.">
   <link rel="stylesheet" href="../styles.css">
   <meta name="color-scheme" content="dark light">
   <script defer src="../app.js"></script>
   <style>
+    /* Styles locaux très légers pour ne rien casser */
     .subnav{margin-top:.75rem}
     .subnav .nav-list{display:flex;gap:.5rem;flex-wrap:wrap;list-style:none;margin:0;padding:0}
     .subnav a{display:inline-block;padding:.4rem .75rem;border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);background:var(--bg-elev)}
@@ -29,12 +30,13 @@
         <span class="brand-mark" aria-hidden="true">HA</span>
         <span class="brand-text">Hestia Aura</span>
       </a>
+      <!-- On garde la nav existante : uniquement des liens relatifs, pas de libellés nouveaux -->
       <nav class="site-nav" role="navigation" aria-label="Navigation principale">
         <ul class="nav-list">
-          <li><a href="../index.html#projets">Projets</a></li>
           <li><a href="../showcase.html">Showcase</a></li>
+          <li><a href="../about.html">À propos</a></li>
+          <li><a href="../index.html#projets">Projets</a></li>
           <li><a href="../index.html#contact">Contact</a></li>
-          <li><a aria-current="page" href="./">Power BI</a></li>
         </ul>
       </nav>
     </div>
@@ -92,7 +94,7 @@
             <li>Segments d’années et de types de population.</li>
           </ul>
 
-          <p class="note">Objectif : vue d’ensemble cohérente et filtrable entre séries démographiques et économiques.</p>
+          <p class="note">Vue d’ensemble cohérente et filtrable entre séries démographiques et économiques.</p>
         </div>
       </div>
     </section>
@@ -137,36 +139,36 @@
       <div class="container">
         <h2 id="p3-title">P3 — Scénarios et indicateurs (DAX)</h2>
 
-        <figure class="figure">
-          <img src="../assets/media/PBI%20P3.jpg" alt="Page P3 Power BI — Scénarios DAX et indicateurs PIB, population, chômage">
-          <figcaption>Simulation : curseur Variation PIB %, indicateurs DAX, comparaison réel vs scénario.</figcaption>
-        </figure>
+      <figure class="figure">
+        <img src="../assets/media/PBI%20P3.jpg" alt="Page P3 Power BI — Scénarios DAX et indicateurs PIB, population, chômage">
+        <figcaption>Simulation : curseur Variation PIB %, indicateurs DAX, comparaison réel vs scénario.</figcaption>
+      </figure>
 
-        <div class="boxed">
-          <h3>Préparation (Power Query)</h3>
-          <ul>
-            <li>Alignement des séries PIB/Population/Chômage.</li>
-            <li>Table de paramètres pour la <em>Variation PIB %</em>.</li>
-          </ul>
+      <div class="boxed">
+        <h3>Préparation (Power Query)</h3>
+        <ul>
+          <li>Alignement des séries PIB/Population/Chômage.</li>
+          <li>Table de paramètres pour la <em>Variation PIB %</em>.</li>
+        </ul>
 
-          <h3>Modèle & DAX (indicateurs)</h3>
-          <ul>
-            <li><em>PIB total (réel)</em>, <em>PIB total (scénario)</em> = PIB × (1 + Variation %).</li>
-            <li><em>CAGR PIB %</em> et <em>CAGR Population %</em>.</li>
-            <li><em>Population (année sélectionnée)</em>, <em>Chômage moyen %</em>.</li>
-            <li>Variations <em>YoY %</em> pour PIB et Population.</li>
-          </ul>
+        <h3>Modèle & DAX (indicateurs)</h3>
+        <ul>
+          <li><em>PIB total (réel)</em>, <em>PIB total (scénario)</em> = PIB × (1 + Variation %).</li>
+          <li><em>CAGR PIB %</em> et <em>CAGR Population %</em>.</li>
+          <li><em>Population (année sélectionnée)</em>, <em>Chômage moyen %</em>.</li>
+          <li>Variations <em>YoY %</em> pour PIB et Population.</li>
+        </ul>
 
-          <h3>Visualisations & interactions</h3>
-          <ul>
-            <li>Cartes indicateurs (PIB réel/scénario, population, chômage, CAGR).</li>
-            <li>Colonnes PIB réel vs PIB scénario par année.</li>
-            <li>Tableau détaillé (PIB, population, chômage, YoY, valeur de variation).</li>
-            <li>Curseur <em>Variation PIB %</em> pour chocs négatifs/positifs.</li>
-          </ul>
-        </div>
+        <h3>Visualisations & interactions</h3>
+        <ul>
+          <li>Cartes indicateurs (PIB réel/scénario, population, chômage, CAGR).</li>
+          <li>Colonnes PIB réel vs PIB scénario par année.</li>
+          <li>Tableau détaillé (PIB, population, chômage, YoY, valeur de variation).</li>
+          <li>Curseur <em>Variation PIB %</em> pour chocs négatifs/positifs.</li>
+        </ul>
+      </div>
 
-        <p class="note">Sources : Insee RP2011/2016/2022, séries PIB et chômage agrégées (millésime au 01/01/2024).</p>
+      <p class="note">Sources : Insee RP2011/2016/2022, séries PIB et chômage agrégées (millésime au 01/01/2024).</p>
       </div>
     </section>
   </main>
