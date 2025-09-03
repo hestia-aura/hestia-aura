@@ -235,3 +235,46 @@ a{color:#fff;text-decoration:none}.container{max-width:1080px;margin:0 auto;padd
   .powerbi .split.split--lr { grid-template-columns: 1.6fr 1fr !important; }
   .powerbi .split--lr .figure img { max-height: 600px; }
 }
+/* ===== Capsules (style proche de Pipeline) ===== */
+.capsule{
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(20,24,35,.55);
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.18);
+  margin: 8px 0 18px;
+}
+
+/* Capsule image-gauche / texte-droite */
+.capsule--lr{ display: grid; gap: 18px; }
+.capsule-media, .capsule-body{ min-width: 0; } /* empêche les retours à la ligne forcés */
+
+.capsule-media img{
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 560px;      /* harmonise la taille de l’image */
+  object-fit: contain;    /* conserve les proportions */
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #0d1018;
+}
+.capsule-media figcaption{
+  color: var(--muted);
+  font-size: .9rem;
+  margin-top: .4rem;
+}
+
+@media (min-width: 980px){
+  .capsule--lr{
+    grid-template-columns: 1.7fr 1fr;   /* image un peu plus large que le texte */
+    align-items: start;
+  }
+}
+@media (min-width: 1440px){
+  .capsule--lr{ grid-template-columns: 1.6fr 1fr; }
+  .capsule-media img{ max-height: 600px; }
+}
+
+/* Spécifique page Power BI : largeur utile confortable */
+.powerbi .container{ max-width: 1280px; }
