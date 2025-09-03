@@ -124,4 +124,31 @@ const form = document.getElementById('contactForm')
     }
   });
 })();
+// ==== Zoom images (lightbox) ====
+(function(){
+  const modal = document.getElementById('imgModal');
+  const modalImg = document.getElementById('imgModalImg');
+  const modalClose = document.getElementById('imgModalClose');
+
+  document.querySelectorAll('.zoomable img').forEach(img => {
+    img.addEventListener('click', () => {
+      modalImg.src = img.src;
+      modalImg.alt = img.alt;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden','false');
+    });
+  });
+
+  modalClose.addEventListener('click', () => {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden','true');
+  });
+
+  modal.addEventListener('click', e => {
+    if(e.target === modal){
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden','true');
+    }
+  });
+})();
 
