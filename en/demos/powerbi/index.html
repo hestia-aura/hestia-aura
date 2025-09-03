@@ -1,1 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Power BI — Demographics & Economy Île-de-France (2011–2022) | Hestia Aura</title>
+  <link rel="icon" href="/assets/logo.jpg">
+  <link rel="apple-touch-icon" href="/assets/logo.jpg">
+  <link rel="stylesheet" href="/styles.css">
+  <meta name="description" content="Power BI report combining Power Query preparation and DAX model: P1 Evolution, P2 Distribution, P3 Scenarios & indicators. Zoomable screenshots.">
+</head>
+
+<body class="powerbi">
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/en/index.html">
+        <img src="/assets/logo.jpg" alt="Hestia Aura – logo" class="brand-mark">
+        <span class="brand-name">Hestia <strong>Aura</strong></span>
+      </a>
+      <nav class="nav">
+        <a href="/en/index.html">Home</a>
+        <a href="/en/about.html">About</a>
+        <a href="/en/showcase.html">Showcase</a>
+        <a href="/index.html" class="lang">FR</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+    <h1>Power BI — Demographics & Economy Île-de-France (2011–2022)</h1>
+
+    <!-- Context -->
+    <section class="intro-context">
+      <h2>Context & scope</h2>
+      <p>Total population, average unemployment rate %, aggregated GDP 2011–2022. Temporal + geographic perspective.</p>
+    </section>
+
+    <p>Report combining <strong>Power Query</strong> preparation and <strong>DAX</strong> model. Three sections:
+      <em>P1 Evolution</em>, <em>P2 Distribution</em>, <em>P3 Scenarios & Indicators</em>.
+    </p>
+
+    <a class="btn" href="/en/showcase.html">← Back to Showcase</a>
+
+    <!-- Tags -->
+    <ul class="tags" aria-label="Technologies">
+      <li><span>Power BI</span></li>
+      <li><span>Power Query</span></li>
+      <li><span>DAX</span></li>
+    </ul>
+
+    <ul class="toc">
+      <li>→ P1 — Evolution</li>
+      <li>→ P2 — Distribution</li>
+      <li>→ P3 — Scenarios & Indicators</li>
+    </ul>
+
+    <!-- P1 -->
+    <section>
+      <h2>P1 — Census & Economic Evolution in Île-de-France (2011–2022)</h2>
+      <div class="capsule capsule--lr">
+        <figure class="capsule-media zoomable">
+          <img src="/assets/media/PBI%20P1.jpg"
+               alt="Overview: population, unemployment and GDP in Île-de-France (2011–2022)"
+               loading="lazy">
+          <figcaption>Overview (time-series, map centered on Paris, year/type segments).</figcaption>
+        </figure>
+
+        <div class="capsule-body">
+          <h3>Preparation (Power Query)</h3>
+          <ul>
+            <li>Import RP2011/2016/2022, average unemployment rate %, annual GDP.</li>
+            <li>Harmonization of vintages, label normalization, column typing.</li>
+            <li>Controls: uniqueness year–value, handling missing data.</li>
+          </ul>
+
+          <h3>DAX Model (Indicators)</h3>
+          <ul>
+            <li><em>Total population</em>, <em>Average unemployment rate %</em>, <em>Total GDP</em>.</li>
+            <li>Annual and average aggregations on selected period.</li>
+          </ul>
+
+          <h3>Visualizations & Interactions</h3>
+          <ul>
+            <li>Population evolution curve.</li>
+            <li>Proportional bubble map centered on Paris.</li>
+            <li>Horizontal bars by population type.</li>
+            <li>Evolution lines for unemployment % and GDP sum.</li>
+            <li>Year and type segments.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- P2 -->
+    <section>
+      <h2>P2 — Exploration & Details: Population Distribution (2011–2022)</h2>
+      <div class="capsule capsule--lr">
+        <figure class="capsule-media zoomable">
+          <img src="/assets/media/PBI%20P2.jpg"
+               alt="Detailed distribution by population type (2011–2022)"
+               loading="lazy">
+          <figcaption>Distribution by type, departmental focus, zoom on extremes.</figcaption>
+        </figure>
+
+        <div class="capsule-body">
+          <h3>Preparation (Power Query)</h3>
+          <ul>
+            <li>Harmonization of categories across vintages, label normalization.</li>
+            <li>Derived columns for inter-annual comparisons.</li>
+            <li>Quality checks: duplicates, missing values, total consistency.</li>
+          </ul>
+
+          <h3>DAX Model (Indicators)</h3>
+          <ul>
+            <li>Averages and shares (%) by type over selected period.</li>
+            <li>YoY variations (value &amp; %), ratios vs total.</li>
+            <li>Measures ready for decomposition tree.</li>
+          </ul>
+
+          <h3>Visualizations & Interactions</h3>
+          <ul>
+            <li>Donut chart by type + bars by type/year.</li>
+            <li>Population/GDP curve for trends.</li>
+            <li>Year &amp; Type segments, cross-selection and tooltips.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- P3 -->
+    <section>
+      <h2>P3 — Scenarios & Indicators</h2>
+      <div class="capsule capsule--lr">
+        <figure class="capsule-media zoomable">
+          <img src="/assets/media/PBI%20P3.jpg"
+               alt="Scenarios and key indicators (cards & graphs)"
+               loading="lazy">
+          <figcaption>Scenario parameters + indicators (documented DAX measures).</figcaption>
+        </figure>
+
+        <div class="capsule-body">
+          <h3>Preparation (Parameters)</h3>
+          <ul>
+            <li><em>GDP % Variation</em> parameter table (what-if) exposed as segment.</li>
+            <li>Year and Type segments for context.</li>
+            <li>Consistent formats &amp; units across KPIs.</li>
+          </ul>
+
+          <h3>DAX Model (Indicators)</h3>
+          <ul>
+            <li><strong>Total GDP (scenario)</strong> = GDP adjusted by parameter.</li>
+            <li>KPIs: Total GDP, Population (selected year), GDP CAGR %, Population CAGR %, Average unemployment %.</li>
+            <li>YoY dynamics (GDP/Population) and PCA % share.</li>
+          </ul>
+
+          <h3>Visualizations & Interactions</h3>
+          <ul>
+            <li>KPI cards + combo column/line chart (GDP vs scenario).</li>
+            <li>Synthesis table by year (values, YoY, shares).</li>
+            <li><em>GDP % Variation</em> segment: instant update of all visuals.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Lightbox -->
+  <div class="image-modal" id="imgModal" aria-hidden="true">
+    <button class="close" id="imgModalClose" aria-label="Close image">×</button>
+    <img id="imgModalImg" alt="">
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
 
