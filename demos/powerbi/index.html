@@ -8,13 +8,11 @@
   <link rel="icon" href="/assets/logo.jpg">
   <link rel="apple-touch-icon" href="/assets/logo.jpg">
   <link rel="stylesheet" href="/styles.css">
-
-  <!-- SEO -->
   <meta name="description" content="Rapport Power BI combinant Power Query et modèle DAX : P1 Évolution, P2 Répartition, P3 Scénarios & indicateurs. Captures zoomables.">
 </head>
 
 <body class="powerbi">
-  <!-- Header identique aux autres pages -->
+  <!-- Header -->
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="/">
@@ -39,16 +37,18 @@
       <p>Population totale, chômage moyen %, PIB agrégé 2011–2022. Lecture temporelle + géographique.</p>
     </section>
 
-    <p>Rapport combinant préparation <strong>Power Query</strong> et modèle <strong>DAX</strong>. Trois volets : <em>P1 Évolution, P2 Répartition, P3 Scénarios & indicateurs</em>.</p>
+    <p>Rapport combinant préparation <strong>Power Query</strong> et modèle <strong>DAX</strong>. Trois volets :
+      <em>P1 Évolution</em>, <em>P2 Répartition</em>, <em>P3 Scénarios & indicateurs</em>.
+    </p>
 
     <a class="btn" href="/showcase.html">← Retour au Showcase</a>
 
-   <ul class="tags">
-  <li><span>Power BI</span></li>
-  <li><span>Power Query</span></li>
-  <li><span>DAX</span></li>
-</ul>
-
+    <!-- Tags en bulles -->
+    <ul class="tags" aria-label="Technologies">
+      <li><span>Power BI</span></li>
+      <li><span>Power Query</span></li>
+      <li><span>DAX</span></li>
+    </ul>
 
     <ul class="toc">
       <li>→ P1 — Évolution</li>
@@ -66,6 +66,7 @@
                loading="lazy">
           <figcaption>Vue d’ensemble (time-series, carte centrée sur Paris, segments d’années/types).</figcaption>
         </figure>
+
         <div class="capsule-body">
           <h3>Préparation (Power Query)</h3>
           <ul>
@@ -102,16 +103,27 @@
                loading="lazy">
           <figcaption>Répartition par type, focus par département, zoom sur les extrêmes.</figcaption>
         </figure>
+
         <div class="capsule-body">
           <h3>Préparation (Power Query)</h3>
           <ul>
-            <li>Nettoyage & correspondances des catégories entre millésimes.</li>
+            <li>Harmonisation des catégories entre millésimes, normalisation des libellés.</li>
             <li>Colonnes dérivées pour comparaisons inter-annuelles.</li>
+            <li>Contrôles de qualité : doublons, valeurs manquantes, cohérence des totaux.</li>
           </ul>
-          <h3>Modèle DAX (indicateurs supplémentaires)</h3>
+
+          <h3>Modèle DAX (indicateurs)</h3>
           <ul>
-            <li>Part (%) d’un type vs total (période/fenêtre glissante).</li>
-            <li>Variation absolue et relative par an.</li>
+            <li>Moyennes et parts (%) par type sur la période sélectionnée.</li>
+            <li>Variations <abbr title="Year-over-Year">YoY</abbr> (valeur &amp; %), ratios vs total.</li>
+            <li>Mesures prêtes pour l’arborescence de décomposition.</li>
+          </ul>
+
+          <h3>Visualisations & interactions</h3>
+          <ul>
+            <li>Anneau des parts par type + barres par type/année.</li>
+            <li>Courbe population/PIB pour les tendances.</li>
+            <li>Segments Année &amp; Type, sélection croisée et info-bulles.</li>
           </ul>
         </div>
       </div>
@@ -127,12 +139,27 @@
                loading="lazy">
           <figcaption>Paramètres de scénario + indicateurs (mesures DAX documentées).</figcaption>
         </figure>
+
         <div class="capsule-body">
-          <h3>Indicateurs clés</h3>
+          <h3>Préparation (Paramètres)</h3>
           <ul>
-            <li>6–8 mesures standardisées (KPI de base).</li>
-            <li>Adoption cible : 25+ utilisateurs, −20/30 % d’ad hoc.</li>
-            <li>J+1 à 08:30 CET grâce à planification.</li>
+            <li>Table paramètre <em>Variation PIB %</em> (what-if) exposée en segment.</li>
+            <li>Segments Année et Type pour le contexte.</li>
+            <li>Formats &amp; unités homogènes sur les KPI.</li>
+          </ul>
+
+          <h3>Modèle DAX (indicateurs)</h3>
+          <ul>
+            <li><strong>PIB total (scénario)</strong> = PIB ajusté par le paramètre.</li>
+            <li>KPI : PIB total, Population (année sél.), CAGR PIB %, CAGR Population %, Chômage moyen %.</li>
+            <li>Dynamiques YoY (PIB/Population) et Part PCA %.</li>
+          </ul>
+
+          <h3>Visualisations & interactions</h3>
+          <ul>
+            <li>Cartes KPI + combo colonne/ligne (PIB vs scénario).</li>
+            <li>Table de synthèse par année (valeurs, YoY, parts).</li>
+            <li>Segment <em>Variation PIB %</em> : mise à jour instantanée de tous les visuels.</li>
           </ul>
         </div>
       </div>
