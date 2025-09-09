@@ -87,32 +87,38 @@
       </div>
     </section>
 
-    <!-- P2 -->
+       <!-- P2 -->
     <section id="p2" class="section">
       <div class="container">
         <h2>P2 — Requêtes optimisées (non sargable → sargable)</h2>
 
         <div class="capsule">
           <div class="capsule__left">
-            <figure class="figure">
-              <img src="/assets/media/SQL_P2_BEFORE.jpg" alt="Plan d'exécution avant — requête non sargable">
+            <figure class="figure figure--plan">
+              <img src="/assets/media/SQL_P2_BEFORE.jpg"
+                   alt="Plan d'exécution avant — requête non sargable"
+                   data-zoom="1">
               <figcaption>Avant : condition non sargable, index non exploité efficacement.</figcaption>
             </figure>
           </div>
           <div class="capsule__right">
-            <figure class="figure">
-              <img src="/assets/media/SQL_P2_AFTER.jpg" alt="Plan d'exécution après — requête sargable et index utilisé">
+            <figure class="figure figure--plan">
+              <img src="/assets/media/SQL_P2_AFTER.jpg"
+                   alt="Plan d'exécution après — requête sargable et index utilisé"
+                   data-zoom="1">
               <figcaption>Après : réécriture sargable + index adapté → plan d’exécution plus léger.</figcaption>
             </figure>
 
             <div class="note">
-              <strong>Idée clé :</strong> réécrire le <code>WHERE</code> pour éviter les fonctions sur la colonne indexée, et poser une borne inclus/strict :
+              <strong>Idée clé :</strong> réécrire le <code>WHERE</code> pour éviter les fonctions sur la colonne indexée,
+              et poser une borne inclus/strict :
               <code>o.order_date &gt;= '2021-01-01' AND o.order_date &lt; '2023-01-01'</code>.
             </div>
           </div>
         </div>
       </div>
     </section>
+
 
     <!-- P3 -->
     <section id="p3" class="section">
