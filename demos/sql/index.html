@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SQL — Modèle, requêtes, qualité & pipeline | Hestia Aura</title>
+
+  <!-- Favicon & styles (même chemin que le reste du site) -->
+  <link rel="icon" href="/assets/logo.jpg">
+  <link rel="apple-touch-icon" href="/assets/logo.jpg">
+  <link rel="stylesheet" href="/styles.css?v=final3">
+
+  <!-- SEO -->
+  <meta name="description" content="Showcase SQL : modèle de données, agrégats mensuels, optimisation de requêtes (sargable), suivi qualité des données et journal d'exécution du pipeline.">
+  <meta property="og:title" content="Showcase SQL — Hestia Aura">
+  <meta property="og:description" content="Exemples concrets : modèle relationnel, KPI mensuels, requêtes optimisées, contrôles qualité et pipeline ETL.">
+  <meta property="og:image" content="/assets/logo.jpg">
+</head>
+
+<body class="powerbi">
+  <a class="skip" href="#main">Aller au contenu principal</a>
+
+  <!-- Header identique aux autres pages -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/"><img src="/assets/logo.jpg" class="brand-mark" alt="logo"><span class="brand-name">Hestia <strong>Aura</strong></span></a>
+      <nav class="nav">
+        <a href="/">Accueil</a>
+        <a href="/about.html">À propos</a>
+        <a href="/showcase.html">Showcase</a>
+        <a class="btn btn--sm" href="/en/demos/sql/">EN</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <h1>SQL — Modèle, requêtes, qualité & pipeline</h1>
+
+        <p>Exemples concrets avec SQL Server : modèle relationnel, agrégats mensuels, optimisation de requêtes (<em>sargable</em>), contrôles qualité, et journal d’exécution.</p>
+
+        <div class="pills">
+          <span class="pill">SQL Server</span>
+          <span class="pill">SSMS</span>
+          <span class="pill">ETL</span>
+          <span class="pill">Data Quality</span>
+        </div>
+
+        <p style="margin-top:12px;">
+          <a class="btn btn--sm" href="/showcase.html">↩ Retour au Showcase</a>
+        </p>
+
+        <ul class="hero-badges" style="margin-top:8px">
+          <li><a href="#p1">P1 — Modèle & KPI</a></li>
+          <li><a href="#p2">P2 — Requêtes optimisées</a></li>
+          <li><a href="#p3">P3 — Qualité des données</a></li>
+          <li><a href="#p4">P4 — Pipeline & journal</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- P1 -->
+    <section id="p1" class="section">
+      <div class="container">
+        <h2>P1 — Modèle & KPI mensuels</h2>
+
+        <div class="capsule">
+          <div class="capsule__left">
+            <figure class="figure">
+              <img src="/assets/media/SQL_P1_ERD.jpg" alt="Schéma relationnel SQL (customers, orders, order_items, products, payments)">
+              <figcaption>Modèle relationnel : clients → commandes → lignes → produits & paiements.</figcaption>
+            </figure>
+          </div>
+          <div class="capsule__right">
+            <h3>Contexte & objectif</h3>
+            <p>On part d’un modèle simple pour illustrer ce que l’on peut faire avec SQL : explorer, agréger et ordonner des informations utiles pour l’analyse.</p>
+
+            <h4>Exemples d’agrégats (mois)</h4>
+            <figure class="figure">
+              <img src="/assets/media/SQL_P1_KPI.jpg" alt="Revenus mensuels, commandes, panier moyen, clients actifs">
+              <figcaption>KPIs par mois : revenus, nombre de commandes, panier moyen, clients actifs.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- P2 -->
+    <section id="p2" class="section">
+      <div class="container">
+        <h2>P2 — Requêtes optimisées (non sargable → sargable)</h2>
+
+        <div class="capsule">
+          <div class="capsule__left">
+            <figure class="figure">
+              <img src="/assets/media/SQL_P2_BEFORE.jpg" alt="Plan d'exécution avant — requête non sargable">
+              <figcaption>Avant : condition non sargable, index non exploité efficacement.</figcaption>
+            </figure>
+          </div>
+          <div class="capsule__right">
+            <figure class="figure">
+              <img src="/assets/media/SQL_P2_AFTER.jpg" alt="Plan d'exécution après — requête sargable et index utilisé">
+              <figcaption>Après : réécriture sargable + index adapté → plan d’exécution plus léger.</figcaption>
+            </figure>
+
+            <div class="note">
+              <strong>Idée clé :</strong> réécrire le <code>WHERE</code> pour éviter les fonctions sur la colonne indexée, et poser une borne inclus/strict :
+              <code>o.order_date &gt;= '2021-01-01' AND o.order_date &lt; '2023-01-01'</code>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- P3 -->
+    <section id="p3" class="section">
+      <div class="container">
+        <h2>P3 — Qualité des données (règles & priorités)</h2>
+
+        <div class="capsule">
+          <div class="capsule__left">
+            <figure class="figure">
+              <img src="/assets/media/SQL_P3_QUALITY.jpg" alt="Vue de synthèse des contrôles qualité : doublons, valeurs nulles, paiements négatifs, références manquantes">
+              <figcaption>Vue de synthèse : règle, sévérité, lignes affectées. Tri : high → medium → low.</figcaption>
+            </figure>
+          </div>
+          <div class="capsule__right">
+            <h3>Ce que montre l’exemple</h3>
+            <ul>
+              <li>Des contrôles simples (doublons, null, paiements négatifs, références orphelines).</li>
+              <li>Une <em>vue</em> agrège les résultats pour prioriser les corrections.</li>
+              <li>On peut brancher ces infos sur un tableau de bord ou des notifications.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- P4 -->
+    <section id="p4" class="section">
+      <div class="container">
+        <h2>P4 — Pipeline & journal d’exécution</h2>
+
+        <div class="capsule">
+          <div class="capsule__left">
+            <figure class="figure">
+              <img src="/assets/media/SQL_P4_PIPELINE.png" alt="Schéma pipeline : staging → clean → mart avec audit">
+              <figcaption>Pipeline logique : <strong>staging</strong> → <strong>clean</strong> → <strong>mart</strong> + zone <strong>audit</strong>.</figcaption>
+            </figure>
+          </div>
+          <div class="capsule__right">
+            <figure class="figure">
+              <img src="/assets/media/SQL_P4_JOBS.jpg" alt="Journal des exécutions : jobs, timestamps, statuts, volumes, message">
+              <figcaption>Journal des jobs : statut, volumes, message (ex. ré-exécution après correction).</figcaption>
+            </figure>
+            <p class="muted">Exécution fictive pour la démonstration (volumes, messages). L’objectif est d’illustrer le suivi et la traçabilité.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© <span id="y"></span> Jérôme Jeannin</span>
+      <a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+    </div>
+  </footer>
+
+  <script src="/app.js?v=final3"></script>
+</body>
+</html>
