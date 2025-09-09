@@ -9,16 +9,13 @@
   <link rel="apple-touch-icon" href="/assets/logo.jpg" />
   <link rel="stylesheet" href="/styles.css?v=final3" />
 
-  <!-- SEO -->
   <meta name="description" content="Exemples SQL Server : modèle relationnel, KPIs mensuels, optimisation de requêtes (sargable), contrôles qualité et journal de pipeline." />
   <meta property="og:title" content="Showcase SQL — Hestia Aura" />
   <meta property="og:description" content="Modélisation, performance de requêtes, qualité des données et pipeline SQL léger sur un jeu e-commerce fictif." />
   <meta property="og:image" content="/assets/logo.jpg" />
 </head>
 
-<!-- on réutilise les styles capsules/zoom déjà définis dans styles.css -->
 <body class="powerbi">
-  <!-- EN-tête commun -->
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="/">
@@ -42,10 +39,10 @@
 
         <p>
           Exemples pédagogiques sur un jeu e-commerce fictif (CH/EU) couvrant 2019–2024.
-          L’idée n’est pas de « montrer une stack », mais d’illustrer **ce que l’on peut faire avec SQL** :
-          bâtir un modèle simple, produire des agrégats lisibles, lire un plan d’exécution pour
-          optimizer une requête (<em>sargable</em>), vérifier la **qualité des données** et suivre un
-          **pipeline** en production légère.
+          L’idée n’est pas de « montrer une stack », mais d’illustrer
+          <strong>ce que l’on peut faire avec SQL</strong> : bâtir un modèle simple, produire des agrégats lisibles,
+          lire un plan d’exécution pour optimiser une requête (<em>sargable</em>), vérifier la
+          <strong>qualité des données</strong> et suivre un <strong>pipeline</strong> en production légère.
         </p>
 
         <div class="pills">
@@ -82,22 +79,24 @@
           <div class="capsule-body">
             <h3>Contexte & objectifs</h3>
             <p>
-              On part d’un **modèle relationnel minimal** pour illustrer ce que l’on peut faire avec SQL :
+              On part d’un <strong>modèle relationnel minimal</strong> pour illustrer ce que l’on peut faire avec SQL :
               requêtes claires, indicateurs mensuels, et résultats réutilisables pour un tableau de bord.
-              On s’appuie sur des types explicites, des clés primaires/étrangères et des contraintes
-              simples (<code>NOT NULL</code>, <code>CHECK</code>).
+              On s’appuie sur des types explicites, des clés primaires/étrangères et des contraintes simples
+              (<code>NOT NULL</code>, <code>CHECK</code>).
             </p>
             <p>
-              Côté requêtes, on combine des CTE (<code>WITH</code>) et quelques **fonctions de fenêtre**
-              (ex. <code>SUM() OVER</code>) pour agréger proprement. Les agrégats cibles :
-              **CA (CHF)**, **nombre de commandes**, **panier moyen** et **clients actifs** par mois.
+              Côté requêtes, on combine des CTE (<code>WITH</code>) et quelques
+              <strong>fonctions de fenêtre</strong> (ex. <code>SUM() OVER</code>) pour agréger proprement.
+              Les agrégats cibles : <strong>CA (CHF)</strong>, <strong>nombre de commandes</strong>,
+              <strong>panier moyen</strong> et <strong>clients actifs</strong> par mois.
             </p>
 
             <h4>Agrégats mensuels (extrait)</h4>
             <figure class="figure">
               <img src="/assets/media/SQL_P1_KPI.jpg" alt="Revenus mensuels, commandes, panier moyen, clients actifs" />
               <figcaption>
-                Vue « sales_monthly » : **revenue_chf**, **orders_cnt**, **avg_order_value**, **active_customers** (mois).
+                Vue « sales_monthly » : <strong>revenue_chf</strong>, <strong>orders_cnt</strong>,
+                <strong>avg_order_value</strong>, <strong>active_customers</strong> (mois).
               </figcaption>
             </figure>
           </div>
@@ -112,16 +111,18 @@
 
         <div class="capsule">
           <p>
-            L’idée est de **réécrire** une requête pour la rendre <em>sargable</em> (search-ARGument-able)
-            et **exploiter un index** pertinent. Ici, la requête « Top clients sur période » était écrite
-            avec une fonction sur la colonne de date : l’optimiseur scannait plus que nécessaire.
+            L’objectif : <strong>réécrire</strong> une requête pour la rendre <em>sargable</em>
+            (search-ARGument-able) et <strong>exploiter un index</strong> pertinent.
+            Ici, la requête « Top clients sur période » appliquait une fonction sur la colonne de date :
+            l’optimiseur scannait plus que nécessaire.
           </p>
 
           <div class="capsule--lr">
             <figure class="capsule-media figure figure--plan">
               <img src="/assets/media/SQL_P2_BEFORE.jpg" alt="Plan d'exécution avant — requête non sargable" data-zoom="1" />
               <figcaption>
-                <strong>Avant</strong> : filtre non sargable (<code>CONVERT(date,o.order_date)</code>), l’index ne peut pas être utilisé efficacement → **scan** inutilement large.
+                <strong>Avant</strong> : filtre non sargable (<code>CONVERT(date, o.order_date)</code>),
+                l’index ne peut pas être utilisé efficacement → scan inutilement large.
               </figcaption>
             </figure>
 
@@ -137,7 +138,8 @@
 
               <p class="muted" style="margin-top:6px">
                 Bonnes pratiques : limiter les colonnes sélectionnées, préférer <code>EXISTS</code> à
-                <code>IN</code> quand utile, pré-agréger si nécessaire, et **lire le plan** (coûts, opérateurs).
+                <code>IN</code> quand utile, pré-agréger si nécessaire, et <strong>lire le plan</strong>
+                (coûts, opérateurs).
               </p>
             </div>
           </div>
@@ -154,16 +156,18 @@
           <figure class="capsule-media figure">
             <img src="/assets/media/SQL_P3_QUALITY.jpg" alt="Vue de synthèse des contrôles qualité : doublons, valeurs nulles, paiements négatifs, références manquantes" />
             <figcaption>
-              Vue de synthèse : **règle**, **sévérité** (high/medium/low), **lignes affectées** — triée par priorité.
+              Vue de synthèse : <strong>règle</strong>, <strong>sévérité</strong> (high/medium/low),
+              <strong>lignes affectées</strong> — triée par priorité.
             </figcaption>
           </figure>
 
           <div class="capsule-body">
             <p>
-              Voici **ce que l’on peut faire avec SQL** pour fiabiliser un jeu de données : règles
-              de qualité (doublons, <code>NULL</code>, références orphelines, montants négatifs), mise en
-              forme homogène et **priorisation** des corrections. Une **vue** consolide les résultats
-              pour les exposer à un tableau de bord ou à des notifications.
+              Voici <strong>ce que l’on peut faire avec SQL</strong> pour fiabiliser un jeu de données :
+              règles de qualité (doublons, <code>NULL</code>, références orphelines, montants négatifs),
+              mise en forme homogène et <strong>priorisation</strong> des corrections.
+              Une <strong>vue</strong> consolide les résultats pour les exposer à un tableau de bord
+              ou à des notifications.
             </p>
             <ul>
               <li>Règles simples et explicites (clé composite, contraintes <code>CHECK</code>).</li>
@@ -184,24 +188,23 @@
           <figure class="capsule-media figure">
             <img src="/assets/media/SQL_P4_PIPELINE.png" alt="Schéma pipeline : staging → clean → mart avec audit" />
             <figcaption>
-              Pipeline logique : **staging** (brut) → **clean** (normalisé) → **mart** (pour la BI) +
-              zone **audit** (journal & qualité).
+              Pipeline logique : <strong>staging</strong> (brut) → <strong>clean</strong> (normalisé) → <strong>mart</strong> (pour la BI)
+              + zone <strong>audit</strong> (journal & qualité).
             </figcaption>
           </figure>
 
           <div class="capsule-body">
             <p>
-              Un flux SQL « léger » reste lisible et **idempotent** : chargements
-              incrémentaux, **MERGE/UPSERT**, clés techniques, horodatage. La planification peut se
-              faire via CRON/Azure DevOps à 08:30 CET, avec relance en cas d’échec.
+              Un flux SQL « léger » reste lisible et <strong>idempotent</strong> : chargements incrémentaux,
+              <strong>MERGE/UPSERT</strong>, clés techniques, horodatage. La planification peut se faire via
+              CRON/Azure DevOps à 08:30 CET, avec relance en cas d’échec.
             </p>
 
             <figure class="figure">
               <img src="/assets/media/SQL_P4_JOBS.jpg" alt="Journal des exécutions : jobs, timestamps, statuts, volumes, message" />
               <figcaption>
-                Journal des jobs (<code>job_runs</code>) : <em>start/end-ts</em>, <em>status</em>, <em>rows_in/out</em>,
-                <em>message</em>. Exemple pédagogique : ré-exécution après correction, contrainte
-                sur paiement négatif, delta import, etc.
+                Journal des jobs (<code>job_runs</code>) : start/end-ts, status, rows_in/out, message.
+                Exemple pédagogique : ré-exécution après correction, contrainte sur paiements négatifs, delta import, etc.
               </figcaption>
             </figure>
 
@@ -215,7 +218,6 @@
     </section>
   </main>
 
-  <!-- Pied de page -->
   <footer class="site-footer">
     <div class="container footer-inner">
       <span>© <span id="y"></span> Jérôme Jeannin</span>
@@ -223,7 +225,6 @@
     </div>
   </footer>
 
-  <!-- App + Lightbox -->
   <script src="/app.js?v=final3"></script>
 
   <!-- Modale d'image (zoom plein écran) -->
@@ -236,7 +237,7 @@
     // Année footer
     (function(){var y=document.getElementById('y'); if(y){ y.textContent=new Date().getFullYear(); }})();
 
-    // Zoom images (toutes les <img> dans .figure)
+    // Zoom images
     (function(){
       const modal   = document.getElementById('imgModal');
       const modalImg= document.getElementById('imgModalImg');
