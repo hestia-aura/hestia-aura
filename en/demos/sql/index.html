@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SQL — Modeling, Queries, Data Quality & Pipeline | Hestia Aura</title>
+
+  <link rel="icon" href="/assets/logo.jpg" />
+  <link rel="apple-touch-icon" href="/assets/logo.jpg" />
+  <link rel="stylesheet" href="/styles.css?v=final3" />
+
+  <meta name="description" content="SQL Showcase: relational model, monthly KPIs, query optimization (sargable), data quality checks and pipeline audit log." />
+  <meta property="og:title" content="SQL Showcase — Hestia Aura" />
+  <meta property="og:description" content="Hands-on SQL examples: modeling, analytical queries, performance, data quality and lightweight ETL pipeline." />
+  <meta property="og:image" content="/assets/logo.jpg" />
+</head>
+
+<body class="powerbi">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/en/">
+        <img src="/assets/logo.jpg" class="brand-mark" alt="logo" />
+        <span class="brand-name">Hestia <strong>Aura</strong></span>
+      </a>
+      <nav class="nav">
+        <a href="/en/">Home</a>
+        <a href="/en/about.html">About</a>
+        <a href="/en/showcase.html">Showcase</a>
+        <a class="btn btn--sm" href="/demos/sql/">FR</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container">
+        <h1>SQL — Modeling, Queries, Data Quality & Pipeline</h1>
+
+        <p>
+          Educational examples on a fictitious e-commerce dataset (CH/EU), covering 2019–2024.
+          The point is not to “show a stack”, but to highlight
+          <strong>what you can actually do with SQL</strong>: build a simple model, produce readable KPIs,
+          read an execution plan to optimize a query (<em>sargable</em>), validate
+          <strong>data quality</strong>, and track a <strong>pipeline</strong> in lightweight production.
+        </p>
+
+        <div class="pills">
+          <span class="pill">SQL Server</span>
+          <span class="pill">SSMS</span>
+          <span class="pill">ETL</span>
+          <span class="pill">Data Quality</span>
+        </div>
+
+        <p style="margin-top:12px;">
+          <a class="btn btn--sm btn--primary" href="/en/showcase.html">↩ Back to Showcase</a>
+        </p>
+
+        <ul class="hero-badges" style="margin-top:8px">
+          <li><a href="#p1">P1 — Model & KPIs</a></li>
+          <li><a href="#p2">P2 — Optimized queries</a></li>
+          <li><a href="#p3">P3 — Data quality</a></li>
+          <li><a href="#p4">P4 — Pipeline & log</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- P1 -->
+    <section id="p1" class="section">
+      <div class="container">
+        <h2>P1 — Modeling & Business Queries</h2>
+
+        <div class="capsule capsule--lr">
+          <figure class="capsule-media figure">
+            <img src="/assets/media/SQL_P1_ERD.jpg" alt="SQL relational schema (customers, orders, order_items, products, payments)" />
+            <figcaption>Logical schema: <strong>customers</strong> → <strong>orders</strong> → <strong>order_items</strong>, with <strong>products</strong> and <strong>payments</strong>.</figcaption>
+          </figure>
+
+          <div class="capsule-body">
+            <h3>Context & objectives</h3>
+            <p>
+              We start from a <strong>minimal relational model</strong> to illustrate what SQL can do:
+              clear queries, monthly indicators, and reusable results for a dashboard.
+              We rely on explicit types, primary/foreign keys, and simple constraints
+              (<code>NOT NULL</code>, <code>CHECK</code>).
+            </p>
+            <p>
+              On the query side, we combine CTEs (<code>WITH</code>) and a few
+              <strong>window functions</strong> (e.g. <code>SUM() OVER</code>) to aggregate properly.
+              Target metrics: <strong>Revenue (CHF)</strong>, <strong>number of orders</strong>,
+              <strong>average basket</strong>, and <strong>active customers</strong> per month.
+            </p>
+
+            <h4>Monthly KPIs (excerpt)</h4>
+            <figure class="figure">
+              <img src="/assets/media/SQL_P1_KPI.jpg" alt="Monthly revenue, orders, average basket, active customers" />
+              <figcaption>
+                “sales_monthly” view: <strong>revenue_chf</strong>, <strong>orders_cnt</strong>,
+                <strong>avg_order_value</strong>, <strong>active_customers</strong>.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- P2 -->
+    <section id="p2" class="section">
+      <div class="container">
+        <h2>P2 — Performance & Indexing (Execution Plans)</h2>
+
+        <div class="capsule">
+          <p>
+            The goal: <strong>rewrite</strong> a query to make it <em>sargable</em>
+            (search-ARGument-able) and <strong>leverage a proper index</strong>.
+            Here, the “Top customers by period” query applied a function on the date column,
+            forcing the optimizer to scan more rows than necessary.
+          </p>
+
+          <div class="capsule--lr">
+            <figure class="capsule-media figure figure--plan">
+              <img src="/assets/media/SQL_P2_BEFORE.jpg" alt="Execution plan before — non-sargable query" data-zoom="1" />
+              <figcaption>
+                <strong>Before</strong>: non-sargable filter (<code>CONVERT(date, o.order_date)</code>),
+                index cannot be used effectively → wide scan.
+              </figcaption>
+            </figure>
+
+            <div class="capsule-body">
+              <figure class="figure figure--plan">
+                <img src="/assets/media/SQL_P2_AFTER.jpg" alt="Execution plan after — sargable query with index" data-zoom="1" />
+                <figcaption>
+                  <strong>After</strong>: direct bounds on indexed column
+                  (<code>o.order_date &gt;= '2021-01-01' AND o.order_date &lt; '2023-01-01'</code>)
+                  + composite index (<code>order_date, customer_id</code>) → lighter plan, cheaper sort.
+                </figcaption>
+              </figure>
+
+              <p class="muted" style="margin-top:6px">
+                Best practices: limit selected columns, prefer <code>EXISTS</code> over
+                <code>IN</code> when appropriate, pre-aggregate if needed, and
+                <strong>read the plan</strong> (costs, operators).
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- P3 -->
+    <section id="p3" class="section">
+      <div class="container">
+        <h2>P3 — Data Quality & Reliability</h2>
+
+        <div class="capsule capsule--lr">
+          <figure class="capsule-media figure">
+            <img src="/assets/media/SQL_P3_QUALITY.jpg" alt="Data quality summary view: duplicates, nulls, negative payments, missing references" />
+            <figcaption>
+              Summary view: <strong>rule</strong>, <strong>severity</strong> (high/medium/low),
+              <strong>affected rows</strong> — sorted by priority.
+            </figcaption>
+          </figure>
+
+          <div class="capsule-body">
+            <p>
+              This illustrates <strong>what SQL can do</strong> to make datasets more reliable:
+              data quality rules (duplicates, <code>NULL</code>, orphan references, negative values),
+              consistent formatting, and <strong>prioritization</strong> of fixes.
+              A <strong>view</strong> consolidates results for dashboards or alerting systems.
+            </p>
+            <ul>
+              <li>Simple rules (composite key uniqueness, <code>CHECK</code> constraints).</li>
+              <li>Severity-based prioritization to handle highest-impact issues first.</li>
+              <li>Example corrections (safe <code>UPDATE</code>/<code>DELETE</code>).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- P4 -->
+    <section id="p4" class="section">
+      <div class="container">
+        <h2>P4 — Lightweight ETL & Execution Log</h2>
+
+        <div class="capsule capsule--lr">
+          <figure class="capsule-media figure">
+            <img src="/assets/media/SQL_P4_PIPELINE.png" alt="Pipeline diagram: staging → clean → mart with audit" />
+            <figcaption>
+              Logical pipeline: <strong>staging</strong> (raw) → <strong>clean</strong> (normalized) → <strong>mart</strong> (BI-ready),
+              plus <strong>audit</strong> area (jobs & quality).
+            </figcaption>
+          </figure>
+
+          <div class="capsule-body">
+            <p>
+              A “lightweight” SQL pipeline remains readable and <strong>idempotent</strong>:
+              incremental loads, <strong>MERGE/UPSERT</strong>, technical keys, timestamps.
+              Scheduling can be handled via CRON/Azure DevOps at 08:30 CET, with retries on failure.
+            </p>
+
+            <figure class="figure">
+              <img src="/assets/media/SQL_P4_JOBS.jpg" alt="Execution log: jobs, timestamps, status, row counts, message" />
+              <figcaption>
+                Execution log (<code>job_runs</code>): start/end timestamps, status, rows_in/out, message.
+                Demo output: rerun after fix, constraint violation, delta import, monthly aggregation, etc.
+              </figcaption>
+            </figure>
+
+            <p class="muted">
+              Expected output: a simple, observable and traceable pipeline, ready to connect
+              to an operational dashboard.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© <span id="y"></span> Jérôme Jeannin</span>
+      <a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+    </div>
+  </footer>
+
+  <script src="/app.js?v=final3"></script>
+
+  <!-- Image zoom modal -->
+  <div class="image-modal" id="imgModal" aria-hidden="true">
+    <button class="close" id="imgModalClose" aria-label="Close image">✕</button>
+    <img id="imgModalImg" alt="" />
+  </div>
+
+  <script>
+    // Footer year
+    (function(){var y=document.getElementById('y'); if(y){ y.textContent=new Date().getFullYear(); }})();
+
+    // Image zoom
+    (function(){
+      const modal   = document.getElementById('imgModal');
+      const modalImg= document.getElementById('imgModalImg');
+      const close   = document.getElementById('imgModalClose');
+      if(!modal || !modalImg || !close) return;
+
+      document.addEventListener('click', function(e){
+        const img = e.target.closest('.figure img');
+        if(!img) return;
+        modalImg.src = img.src;
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden','false');
+      });
+
+      function hide(){
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden','true');
+        modalImg.src = '';
+      }
+      close.addEventListener('click', hide);
+      modal.addEventListener('click', function(e){ if(e.target === modal) hide(); });
+      document.addEventListener('keydown', function(e){ if(e.key === 'Escape') hide(); });
+    })();
+  </script>
+</body>
+</html>
