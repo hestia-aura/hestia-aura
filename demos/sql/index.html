@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SQL — Modèle, requêtes, qualité & pipeline | Hestia Aura</title>
 
-  <!-- Favicon & styles (même chemin que le reste du site) -->
+  <!-- Favicon & styles -->
   <link rel="icon" href="/assets/logo.jpg">
   <link rel="apple-touch-icon" href="/assets/logo.jpg">
   <link rel="stylesheet" href="/styles.css?v=final3">
@@ -17,10 +17,11 @@
   <meta property="og:image" content="/assets/logo.jpg">
 </head>
 
+<!-- on garde body.powerbi pour profiter de la même largeur/rythme visuel -->
 <body class="powerbi">
-  <a class="skip" href="#main">Aller au contenu principal</a>
+  <!-- (skip-link supprimé) -->
 
-  <!-- Header identique aux autres pages -->
+  <!-- Header -->
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="/"><img src="/assets/logo.jpg" class="brand-mark" alt="logo"><span class="brand-name">Hestia <strong>Aura</strong></span></a>
@@ -49,7 +50,7 @@
         </div>
 
         <p style="margin-top:12px;">
-<a class="btn btn--sm btn--primary" href="/showcase.html">↩ Retour au Showcase</a>
+          <a class="btn btn--sm btn--primary" href="/showcase.html">↩ Retour au Showcase</a>
         </p>
 
         <ul class="hero-badges" style="margin-top:8px">
@@ -69,7 +70,9 @@
         <div class="capsule">
           <div class="capsule__left">
             <figure class="figure">
-              <img src="/assets/media/SQL_P1_ERD.jpg" alt="Schéma relationnel SQL (customers, orders, order_items, products, payments)">
+              <img src="/assets/media/SQL_P1_ERD.jpg"
+                   alt="Schéma relationnel SQL (customers, orders, order_items, products, payments)"
+                   data-zoom="1">
               <figcaption>Modèle relationnel : clients → commandes → lignes → produits & paiements.</figcaption>
             </figure>
           </div>
@@ -79,7 +82,9 @@
 
             <h4>Exemples d’agrégats (mois)</h4>
             <figure class="figure">
-              <img src="/assets/media/SQL_P1_KPI.jpg" alt="Revenus mensuels, commandes, panier moyen, clients actifs">
+              <img src="/assets/media/SQL_P1_KPI.jpg"
+                   alt="Revenus mensuels, commandes, panier moyen, clients actifs"
+                   data-zoom="1">
               <figcaption>KPIs par mois : revenus, nombre de commandes, panier moyen, clients actifs.</figcaption>
             </figure>
           </div>
@@ -87,7 +92,7 @@
       </div>
     </section>
 
-       <!-- P2 -->
+    <!-- P2 -->
     <section id="p2" class="section">
       <div class="container">
         <h2>P2 — Requêtes optimisées (non sargable → sargable)</h2>
@@ -119,7 +124,6 @@
       </div>
     </section>
 
-
     <!-- P3 -->
     <section id="p3" class="section">
       <div class="container">
@@ -128,7 +132,9 @@
         <div class="capsule">
           <div class="capsule__left">
             <figure class="figure">
-              <img src="/assets/media/SQL_P3_QUALITY.jpg" alt="Vue de synthèse des contrôles qualité : doublons, valeurs nulles, paiements négatifs, références manquantes">
+              <img src="/assets/media/SQL_P3_QUALITY.jpg"
+                   alt="Vue de synthèse des contrôles qualité : doublons, valeurs nulles, paiements négatifs, références manquantes"
+                   data-zoom="1">
               <figcaption>Vue de synthèse : règle, sévérité, lignes affectées. Tri : high → medium → low.</figcaption>
             </figure>
           </div>
@@ -152,13 +158,17 @@
         <div class="capsule">
           <div class="capsule__left">
             <figure class="figure">
-              <img src="/assets/media/SQL_P4_PIPELINE.png" alt="Schéma pipeline : staging → clean → mart avec audit">
+              <img src="/assets/media/SQL_P4_PIPELINE.png"
+                   alt="Schéma pipeline : staging → clean → mart avec audit"
+                   data-zoom="1">
               <figcaption>Pipeline logique : <strong>staging</strong> → <strong>clean</strong> → <strong>mart</strong> + zone <strong>audit</strong>.</figcaption>
             </figure>
           </div>
           <div class="capsule__right">
             <figure class="figure">
-              <img src="/assets/media/SQL_P4_JOBS.jpg" alt="Journal des exécutions : jobs, timestamps, statuts, volumes, message">
+              <img src="/assets/media/SQL_P4_JOBS.jpg"
+                   alt="Journal des exécutions : jobs, timestamps, statuts, volumes, message"
+                   data-zoom="1">
               <figcaption>Journal des jobs : statut, volumes, message (ex. ré-exécution après correction).</figcaption>
             </figure>
             <p class="muted">Exécution fictive pour la démonstration (volumes, messages). L’objectif est d’illustrer le suivi et la traçabilité.</p>
@@ -166,7 +176,6 @@
         </div>
       </div>
     </section>
-
   </main>
 
   <!-- Footer -->
@@ -177,11 +186,44 @@
     </div>
   </footer>
 
+  <!-- Lightbox (HTML + JS) -->
+  <div class="image-modal" id="imgModal" aria-hidden="true">
+    <button class="close" id="imgModalClose" aria-label="Fermer l’image">Fermer ✕</button>
+    <img id="imgModalImg" alt="">
+  </div>
+
+  <script>
+  // Zoom images portant data-zoom="1"
+  (function () {
+    const modal = document.getElementById('imgModal');
+    const modalImg = document.getElementById('imgModalImg');
+    const btnClose = document.getElementById('imgModalClose');
+
+    function open(src, alt) {
+      modalImg.src = src;
+      modalImg.alt = alt || '';
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      modalImg.src = '';
+    }
+
+    document.querySelectorAll('.figure img[data-zoom="1"]').forEach(img => {
+      img.addEventListener('click', () => open(img.src, img.alt));
+    });
+
+    btnClose.addEventListener('click', close);
+    modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('open')) close(); });
+  })();
+  </script>
+
+  <!-- script global du site -->
   <script src="/app.js?v=final3"></script>
-  <!-- Lightbox pour zoom d'image (à placer avant </body>) -->
-<div class="image-modal" id="imgModal" aria-hidden="true">
-  <button class="close" id="imgModalClose" aria-label="Fermer l’image">Fermer ✕</button>
-  <img id="imgModalImg" alt="">
-</div>
 </body>
 </html>
