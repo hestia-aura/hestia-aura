@@ -338,3 +338,26 @@ a{color:#fff;text-decoration:none}.container{max-width:1080px;margin:0 auto;padd
   border: 1px solid rgba(120,130,255,0.4);
   white-space: nowrap;
 }
+/* ==== SQL page tweaks (images P2 + zoom + pills) ==== */
+
+/* Images génériques dans une figure : responsive + curseur loupe */
+.figure img {
+  max-width: 100%;
+  height: auto;
+  cursor: zoom-in; /* indique le zoom au survol */
+  border-radius: 8px;
+}
+
+/* Limite spécifique pour les grands plans d'exécution (P2) */
+.figure--plan img {
+  max-height: 360px;   /* ajuste si tu veux un peu plus petit/grand */
+  width: auto;
+}
+
+/* Pills violettes comme sur la page Power BI */
+.pills .pill {
+  background: linear-gradient(180deg, #6C63FF 0%, #4F46E5 100%);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 1px 0 rgba(255,255,255,.06) inset, 0 8px 20px rgba(79,70,229,.25);
+}
