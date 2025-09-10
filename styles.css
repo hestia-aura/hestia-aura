@@ -387,4 +387,31 @@ a.btn--primary,
 .btn.btn--sm.btn--primary:hover {
   filter: brightness(1.08);
 }
+/* ===== Python page : layout images/captions ===== */
+.py .capsule { display:grid; gap:22px; }
+.py .capsule--split { 
+  grid-template-columns: 1.35fr 1fr; 
+  align-items:start; 
+}
+@media (max-width: 980px){
+  .py .capsule--split { grid-template-columns: 1fr; }
+}
+
+/* Figures */
+.figure{ margin:0; }
+.figure img{
+  display:block; width:100%; height:auto; border-radius:12px;
+  border:1px solid rgba(255,255,255,.12); background:#0d1018;
+  cursor:zoom-in;           /* loupe */
+}
+.figure .legend{
+  color:#c7ccd3; font-size:.92rem; margin-top:.45rem;
+}
+
+/* Variantes de taille pour mieux composer la section */
+.fig-lg img{ max-height:520px; object-fit:contain; }
+.fig-code img{ max-height:420px; object-fit:contain; }
+
+/* Grids internes pour P3 (gros terminal + mini screenshot) */
+.grid-2-rows{ display:grid; gap:14px; }
 
