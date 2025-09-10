@@ -16,7 +16,7 @@
 </head>
 
 <body class="powerbi">
-  <!-- En-tête du site -->
+  <!-- En-tête -->
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="/"><img src="/assets/logo.jpg" class="brand-mark" alt="logo"><span class="brand-name">Hestia <strong>Aura</strong></span></a>
@@ -36,8 +36,10 @@
         <h1>Python — KPIs, qualité & mini-app</h1>
         <p>
           Jeu de données e-commerce fictif et pipeline léger en <strong>Pandas</strong> :
-          génération → ingestion & nettoyage → KPIs mensuels + graphiques →
+          génération → ingestion & nettoyage → KPIs + graphiques →
           contrôles qualité & journal → mini-app <strong>Streamlit</strong>.
+          L’objectif est d’illustrer un flux « du notebook au produit » simple, reproductible et
+          prêt à brancher sur un tableau de bord.
         </p>
 
         <div class="pills">
@@ -69,20 +71,26 @@
         <div class="capsule capsule--lr">
           <figure class="capsule-media figure">
             <img src="/assets/media/PY_P1_SCHEMA.jpg" alt="Schéma des tables clean écrites en SQLite (customers, orders, order_items, products, payments)">
-            <figcaption>Schéma logique : clients → commandes → lignes → produits & paiements. Écriture en Parquet + SQLite.</figcaption>
+            <figcaption>Modèle minimal « clean » : <strong>customers</strong> → <strong>orders</strong> → <strong>order_items</strong> (+ <strong>products</strong>, <strong>payments</strong>). Les mêmes données sont persistées en Parquet et dans SQLite.</figcaption>
           </figure>
           <div class="capsule-body">
-            <h3>Objectif</h3>
-            <p>Charger des données factices, appliquer un nettoyage minimal et les stocker en formats analytiques.</p>
+            <h3>Objectifs & portée</h3>
+            <p>
+              Transformer des fichiers bruts en un jeu de tables lisibles et typées. On force les formats
+              (dates, montants), on gère les valeurs douteuses, et on écrit deux sorties complémentaires :
+              <em>Parquet</em> (analyse/BI rapide) et <em>SQLite</em> (jointures SQL simples).
+            </p>
+            <h4>Ce que l’on met en place</h4>
             <ul class="feature-list">
-              <li>Typages sûrs (dates, montants) &amp; coercition des valeurs numériques.</li>
-              <li>Tables <em>clean</em> sauvegardées en Parquet et dans une base <strong>SQLite</strong> pour la suite.</li>
-              <li>Structure simple et réutilisable pour des notebooks, scripts ou un ETL.</li>
+              <li>Validations de base : coercition numérique, parsing de dates, colonnes requises.</li>
+              <li>Convention de nommage stable (snake_case) et colonnes clés (<code>_id</code>).</li>
+              <li>Persistance duale : Parquet (colonne) pour l’analytics, SQLite pour l’explo ad-hoc.</li>
             </ul>
             <figure class="figure" style="margin-top:10px">
               <img src="/assets/media/PY_P1_CLEAN_SAMPLE.jpg" alt="Liste des fichiers parquet écrits (customers.parquet, orders.parquet, order_items.parquet, payments.parquet, products.parquet)">
-              <figcaption>Fichiers Parquet produits pendant l’étape d’ingestion.</figcaption>
+              <figcaption>Fichiers Parquet produits pendant l’ingestion — un format compact et rapide pour l’exploration.</figcaption>
             </figure>
+            <p class="muted">Bénéfice : démarrer des analyses reproductibles, sans dépendre d’un entrepôt externe.</p>
           </div>
         </div>
       </div>
@@ -97,22 +105,28 @@
           <div class="capsule__left">
             <figure class="figure">
               <img src="/assets/media/PY_P2_CSV.jpg" alt="CSV des KPIs mensuels (year_month, revenue_chf, orders_cnt, active_customers, avg_order_value)">
-              <figcaption>Table <code>sales_monthly</code> exportée en CSV pour usage externe.</figcaption>
+              <figcaption>Export <code>sales_monthly.csv</code> : un format d’échange universel (BI, Excel, outils no-code).</figcaption>
             </figure>
           </div>
           <div class="capsule__right">
-            <p>À partir des tables <em>clean</em>, on calcule des agrégats mensuels : CA (CHF), nombre de commandes, clients actifs, panier moyen. On trace ensuite deux graphiques pour une lecture rapide.</p>
+            <h3>Qu’est-ce qu’on calcule ?</h3>
+            <ul class="feature-list">
+              <li><strong>CA mensuel (CHF)</strong>, <strong>volume de commandes</strong>, <strong>clients actifs</strong>, <strong>panier moyen</strong>.</li>
+              <li>Fenêtre temporelle continue via un calendrier (tous les mois présents, même sans ventes).</li>
+              <li>Exports <strong>CSV</strong> + <strong>PNG</strong> pour partage rapide dans des slides/rapports.</li>
+            </ul>
+
             <figure class="figure">
-              <img src="/assets/media/PY_P2_REVENUE.png" alt="Ligne : chiffre d'affaires mensuel">
-              <figcaption>Évolution du chiffre d’affaires mensuel.</figcaption>
+              <img src="/assets/media/PY_P2_REVENUE.png" alt="Courbe : chiffre d'affaires mensuel">
+              <figcaption>Évolution du chiffre d’affaires : on repère les creux, pics et saisonnalités.</figcaption>
             </figure>
             <figure class="figure">
               <img src="/assets/media/PY_P2_ORDERS.png" alt="Barres : nombre de commandes mensuel">
-              <figcaption>Volume de commandes par mois.</figcaption>
+              <figcaption>Rythme des commandes : utile pour suivre l’adoption et la rétention.</figcaption>
             </figure>
             <figure class="figure">
               <img src="/assets/media/PY_P2_RUN.jpg" alt="Console - script P2 terminé, chemins d'exports">
-              <figcaption>Traçage en console : confirmation des exports CSV/PNG.</figcaption>
+              <figcaption>Trace d’exécution : chemins des exports et aperçu des 12 premières lignes.</figcaption>
             </figure>
           </div>
         </div>
@@ -127,13 +141,23 @@
         <div class="capsule capsule--lr">
           <figure class="capsule-media figure">
             <img src="/assets/media/PY_P3_QUALITY.jpg" alt="Synthèse des contrôles qualité : doublons, NULL, paiements négatifs, références manquantes">
-            <figcaption>Règles simples : doublons, valeurs NULL, montants négatifs, références orphelines.</figcaption>
+            <figcaption>Synthèse des règles : doublons (clé composite), valeurs NULL, montants négatifs, références orphelines.</figcaption>
           </figure>
           <div class="capsule-body">
-            <p>Les résultats sont agrégés dans un tableau de synthèse et un <strong>journal d’exécution</strong> consigne chaque run (date/heure, statut, nombre d’issues).</p>
+            <h3>Pourquoi c’est utile ?</h3>
+            <p>
+              Avant d’alimenter un dashboard, on mesure la santé des données. Chaque règle renvoie un volume affecté
+              et une sévérité (low/medium/high). Les résultats alimentent un <strong>journal d’exécution</strong> pour
+              suivre l’historique des traitements.
+            </p>
+            <ul class="feature-list">
+              <li>Fichier <code>logs/job_runs.csv</code> : <em>job_name, timestamp, status, issues_found, message</em>.</li>
+              <li>Facile à exploiter : on peut filtrer par job, agréger par jour/semaine, alerter via n8n/Make.</li>
+              <li>Base d’un contrôle continu (DataOps) sans déployer d’infra lourde.</li>
+            </ul>
             <figure class="figure" style="margin-top:10px">
               <img src="/assets/media/PY_P3_LOGS.jpg" alt="job_runs.csv ouvert (colonnes job_name, timestamp, status, issues_found)">
-              <figcaption>Extrait de <code>logs/job_runs.csv</code> après un run de qualité.</figcaption>
+              <figcaption>Extrait de journal après un run de qualité — utile pour auditer et diagnostiquer.</figcaption>
             </figure>
           </div>
         </div>
@@ -149,18 +173,29 @@
           <div class="capsule__left">
             <figure class="figure">
               <img src="/assets/media/PY_P4_APP_HOME.jpg" alt="Dashboard Streamlit : table derniers mois, 2 graphiques (CA et commandes)">
-              <figcaption>Accueil de la mini-app : derniers mois + courbes.</figcaption>
+              <figcaption>Vue principale : derniers mois en table + deux graphiques. La mini-app lit les exports générés en P2.</figcaption>
             </figure>
           </div>
           <div class="capsule__right">
-            <p>Un bouton appelle une petite fonction d’<strong>API externe</strong> (taux de change & météo mock) et écrit un log supplémentaire. Idéal pour illustrer une intégration simple.</p>
+            <h3>Interaction & intégration</h3>
+            <p>
+              Un bouton déclenche un appel d’<strong>API externe</strong> (mock FX & météo), concatène un message lisible
+              et inscrit une nouvelle ligne dans le journal. On démontre ainsi comment « brancher le monde extérieur »
+              dans un flux Python très simple.
+            </p>
+            <ul class="feature-list">
+              <li>Écriture append dans <code>job_runs.csv</code> avec un <em>message</em> métier (EUR/CHF, météo Genève).</li>
+              <li>Rechargement instantané côté UI pour visualiser l’impact de l’action.</li>
+              <li>Point d’entrée naturel pour notifier/planifier (cron, Azure, GitHub Actions).</li>
+            </ul>
+
             <figure class="figure">
               <img src="/assets/media/PY_P4_APP_API.jpg" alt="Journal Streamlit après appel d'API (message EUR/CHF, météo Genève)">
-              <figcaption>Feedback de l’appel — message consolidé dans la table de logs.</figcaption>
+              <figcaption>Feedback utilisateur clair + ligne de log persistée.</figcaption>
             </figure>
             <figure class="figure">
               <img src="/assets/media/PY_P4_LOGS_AFTER.jpg" alt="job_runs.csv après l'appel d'API (ligne external_api)">
-              <figcaption>Trace persistée côté fichiers : nouvel enregistrement <code>external_api</code>.</figcaption>
+              <figcaption>Trace côté fichiers : un nouvel enregistrement <code>external_api</code> horodaté.</figcaption>
             </figure>
           </div>
         </div>
@@ -176,12 +211,47 @@
     </div>
   </footer>
 
+  <!-- Script global (si présent) -->
   <script src="/app.js?v=final3"></script>
 
-  <!-- Lightbox image (même composant que les autres pages) -->
+  <!-- Lightbox (déjà stylée par styles.css) -->
   <div class="image-modal" id="imgModal" aria-hidden="true">
     <button class="close" id="imgModalClose" aria-label="Fermer l’image">Fermer ✕</button>
     <img id="imgModalImg" alt="">
   </div>
+
+  <!-- JS léger pour activer le zoom plein écran -->
+  <script>
+    (function(){
+      const modal = document.getElementById('imgModal');
+      const modalImg = document.getElementById('imgModalImg');
+      const closeBtn = document.getElementById('imgModalClose');
+
+      // Cibler toutes les images de la page dans une figure/capsule
+      const zoomables = Array.from(document.querySelectorAll('.figure img, .capsule-media img'));
+
+      function open(src, alt){
+        modalImg.src = src;
+        modalImg.alt = alt || '';
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+      function close(){
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        modalImg.src = '';
+        document.body.style.overflow = '';
+      }
+
+      zoomables.forEach(img => {
+        img.addEventListener('click', () => open(img.src, img.alt));
+      });
+
+      closeBtn.addEventListener('click', close);
+      modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+      window.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+    })();
+  </script>
 </body>
 </html>
