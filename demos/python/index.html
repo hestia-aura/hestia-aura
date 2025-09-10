@@ -64,37 +64,58 @@
     </section>
 
     <!-- P1 -->
-    <section id="p1" class="section">
-      <div class="container">
-        <h2>P1 — Ingestion & nettoyage</h2>
+    <section id="p1" class="section py">
+  <div class="container">
+    <h2>P1 — Ingestion & nettoyage</h2>
 
-        <div class="capsule capsule--lr">
-          <figure class="capsule-media figure">
-            <img src="/assets/media/PY_P1_SCHEMA.jpg" alt="Schéma des tables clean écrites en SQLite (customers, orders, order_items, products, payments)">
-            <figcaption>Modèle minimal « clean » : <strong>customers</strong> → <strong>orders</strong> → <strong>order_items</strong> (+ <strong>products</strong>, <strong>payments</strong>). Les mêmes données sont persistées en Parquet et dans SQLite.</figcaption>
-          </figure>
-          <div class="capsule-body">
-            <h3>Objectifs & portée</h3>
-            <p>
-              Transformer des fichiers bruts en un jeu de tables lisibles et typées. On force les formats
-              (dates, montants), on gère les valeurs douteuses, et on écrit deux sorties complémentaires :
-              <em>Parquet</em> (analyse/BI rapide) et <em>SQLite</em> (jointures SQL simples).
-            </p>
-            <h4>Ce que l’on met en place</h4>
-            <ul class="feature-list">
-              <li>Validations de base : coercition numérique, parsing de dates, colonnes requises.</li>
-              <li>Convention de nommage stable (snake_case) et colonnes clés (<code>_id</code>).</li>
-              <li>Persistance duale : Parquet (colonne) pour l’analytics, SQLite pour l’explo ad-hoc.</li>
-            </ul>
-            <figure class="figure" style="margin-top:10px">
-              <img src="/assets/media/PY_P1_CLEAN_SAMPLE.jpg" alt="Liste des fichiers parquet écrits (customers.parquet, orders.parquet, order_items.parquet, payments.parquet, products.parquet)">
-              <figcaption>Fichiers Parquet produits pendant l’ingestion — un format compact et rapide pour l’exploration.</figcaption>
-            </figure>
-            <p class="muted">Bénéfice : démarrer des analyses reproductibles, sans dépendre d’un entrepôt externe.</p>
-          </div>
+    <div class="capsule capsule--split">
+      <!-- Colonne gauche : grosse image "listing parquet" + légende -->
+      <figure class="figure fig-lg">
+        <img src="/assets/media/PY_P1_SCHEMA.jpg" alt="Schéma logique & tables clean (customers → orders → order_items, products, payments)">
+        <figcaption class="legend">
+          Modèle minimal <em>clean</em> : <strong>customers → orders → order_items</strong> (+ <em>products</em>, <em>payments</em>).  
+          Les mêmes données sont persistées en <em>Parquet</em> (analyse rapide) et dans <em>SQLite</em> (SQL ad-hoc).
+        </figcaption>
+      </figure>
+
+      <!-- Colonne droite : objectifs + petite image code + seconde figure parquet -->
+      <div class="grid-2-rows">
+        <div>
+          <h3>Objectifs & portée</h3>
+          <p>
+            Transformer des fichiers bruts en un jeu de tables lisibles et typées. On force les formats (dates, montants), on
+            gère les valeurs douteuses, et on écrit deux sorties complémentaires : 
+            <strong>Parquet</strong> (lecture/BI rapide) et <strong>SQLite</strong> (jointures SQL simples).
+          </p>
+          <ul class="feature-list">
+            <li><strong>Validations de base</strong> : coercition numérique, parsing de dates, colonnes requises.</li>
+            <li><strong>Convention de nommage</strong> : snake_case et clés techniques <code>_id</code>.</li>
+            <li><strong>Persistance duale</strong> : Parquet (colonne) pour l’analytics, SQLite pour l’explo ad-hoc.</li>
+          </ul>
         </div>
+
+        <figure class="figure fig-code">
+          <img src="/assets/media/PY_P1_CLEAN_SAMPLE.jpg" alt="Extrait de script d’ingestion & nettoyage (pandas → Parquet & SQLite)">
+          <figcaption class="legend">
+            Fichiers Parquet produits pendant l’ingestion — format compact & rapide.
+          </figcaption>
+        </figure>
+
+        <figure class="figure">
+          <img src="/assets/media/PY_P1_SCHEMA.jpg" alt="Tables Parquet générées (customers.parquet, orders.parquet, …)">
+          <figcaption class="legend">
+            Sorties Parquet générées (5 fichiers) — vérification rapide du découpage par entité.
+          </figcaption>
+        </figure>
       </div>
-    </section>
+    </div>
+
+    <p class="muted">
+      Bénéfice : démarrer des analyses reproductibles (parquet + SQL) sans dépendre d’un entrepôt externe.
+    </p>
+  </div>
+</section>
+
 
     <!-- P2 -->
     <section id="p2" class="section">
@@ -134,35 +155,46 @@
     </section>
 
     <!-- P3 -->
-    <section id="p3" class="section">
-      <div class="container">
-        <h2>P3 — Contrôles qualité & journal</h2>
+    <section id="p3" class="section py">
+  <div class="container">
+    <h2>P3 — Contrôles qualité & journal</h2>
 
-        <div class="capsule capsule--lr">
-          <figure class="capsule-media figure">
-            <img src="/assets/media/PY_P3_QUALITY.jpg" alt="Synthèse des contrôles qualité : doublons, NULL, paiements négatifs, références manquantes">
-            <figcaption>Synthèse des règles : doublons (clé composite), valeurs NULL, montants négatifs, références orphelines.</figcaption>
-          </figure>
-          <div class="capsule-body">
-            <h3>Pourquoi c’est utile ?</h3>
-            <p>
-              Avant d’alimenter un dashboard, on mesure la santé des données. Chaque règle renvoie un volume affecté
-              et une sévérité (low/medium/high). Les résultats alimentent un <strong>journal d’exécution</strong> pour
-              suivre l’historique des traitements.
-            </p>
-            <ul class="feature-list">
-              <li>Fichier <code>logs/job_runs.csv</code> : <em>job_name, timestamp, status, issues_found, message</em>.</li>
-              <li>Facile à exploiter : on peut filtrer par job, agréger par jour/semaine, alerter via n8n/Make.</li>
-              <li>Base d’un contrôle continu (DataOps) sans déployer d’infra lourde.</li>
-            </ul>
-            <figure class="figure" style="margin-top:10px">
-              <img src="/assets/media/PY_P3_LOGS.jpg" alt="job_runs.csv ouvert (colonnes job_name, timestamp, status, issues_found)">
-              <figcaption>Extrait de journal après un run de qualité — utile pour auditer et diagnostiquer.</figcaption>
-            </figure>
-          </div>
+    <div class="capsule capsule--split">
+      <!-- Gauche : grand terminal "checks" -->
+      <figure class="figure fig-lg">
+        <img src="/assets/media/PY_P3_QUALITY.jpg" alt="Synthèse des contrôles qualité (doublons, NULL, paiements négatifs, références orphelines)">
+        <figcaption class="legend">
+          Synthèse des règles : doublons (clé composite), valeurs <em>NULL</em>, montants négatifs, références orphelines.
+        </figcaption>
+      </figure>
+
+      <!-- Droite : texte + mini capture journal CSV -->
+      <div class="grid-2-rows">
+        <div>
+          <h3>Pourquoi c’est utile ?</h3>
+          <p>
+            Avant d’alimenter un dashboard, on mesure la santé des données. Chaque règle renvoie un volume affecté et 
+            une sévérité (<em>low</em>/<em>medium</em>/<em>high</em>). Les résultats alimentent un <strong>journal d’exécution</strong> pour suivre
+            l’historique des traitements.
+          </p>
+          <ul class="feature-list">
+            <li><strong>Fichier</strong> <code>logs/job_runs.csv</code> : <code>job_name, timestamp, status, issues_found, message</code>.</li>
+            <li><strong>Exploitable facilement</strong> : on filtre par job, agrège par jour/semaine, alerte via n8n/Make.</li>
+            <li><strong>Base d’un contrôle continu</strong> (DataOps) sans infra lourde.</li>
+          </ul>
         </div>
+
+        <figure class="figure">
+          <img src="/assets/media/PY_P3_LOGS.jpg" alt="Extrait de journal des jobs (CSV)">
+          <figcaption class="legend">
+            Extrait de journal après un run de qualité — utile pour auditer et diagnostiquer.
+          </figcaption>
+        </figure>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
+
 
     <!-- P4 -->
     <section id="p4" class="section">
