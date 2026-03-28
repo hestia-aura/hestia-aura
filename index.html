@@ -1,294 +1,378 @@
-<!DOCTYPE html><html lang="fr"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Portfolio Data/IA & Automatisation : extraction documentaire, RAG, routage d’e-mails, pipelines & dashboards. Certifié AI-900. Ouvert à des rôles en Suisse.">
-<meta property="og:title" content="Portfolio — Data/IA & Automatisation">
-<meta property="og:description" content="Extraction documentaire, RAG, routage d’e-mails, pipelines & dashboards. Certifié AI-900. Ouvert à des rôles en Suisse.">
-<title>Portfolio — Data/BI/IA & Automatisation</title>
-<link rel="icon" href="/assets/logo.jpg">
-<link rel="apple-touch-icon" href="/assets/logo.jpg">
-<link rel="stylesheet" href="/styles.css?v=final3">
-<style>
-/* --- Overrides spécifiques à la home FR --- */
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Jérôme Jeannin - Data, Analytics, BI, IA. Senior Consultant Analytics chez Sopra Steria. Cas d'usage, solutions, contenus pédagogiques et analyses autour de la donnée.">
+  <meta property="og:title" content="Jérôme Jeannin | Data, Analytics, BI, IA">
+  <meta property="og:description" content="Senior Consultant Analytics chez Sopra Steria. Cas d'usage, solutions, contenus pédagogiques et analyses autour de la donnée.">
+  <title>Jérôme Jeannin | Data, Analytics, BI, IA</title>
+  <link rel="icon" href="/assets/logo.jpg">
+  <link rel="apple-touch-icon" href="/assets/logo.jpg">
+  <link rel="stylesheet" href="/styles.css?v=home-fr-v2">
+  <style>
+    /* Home FR only */
+    .card:not(a)::after{content:none !important;}
+    a.pill{display:inline-block;}
 
-/* 1) Carte KPI du hero : largeur adaptée au contenu */
-.card.kpi-floating{width:fit-content;min-width:450px;max-width:560px;}
-@media (max-width: 720px){ .card.kpi-floating{min-width:auto;max-width:none;width:auto;} }
+    .brand--personal{gap:12px;}
+    .brand-text{display:flex;flex-direction:column;line-height:1.05;}
+    .brand-text .brand-name{font-size:15px;font-weight:700;letter-spacing:.01em;}
+    .brand-text .brand-label{font-size:11px;color:#aeb6c4;font-weight:500;text-transform:uppercase;letter-spacing:.14em;}
 
-/* 2) Retirer la flèche sur TOUTES les cartes non cliquables, animation conservée */
-.card:not(a)::after{content:none !important;}
+    .intro-overlay{padding:24px;}
+    .intro-title{
+      max-width:900px;
+      margin:0 auto;
+      text-align:center;
+      font-size:clamp(34px,5vw,86px);
+      line-height:1.08;
+    }
+    .intro-quote{
+      position:absolute;
+      left:24px;
+      bottom:22px;
+      max-width:420px;
+      color:rgba(255,255,255,.64);
+      font-size:13px;
+      font-style:italic;
+      line-height:1.5;
+      text-align:left;
+    }
+    .intro-credit{
+      right:24px;
+      bottom:22px;
+      font-size:14px;
+      font-weight:600;
+      color:rgba(255,255,255,.92);
+    }
 
-/* 3) Lien "Voir plus" sous la section Démos */
-.more-link{display:inline-block;margin-top:12px;opacity:.85}
-.more-link:hover{opacity:1;text-decoration:underline}
+    .hero{padding:88px 0 56px;}
+    .home-hero{
+      display:grid;
+      grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);
+      gap:48px;
+      align-items:center;
+    }
+    .home-eyebrow{
+      display:inline-block;
+      margin:0 0 14px;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:#aeb6c4;
+    }
+    .home-title{
+      margin:0 0 18px;
+      font-size:clamp(34px,5vw,56px);
+      line-height:1.05;
+    }
+    .home-lead{
+      margin:0 0 14px;
+      max-width:720px;
+      color:#e5e7eb;
+      font-size:18px;
+      line-height:1.7;
+    }
+    .hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0 18px;}
+    .hero-cta .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:48px;
+      padding:0 18px;
+      line-height:1;
+      border-radius:12px;
+      font-weight:700;
+    }
+    .hero-cta .btn--dark{
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:none;
+    }
 
-/* 4) Harmonisation des 3 boutons du hero (hauteur/centrage identiques) */
-.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
-.hero-cta .btn{
-  display:inline-flex;align-items:center;justify-content:center;
-  height:48px;padding:0 20px;line-height:1;border-radius:12px;
-  font-weight:700;
-}
-.hero-cta .btn--dark{
-  background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.08);
-}
+    .hero-badges{margin:0;}
+    .hero-badges li{font-size:13px;}
 
-/* 5) Pastilles cliquables conservent le style .pill */
-a.pill{display:inline-block}
-</style>
-</head><body>
-  <!-- Intro video -->
-<div id="intro" class="intro" aria-label="Intro animation" role="dialog" aria-modal="true">
-  <video id="introVideo" class="intro-video" autoplay muted playsinline preload="auto" poster="/assets/intro-poster.jpg">
-    <source src="/assets/intro.webm" type="video/webm">
-    <source src="/assets/intro.mp4" type="video/mp4">
-  </video>
-  <div class="intro-overlay">
-    <h1 class="intro-title">Hestia Aura</h1>
-    <div class="intro-credit">Jérôme Jeannin</div>
-    <button id="introSkip" class="intro-arrow" aria-label="Entrer"></button>
-  </div>
-</div>
+    .hero-side{display:flex;flex-direction:column;align-items:flex-end;gap:18px;}
+    .hero-photo{
+      width:min(100%,420px);
+      aspect-ratio:1/1;
+      overflow:hidden;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:0 18px 50px rgba(0,0,0,.40);
+      background:#0f1117;
+    }
+    .hero-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+    .hero-proof{
+      width:min(100%,420px);
+      background:#0f1117;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:18px;
+      box-shadow:0 8px 30px rgba(0,0,0,.28);
+    }
+    .hero-proof ul{list-style:none;margin:0;padding:0;}
+    .hero-proof li{display:flex;gap:8px;align-items:flex-start;color:#e5e7eb;line-height:1.55;}
+    .hero-proof li + li{margin-top:10px;}
+    .hero-proof strong{min-width:110px;color:#c7ccd3;font-weight:600;}
 
-<header class="site-header"><div class="container header-inner">
-  <a class="brand" href="/" aria-label="Hestia Aura">
-    <img src="/assets/logo.jpg" alt="logo" class="brand-mark"><span class="brand-name">Hestia <strong>Aura</strong></span>
-  </a>
-  <nav class="nav">
-    <a href="/">Accueil</a><a href="/about.html">À propos</a><a href="/showcase.html">Showcase</a>
-    <a href="/en/" class="btn btn--sm">EN</a>
-  </nav>
-</div></header>
+    .section-intro{
+      max-width:860px;
+      color:#e5e7eb;
+      font-size:18px;
+      line-height:1.7;
+    }
+    .cards-4{grid-template-columns:repeat(4,1fr);}
+    @media (max-width:1100px){.cards-4{grid-template-columns:repeat(2,1fr);}}
+    @media (max-width:900px){.cards-4{grid-template-columns:1fr;}}
 
-<main id="top">
-<section class="hero">
-  <div class="container grid-2">
+    .cred-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+    @media (max-width:1100px){.cred-grid{grid-template-columns:repeat(2,1fr);}}
+    @media (max-width:900px){.cred-grid{grid-template-columns:1fr;}}
 
-    <div class="hero-copy reveal">
-      <h1>Portfolio — <span class="accent">Data/BI/IA & Automatisation</span></h1>
+    .contact-layout{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;}
+    @media (max-width:980px){.contact-layout{grid-template-columns:1fr;}}
 
-      <!-- Rôles visés (réintroduit) -->
-      <p class="muted"><strong>Rôles visés :</strong> Data/BI Analyst · Business Analyst IT · Spécialiste IA/Automatisation</p>
+    .section-note{margin:0 0 18px;color:#c7ccd3;font-size:14px;}
+    .contact-links{display:flex;flex-direction:column;gap:10px;margin-top:18px;max-width:280px;}
 
-      <p>Je conçois des POC et des automatisations qui réduisent les coûts. Ouvert à des rôles en Suisse (onsite/hybride). Analyser, Automatiser, Industrialiser.</p>
-      <p>Intégration IA & automatisation pragmatique : extraction de documents, RAG interne, routage d’e-mails, pipelines data et tableaux de bord. Certifié <strong>AI-900</strong>. Compétences : <strong>Azure</strong>, <strong>Excel/VBA</strong>, <strong>Power BI</strong>, <strong>SQL</strong>.</p>
+    @media (max-width:980px){
+      .home-hero{grid-template-columns:1fr;gap:32px;}
+      .hero-side{align-items:flex-start;}
+      .hero-photo,.hero-proof{width:min(100%,380px);}
+    }
 
-      <!-- Boutons -->
-      <div class="hero-cta">
-        <a href="/assets/CV_FR.pdf" target="_blank" class="btn btn--outline">Mon CV</a>
-        <a href="/showcase.html" class="btn btn--dark">Voir mes démos</a>
-        <a href="mailto:jeanninjerome6@gmail.com" class="btn">Me contacter</a>
-      </div>
-
-      <!-- Preuves d'usage -->
-      <ul class="hero-badges">
-        <li>Extraction facture → JSON/CSV</li>
-        <li>Routage d’e-mails → action suivante</li>
-        <li>RAG interne FR/EN</li>
-      </ul>
-
-      <!-- Pastilles rapides : AI-900 et TOEIC cliquables -->
-      <div class="pills" style="margin-top:8px">
-        <a class="pill" href="/assets/certs/ai-900-credentials.pdf" target="_blank" rel="noopener">AI-900</a>
-        <a class="pill" href="/assets/certs/toeic-statement.pdf" target="_blank" rel="noopener">TOEIC 915</a>
-        <span class="pill">PCIE Excel</span>
-      </div>
+    @media (max-width:640px){
+      .hero{padding:52px 0 44px;}
+      .home-lead,.section-intro{font-size:16px;line-height:1.65;}
+      .intro-quote{left:16px;right:80px;bottom:18px;max-width:none;font-size:11px;}
+      .intro-credit{right:16px;bottom:18px;font-size:12px;}
+      .brand-text .brand-label{font-size:10px;letter-spacing:.12em;}
+      .hero-proof strong{min-width:96px;}
+    }
+  </style>
+</head>
+<body>
+  <div id="intro" class="intro" aria-label="Intro animation" role="dialog" aria-modal="true">
+    <video id="introVideo" class="intro-video" autoplay muted playsinline preload="auto" poster="/assets/intro-poster.jpg">
+      <source src="/assets/intro.webm" type="video/webm">
+      <source src="/assets/intro.mp4" type="video/mp4">
+    </video>
+    <div class="intro-overlay">
+      <h1 class="intro-title">Lire le réel par la donnée</h1>
+      <div class="intro-quote">"Les mathématiques sont la langue avec laquelle Dieu a écrit l'univers." Galilée</div>
+      <div class="intro-credit">Jérôme Jeannin</div>
+      <button id="introSkip" class="intro-arrow" aria-label="Entrer"></button>
     </div>
+  </div>
 
-    <!-- visuel + KPI -->
-    <div class="hero-visual reveal delay-1">
-      <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
-      <div class="card kpi-floating">
-        <div class="card-kpi"><span class="kpi-label">Ouvert&nbsp;:</span><span class="kpi-value">Suisse · On-site/Hybride</span></div>
-        <div class="card-kpi"><span class="kpi-label">Stack&nbsp;:</span><span class="kpi-value">Azure AI · Python · Power BI</span></div>
-        <div class="card-kpi"><span class="kpi-label">Certif.&nbsp;:</span><span class="kpi-value">AI-900 · TOEIC 915 · PCIE Excel</span></div>
-      </div>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
+        <img src="/assets/logo.jpg" alt="logo" class="brand-mark">
+        <span class="brand-text">
+          <span class="brand-name">Jérôme Jeannin</span>
+          <span class="brand-label">Hestia Aura</span>
+        </span>
+      </a>
+      <nav class="nav">
+        <a href="/">Accueil</a>
+        <a href="/about.html">À propos</a>
+        <a href="/showcase.html">Showcase</a>
+        <a href="/en/" class="btn btn--sm">EN</a>
+      </nav>
     </div>
+  </header>
 
-  </div>
-</section>
-
-<section id="expertises" class="section"><div class="container">
-  <h2 class="section-title reveal">Analyser · Automatiser · Industrialiser</h2>
-  <div class="cards">
-    <article class="card reveal"><h3>Analyser</h3><p>Rendre les données utilisables : qualité, schémas simples, indicateurs clés.</p></article>
-    <article class="card reveal"><h3>Automatiser</h3><p>Remplacer des tâches répétitives par des règles/outils simples avec gains immédiats.</p></article>
-    <article class="card reveal"><h3>Industrialiser</h3><p>Passer du POC à un usage robuste : droits d’accès, logs, conformité nLPD/FINMA.</p></article>
-  </div>
-</div></section>
-
-<section id="projects" class="section alt"><div class="container">
-  <h2 class="section-title reveal">Démos orientées usage</h2>
-  <p class="muted">Front-end, données fictives. L’objectif est d’illustrer la logique métier. En production, ces approches s’intègrent à l’environnement et aux standards de l’entreprise.</p>
-  <div class="cards">
-    <article class="card reveal"><h3>Extraction de factures</h3><p>Champs clés + lignes d’articles → JSON exploitable → export CSV.</p><div class="pills"><span class="pill">Suisse/UE/US</span><span class="pill">CSV</span><span class="pill">JSON</span></div></article>
-    <article class="card reveal"><h3>Router d’e-mails</h3><p>Classification simple et action suivante (ticket/CRM/RH) — 100 % local.</p><div class="pills"><span class="pill">Règles</span><span class="pill">Flux</span><span class="pill">Triage</span></div></article>
-    <article class="card reveal"><h3>RAG interne</h3><p>Recherche FR/EN sur corpus JSON, tags et surlignage des termes.</p><div class="pills"><span class="pill">FR/EN</span><span class="pill">Tags</span><span class="pill">Surlignage</span></div></article>
-  </div>
-  <a class="more-link" href="/showcase.html">Voir plus →</a>
-</div></section>
-
-<!-- Certifications -->
-<section id="certs" class="section">
-  <div class="container">
-    <h2 class="section-title reveal">Certifications</h2>
-    <div class="cards">
-
-      <article class="card reveal">
-        <h3>AI-900 — Microsoft Certified: Azure AI Fundamentals</h3>
-        <p>Fondamentaux IA sur Azure (services cognitifs, IA responsable).</p>
-        <p class="muted" style="margin-top:6px">Obtenue&nbsp;: 17 août 2025</p>
-        <div class="pills">
-          <span class="pill pill--success">IA</span>
-          <a class="pill" href="/assets/certs/ai-900-credentials.pdf" target="_blank" rel="noopener">Attestation (PDF)</a>
+  <main id="top">
+    <section class="hero">
+      <div class="container home-hero">
+        <div class="hero-copy reveal">
+          <p class="home-eyebrow">Data, Analytics, BI, IA</p>
+          <h1 class="home-title">Senior Consultant Analytics chez Sopra Steria</h1>
+          <p class="home-lead">Je travaille sur des sujets Data, Analytics et BI avec une approche orientée métier, lisibilité, robustesse et impact. Ce site présente ma manière d'aborder la donnée en entreprise, à travers des cas d'usage, des solutions, des contenus pédagogiques et des analyses.</p>
+          <div class="hero-cta">
+            <a href="/showcase.html" class="btn">Voir le showcase</a>
+            <a href="mailto:jeanninjerome6@gmail.com" class="btn btn--dark">Me contacter</a>
+            <a href="https://www.linkedin.com/in/j%C3%A9r%C3%B4me-jeannin-151023a6/?locale=fr_FR" target="_blank" rel="noopener" class="btn btn--outline">LinkedIn</a>
+          </div>
+          <ul class="hero-badges">
+            <li>Data & Analytics</li>
+            <li>BI & Reporting</li>
+            <li>IA appliquée</li>
+            <li>Automatisation & technologies</li>
+          </ul>
         </div>
-      </article>
 
-      <article class="card reveal">
-        <h3>TOEIC — Test of English for International Communication</h3>
-        <p>Score <strong>915 / 990</strong>. Niveau C1 opérationnel.</p>
-        <p class="muted" style="margin-top:6px">Obtenu&nbsp;: août 2023</p>
-        <div class="pills">
-          <span class="pill">Listening & Reading</span>
-          <span class="pill">Anglais professionnel</span>
-          <a class="pill" href="/assets/certs/toeic-statement.pdf" target="_blank" rel="noopener">Attestation (PDF)</a>
+        <div class="hero-side reveal delay-1">
+          <figure class="hero-photo">
+            <img src="/assets/jerome-home.png" alt="Portrait de Jérôme Jeannin">
+          </figure>
+          <div class="hero-proof">
+            <ul>
+              <li><strong>Focus</strong><span>Data, Analytics, BI, IA appliquée</span></li>
+              <li><strong>Contexte</strong><span>Conseil, finance, assurance, environnements exigeants</span></li>
+              <li><strong>Stack</strong><span>Power BI, SQL, Python, Azure, modélisation et reporting</span></li>
+              <li><strong>Langues</strong><span>Français, anglais, espagnol</span></li>
+            </ul>
+          </div>
         </div>
-      </article>
-
-      <article class="card reveal">
-        <h3>PCIE — Excel (ICDL)</h3>
-        <p>Maîtrise avancée d’Excel (tableaux, TCD, fonctions, VBA).</p>
-        <p class="muted" style="margin-top:6px">Obtenu&nbsp;: août 2018</p>
-        <div class="pills">
-          <span class="pill">Excel avancé</span>
-          <span class="pill">ICDL / PCIE</span>
-        </div>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-<!-- Preuves rapides -->
-<section id="proofs" class="section alt">
-  <div class="container">
-    <h2 class="section-title reveal">Preuves rapides</h2>
-    <div class="cards">
-      <a class="card reveal" href="/assets/CV_FR.pdf" target="_blank" rel="noopener">
-        <h3>CV (FR)</h3>
-        <p>Profil, expériences, compétences clés.</p>
-      </a>
-      <a class="card reveal" href="/assets/certs/ai-900-credentials.pdf" target="_blank" rel="noopener">
-        <h3>AI-900 — Attestation</h3>
-        <p>Microsoft Certified: Azure AI Fundamentals.</p>
-      </a>
-      <a class="card reveal" href="/assets/certs/toeic-statement.pdf" target="_blank" rel="noopener">
-        <h3>TOEIC — Attestation</h3>
-        <p>Score 915/990 (Listening & Reading).</p>
-      </a>
-      <a class="card reveal" href="https://www.linkedin.com/in/j%C3%A9r%C3%B4me-jeannin-151023a6/?locale=fr_FR" target="_blank" rel="noopener">
-        <h3>LinkedIn</h3>
-        <p>Parcours et recommandations.</p>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- Pour les recruteurs -->
-<section id="recruteurs" class="section"><div class="container">
-  <h2 class="section-title reveal">Pour les recruteurs</h2>
-  <ul class="feature-list">
-    <li>Langues : FR / EN / ES</li>
-    <li>Disponibilité : Suisse, onsite/hybride</li>
-    <li>Contact recrutement : <a href="mailto:jeanninjerome6@gmail.com">jeanninjerome6@gmail.com</a></li>
-  </ul>
-
-  <div class="pills">
-    <span class="pill">Azure AI</span><span class="pill">Python</span>
-    <span class="pill">Excel/VBA</span><span class="pill">Power BI</span>
-    <span class="pill">SQL</span><span class="pill">Compliance</span>
-    <span class="pill">Agile</span><span class="pill">n8n · Make</span>
-    <span class="pill">Salesforce</span><span class="pill">Blockchain</span>
-    <span class="pill">AI-900</span><span class="pill">TOEIC</span><span class="pill">PCIE</span>
-  </div>
-</div></section>
-
-<section class="section"><div class="container grid-2">
- <div class="reveal">
-  <h2 class="section-title">À propos (en quelques mots)</h2>
-  <p>Français originaire de Paris, je suis passionné par les nouvelles technologies et animé par un sens aigu du détail ainsi qu’une recherche constante d’efficacité. Mon approche consiste à identifier les tâches répétitives, réduire les frictions et transformer des processus manuels en systèmes fiables, mesurables et durables.</p>
-</div>
-
-  <div class="reveal delay-1">
-    <div class="card contact-card">
-      <h3>Contact</h3>
-      <p class="muted">Réponse sous 24h (FR/EN/ES).</p>
-      <div class="stack">
-        <a class="btn" href="mailto:jeanninjerome6@gmail.com">Email</a>
-        <a class="btn btn--outline" href="https://www.linkedin.com/in/j%C3%A9r%C3%B4me-jeannin-151023a6/?locale=fr_FR" target="_blank" rel="noopener">LinkedIn</a>
       </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title reveal">Approche</h2>
+        <p class="section-intro reveal">Je conçois et structure des approches data utiles au pilotage, à l'analyse et à la transformation des organisations. Mon travail se situe à l'interface entre enjeux métier, structuration des données, reporting, visualisation, automatisation et technologies appliquées. Ce site a vocation à présenter cette approche, de manière claire, concrète et progressive.</p>
+      </div>
+    </section>
+
+    <section id="expertises" class="section alt">
+      <div class="container">
+        <h2 class="section-title reveal">Ce que je fais</h2>
+        <div class="cards cards-4">
+          <article class="card reveal">
+            <h3>Data & Analytics</h3>
+            <p>Structuration des données, analyses, cadrage, qualité, transformations et mise en cohérence des flux pour produire une lecture exploitable du réel.</p>
+          </article>
+          <article class="card reveal">
+            <h3>BI & Reporting</h3>
+            <p>Conception de dashboards, modèles de données, indicateurs, logique de pilotage et restitution pour rendre les analyses lisibles, utiles et actionnables.</p>
+          </article>
+          <article class="card reveal">
+            <h3>IA appliquée</h3>
+            <p>Exploration et mise en oeuvre de cas d'usage ciblés lorsque l'IA apporte un gain réel en recherche, traitement documentaire, assistance ou productivité.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Automatisation & technologies</h3>
+            <p>Automatisation de tâches, pipelines, intégration de briques techniques et veille sur les usages émergents lorsqu'ils améliorent concrètement les opérations.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="section">
+      <div class="container">
+        <h2 class="section-title reveal">Cas d'usage sélectionnés</h2>
+        <p class="section-note reveal">Front-end et données fictives. L'objectif est d'illustrer une logique métier, un type de besoin et une manière de structurer la solution.</p>
+        <div class="cards">
+          <a class="card reveal" href="/showcase.html">
+            <h3>Extraction de factures</h3>
+            <p>Lecture de documents, extraction de champs clés, structuration en JSON exploitable puis export CSV.</p>
+            <div class="pills"><span class="pill">Document processing</span><span class="pill">JSON</span><span class="pill">CSV</span></div>
+          </a>
+          <a class="card reveal" href="/showcase.html">
+            <h3>Routage d'e-mails</h3>
+            <p>Classification simple, logique de tri et orientation vers la bonne action suivante dans un cadre lisible et industrialisable.</p>
+            <div class="pills"><span class="pill">Triage</span><span class="pill">Workflow</span><span class="pill">Ops</span></div>
+          </a>
+          <a class="card reveal" href="/showcase.html">
+            <h3>RAG interne</h3>
+            <p>Recherche FR/EN sur corpus interne avec structuration documentaire, tags et accès plus rapide à l'information utile.</p>
+            <div class="pills"><span class="pill">FR / EN</span><span class="pill">Recherche</span><span class="pill">Knowledge</span></div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="credibilite" class="section alt">
+      <div class="container">
+        <h2 class="section-title reveal">Repères de crédibilité</h2>
+        <div class="cred-grid">
+          <article class="card reveal">
+            <h3>Rôle actuel</h3>
+            <p>Senior Consultant Analytics chez Sopra Steria, avec une pratique orientée analyse, pilotage, modélisation et mise en oeuvre.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Expérience</h3>
+            <p>5+ ans sur des sujets data, BI, reporting et technologies appliquées, entre conseil, assurance et finance.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Socle technique</h3>
+            <p>Power BI, SQL, Python, Azure, modélisation, visualisation, qualité de données, documentation et logique de gouvernance.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Repères complémentaires</h3>
+            <p>EDHEC Business School, Azure AI-900, TOEIC 915, français natif, anglais courant, espagnol courant.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title reveal">Vision</h2>
+        <p class="section-intro reveal">Je m'intéresse aux sujets data à l'endroit où ils deviennent réellement utiles : mieux lire une situation, clarifier un pilotage, fiabiliser un processus ou rendre une solution plus adoptable. Cette vitrine a été pensée comme un actif de crédibilité, mais aussi comme un espace où partager des angles de travail, des cas concrets, des analyses et des contenus pédagogiques autour de la donnée.</p>
+      </div>
+    </section>
+
+    <section id="contact" class="section alt">
+      <div class="container contact-layout">
+        <div class="reveal">
+          <h2 class="section-title">Échanger</h2>
+          <p class="section-intro">Je suis ouvert aux échanges autour de sujets data, analytics, BI, IA appliquée, automatisation, cadrage ou transformation. Le plus simple est de me contacter par e-mail, LinkedIn ou via le formulaire ci-contre.</p>
+          <div class="contact-links">
+            <a class="btn" href="mailto:jeanninjerome6@gmail.com">Email</a>
+            <a class="btn btn--outline" href="https://www.linkedin.com/in/j%C3%A9r%C3%B4me-jeannin-151023a6/?locale=fr_FR" target="_blank" rel="noopener">LinkedIn</a>
+            <a class="btn btn--dark" href="/assets/CV_FR.pdf" target="_blank" rel="noopener">CV - PDF</a>
+          </div>
+        </div>
+
+        <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" class="contact-form reveal">
+          <h3 class="section-title" style="margin:0 0 12px 0;">Formulaire de contact</h3>
+          <input type="hidden" name="access_key" value="0fd6281b-4d44-4857-8c2f-f70937b432fa">
+          <input type="hidden" name="subject" value="Contact site - Jérôme Jeannin">
+          <input type="hidden" name="from_name" value="Site Jérôme Jeannin">
+          <input type="checkbox" name="botcheck" class="hidden" style="display:none;">
+
+          <div class="form-row"><label>Nom</label><input type="text" name="name" required></div>
+          <div class="form-row"><label>Email</label><input type="email" name="email" required></div>
+          <div class="form-row"><label>Message</label><textarea name="message" rows="4" required></textarea></div>
+
+          <button type="submit" class="btn">Envoyer</button>
+          <p class="form-status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© <span id="y"></span> Jérôme Jeannin | Hestia Aura</span>
+      <a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
     </div>
-  </div>
-</div></section>
+  </footer>
 
-<section id="contact" class="section"><div class="container grid-2">
+  <script src="/app.js?v=final3"></script>
+  <script>
+    /* Filet de sécurité pour l'intro : fin, erreur, clic, ou auto-fermeture après 3,5 s.
+       Désactivation pendant tests : ?intro=0 ou ?nointro=1 */
+    (function(){
+      const intro = document.getElementById('intro');
+      if(!intro) return;
+      const video = document.getElementById('introVideo');
+      const skip  = document.getElementById('introSkip');
 
-  <div class="reveal">
-    <h2 class="section-title">Travaillons ensemble</h2>
-    <p>Ouvert aux opportunités en Suisse.</p>
-    <ul class="feature-list">
-      <li>Réponse sous 24h</li>
-      <li>FR / EN / ES</li>
-      <li>Sur site ou hybride</li>
-    </ul>
-  </div>
+      const close = () => {
+        if (!intro) return;
+        intro.style.pointerEvents = 'none';
+        intro.style.opacity = '0';
+        intro.setAttribute('aria-hidden','true');
+        try { intro.remove(); } catch(e) {}
+      };
 
-  <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" class="contact-form">
-    <h3 class="section-title" style="margin:0 0 12px 0">Formulaire de contact</h3>
-    <input type="hidden" name="access_key" value="0fd6281b-4d44-4857-8c2f-f70937b432fa">
-    <input type="hidden" name="subject" value="Portfolio contact — Hestia Aura">
-    <input type="hidden" name="from_name" value="Hestia Aura Portfolio">
-    <input type="checkbox" name="botcheck" class="hidden" style="display:none">
+      const qs = new URLSearchParams(location.search);
+      if (qs.get('intro') === '0' || qs.get('nointro') === '1') { close(); return; }
 
-    <div class="form-row"><label>Nom</label><input type="text" name="name" required></div>
-    <div class="form-row"><label>Email</label><input type="email" name="email" required></div>
-    <div class="form-row"><label>Message</label><textarea name="message" rows="4" required></textarea></div>
+      if (skip)  skip.addEventListener('click', (e)=>{ e.preventDefault(); close(); });
+      if (video) { video.addEventListener('ended', close); video.addEventListener('error', close); }
 
-    <button type="submit" class="btn">Envoyer</button>
-    <p class="form-status" aria-live="polite"></p>
-  </form>
-
-</div></section>
-</main>
-
-<footer class="site-footer"><div class="container footer-inner">
-  <span>© <span id="y"></span> Jérôme Jeannin</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
-</div></footer>
-
-<script src="/app.js?v=final3"></script>
-<script>
-/* Filet de sécurité pour l'intro : fin, erreur, clic, ou auto-fermeture après 3,5 s.
-   Désactivation pendant tests : ?intro=0 ou ?nointro=1 */
-(function(){
-  const intro = document.getElementById('intro');
-  if(!intro) return;
-  const video = document.getElementById('introVideo');
-  const skip  = document.getElementById('introSkip');
-
-  const close = () => {
-    if (!intro) return;
-    intro.style.pointerEvents = 'none';
-    intro.style.opacity = '0';
-    intro.setAttribute('aria-hidden','true');
-    try { intro.remove(); } catch(e) {}
-  };
-
-  const qs = new URLSearchParams(location.search);
-  if (qs.get('intro') === '0' || qs.get('nointro') === '1') { close(); return; }
-
-  if (skip)  skip.addEventListener('click', (e)=>{ e.preventDefault(); close(); });
-  if (video) { video.addEventListener('ended', close); video.addEventListener('error', close); }
-
-  setTimeout(close, 3500);
-})();
-</script>
-</body></html>
+      setTimeout(close, 3500);
+    })();
+  </script>
+</body>
+</html>
