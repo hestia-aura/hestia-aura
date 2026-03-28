@@ -330,7 +330,8 @@
 
     .approach-visual{
       position:relative;
-      min-height:440px;
+      min-height:420px;
+      margin-top:-10px;
       border-radius:26px;
       overflow:hidden;
       border:1px solid rgba(255,255,255,.08);
@@ -338,7 +339,7 @@
         radial-gradient(circle at 82% 16%, rgba(138,91,255,.18) 0, transparent 20%),
         linear-gradient(140deg, rgba(8,11,22,.98), rgba(10,15,28,.95));
       box-shadow:0 10px 36px rgba(0,0,0,.24);
-      padding:28px;
+      padding:24px 28px 24px;
     }
 
     .approach-steps{
@@ -910,23 +911,53 @@
       const video = document.getElementById('intro-video');
       const scrollBtn = document.querySelector('.intro-scroll');
       const target = document.getElementById('contenu');
+      const seenKey = 'hestia_intro_seen';
 
       if (!intro || !target) return;
 
-      function closeIntro() {
+      function closeIntro(scrollToContent = false) {
+        if (!intro.classList.contains('is-hidden')) {
+          intro.classList.add('is-hidden');
+          sessionStorage.setItem(seenKey, '1');
+        }
+
+        if (scrollToContent) {
+          setTimeout(function () {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }, 250);
+        }
+      }
+
+      if (sessionStorage.getItem(seenKey) === '1') {
         intro.classList.add('is-hidden');
+        return;
       }
 
       if (scrollBtn) {
         scrollBtn.addEventListener('click', function () {
-          closeIntro();
-          setTimeout(function () {
-            target.scrollIntoView({ behavior: 'smooth' });
-          }, 250);
+          closeIntro(true);
         });
       }
 
-      setTimeout(closeIntro, 18000);
+      intro.addEventListener('click', function () {
+        closeIntro(true);
+      });
+
+      intro.addEventListener('wheel', function () {
+        closeIntro(true);
+      }, { passive: true });
+
+      intro.addEventListener('touchstart', function () {
+        closeIntro(true);
+      }, { passive: true });
+
+      intro.addEventListener('mousedown', function () {
+        closeIntro(true);
+      });
+
+      setTimeout(function () {
+        closeIntro(false);
+      }, 18000);
 
       if (video) {
         video.play().catch(() => {});
