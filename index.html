@@ -3,221 +3,679 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Jérôme Jeannin - Data, Analytics, BI, IA. Senior Consultant Analytics chez Sopra Steria. Cas d'usage, solutions, contenus pédagogiques et analyses autour de la donnée.">
+  <meta name="description" content="Jérôme Jeannin | Data, Analytics, BI, IA - Cas d'usage, analyses, solutions et contenus pédagogiques autour de la donnée.">
   <meta property="og:title" content="Jérôme Jeannin | Data, Analytics, BI, IA">
-  <meta property="og:description" content="Senior Consultant Analytics chez Sopra Steria. Cas d'usage, solutions, contenus pédagogiques et analyses autour de la donnée.">
+  <meta property="og:description" content="Cas d'usage, analyses, solutions et contenus pédagogiques autour de la donnée.">
   <title>Jérôme Jeannin | Data, Analytics, BI, IA</title>
   <link rel="icon" href="/assets/logo.jpg">
   <link rel="apple-touch-icon" href="/assets/logo.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=home-fr-v3">
+  <link rel="stylesheet" href="/styles.css?v=index-final-fr">
+
   <style>
-    .container{max-width:1280px;}
-    .card:not(a)::after{content:none !important;}
-    a.pill{display:inline-block;}
+    :root{
+      --bg:#07090f;
+      --panel:#0d111a;
+      --line:rgba(255,255,255,.08);
+      --text:#eef1f6;
+      --accent:#6c6cff;
+      --accent-2:#4fd2ff;
+      --accent-3:#8a5bff;
+      --shadow:0 18px 50px rgba(0,0,0,.32);
+    }
+
+    body{
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    .container{max-width:1320px;}
 
     .brand--personal{gap:12px;}
     .brand-text{display:flex;flex-direction:column;line-height:1.05;}
     .brand-text .brand-name{font-size:15px;font-weight:700;letter-spacing:.01em;}
     .brand-text .brand-label{font-size:11px;color:#aeb6c4;font-weight:500;text-transform:uppercase;letter-spacing:.14em;}
 
-    .intro-overlay{padding:24px;}
-    .intro-title,
-    .home-title,
-    .section-title{
+    .page-title,
+    .section-title,
+    .section-kicker,
+    .intro-claim,
+    .author-title{
       font-family:"Space Grotesk",Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
       letter-spacing:-.03em;
     }
-    .intro-title{
-      max-width:980px;
-      margin:0 auto;
-      text-align:center;
-      font-size:clamp(36px,5.4vw,88px);
-      line-height:1.02;
-      font-weight:700;
-      text-wrap:balance;
-    }
-    .intro-title span{display:block;}
-    .intro-quote{
-      position:absolute;
-      left:24px;
-      bottom:22px;
-      color:rgba(255,255,255,.7);
-      font-size:14px;
-      font-style:italic;
-      line-height:1.4;
-      text-align:left;
-      white-space:nowrap;
-    }
-    .intro-credit{
-      right:24px;
-      bottom:22px;
-      font-size:14px;
-      font-weight:600;
-      color:rgba(255,255,255,.92);
+
+    .intro-screen{
+      position:relative;
+      min-height:100svh;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      background:
+        radial-gradient(circle at 12% 32%, rgba(99,194,255,.95) 0, rgba(99,194,255,.35) 8%, transparent 20%),
+        radial-gradient(circle at 38% 8%, rgba(92,157,255,.22) 0, transparent 20%),
+        radial-gradient(circle at 75% 42%, rgba(255,172,64,.12) 0, transparent 24%),
+        linear-gradient(115deg, rgba(13,26,52,.95) 8%, rgba(5,9,18,.98) 48%, rgba(4,7,15,.98) 100%);
     }
 
-    .hero{padding:92px 0 60px;}
-    .home-hero{
+    .intro-screen::before{
+      content:"";
+      position:absolute;
+      inset:-8% -4% 0;
+      background:
+        radial-gradient(ellipse at 64% 28%, rgba(255,180,76,.22) 0, transparent 28%),
+        radial-gradient(ellipse at 70% 52%, rgba(255,180,76,.18) 0, transparent 24%),
+        radial-gradient(ellipse at 58% 50%, rgba(41,132,255,.25) 0, transparent 24%),
+        radial-gradient(ellipse at 52% 44%, rgba(10,18,42,.92) 28%, rgba(5,8,16,.98) 58%);
+      mix-blend-mode:screen;
+      opacity:.92;
+      pointer-events:none;
+    }
+
+    .intro-screen::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.08), rgba(0,0,0,.18)),
+        radial-gradient(circle at center, transparent 35%, rgba(0,0,0,.12) 100%);
+      pointer-events:none;
+    }
+
+    .intro-content{
+      position:relative;
+      z-index:2;
+      text-align:center;
+      padding:32px 24px 80px;
+      max-width:980px;
+    }
+
+    .intro-claim{
+      margin:0;
+      font-size:clamp(56px,7vw,102px);
+      line-height:.96;
+      color:#fff;
+      text-shadow:0 10px 28px rgba(0,0,0,.42);
+    }
+
+    .intro-claim span{display:block;}
+
+    .intro-quote{
+      position:absolute;
+      left:16px;
+      bottom:18px;
+      z-index:2;
+      margin:0;
+      color:rgba(255,255,255,.72);
+      font-size:19px;
+      font-style:italic;
+      letter-spacing:.01em;
+      white-space:nowrap;
+    }
+
+    .intro-sign{
+      position:absolute;
+      right:18px;
+      bottom:16px;
+      z-index:2;
+      color:#fff;
+      font-size:14px;
+      font-weight:600;
+      opacity:.9;
+    }
+
+    .intro-scroll{
+      position:absolute;
+      left:50%;
+      bottom:18px;
+      z-index:2;
+      width:30px;
+      height:30px;
+      margin-left:-15px;
+      border:none;
+      background:transparent;
+      color:#fff;
+      opacity:.88;
+      cursor:pointer;
+    }
+
+    .intro-scroll::before{
+      content:"";
+      display:block;
+      width:16px;
+      height:16px;
+      margin:6px auto 0;
+      border-right:2px solid currentColor;
+      border-bottom:2px solid currentColor;
+      transform:rotate(45deg);
+    }
+
+    .editorial-hero{
+      position:relative;
+      padding:86px 0 34px;
+      border-bottom:1px solid rgba(255,255,255,.05);
+      overflow:hidden;
+    }
+
+    .editorial-grid{
       display:grid;
-      grid-template-columns:minmax(0,1.1fr) minmax(360px,.9fr);
-      gap:64px;
+      grid-template-columns:minmax(0,1.02fr) minmax(360px,.98fr);
+      gap:34px;
       align-items:center;
     }
-    .home-eyebrow{
+
+    .section-kicker{
       display:inline-block;
-      margin:0 0 14px;
+      margin:0 0 12px;
       font-size:12px;
       font-weight:700;
       letter-spacing:.14em;
       text-transform:uppercase;
       color:#aeb6c4;
     }
-    .home-title{
-      margin:0 0 18px;
-      font-size:clamp(38px,4.8vw,62px);
-      line-height:1.02;
+
+    .page-title{
+      margin:0 0 16px;
+      max-width:760px;
+      font-size:clamp(40px,5vw,72px);
+      line-height:.98;
     }
-    .home-lead{
-      margin:0 0 14px;
+
+    .page-subtitle{
+      margin:0;
       max-width:760px;
       color:#e5e7eb;
-      font-size:18px;
-      line-height:1.72;
+      font-size:19px;
+      line-height:1.75;
     }
-    .hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0 18px;}
-    .hero-cta .btn{
+
+    .editorial-actions,
+    .author-actions,
+    .contact-links{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:28px;
+    }
+
+    .editorial-visual{
+      position:relative;
+      min-height:420px;
+      border-radius:28px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      background:
+        radial-gradient(circle at 85% 20%, rgba(138,91,255,.28) 0, transparent 22%),
+        radial-gradient(circle at 18% 78%, rgba(79,210,255,.18) 0, transparent 20%),
+        linear-gradient(140deg, rgba(8,11,22,.98), rgba(11,17,31,.95));
+      box-shadow:var(--shadow);
+      isolation:isolate;
+    }
+
+    .flow-layer{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:.96;
+    }
+
+    .flow-line{
+      position:absolute;
+      height:4px;
+      border-radius:999px;
+      background:linear-gradient(90deg, rgba(79,210,255,.15), rgba(79,210,255,.95), rgba(138,91,255,.9));
+      box-shadow:0 0 16px rgba(79,210,255,.35);
+      transform-origin:left center;
+    }
+
+    .flow-line::after{
+      content:"";
+      position:absolute;
+      right:-3px;
+      top:50%;
+      width:10px;
+      height:10px;
+      margin-top:-5px;
+      border-radius:50%;
+      background:#9ee9ff;
+      box-shadow:0 0 18px rgba(79,210,255,.65);
+    }
+
+    .flow-line.line-1{width:66%; top:18%; left:-3%; transform:rotate(7deg);}
+    .flow-line.line-2{width:58%; top:31%; left:10%; transform:rotate(-10deg);}
+    .flow-line.line-3{width:76%; top:47%; left:-5%; transform:rotate(6deg);}
+    .flow-line.line-4{width:54%; top:60%; left:18%; transform:rotate(-8deg);}
+    .flow-line.line-5{width:68%; top:74%; left:3%; transform:rotate(10deg);}
+    .flow-line.line-6{width:44%; top:82%; left:24%; transform:rotate(-14deg);}
+
+    .flow-node{
+      position:absolute;
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:#fff;
+      box-shadow:0 0 18px rgba(109,124,255,.6);
+      opacity:.95;
+    }
+
+    .flow-node.n1{top:16%; left:18%;}
+    .flow-node.n2{top:24%; left:56%;}
+    .flow-node.n3{top:40%; left:24%;}
+    .flow-node.n4{top:51%; left:58%;}
+    .flow-node.n5{top:68%; left:36%;}
+    .flow-node.n6{top:77%; left:71%;}
+
+    .visual-panel{
+      position:absolute;
+      left:28px;
+      right:28px;
+      bottom:28px;
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+      z-index:2;
+    }
+
+    .mini-card{
+      padding:16px 14px;
+      border-radius:18px;
+      background:rgba(10,14,25,.72);
+      border:1px solid rgba(255,255,255,.08);
+      backdrop-filter:blur(8px);
+      box-shadow:0 8px 24px rgba(0,0,0,.24);
+    }
+
+    .mini-card h3{
+      margin:0 0 8px;
+      font-size:17px;
+      line-height:1.15;
+    }
+
+    .mini-card p{
+      margin:0;
+      color:#cdd4de;
+      font-size:13px;
+      line-height:1.55;
+    }
+
+    .section{padding:62px 0;}
+    .section--tight{padding:54px 0;}
+
+    .section-title{
+      margin:0 0 18px;
+      font-size:34px;
+      line-height:1.06;
+    }
+
+    .section-copy{
+      max-width:920px;
+      color:#e5e7eb;
+      font-size:18px;
+      line-height:1.82;
+    }
+
+    .section-copy p{margin:0;}
+    .section-copy p + p{margin-top:18px;}
+
+    .approach-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(300px,420px);
+      gap:42px;
+      align-items:center;
+      margin-top:12px;
+    }
+
+    .approach-visual{
+      position:relative;
+      min-height:440px;
+      border-radius:26px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      background:
+        radial-gradient(circle at 82% 16%, rgba(138,91,255,.18) 0, transparent 20%),
+        linear-gradient(140deg, rgba(8,11,22,.98), rgba(10,15,28,.95));
+      box-shadow:0 10px 36px rgba(0,0,0,.24);
+      padding:28px;
+    }
+
+    .approach-steps{
+      position:relative;
+      z-index:2;
+      display:flex;
+      flex-direction:column;
+      gap:22px;
+      margin-top:12px;
+    }
+
+    .approach-step{
+      position:relative;
+      padding:22px 22px 20px;
+      border-radius:22px;
+      background:rgba(11,15,27,.8);
+      border:1px solid rgba(123,135,255,.34);
+      box-shadow:0 8px 24px rgba(0,0,0,.22);
+      text-align:center;
+    }
+
+    .approach-step h3{
+      margin:0 0 10px;
+      font-size:18px;
+      line-height:1.15;
+    }
+
+    .approach-step span{
+      display:inline-block;
+      padding:8px 14px;
+      border-radius:999px;
+      background:linear-gradient(90deg, rgba(90,89,255,.38), rgba(121,80,255,.38));
+      color:#eef1f6;
+      font-size:13px;
+      font-weight:600;
+      letter-spacing:.01em;
+    }
+
+    .approach-step + .approach-step::before{
+      content:"";
+      position:absolute;
+      top:-22px;
+      left:50%;
+      width:2px;
+      height:22px;
+      margin-left:-1px;
+      background:linear-gradient(to bottom, rgba(79,210,255,.92), rgba(138,91,255,.72));
+      box-shadow:0 0 12px rgba(79,210,255,.3);
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:18px;
+      margin-top:20px;
+    }
+
+    .card{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      min-height:220px;
+      padding:22px 20px;
+      border-radius:22px;
+      background:linear-gradient(180deg, rgba(11,15,27,.96), rgba(9,13,22,.92));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 10px 28px rgba(0,0,0,.22);
+      text-decoration:none;
+      color:inherit;
+      transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .card:hover{
+      transform:translateY(-3px);
+      border-color:rgba(108,108,255,.35);
+      box-shadow:0 18px 34px rgba(0,0,0,.28);
+    }
+
+    .card h3{
+      margin:0;
+      font-size:20px;
+      line-height:1.18;
+    }
+
+    .card p{
+      margin:0;
+      color:#e5e7eb;
+      line-height:1.65;
+      font-size:16px;
+    }
+
+    .card .pills{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:auto;
+    }
+
+    .pill{
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      min-height:48px;
-      padding:0 18px;
-      line-height:1;
-      border-radius:12px;
-      font-weight:700;
-    }
-    .hero-cta .btn--dark{
-      background:rgba(255,255,255,.06);
+      min-height:30px;
+      padding:0 12px;
+      border-radius:999px;
+      background:linear-gradient(90deg, rgba(108,108,255,.94), rgba(118,90,255,.92));
       color:#fff;
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:none;
+      font-size:13px;
+      font-weight:600;
+      box-shadow:0 0 16px rgba(108,108,255,.18);
     }
 
-    .hero-badges{margin:0;}
-    .hero-badges li{font-size:13px;}
-.hero-signature{
-  margin-top:52px;
-  width:min(100%,340px);
-  opacity:.78;
-  pointer-events:none;
-  user-select:none;
-}
-.hero-signature img{
-  width:100%;
-  height:auto;
-  display:block;
-  filter:drop-shadow(0 2px 10px rgba(0,0,0,.22));
-}
-    .hero-side{display:flex;flex-direction:column;align-items:flex-end;gap:18px;}
-    .hero-photo{
-      width:min(100%,430px);
-      aspect-ratio:1/1;
-      overflow:hidden;
-      border-radius:50%;
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:0 18px 50px rgba(0,0,0,.40);
-      background:#0f1117;
+    .author-section{
+      padding:72px 0 56px;
+      border-top:1px solid rgba(255,255,255,.05);
     }
-    .hero-photo img{width:100%;height:100%;object-fit:cover;display:block;}
-    .hero-proof{
-      width:min(100%,430px);
-      background:#0f1117;
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:16px;
-      padding:18px;
-      box-shadow:0 8px 30px rgba(0,0,0,.28);
-    }
-    .hero-proof ul{list-style:none;margin:0;padding:0;}
-    .hero-proof li{display:flex;gap:8px;align-items:flex-start;color:#e5e7eb;line-height:1.55;}
-    .hero-proof li + li{margin-top:10px;}
-    .hero-proof strong{min-width:110px;color:#c7ccd3;font-weight:600;}
 
-    .section-intro,
-    .section-copy{
-      max-width:900px;
+    .author-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.02fr) minmax(360px,.98fr);
+      gap:34px;
+      align-items:start;
+    }
+
+    .author-title{
+      margin:0 0 16px;
+      max-width:760px;
+      font-size:clamp(36px,4.6vw,64px);
+      line-height:.98;
+    }
+
+    .author-copy{
+      margin:0;
+      max-width:760px;
       color:#e5e7eb;
-      font-size:18px;
+      font-size:19px;
       line-height:1.75;
     }
-    .section-copy p{margin:0;}
-    .section-copy p + p{margin-top:16px;}
 
-    .cards-4{grid-template-columns:repeat(4,1fr);}
-    @media (max-width:1100px){.cards-4{grid-template-columns:repeat(2,1fr);}}
-    @media (max-width:900px){.cards-4{grid-template-columns:1fr;}}
+    .hero-badges{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      padding:0;
+      margin:18px 0 0;
+      list-style:none;
+    }
 
-    .cred-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
-    @media (max-width:1100px){.cred-grid{grid-template-columns:repeat(2,1fr);}}
-    @media (max-width:900px){.cred-grid{grid-template-columns:1fr;}}
+    .hero-badges li{
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      color:#d8dde6;
+      font-size:13px;
+      line-height:1;
+    }
 
-    .cert-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;}
-    .cert-list li{line-height:1.55;}
-    .subtle-link{
+    .hero-signature{
+      margin-top:52px;
+      width:min(100%,340px);
+      opacity:.78;
+      pointer-events:none;
+      user-select:none;
+    }
+
+    .hero-signature img{
+      width:100%;
+      height:auto;
+      display:block;
+      filter:drop-shadow(0 2px 10px rgba(0,0,0,.22));
+    }
+
+    .profile-photo{
+      width:min(100%,430px);
+      aspect-ratio:1/1;
+      border-radius:50%;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.1);
+      background:#06080e;
+      box-shadow:var(--shadow);
+      justify-self:center;
+      margin:0 0 18px auto;
+    }
+
+    .profile-photo img{
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .author-aside{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:20px;
+      box-shadow:0 8px 30px rgba(0,0,0,.26);
+    }
+
+    .author-aside ul{
+      list-style:none;
+      margin:0;
+      padding:0;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .author-aside li{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      line-height:1.55;
       color:#e5e7eb;
-      text-decoration:underline;
-      text-decoration-color:rgba(255,255,255,.28);
-      text-underline-offset:3px;
-      transition:text-decoration-color .2s ease, color .2s ease;
     }
-    .subtle-link:hover{
+
+    .author-aside strong{
+      min-width:110px;
+      color:#c7ccd3;
+      font-weight:600;
+    }
+
+    .contact-section{
+      padding:0 0 84px;
+    }
+
+    .contact-card{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(360px,420px);
+      gap:26px;
+      padding:28px;
+      background:linear-gradient(180deg, rgba(11,15,27,.96), rgba(9,13,22,.92));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:24px;
+      box-shadow:0 12px 32px rgba(0,0,0,.22);
+    }
+
+    .contact-copy h2{
+      margin:0 0 16px;
+      font-size:32px;
+      font-family:"Space Grotesk",Inter,system-ui,sans-serif;
+      letter-spacing:-.03em;
+    }
+
+    .contact-copy p{
+      margin:0;
+      max-width:720px;
+      color:#e5e7eb;
+      font-size:18px;
+      line-height:1.78;
+    }
+
+    .contact-form{
+      display:grid;
+      gap:12px;
+    }
+
+    .contact-form input,
+    .contact-form textarea{
+      width:100%;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.03);
       color:#fff;
-      text-decoration-color:rgba(255,255,255,.6);
+      padding:14px 16px;
+      font:inherit;
     }
 
-    .contact-layout{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;}
-    @media (max-width:980px){.contact-layout{grid-template-columns:1fr;}}
+    .contact-form textarea{
+      min-height:140px;
+      resize:vertical;
+    }
 
-    .section-note{margin:0 0 18px;color:#c7ccd3;font-size:14px;}
-    .contact-links{display:flex;flex-direction:column;gap:10px;margin-top:18px;max-width:280px;}
+    .site-footer{
+      border-top:1px solid rgba(255,255,255,.06);
+    }
+
+    @media (max-width:1180px){
+      .editorial-grid,
+      .author-grid,
+      .approach-grid,
+      .contact-card{
+        grid-template-columns:1fr;
+      }
+
+      .editorial-visual{min-height:380px;}
+      .visual-panel{grid-template-columns:1fr; left:22px; right:22px;}
+      .profile-photo{margin:0 0 18px 0;}
+    }
 
     @media (max-width:980px){
-      .home-hero{grid-template-columns:1fr;gap:32px;}
-      .hero-side{align-items:flex-start;}
-      .hero-photo,.hero-proof{width:min(100%,380px);}
+      .cards{grid-template-columns:1fr;}
+      .intro-claim{font-size:clamp(42px,10vw,74px);}
+      .intro-quote{
+        left:14px;
+        right:14px;
+        white-space:normal;
+        max-width:340px;
+        font-size:12px;
+      }
     }
 
-    @media (max-width:640px){
+    @media (max-width:760px){
       .container{padding:0 18px;}
-      .hero{padding:56px 0 44px;}
-      .home-lead,.section-intro,.section-copy{font-size:16px;line-height:1.68;}
-      .intro-quote{
-        left:16px;
-        right:88px;
-        bottom:18px;
-        font-size:12px;
-        white-space:normal;
+      .editorial-hero{padding:56px 0 24px;}
+      .section,
+      .section--tight,
+      .author-section{padding:46px 0;}
+      .contact-section{padding:0 0 58px;}
+      .page-subtitle,
+      .author-copy,
+      .section-copy,
+      .contact-copy p{
+        font-size:16px;
+        line-height:1.7;
       }
-      .intro-credit{right:16px;bottom:18px;font-size:12px;}
-      .brand-text .brand-label{font-size:10px;letter-spacing:.12em;}
-      .hero-proof strong{min-width:96px;}
+      .contact-card{padding:22px;}
+      .brand-text .brand-label{font-size:10px; letter-spacing:.12em;}
+      .intro-sign{font-size:13px;}
+      .editorial-actions,
+      .author-actions,
+      .contact-links{gap:10px;}
+      .intro-scroll{bottom:12px;}
+      .approach-visual{min-height:390px;}
     }
   </style>
 </head>
+
 <body>
-  <div id="intro" class="intro" aria-label="Intro animation" role="dialog" aria-modal="true">
-    <video id="introVideo" class="intro-video" autoplay muted playsinline preload="auto" poster="/assets/intro-poster.jpg">
-      <source src="/assets/intro.webm" type="video/webm">
-      <source src="/assets/intro.mp4" type="video/mp4">
-    </video>
-    <div class="intro-overlay">
-      <h1 class="intro-title"><span>Lire le réel</span><span>par la donnée</span></h1>
-      <div class="intro-quote">"Les mathématiques sont la langue avec laquelle Dieu a écrit l'univers." Galilée</div>
-      <div class="intro-credit">Jérôme Jeannin</div>
-      <button id="introSkip" class="intro-arrow" aria-label="Entrer"></button>
+  <section class="intro-screen" aria-label="Introduction du site">
+    <div class="intro-content">
+      <h1 class="intro-claim"><span>Lire le réel</span><span>par la donnée</span></h1>
     </div>
-  </div>
+    <p class="intro-quote">"Les mathématiques sont la langue avec laquelle Dieu a écrit l'univers." Galilée</p>
+    <span class="intro-sign">Jérôme Jeannin</span>
+    <button class="intro-scroll" type="button" aria-label="Faire défiler vers le contenu" onclick="document.getElementById('contenu').scrollIntoView({behavior:'smooth'})"></button>
+  </section>
 
   <header class="site-header">
     <div class="container header-inner">
@@ -228,6 +686,7 @@
           <span class="brand-label">Hestia Aura</span>
         </span>
       </a>
+
       <nav class="nav">
         <a href="/">Accueil</a>
         <a href="/about.html">À propos</a>
@@ -237,202 +696,205 @@
     </div>
   </header>
 
-  <main id="top">
-    <section class="hero">
-      <div class="container home-hero">
-        <div class="hero-copy reveal">
-          <p class="home-eyebrow">Data, Analytics, BI, IA</p>
-          <h1 class="home-title">Senior Consultant Analytics chez Sopra Steria</h1>
-          <p class="home-lead">J'aborde la donnée comme un outil de lecture, de pilotage et de transformation. Ce site rassemble des cas d'usage, des solutions, des analyses, des contenus pédagogiques et des réflexions autour de la Data, de l'Analytics, de la BI, de l'IA et des technologies appliquées, avec une ligne simple : rendre ces sujets plus concrets, plus lisibles et plus utiles.</p>
-          <div class="hero-cta">
-            <a href="/showcase.html" class="btn">Voir le showcase</a>
-            <a href="mailto:jeanninjerome6@gmail.com" class="btn btn--dark">Me contacter</a>
-            <a href="https://www.linkedin.com/in/j%C3%A9r%C3%B4me-jeannin-151023a6/?locale=fr_FR" target="_blank" rel="noopener" class="btn btn--outline">LinkedIn</a>
-          </div>
-<ul class="hero-badges">
-  <li>Data & Analytics</li>
-  <li>BI & Reporting</li>
-  <li>IA appliquée</li>
-  <li>Automatisation & technologies</li>
-</ul>
+  <main id="contenu">
+    <section class="editorial-hero">
+      <div class="container editorial-grid">
+        <div>
+          <p class="section-kicker">Data, Analytics, BI, IA appliquée</p>
+          <h1 class="page-title">Lire, structurer et rendre la donnée utile</h1>
+          <p class="page-subtitle">Ce site rassemble des cas d'usage, des solutions et des analyses autour de la donnée. L'objectif est de rendre des sujets techniques plus lisibles, de montrer comment ils s'appliquent concrètement et de proposer une lecture claire des enjeux de pilotage, de reporting, d'automatisation et d'IA appliquée.</p>
 
-<figure class="hero-signature" aria-hidden="true">
-  <img src="/assets/signature-home.png" alt="">
-</figure>
+          <div class="editorial-actions">
+            <a class="btn" href="#projects">Voir les cas d'usage</a>
+            <a class="btn btn--outline" href="/showcase.html">Explorer le showcase</a>
+          </div>
         </div>
 
-        <div class="hero-side reveal delay-1">
-          <figure class="hero-photo">
-            <img src="/assets/jerome-home.png" alt="Portrait de Jérôme Jeannin">
-          </figure>
-          <div class="hero-proof">
-            <ul>
-              <li><strong>Focus</strong><span>Data, Analytics, BI, IA appliquée</span></li>
-              <li><strong>Contexte</strong><span>Conseil, finance, assurance, environnements exigeants</span></li>
-              <li><strong>Stack</strong><span>Power BI, SQL, Python, Azure, modélisation et reporting</span></li>
-              <li><strong>Langues</strong><span>Français, anglais, espagnol</span></li>
-            </ul>
+        <div class="editorial-visual" aria-hidden="true">
+          <div class="flow-layer">
+            <div class="flow-line line-1"></div>
+            <div class="flow-line line-2"></div>
+            <div class="flow-line line-3"></div>
+            <div class="flow-line line-4"></div>
+            <div class="flow-line line-5"></div>
+            <div class="flow-line line-6"></div>
+            <span class="flow-node n1"></span>
+            <span class="flow-node n2"></span>
+            <span class="flow-node n3"></span>
+            <span class="flow-node n4"></span>
+            <span class="flow-node n5"></span>
+            <span class="flow-node n6"></span>
+          </div>
+
+          <div class="visual-panel">
+            <article class="mini-card">
+              <h3>Cas d'usage</h3>
+              <p>Des problématiques concrètes traitées sous l'angle du besoin métier, de la donnée et du pilotage.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Analyses</h3>
+              <p>Une lecture claire de sujets data, BI, automatisation et IA appliquée, sans effet gadget.</p>
+            </article>
+            <article class="mini-card">
+              <h3>Solutions</h3>
+              <p>Des approches structurées pour relier flux, modélisation, restitution et adoption réelle.</p>
+            </article>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section section--tight">
       <div class="container">
-        <h2 class="section-title reveal">Vision</h2>
-        <div class="section-copy reveal">
+        <h2 class="section-title">Vision</h2>
+        <div class="section-copy">
           <p>Je ne me suis pas d'abord intéressé aux mathématiques pour elles-mêmes, mais pour le moment où elles deviennent concrètes. Quand un chiffre permet de comprendre une situation, d'expliquer un écart ou d'éclairer une décision, il prend du sens, et c'est sans doute ce qui m'a amené vers la donnée, son traitement et son exploitation.</p>
           <p>Ce site s'adresse à celles et ceux qui cherchent à mieux comprendre ce que la donnée permet réellement de faire en entreprise. On y trouve des cas d'usage, des analyses, des contenus pédagogiques et des réflexions autour de la Data, de l'Analytics, de la BI, de l'IA et des technologies appliquées, avec un fil conducteur simple : rendre ces sujets plus lisibles, plus concrets et plus utiles.</p>
         </div>
       </div>
     </section>
 
-    <section class="section alt">
+    <section class="section section--tight">
       <div class="container">
-        <h2 class="section-title reveal">Approche</h2>
-        <div class="section-copy reveal">
-          <p>Mon travail consiste à partir d'un enjeu métier, clarifier ce qu'il faut mesurer, structurer les bonnes données, choisir le bon niveau de modélisation et construire des livrables réellement exploitables. J'interviens là où il faut fiabiliser un reporting, améliorer la qualité d'un flux, industrialiser un traitement ou rendre une solution plus utile pour ses utilisateurs.</p>
-          <p>Selon les cas, cela peut prendre la forme d'un dashboard, d'un modèle de données, d'un pipeline, d'un cas d'usage IA ou d'une logique d'automatisation. L'objectif reste le même : transformer un sujet parfois flou ou dispersé en solution robuste, lisible et actionnable.</p>
-        </div>
-      </div>
-    </section>
+        <h2 class="section-title">Approche</h2>
 
-    <section id="expertises" class="section alt">
-      <div class="container">
-        <h2 class="section-title reveal">Ce que je fais</h2>
-        <div class="cards cards-4">
-          <article class="card reveal">
-            <h3>Data & Analytics</h3>
-            <p>Structuration des données, analyses, cadrage, qualité, transformations et mise en cohérence des flux pour produire une lecture exploitable du réel.</p>
-          </article>
-          <article class="card reveal">
-            <h3>BI & Reporting</h3>
-            <p>Conception de dashboards, modèles de données, indicateurs, logique de pilotage et restitution pour rendre les analyses lisibles, utiles et actionnables.</p>
-          </article>
-          <article class="card reveal">
-            <h3>IA appliquée</h3>
-            <p>Exploration et mise en oeuvre de cas d'usage ciblés lorsque l'IA apporte un gain réel en recherche, traitement documentaire, assistance ou productivité.</p>
-          </article>
-          <article class="card reveal">
-            <h3>Automatisation & technologies</h3>
-            <p>Automatisation de tâches, pipelines, intégration de briques techniques et veille sur les usages émergents lorsqu'ils améliorent concrètement les opérations.</p>
-          </article>
+        <div class="approach-grid">
+          <div class="section-copy">
+            <p>Mon travail consiste à partir d'un enjeu métier, clarifier ce qu'il faut mesurer, structurer les bonnes données, choisir le bon niveau de modélisation et construire des livrables réellement exploitables. J'interviens là où il faut fiabiliser un reporting, améliorer la qualité d'un flux, industrialiser un traitement ou rendre une solution plus utile pour ses utilisateurs.</p>
+            <p>Selon les cas, cela peut prendre la forme d'un dashboard, d'un modèle de données, d'un pipeline, d'un cas d'usage IA ou d'une logique d'automatisation. L'objectif reste le même : transformer un sujet parfois flou ou dispersé en solution robuste, lisible et actionnable.</p>
+          </div>
+
+          <div class="approach-visual" aria-hidden="true">
+            <div class="approach-steps">
+              <article class="approach-step">
+                <h3>Besoin métier</h3>
+                <span>Analyse & planification</span>
+              </article>
+              <article class="approach-step">
+                <h3>Structuration & traitement</h3>
+                <span>Pipeline & modélisation</span>
+              </article>
+              <article class="approach-step">
+                <h3>Restitution exploitable</h3>
+                <span>Dashboard & reporting</span>
+              </article>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <section id="projects" class="section">
       <div class="container">
-        <h2 class="section-title reveal">Cas d'usage sélectionnés</h2>
-        <p class="section-note reveal">Exemples de problématiques traitées sous l'angle de la donnée, du pilotage et de l'automatisation. L'objectif n'est pas de montrer une simple démo, mais une manière de structurer une solution autour d'un besoin métier.</p>
+        <h2 class="section-title">Cas d'usage sélectionnés</h2>
+        <p class="section-copy" style="max-width:1100px;">Exemples de problématiques traitées sous l'angle de la donnée, du pilotage et de l'automatisation. L'objectif n'est pas de montrer une simple démo, mais une manière de structurer une solution autour d'un besoin métier.</p>
+
         <div class="cards">
-          <a class="card reveal" href="/showcase.html">
+          <a class="card" href="/demos/pipeline/">
             <h3>Pipeline & Dashboard</h3>
             <p>Structuration de flux, préparation de données et restitution visuelle pour passer de données brutes à un pilotage plus lisible et exploitable.</p>
-            <div class="pills"><span class="pill">Pipeline</span><span class="pill">Dashboard</span><span class="pill">Reporting</span></div>
+            <div class="pills">
+              <span class="pill">Pipeline</span>
+              <span class="pill">Dashboard</span>
+              <span class="pill">Reporting</span>
+            </div>
           </a>
-          <a class="card reveal" href="/showcase.html">
+
+          <a class="card" href="/demos/powerbi/">
             <h3>Analyse Power BI</h3>
             <p>Modélisation, indicateurs et visualisations pour transformer un besoin de reporting en outil de lecture, de suivi et de décision.</p>
-            <div class="pills"><span class="pill">BI</span><span class="pill">Modélisation</span><span class="pill">Indicateurs</span></div>
+            <div class="pills">
+              <span class="pill">BI</span>
+              <span class="pill">Modélisation</span>
+              <span class="pill">Indicateurs</span>
+            </div>
           </a>
-          <a class="card reveal" href="/showcase.html">
+
+          <a class="card" href="/demos/invoices/">
             <h3>Extraction de factures IA</h3>
             <p>Lecture documentaire, extraction de champs clés et structuration des données pour automatiser un traitement répétitif et produire un export exploitable.</p>
-            <div class="pills"><span class="pill">IA appliquée</span><span class="pill">Extraction</span><span class="pill">CSV</span></div>
+            <div class="pills">
+              <span class="pill">IA appliquée</span>
+              <span class="pill">Extraction</span>
+              <span class="pill">CSV</span>
+            </div>
           </a>
         </div>
       </div>
     </section>
 
-    <section id="references" class="section alt">
-      <div class="container">
-        <h2 class="section-title reveal">Parcours & références</h2>
-        <div class="cred-grid">
-          <article class="card reveal">
-            <h3>Rôle actuel</h3>
-            <p>Senior Consultant Analytics chez Sopra Steria, avec une pratique orientée analyse, pilotage, modélisation et mise en oeuvre.</p>
-          </article>
-          <article class="card reveal">
-            <h3>Expérience</h3>
-            <p>5+ ans sur des sujets data, BI, reporting et technologies appliquées, entre conseil, assurance et finance.</p>
-          </article>
-          <article class="card reveal">
-            <h3>Socle technique</h3>
-            <p>Power BI, SQL, Python, Azure, modélisation, visualisation, qualité de données, documentation et logique de gouvernance.</p>
-          </article>
-          <article class="card reveal">
-            <h3>Formation & certifications</h3>
-            <ul class="cert-list">
-              <li><a class="subtle-link" href="/assets/certs/edhec-msc-diploma.pdf" target="_blank" rel="noopener">EDHEC Business School - Master of Science mention Excellent</a></li>
-              <li><a class="subtle-link" href="/assets/certs/ai-900-credentials.pdf" target="_blank" rel="noopener">Microsoft Azure AI-900</a></li>
-              <li><a class="subtle-link" href="/assets/certs/toeic-statement.pdf" target="_blank" rel="noopener">TOEIC 915pts</a></li>
+    <section class="author-section">
+      <div class="container author-grid">
+        <div>
+          <p class="section-kicker">Data, Analytics, BI, IA</p>
+          <h2 class="author-title">Senior Consultant Analytics chez Sopra Steria</h2>
+          <p class="author-copy">J'aborde la donnée comme un outil de lecture, de pilotage et de transformation. Ce site rassemble des cas d'usage, des solutions, des analyses, des contenus pédagogiques et des réflexions autour de la Data, de l'Analytics, de la BI, de l'IA et des technologies appliquées, avec une ligne simple : rendre ces sujets plus concrets, plus lisibles et plus utiles.</p>
+
+          <div class="author-actions">
+            <a class="btn" href="/showcase.html">Voir le showcase</a>
+            <a class="btn btn--outline" href="https://www.linkedin.com/in/j%C3%A9r%C3%B4me-jeannin-151023a6/?locale=fr_FR" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+
+          <ul class="hero-badges">
+            <li>Data & Analytics</li>
+            <li>BI & Reporting</li>
+            <li>IA appliquée</li>
+            <li>Automatisation & technologies</li>
+          </ul>
+
+          <figure class="hero-signature" aria-hidden="true">
+            <img src="/assets/signature-home.png" alt="">
+          </figure>
+        </div>
+
+        <div>
+          <figure class="profile-photo">
+            <img src="/assets/jerome-home.png" alt="Portrait de Jérôme Jeannin">
+          </figure>
+
+          <aside class="author-aside">
+            <ul>
+              <li><strong>Focus</strong><span>Data, Analytics, BI, IA appliquée</span></li>
+              <li><strong>Contexte</strong><span>Conseil, finance, assurance, environnements exigeants</span></li>
+              <li><strong>Stack</strong><span>Power BI, SQL, Python, Azure, modélisation et reporting</span></li>
+              <li><strong>Langues</strong><span>Français, anglais, espagnol</span></li>
             </ul>
-          </article>
+          </aside>
         </div>
       </div>
     </section>
 
-    <section id="contact" class="section alt">
-      <div class="container contact-layout">
-        <div class="reveal">
-          <h2 class="section-title">Échanger</h2>
-          <p class="section-intro">Je suis ouvert aux échanges autour de sujets data, analytics, BI, IA appliquée, automatisation, cadrage ou transformation. Le plus simple est de me contacter par e-mail, LinkedIn ou via le formulaire ci-contre.</p>
-          <div class="contact-links">
-            <a class="btn" href="mailto:jeanninjerome6@gmail.com">Email</a>
-            <a class="btn btn--outline" href="https://www.linkedin.com/in/j%C3%A9r%C3%B4me-jeannin-151023a6/?locale=fr_FR" target="_blank" rel="noopener">LinkedIn</a>
+    <section class="contact-section">
+      <div class="container">
+        <div class="contact-card">
+          <div class="contact-copy">
+            <h2>Échanger</h2>
+            <p>Je suis ouvert aux échanges autour de sujets data, analytics, BI, IA appliquée, automatisation, cadrage ou transformation. Le plus simple est de me contacter par e-mail ou via le formulaire ci-contre.</p>
+
+            <div class="contact-links">
+              <a class="btn" href="mailto:contact@hestiaaura.com">Email</a>
+            </div>
           </div>
+
+          <form class="contact-form" action="mailto:contact@hestiaaura.com" method="post" enctype="text/plain">
+            <input type="text" name="Nom" placeholder="Nom" required>
+            <input type="email" name="Email" placeholder="E-mail" required>
+            <input type="text" name="Sujet" placeholder="Sujet">
+            <textarea name="Message" placeholder="Votre message"></textarea>
+            <button class="btn" type="submit">Envoyer</button>
+          </form>
         </div>
-
-        <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" class="contact-form reveal">
-          <h3 class="section-title" style="margin:0 0 12px 0;">Formulaire de contact</h3>
-          <input type="hidden" name="access_key" value="0fd6281b-4d44-4857-8c2f-f70937b432fa">
-          <input type="hidden" name="subject" value="Contact site - Jérôme Jeannin">
-          <input type="hidden" name="from_name" value="Site Jérôme Jeannin">
-          <input type="checkbox" name="botcheck" class="hidden" style="display:none;">
-
-          <div class="form-row"><label>Nom</label><input type="text" name="name" required></div>
-          <div class="form-row"><label>Email</label><input type="email" name="email" required></div>
-          <div class="form-row"><label>Message</label><textarea name="message" rows="4" required></textarea></div>
-
-          <button type="submit" class="btn">Envoyer</button>
-          <p class="form-status" aria-live="polite"></p>
-        </form>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <span>© <span id="y"></span> Jérôme Jeannin | Hestia Aura</span>
+      <span>© <span id="y"></span> Jérôme Jeannin</span>
       <a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
     </div>
   </footer>
 
-  <script src="/app.js?v=final4"></script>
-  <script>
-    (function(){
-      const intro = document.getElementById('intro');
-      if(!intro) return;
-      const video = document.getElementById('introVideo');
-      const skip  = document.getElementById('introSkip');
-
-      const close = () => {
-        if (!intro) return;
-        intro.style.pointerEvents = 'none';
-        intro.style.opacity = '0';
-        intro.setAttribute('aria-hidden','true');
-        try { intro.remove(); } catch(e) {}
-      };
-
-      const qs = new URLSearchParams(location.search);
-      if (qs.get('intro') === '0' || qs.get('nointro') === '1') { close(); return; }
-
-      if (skip)  skip.addEventListener('click', (e)=>{ e.preventDefault(); close(); });
-      if (video) { video.addEventListener('ended', close); video.addEventListener('error', close); }
-
-      setTimeout(close, 3500);
-    })();
-  </script>
+  <script src="/app.js?v=index-final-fr"></script>
 </body>
 </html>
