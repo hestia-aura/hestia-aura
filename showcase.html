@@ -1,131 +1,669 @@
-<!DOCTYPE html><html lang="fr"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Showcase — Démos Data/BI/IA</title>
-<link rel="icon" href="/assets/logo.jpg"><link rel="apple-touch-icon" href="/assets/logo.jpg">
-<link rel="stylesheet" href="/styles.css?v=final3">
-</head><body>
-<header class="site-header"><div class="container header-inner">
-  <a class="brand" href="/"><img src="/assets/logo.jpg" class="brand-mark" alt="logo"><span class="brand-name">Hestia <strong>Aura</strong></span></a>
-  <nav class="nav"><a href="/">Accueil</a><a href="/about.html">À propos</a><a href="/showcase.html">Showcase</a><a class="btn btn--sm" href="/en/showcase.html">EN</a></nav>
-</div></header>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Cas d'usage & solutions data - sélection de problématiques concrètes autour du pilotage, de la structuration de données, de l'automatisation et de l'IA appliquée.">
+  <meta property="og:title" content="Showcase | Cas d'usage & solutions data">
+  <meta property="og:description" content="Une sélection de cas d'usage illustrant des problématiques concrètes de pilotage, de structuration de données, d'automatisation et d'IA appliquée.">
+  <title>Showcase | Cas d'usage & solutions data</title>
+  <link rel="icon" href="/assets/logo.jpg">
+  <link rel="apple-touch-icon" href="/assets/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=showcase-fr-v1">
+  <style>
+    :root{
+      --bg:#07090f;
+      --panel:#0d111a;
+      --panel-2:#0f1420;
+      --line:rgba(255,255,255,.08);
+      --text:#eef1f6;
+      --muted:#b8c0cf;
+      --accent:#6c6cff;
+      --accent-2:#4fd2ff;
+      --accent-3:#8a5bff;
+      --shadow:0 18px 50px rgba(0,0,0,.32);
+    }
 
-<main id="top">
-  <section class="hero"><div class="container">
-    <h1>Showcase — démos Data/BI/IA</h1>
-    <p>Mini-démos front-end (données factices) pour illustrer quelques cas d’usage.</p>
-    <ul class="hero-badges"><li>Azure · Power BI · Python</li><li>Intégrations · n8n/Make</li></ul>
-  </div></section>
+    body{
+      background:var(--bg);
+      color:var(--text);
+    }
 
-  <section class="section"><div class="container">
-    <div class="cards">
+    .container{max-width:1320px;}
 
-      <!-- Carte Python -->
-      <a class="card" href="/demos/python/" aria-label="Ouvrir la démo Python — KPIs, qualité & mini-app">
-        <h3>Python — KPIs, qualité & mini-app</h3>
-        <p>Pipeline pédagogique : génération, ingestion & nettoyage, KPIs mensuels + graphiques, contrôles qualité & journal, mini-app Streamlit.</p>
-        <div class="pills">
-          <span class="pill">Python</span>
-          <span class="pill">Pandas</span>
-          <span class="pill">SQLite</span>
-          <span class="pill">Streamlit</span>
-        </div>
-        <p class="muted" style="margin-top:8px">
-          <strong>Focus :</strong> scripts reproductibles, exports CSV/PNG, traçabilité simple.<br>
-          <em>Bonus :</em> bouton d’API externe (FX/météo) qui écrit dans le journal.
-        </p>
+    .brand--personal{gap:12px;}
+    .brand-text{display:flex;flex-direction:column;line-height:1.05;}
+    .brand-text .brand-name{font-size:15px;font-weight:700;letter-spacing:.01em;}
+    .brand-text .brand-label{font-size:11px;color:#aeb6c4;font-weight:500;text-transform:uppercase;letter-spacing:.14em;}
+
+    .page-title,
+    .section-title,
+    .section-kicker,
+    .usecase-title{
+      font-family:"Space Grotesk",Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      letter-spacing:-.03em;
+    }
+
+    .showcase-hero{
+      position:relative;
+      padding:88px 0 42px;
+      border-bottom:1px solid rgba(255,255,255,.05);
+      overflow:hidden;
+    }
+
+    .showcase-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.02fr) minmax(360px,.98fr);
+      gap:34px;
+      align-items:center;
+    }
+
+    .section-kicker{
+      display:inline-block;
+      margin:0 0 12px;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:#aeb6c4;
+    }
+
+    .page-title{
+      margin:0 0 16px;
+      max-width:760px;
+      font-size:clamp(40px,5vw,72px);
+      line-height:.98;
+    }
+
+    .page-subtitle{
+      margin:0;
+      max-width:760px;
+      color:#e5e7eb;
+      font-size:19px;
+      line-height:1.75;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:28px;
+    }
+
+    .hero-visual{
+      position:relative;
+      min-height:420px;
+      border-radius:28px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      background:
+        radial-gradient(circle at 82% 16%, rgba(138,91,255,.28) 0, transparent 22%),
+        radial-gradient(circle at 18% 78%, rgba(79,210,255,.18) 0, transparent 20%),
+        linear-gradient(140deg, rgba(8,11,22,.98), rgba(11,17,31,.95));
+      box-shadow:var(--shadow);
+      isolation:isolate;
+    }
+
+    .flow-layer{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:.96;
+    }
+
+    .flow-line{
+      position:absolute;
+      height:4px;
+      border-radius:999px;
+      background:linear-gradient(90deg, rgba(79,210,255,.15), rgba(79,210,255,.95), rgba(138,91,255,.9));
+      box-shadow:0 0 16px rgba(79,210,255,.35);
+      transform-origin:left center;
+    }
+
+    .flow-line::after{
+      content:"";
+      position:absolute;
+      right:-3px;
+      top:50%;
+      width:10px;
+      height:10px;
+      margin-top:-5px;
+      border-radius:50%;
+      background:#9ee9ff;
+      box-shadow:0 0 18px rgba(79,210,255,.65);
+    }
+
+    .flow-line.line-1{width:66%; top:18%; left:-3%; transform:rotate(7deg);}
+    .flow-line.line-2{width:58%; top:31%; left:10%; transform:rotate(-10deg);}
+    .flow-line.line-3{width:76%; top:47%; left:-5%; transform:rotate(6deg);}
+    .flow-line.line-4{width:54%; top:60%; left:18%; transform:rotate(-8deg);}
+    .flow-line.line-5{width:68%; top:74%; left:3%; transform:rotate(10deg);}
+    .flow-line.line-6{width:44%; top:82%; left:24%; transform:rotate(-14deg);}
+
+    .flow-node{
+      position:absolute;
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:#fff;
+      box-shadow:0 0 18px rgba(109,124,255,.6);
+      opacity:.95;
+    }
+
+    .flow-node.n1{top:16%; left:18%;}
+    .flow-node.n2{top:24%; left:56%;}
+    .flow-node.n3{top:40%; left:24%;}
+    .flow-node.n4{top:51%; left:58%;}
+    .flow-node.n5{top:68%; left:36%;}
+    .flow-node.n6{top:77%; left:71%;}
+
+    .hero-panel{
+      position:absolute;
+      left:28px;
+      right:28px;
+      bottom:28px;
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+      z-index:2;
+    }
+
+    .hero-chip{
+      padding:14px 12px;
+      border-radius:18px;
+      background:rgba(10,14,25,.72);
+      border:1px solid rgba(255,255,255,.08);
+      backdrop-filter:blur(8px);
+      box-shadow:0 8px 24px rgba(0,0,0,.24);
+      text-align:center;
+      font-size:14px;
+      font-weight:600;
+      color:#eef1f6;
+    }
+
+    .section{
+      padding:62px 0;
+    }
+
+    .section-title{
+      margin:0 0 18px;
+      font-size:34px;
+      line-height:1.06;
+    }
+
+    .section-copy{
+      max-width:960px;
+      color:#e5e7eb;
+      font-size:18px;
+      line-height:1.82;
+    }
+
+    .section-copy p{margin:0;}
+    .section-copy p + p{margin-top:18px;}
+
+    .category-pills{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      padding:0;
+      margin:22px 0 0;
+      list-style:none;
+    }
+
+    .category-pills li{
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      color:#d8dde6;
+      font-size:14px;
+      line-height:1;
+      background:rgba(255,255,255,.02);
+    }
+
+    .usecase-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:20px;
+      margin-top:24px;
+    }
+
+    .usecase-card{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      min-height:290px;
+      padding:24px 22px;
+      border-radius:24px;
+      background:linear-gradient(180deg, rgba(11,15,27,.96), rgba(9,13,22,.92));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 12px 30px rgba(0,0,0,.22);
+      color:inherit;
+      text-decoration:none;
+      transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .usecase-card:hover{
+      transform:translateY(-3px);
+      border-color:rgba(108,108,255,.35);
+      box-shadow:0 18px 34px rgba(0,0,0,.28);
+    }
+
+    .usecase-header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+    }
+
+    .usecase-title{
+      margin:0;
+      font-size:24px;
+      line-height:1.08;
+    }
+
+    .usecase-arrow{
+      flex:0 0 auto;
+      color:#fff;
+      opacity:.75;
+      font-size:22px;
+      line-height:1;
+      margin-top:2px;
+    }
+
+    .usecase-block{
+      display:grid;
+      gap:10px;
+    }
+
+    .usecase-label{
+      color:#aeb6c4;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+    }
+
+    .usecase-text{
+      color:#e5e7eb;
+      font-size:16px;
+      line-height:1.7;
+    }
+
+    .usecase-pills{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:auto;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:30px;
+      padding:0 12px;
+      border-radius:999px;
+      background:linear-gradient(90deg, rgba(108,108,255,.94), rgba(118,90,255,.92));
+      color:#fff;
+      font-size:13px;
+      font-weight:600;
+      box-shadow:0 0 16px rgba(108,108,255,.18);
+    }
+
+    .method-card,
+    .contact-card{
+      padding:28px;
+      background:linear-gradient(180deg, rgba(11,15,27,.96), rgba(9,13,22,.92));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:24px;
+      box-shadow:0 12px 32px rgba(0,0,0,.22);
+    }
+
+    .method-card .section-copy,
+    .contact-copy{
+      max-width:none;
+    }
+
+    .contact-wrap{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(320px,380px);
+      gap:26px;
+      align-items:start;
+    }
+
+    .contact-copy h2{
+      margin:0 0 16px;
+      font-size:32px;
+      font-family:"Space Grotesk",Inter,system-ui,sans-serif;
+      letter-spacing:-.03em;
+    }
+
+    .contact-copy p{
+      margin:0;
+      color:#e5e7eb;
+      font-size:18px;
+      line-height:1.78;
+    }
+
+    .contact-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:24px;
+    }
+
+    .site-footer{
+      border-top:1px solid rgba(255,255,255,.06);
+    }
+
+    @media (max-width:1180px){
+      .showcase-grid,
+      .contact-wrap{
+        grid-template-columns:1fr;
+      }
+      .hero-visual{
+        min-height:380px;
+      }
+      .hero-panel{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+
+    @media (max-width:980px){
+      .usecase-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width:760px){
+      .container{padding:0 18px;}
+      .showcase-hero{padding:56px 0 28px;}
+      .section{padding:46px 0;}
+      .page-subtitle,
+      .section-copy,
+      .contact-copy p{
+        font-size:16px;
+        line-height:1.7;
+      }
+      .hero-panel{
+        grid-template-columns:1fr;
+        left:22px;
+        right:22px;
+        bottom:22px;
+      }
+      .brand-text .brand-label{font-size:10px;letter-spacing:.12em;}
+      .method-card,
+      .contact-card{padding:22px;}
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
+        <img src="/assets/logo.jpg" alt="logo" class="brand-mark">
+        <span class="brand-text">
+          <span class="brand-name">Jérôme Jeannin</span>
+          <span class="brand-label">Hestia Aura</span>
+        </span>
       </a>
 
-      <!-- Carte SQL -->
-      <article class="card">
-        <a href="/demos/sql/">
-          <h3>SQL — Modèle, requêtes, qualité & pipeline</h3>
-          <p>Ce que l’on peut faire avec SQL : modèle relationnel, KPI mensuels, requêtes optimisées (<em>sargable</em>), contrôles qualité et journal d’exécution.</p>
-          <div class="pills">
-            <span class="pill">SQL Server</span>
-            <span class="pill">SSMS</span>
-            <span class="pill">ETL</span>
-            <span class="pill">Data Quality</span>
-          </div>
-          <p class="muted" style="margin-top:8px">
-            <strong>Cas illustré :</strong> pipeline <em>staging → clean → mart</em> avec zone audit.<br>
-            <em>Focus :</em> modèle, performances, traçabilité.
-          </p>
-        </a>
-      </article>
-
-      <!-- Carte Power BI -->
-      <a class="card reveal" href="/demos/powerbi/" aria-label="Ouvrir la démo Power BI — IDF (2011–2022)">
-        <h3>Power BI — Démographie & Économie IDF (2011–2022)</h3>
-        <p>Rapport combinant préparation Power Query et modèle DAX. Trois volets : P1 Évolution, P2 Répartition, P3 Scénarios & Indicateurs.</p>
-        <div class="pills">
-          <span class="pill">Power BI</span>
-          <span class="pill">Power Query</span>
-          <span class="pill">DAX</span>
-        </div>
-        <p class="muted"><strong>Étude de cas :</strong> indicateurs de recensement et d’économie pour l’Île-de-France (2011–2022). <em>Focus :</em> séries temporelles, carte, KPI ; captures zoomables.</p>
-      </a>
-
-      <!-- Autres cartes existantes -->
-      <article class="card">
-        <a href="/demos/pipeline/">
-          <h3>Pipeline & Dashboard</h3>
-          <p>ETL mock (Extract → Transform → Load), table normalisée, KPIs et graphiques. Export CSV.</p>
-          <div class="pills">
-            <span class="pill">ETL</span><span class="pill">CSV</span><span class="pill">KPIs</span><span class="pill">Charts</span>
-          </div>
-          <p class="muted" style="margin-top:8px">
-            <strong>Étude de cas :</strong> reporting mensuel dispersé → normalisation + KPIs CHF.
-            <em>Résultat attendu :</em> ~50 % de temps de préparation en moins, cohérence des chiffres.
-          </p>
-        </a>
-      </article>
-
-      <a class="card" href="/demos/invoices/">
-        <h3>Extraction de factures</h3>
-        <p>Champs clés + lignes d’articles → JSON exploitable → export CSV.</p>
-        <div class="pills"><span class="pill">Suisse/UE/US</span><span class="pill">CSV</span><span class="pill">JSON</span></div>
-        <p class="muted" style="margin-top:8px">
-          <strong>Étude de cas :</strong> saisie manuelle de factures (CH/EU/US) → extraction structurée.
-          <em>Résultat attendu :</em> moins d’erreurs, intégration ERP plus rapide.
-        </p>
-      </a>
-
-      <a class="card" href="/demos/email-router/">
-        <h3>Router d’e-mails</h3>
-        <p>Résumé + classification + aiguillage fictifs vers CRM/support.</p>
-        <div class="pills"><span class="pill">LLM</span><span class="pill">Workflow</span></div>
-        <p class="muted" style="margin-top:8px">
-          <strong>Étude de cas :</strong> boîte partagée saturée → résumé, classification, routage.
-          <em>Résultat attendu :</em> triage et délais de traitement réduits.
-        </p>
-      </a>
-
-      <a class="card" href="/demos/invoices/?sample=ch">
-        <h3>QR-facture (Suisse)</h3>
-        <p>Aperçu des champs clés et de la référence QR (mock) ; export CSV.</p>
-        <div class="pills"><span class="pill">Suisse</span><span class="pill">Paiements</span></div>
-        <p class="muted" style="margin-top:8px">
-          <strong>Étude de cas :</strong> spécificités CH (IBAN, référence QR) → lecture/validation.
-          <em>Résultat attendu :</em> conformité et rapprochement accrus.
-        </p>
-      </a>
-
-      <a class="card" href="/demos/rag/">
-        <h3>RAG interne</h3>
-        <p>Recherche simplifiée dans un corpus JSON (front-end only).</p>
-        <div class="pills"><span class="pill">Index</span><span class="pill">Search</span></div>
-        <p class="muted" style="margin-top:8px">
-          <strong>Étude de cas :</strong> documents internes dispersés → recherche FR/EN + tags + surlignage.
-          <em>Résultat attendu :</em> réponses sourcées plus rapides.
-        </p>
-      </a>
-
+      <nav class="nav">
+        <a href="/">Accueil</a>
+        <a href="/about.html">À propos</a>
+        <a href="/showcase.html">Showcase</a>
+        <a href="/en/showcase.html" class="btn btn--sm">EN</a>
+      </nav>
     </div>
-  </div></section>
-</main>
+  </header>
 
-<footer class="site-footer"><div class="container footer-inner">
-  <span>© <span id="y"></span> Jérôme Jeannin</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
-</div></footer>
-<script src="/app.js?v=final3"></script>
-</body></html>
+  <main>
+    <section class="showcase-hero">
+      <div class="container showcase-grid">
+        <div>
+          <p class="section-kicker">Showcase</p>
+          <h1 class="page-title">Cas d’usage & solutions data</h1>
+          <p class="page-subtitle">Une sélection de cas d’usage illustrant des problématiques concrètes de pilotage, de structuration de données, d’automatisation et d’IA appliquée. L’objectif n’est pas de montrer des démonstrations isolées, mais des façons concrètes de traiter un besoin métier.</p>
+
+          <div class="hero-actions">
+            <a class="btn" href="#usecases">Voir les cas d’usage</a>
+            <a class="btn btn--outline" href="mailto:contact@hestiaaura.com">Me contacter</a>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="flow-layer">
+            <div class="flow-line line-1"></div>
+            <div class="flow-line line-2"></div>
+            <div class="flow-line line-3"></div>
+            <div class="flow-line line-4"></div>
+            <div class="flow-line line-5"></div>
+            <div class="flow-line line-6"></div>
+            <span class="flow-node n1"></span>
+            <span class="flow-node n2"></span>
+            <span class="flow-node n3"></span>
+            <span class="flow-node n4"></span>
+            <span class="flow-node n5"></span>
+            <span class="flow-node n6"></span>
+          </div>
+
+          <div class="hero-panel">
+            <div class="hero-chip">BI & Reporting</div>
+            <div class="hero-chip">Data pipeline</div>
+            <div class="hero-chip">Automatisation</div>
+            <div class="hero-chip">IA appliquée</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-copy">
+          <p>Ces cas ne sont pas des démonstrations isolées, mais des lectures structurées de problématiques réelles : comprendre un besoin, organiser la donnée, choisir le bon niveau de modélisation et produire un résultat exploitable.</p>
+        </div>
+
+        <ul class="category-pills">
+          <li>BI & Reporting</li>
+          <li>Data pipeline</li>
+          <li>Automatisation</li>
+          <li>IA appliquée</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="usecases">
+      <div class="container">
+        <h2 class="section-title">Cas d’usage</h2>
+
+        <div class="usecase-grid">
+          <a class="usecase-card" href="/demos/pipeline/">
+            <div class="usecase-header">
+              <h3 class="usecase-title">Pipeline & Dashboard</h3>
+              <span class="usecase-arrow">→</span>
+            </div>
+            <div class="usecase-block">
+              <span class="usecase-label">Problématique</span>
+              <div class="usecase-text">Passer de données brutes à un pilotage lisible et fiable.</div>
+            </div>
+            <div class="usecase-block">
+              <span class="usecase-label">Ce que le cas illustre</span>
+              <div class="usecase-text">Structuration d’un flux de données, préparation et restitution sous forme de dashboard.</div>
+            </div>
+            <div class="usecase-pills">
+              <span class="pill">Pipeline</span>
+              <span class="pill">Modélisation</span>
+              <span class="pill">Reporting</span>
+            </div>
+          </a>
+
+          <a class="usecase-card" href="/demos/powerbi/">
+            <div class="usecase-header">
+              <h3 class="usecase-title">Analyse Power BI</h3>
+              <span class="usecase-arrow">→</span>
+            </div>
+            <div class="usecase-block">
+              <span class="usecase-label">Problématique</span>
+              <div class="usecase-text">Construire un reporting pertinent à partir de données métiers.</div>
+            </div>
+            <div class="usecase-block">
+              <span class="usecase-label">Ce que le cas illustre</span>
+              <div class="usecase-text">Modélisation, création d’indicateurs et visualisation pour faciliter la prise de décision.</div>
+            </div>
+            <div class="usecase-pills">
+              <span class="pill">Power BI</span>
+              <span class="pill">DAX</span>
+              <span class="pill">Indicateurs</span>
+            </div>
+          </a>
+
+          <a class="usecase-card" href="/demos/invoices/">
+            <div class="usecase-header">
+              <h3 class="usecase-title">Extraction de factures IA</h3>
+              <span class="usecase-arrow">→</span>
+            </div>
+            <div class="usecase-block">
+              <span class="usecase-label">Problématique</span>
+              <div class="usecase-text">Automatiser le traitement de documents structurés comme les factures.</div>
+            </div>
+            <div class="usecase-block">
+              <span class="usecase-label">Ce que le cas illustre</span>
+              <div class="usecase-text">Extraction de données, structuration et production d’un format exploitable.</div>
+            </div>
+            <div class="usecase-pills">
+              <span class="pill">IA</span>
+              <span class="pill">OCR</span>
+              <span class="pill">Export</span>
+            </div>
+          </a>
+
+          <a class="usecase-card" href="/demos/sql/">
+            <div class="usecase-header">
+              <h3 class="usecase-title">Requête & analyse SQL</h3>
+              <span class="usecase-arrow">→</span>
+            </div>
+            <div class="usecase-block">
+              <span class="usecase-label">Problématique</span>
+              <div class="usecase-text">Interroger et structurer des données pour répondre à un besoin analytique.</div>
+            </div>
+            <div class="usecase-block">
+              <span class="usecase-label">Ce que le cas illustre</span>
+              <div class="usecase-text">Jointures, agrégations et préparation de datasets pour le reporting.</div>
+            </div>
+            <div class="usecase-pills">
+              <span class="pill">SQL</span>
+              <span class="pill">Agrégation</span>
+              <span class="pill">Dataset</span>
+            </div>
+          </a>
+
+          <a class="usecase-card" href="/demos/python/">
+            <div class="usecase-header">
+              <h3 class="usecase-title">Automatisation Python</h3>
+              <span class="usecase-arrow">→</span>
+            </div>
+            <div class="usecase-block">
+              <span class="usecase-label">Problématique</span>
+              <div class="usecase-text">Automatiser un traitement répétitif ou structurer une logique de transformation.</div>
+            </div>
+            <div class="usecase-block">
+              <span class="usecase-label">Ce que le cas illustre</span>
+              <div class="usecase-text">Scripts de traitement de données et automatisation de flux simples.</div>
+            </div>
+            <div class="usecase-pills">
+              <span class="pill">Python</span>
+              <span class="pill">Script</span>
+              <span class="pill">Automatisation</span>
+            </div>
+          </a>
+
+          <a class="usecase-card" href="/demos/rag/">
+            <div class="usecase-header">
+              <h3 class="usecase-title">Recherche intelligente documentaire</h3>
+              <span class="usecase-arrow">→</span>
+            </div>
+            <div class="usecase-block">
+              <span class="usecase-label">Problématique</span>
+              <div class="usecase-text">Interroger un corpus documentaire de manière plus rapide et contextualisée.</div>
+            </div>
+            <div class="usecase-block">
+              <span class="usecase-label">Ce que le cas illustre</span>
+              <div class="usecase-text">Indexation de contenu et restitution contextualisée via IA.</div>
+            </div>
+            <div class="usecase-pills">
+              <span class="pill">RAG</span>
+              <span class="pill">Recherche</span>
+              <span class="pill">Knowledge</span>
+            </div>
+          </a>
+
+          <a class="usecase-card" href="/demos/email-router/">
+            <div class="usecase-header">
+              <h3 class="usecase-title">Routage d’e-mails automatisé</h3>
+              <span class="usecase-arrow">→</span>
+            </div>
+            <div class="usecase-block">
+              <span class="usecase-label">Problématique</span>
+              <div class="usecase-text">Trier et orienter automatiquement des flux d’e-mails.</div>
+            </div>
+            <div class="usecase-block">
+              <span class="usecase-label">Ce que le cas illustre</span>
+              <div class="usecase-text">Classification et automatisation d’un processus métier simple.</div>
+            </div>
+            <div class="usecase-pills">
+              <span class="pill">Workflow</span>
+              <span class="pill">Triage</span>
+              <span class="pill">Automatisation</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="method-card">
+          <h2 class="section-title">Approche</h2>
+          <div class="section-copy">
+            <p>Chaque cas présenté ici suit une logique simple : partir d’un besoin métier, structurer la donnée, choisir le bon niveau de transformation et produire une solution exploitable. L’objectif n’est pas la complexité technique, mais la lisibilité, la robustesse et l’utilité.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="contact-card">
+          <div class="contact-wrap">
+            <div class="contact-copy">
+              <h2>Échanger autour d’un besoin</h2>
+              <p>Je suis ouvert aux échanges autour de sujets data, analytics, BI, automatisation et IA appliquée. Que ce soit pour structurer un besoin, améliorer un existant ou explorer un cas d’usage.</p>
+
+              <div class="contact-actions">
+                <a class="btn" href="mailto:contact@hestiaaura.com">Email</a>
+                <a class="btn btn--outline" href="https://www.linkedin.com/in/j%C3%A9r%C3%B4me-jeannin-151023a6/?locale=fr_FR" target="_blank" rel="noopener">LinkedIn</a>
+              </div>
+            </div>
+
+            <div class="section-copy" style="max-width:none;">
+              <p>Cette page a vocation à montrer des solutions lisibles, structurées et ancrées dans des besoins concrets. Les démonstrations seront ensuite retravaillées une par une pour renforcer le contexte, la pédagogie et la lecture métier.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© <span id="y"></span> Jérôme Jeannin</span>
+      <a href="mailto:contact@hestiaura.com">contact@hestiaura.com</a>
+    </div>
+  </footer>
+
+  <script src="/app.js?v=showcase-fr-v1"></script>
+</body>
+</html>
