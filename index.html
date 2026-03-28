@@ -9,9 +9,12 @@
   <title>Jérôme Jeannin | Data, Analytics, BI, IA</title>
   <link rel="icon" href="/assets/logo.jpg">
   <link rel="apple-touch-icon" href="/assets/logo.jpg">
-  <link rel="stylesheet" href="/styles.css?v=home-fr-v2">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=home-fr-v3">
   <style>
-    /* Home FR only */
+    .container{max-width:1280px;}
     .card:not(a)::after{content:none !important;}
     a.pill{display:inline-block;}
 
@@ -21,23 +24,32 @@
     .brand-text .brand-label{font-size:11px;color:#aeb6c4;font-weight:500;text-transform:uppercase;letter-spacing:.14em;}
 
     .intro-overlay{padding:24px;}
+    .intro-title,
+    .home-title,
+    .section-title{
+      font-family:"Space Grotesk",Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      letter-spacing:-.03em;
+    }
     .intro-title{
-      max-width:900px;
+      max-width:980px;
       margin:0 auto;
       text-align:center;
-      font-size:clamp(34px,5vw,86px);
-      line-height:1.08;
+      font-size:clamp(36px,5.4vw,88px);
+      line-height:1.02;
+      font-weight:700;
+      text-wrap:balance;
     }
+    .intro-title span{display:block;}
     .intro-quote{
       position:absolute;
       left:24px;
       bottom:22px;
-      max-width:420px;
-      color:rgba(255,255,255,.64);
-      font-size:13px;
+      color:rgba(255,255,255,.7);
+      font-size:14px;
       font-style:italic;
-      line-height:1.5;
+      line-height:1.4;
       text-align:left;
+      white-space:nowrap;
     }
     .intro-credit{
       right:24px;
@@ -47,11 +59,11 @@
       color:rgba(255,255,255,.92);
     }
 
-    .hero{padding:88px 0 56px;}
+    .hero{padding:92px 0 60px;}
     .home-hero{
       display:grid;
-      grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);
-      gap:48px;
+      grid-template-columns:minmax(0,1.1fr) minmax(360px,.9fr);
+      gap:64px;
       align-items:center;
     }
     .home-eyebrow{
@@ -65,15 +77,15 @@
     }
     .home-title{
       margin:0 0 18px;
-      font-size:clamp(34px,5vw,56px);
-      line-height:1.05;
+      font-size:clamp(38px,4.8vw,62px);
+      line-height:1.02;
     }
     .home-lead{
       margin:0 0 14px;
-      max-width:720px;
+      max-width:760px;
       color:#e5e7eb;
       font-size:18px;
-      line-height:1.7;
+      line-height:1.72;
     }
     .hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0 18px;}
     .hero-cta .btn{
@@ -98,7 +110,7 @@
 
     .hero-side{display:flex;flex-direction:column;align-items:flex-end;gap:18px;}
     .hero-photo{
-      width:min(100%,420px);
+      width:min(100%,430px);
       aspect-ratio:1/1;
       overflow:hidden;
       border-radius:50%;
@@ -108,7 +120,7 @@
     }
     .hero-photo img{width:100%;height:100%;object-fit:cover;display:block;}
     .hero-proof{
-      width:min(100%,420px);
+      width:min(100%,430px);
       background:#0f1117;
       border:1px solid rgba(255,255,255,.08);
       border-radius:16px;
@@ -120,12 +132,16 @@
     .hero-proof li + li{margin-top:10px;}
     .hero-proof strong{min-width:110px;color:#c7ccd3;font-weight:600;}
 
-    .section-intro{
-      max-width:860px;
+    .section-intro,
+    .section-copy{
+      max-width:900px;
       color:#e5e7eb;
       font-size:18px;
-      line-height:1.7;
+      line-height:1.75;
     }
+    .section-copy p{margin:0;}
+    .section-copy p + p{margin-top:16px;}
+
     .cards-4{grid-template-columns:repeat(4,1fr);}
     @media (max-width:1100px){.cards-4{grid-template-columns:repeat(2,1fr);}}
     @media (max-width:900px){.cards-4{grid-template-columns:1fr;}}
@@ -133,6 +149,20 @@
     .cred-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
     @media (max-width:1100px){.cred-grid{grid-template-columns:repeat(2,1fr);}}
     @media (max-width:900px){.cred-grid{grid-template-columns:1fr;}}
+
+    .cert-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;}
+    .cert-list li{line-height:1.55;}
+    .subtle-link{
+      color:#e5e7eb;
+      text-decoration:underline;
+      text-decoration-color:rgba(255,255,255,.28);
+      text-underline-offset:3px;
+      transition:text-decoration-color .2s ease, color .2s ease;
+    }
+    .subtle-link:hover{
+      color:#fff;
+      text-decoration-color:rgba(255,255,255,.6);
+    }
 
     .contact-layout{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;}
     @media (max-width:980px){.contact-layout{grid-template-columns:1fr;}}
@@ -147,9 +177,16 @@
     }
 
     @media (max-width:640px){
-      .hero{padding:52px 0 44px;}
-      .home-lead,.section-intro{font-size:16px;line-height:1.65;}
-      .intro-quote{left:16px;right:80px;bottom:18px;max-width:none;font-size:11px;}
+      .container{padding:0 18px;}
+      .hero{padding:56px 0 44px;}
+      .home-lead,.section-intro,.section-copy{font-size:16px;line-height:1.68;}
+      .intro-quote{
+        left:16px;
+        right:88px;
+        bottom:18px;
+        font-size:12px;
+        white-space:normal;
+      }
       .intro-credit{right:16px;bottom:18px;font-size:12px;}
       .brand-text .brand-label{font-size:10px;letter-spacing:.12em;}
       .hero-proof strong{min-width:96px;}
@@ -163,7 +200,7 @@
       <source src="/assets/intro.mp4" type="video/mp4">
     </video>
     <div class="intro-overlay">
-      <h1 class="intro-title">Lire le réel par la donnée</h1>
+      <h1 class="intro-title"><span>Lire le réel</span><span>par la donnée</span></h1>
       <div class="intro-quote">"Les mathématiques sont la langue avec laquelle Dieu a écrit l'univers." Galilée</div>
       <div class="intro-credit">Jérôme Jeannin</div>
       <button id="introSkip" class="intro-arrow" aria-label="Entrer"></button>
@@ -194,7 +231,7 @@
         <div class="hero-copy reveal">
           <p class="home-eyebrow">Data, Analytics, BI, IA</p>
           <h1 class="home-title">Senior Consultant Analytics chez Sopra Steria</h1>
-          <p class="home-lead">Je travaille sur des sujets Data, Analytics et BI avec une approche orientée métier, lisibilité, robustesse et impact. Ce site présente ma manière d'aborder la donnée en entreprise, à travers des cas d'usage, des solutions, des contenus pédagogiques et des analyses.</p>
+          <p class="home-lead">J'aborde la donnée comme un outil de lecture, de pilotage et de transformation. Ce site rassemble des cas d'usage, des solutions, des analyses, des contenus pédagogiques et des réflexions autour de la Data, de l'Analytics, de la BI, de l'IA et des technologies appliquées, avec une approche concrète, lisible et orientée métier.</p>
           <div class="hero-cta">
             <a href="/showcase.html" class="btn">Voir le showcase</a>
             <a href="mailto:jeanninjerome6@gmail.com" class="btn btn--dark">Me contacter</a>
@@ -227,7 +264,7 @@
     <section class="section">
       <div class="container">
         <h2 class="section-title reveal">Approche</h2>
-        <p class="section-intro reveal">Je conçois et structure des approches data utiles au pilotage, à l'analyse et à la transformation des organisations. Mon travail se situe à l'interface entre enjeux métier, structuration des données, reporting, visualisation, automatisation et technologies appliquées. Ce site a vocation à présenter cette approche, de manière claire, concrète et progressive.</p>
+        <p class="section-intro reveal">Mon travail consiste à relier des enjeux métier à des flux, des modèles, des indicateurs et des outils réellement exploitables. J'interviens là où il faut clarifier un besoin, structurer des données, fiabiliser un reporting, industrialiser un traitement ou rendre une solution plus utile pour ses utilisateurs.</p>
       </div>
     </section>
 
@@ -279,9 +316,9 @@
       </div>
     </section>
 
-    <section id="credibilite" class="section alt">
+    <section id="references" class="section alt">
       <div class="container">
-        <h2 class="section-title reveal">Repères de crédibilité</h2>
+        <h2 class="section-title reveal">Parcours & références</h2>
         <div class="cred-grid">
           <article class="card reveal">
             <h3>Rôle actuel</h3>
@@ -296,8 +333,12 @@
             <p>Power BI, SQL, Python, Azure, modélisation, visualisation, qualité de données, documentation et logique de gouvernance.</p>
           </article>
           <article class="card reveal">
-            <h3>Repères complémentaires</h3>
-            <p>EDHEC Business School, Azure AI-900, TOEIC 915, français natif, anglais courant, espagnol courant.</p>
+            <h3>Formation & certifications</h3>
+            <ul class="cert-list">
+              <li><a class="subtle-link" href="/assets/certs/edhec-msc-diploma.pdf" target="_blank" rel="noopener">EDHEC Business School - Master (Bac+5), mention Excellent</a></li>
+              <li><a class="subtle-link" href="/assets/certs/ai-900-credentials.pdf" target="_blank" rel="noopener">Microsoft Azure AI-900</a></li>
+              <li><a class="subtle-link" href="/assets/certs/toeic-statement.pdf" target="_blank" rel="noopener">TOEIC 915pts</a></li>
+            </ul>
           </article>
         </div>
       </div>
@@ -306,7 +347,10 @@
     <section class="section">
       <div class="container">
         <h2 class="section-title reveal">Vision</h2>
-        <p class="section-intro reveal">Je m'intéresse aux sujets data à l'endroit où ils deviennent réellement utiles : mieux lire une situation, clarifier un pilotage, fiabiliser un processus ou rendre une solution plus adoptable. Cette vitrine a été pensée comme un actif de crédibilité, mais aussi comme un espace où partager des angles de travail, des cas concrets, des analyses et des contenus pédagogiques autour de la donnée.</p>
+        <div class="section-copy reveal">
+          <p>Je ne me suis pas d'abord intéressé aux mathématiques pour elles-mêmes, mais pour le moment où elles deviennent concrètes. Quand un chiffre permet de comprendre une situation, d'expliquer un écart ou d'éclairer une décision, il prend du sens - et c'est sans doute ce qui m'a amené vers la donnée, son traitement et son exploitation.</p>
+          <p>Ce site prolonge cette logique. On y trouve des cas d'usage, des angles de travail, des analyses et des contenus pensés pour des lecteurs qui s'intéressent à la Data non comme un sujet abstrait, mais comme un levier de compréhension, de pilotage et de transformation.</p>
+        </div>
       </div>
     </section>
 
@@ -347,10 +391,8 @@
     </div>
   </footer>
 
-  <script src="/app.js?v=final3"></script>
+  <script src="/app.js?v=final4"></script>
   <script>
-    /* Filet de sécurité pour l'intro : fin, erreur, clic, ou auto-fermeture après 3,5 s.
-       Désactivation pendant tests : ?intro=0 ou ?nointro=1 */
     (function(){
       const intro = document.getElementById('intro');
       if(!intro) return;
