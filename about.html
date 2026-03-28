@@ -130,14 +130,20 @@
     .about-footer{
       padding:46px 0 72px;
     }
-    .about-footer-inner{
-      display:grid;
-      grid-template-columns:minmax(0,1fr) auto;
-      gap:24px;
-      align-items:end;
-    }
+.about-footer-inner{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:32px;
+  align-items:end;
+}
+.about-footer-main{
+  min-width:0;
+  width:100%;
+  max-width:900px;
+}
 .about-footer-copy{
-  max-width:920px;
+  max-width:none;
+  width:100%;
   color:#e5e7eb;
   font-size:18px;
   line-height:1.8;
@@ -298,20 +304,20 @@
       </div>
     </section>
 
-    <section class="about-footer">
-      <div class="container about-footer-inner">
-        <div>
-          <div class="about-footer-copy">Je considère la donnée comme un outil de lecture, mais aussi comme un outil de mise en mouvement. Lorsqu'elle est bien structurée, bien comprise et bien exploitée, elle aide à voir plus clair, à mieux décider et à construire des solutions plus cohérentes. Ce site s'inscrit dans cette logique.</div>
-          <div class="about-actions">
-            <a class="btn" href="mailto:contact@hestiaaura.com">Email</a>
-            <a class="btn btn--outline" href="https://www.linkedin.com/in/j%C3%A9r%C3%B4me-jeannin-151023a6/?locale=fr_FR" target="_blank" rel="noopener">LinkedIn</a>
-          </div>
-        </div>
-        <figure class="signature-block" aria-hidden="true">
-          <img src="/assets/signature-home.png" alt="">
-        </figure>
+<section class="about-footer">
+  <div class="container about-footer-inner">
+    <div class="about-footer-main">
+      <div class="about-footer-copy">Je considère la donnée comme un outil de lecture, mais aussi comme un outil de mise en mouvement. Lorsqu'elle est bien structurée, bien comprise et bien exploitée, elle aide à voir plus clair, à mieux décider et à construire des solutions plus cohérentes. Ce site s'inscrit dans cette logique.</div>
+      <div class="about-actions">
+        <a class="btn" href="mailto:contact@hestiaaura.com">Email</a>
+        <a class="btn btn--outline" href="https://www.linkedin.com/in/j%C3%A9r%C3%B4me-jeannin-151023a6/?locale=fr_FR" target="_blank" rel="noopener">LinkedIn</a>
       </div>
-    </section>
+    </div>
+    <figure class="signature-block" aria-hidden="true">
+      <img src="/assets/signature-home.png" alt="">
+    </figure>
+  </div>
+</section>
   </main>
 
   <footer class="site-footer">
