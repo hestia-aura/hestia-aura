@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   // Clic bouton / fin vidéo / timeout garde-fou
   if (skip)  skip.addEventListener('click', close);
   if (video) video.addEventListener('ended', close);
-  setTimeout(close, 12000);
+  setTimeout(close, 18000);
 
   // Molette (PC)
   const wheelOpts = { passive: false };
