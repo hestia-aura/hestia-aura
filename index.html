@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=index-final-fr">
+  <link rel="stylesheet" href="/styles.css?v=index-final-fr-v2">
 
   <style>
     :root{
@@ -48,31 +48,29 @@
     }
 
     .intro-screen{
-      position:relative;
-      min-height:100svh;
+      position:fixed;
+      inset:0;
+      z-index:2000;
       display:grid;
       place-items:center;
       overflow:hidden;
-      border-bottom:1px solid rgba(255,255,255,.06);
-      background:
-        radial-gradient(circle at 12% 32%, rgba(99,194,255,.95) 0, rgba(99,194,255,.35) 8%, transparent 20%),
-        radial-gradient(circle at 38% 8%, rgba(92,157,255,.22) 0, transparent 20%),
-        radial-gradient(circle at 75% 42%, rgba(255,172,64,.12) 0, transparent 24%),
-        linear-gradient(115deg, rgba(13,26,52,.95) 8%, rgba(5,9,18,.98) 48%, rgba(4,7,15,.98) 100%);
+      background:#03050a;
+      transition:opacity .9s ease, visibility .9s ease;
     }
 
-    .intro-screen::before{
-      content:"";
-      position:absolute;
-      inset:-8% -4% 0;
-      background:
-        radial-gradient(ellipse at 64% 28%, rgba(255,180,76,.22) 0, transparent 28%),
-        radial-gradient(ellipse at 70% 52%, rgba(255,180,76,.18) 0, transparent 24%),
-        radial-gradient(ellipse at 58% 50%, rgba(41,132,255,.25) 0, transparent 24%),
-        radial-gradient(ellipse at 52% 44%, rgba(10,18,42,.92) 28%, rgba(5,8,16,.98) 58%);
-      mix-blend-mode:screen;
-      opacity:.92;
+    .intro-screen.is-hidden{
+      opacity:0;
+      visibility:hidden;
       pointer-events:none;
+    }
+
+    .intro-video{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      filter:saturate(1.02) contrast(1.02) brightness(.9);
     }
 
     .intro-screen::after{
@@ -80,8 +78,8 @@
       position:absolute;
       inset:0;
       background:
-        linear-gradient(to bottom, rgba(0,0,0,.08), rgba(0,0,0,.18)),
-        radial-gradient(circle at center, transparent 35%, rgba(0,0,0,.12) 100%);
+        linear-gradient(to bottom, rgba(0,0,0,.10), rgba(0,0,0,.22)),
+        radial-gradient(circle at center, transparent 35%, rgba(0,0,0,.14) 100%);
       pointer-events:none;
     }
 
@@ -109,11 +107,12 @@
       bottom:18px;
       z-index:2;
       margin:0;
-      color:rgba(255,255,255,.72);
+      color:rgba(255,255,255,.78);
       font-size:19px;
       font-style:italic;
       letter-spacing:.01em;
       white-space:nowrap;
+      text-shadow:0 4px 16px rgba(0,0,0,.35);
     }
 
     .intro-sign{
@@ -125,6 +124,7 @@
       font-size:14px;
       font-weight:600;
       opacity:.9;
+      text-shadow:0 4px 16px rgba(0,0,0,.35);
     }
 
     .intro-scroll{
@@ -325,7 +325,7 @@
       grid-template-columns:minmax(0,1fr) minmax(300px,420px);
       gap:42px;
       align-items:center;
-      margin-top:12px;
+      margin-top:0;
     }
 
     .approach-visual{
@@ -636,8 +636,8 @@
         left:14px;
         right:14px;
         white-space:normal;
-        max-width:340px;
-        font-size:12px;
+        max-width:480px;
+        font-size:14px;
       }
     }
 
@@ -663,18 +663,26 @@
       .contact-links{gap:10px;}
       .intro-scroll{bottom:12px;}
       .approach-visual{min-height:390px;}
+      .intro-quote{font-size:13px;}
     }
   </style>
 </head>
 
 <body>
-  <section class="intro-screen" aria-label="Introduction du site">
+  <section class="intro-screen" id="intro-screen" aria-label="Introduction du site">
+    <video class="intro-video" id="intro-video" autoplay muted playsinline preload="auto">
+      <source src="/assets/intro.webm" type="video/webm">
+      <source src="/assets/intro.mp4" type="video/mp4">
+    </video>
+
     <div class="intro-content">
       <h1 class="intro-claim"><span>Lire le réel</span><span>par la donnée</span></h1>
     </div>
-    <p class="intro-quote">"Les mathématiques sont la langue avec laquelle Dieu a écrit l'univers." Galilée</p>
+
+    <p class="intro-quote">"Le grand livre de l'univers est écrit en langue mathématique." Galilée</p>
     <span class="intro-sign">Jérôme Jeannin</span>
-    <button class="intro-scroll" type="button" aria-label="Faire défiler vers le contenu" onclick="document.getElementById('contenu').scrollIntoView({behavior:'smooth'})"></button>
+
+    <button class="intro-scroll" type="button" aria-label="Faire défiler vers le contenu"></button>
   </section>
 
   <header class="site-header">
@@ -895,6 +903,35 @@
     </div>
   </footer>
 
-  <script src="/app.js?v=index-final-fr"></script>
+  <script src="/app.js?v=index-final-fr-v2"></script>
+  <script>
+    (function () {
+      const intro = document.getElementById('intro-screen');
+      const video = document.getElementById('intro-video');
+      const scrollBtn = document.querySelector('.intro-scroll');
+      const target = document.getElementById('contenu');
+
+      if (!intro || !target) return;
+
+      function closeIntro() {
+        intro.classList.add('is-hidden');
+      }
+
+      if (scrollBtn) {
+        scrollBtn.addEventListener('click', function () {
+          closeIntro();
+          setTimeout(function () {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }, 250);
+        });
+      }
+
+      setTimeout(closeIntro, 18000);
+
+      if (video) {
+        video.play().catch(() => {});
+      }
+    })();
+  </script>
 </body>
 </html>
