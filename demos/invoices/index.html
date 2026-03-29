@@ -37,12 +37,17 @@
     }
 
     .page-title,
-    .section-title,
-    .section-kicker,
-    .step-title{
-      font-family:"Space Grotesk",Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      letter-spacing:-.03em;
-    }
+.section-title,
+.section-kicker,
+.step-title{
+  font-family:"Space Grotesk",Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  letter-spacing:-.03em;
+}
+
+.brand--personal{gap:12px;}
+.brand-text{display:flex;flex-direction:column;line-height:1.05;}
+.brand-text .brand-name{font-size:15px;font-weight:700;letter-spacing:.01em;}
+.brand-text .brand-label{font-size:11px;color:#aeb6c4;font-weight:500;text-transform:uppercase;letter-spacing:.14em;}
 
     .demo-hero{
       margin-bottom:24px;
@@ -567,23 +572,23 @@
 </head>
 <body class="page-invoices">
   <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
-        <img src="/assets/logo.jpg" alt="logo" class="brand-mark">
-        <span class="brand-text">
-          <span class="brand-name">Jérôme Jeannin</span>
-          <span class="brand-label">Hestia Aura</span>
-        </span>
-      </a>
+  <div class="container header-inner">
+    <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
+      <img src="/assets/logo.jpg" alt="logo" class="brand-mark">
+      <span class="brand-text">
+        <span class="brand-name">Jérôme Jeannin</span>
+        <span class="brand-label">Hestia Aura</span>
+      </span>
+    </a>
 
-      <nav class="nav">
-        <a href="/">Accueil</a>
-        <a href="/about.html">À propos</a>
-        <a href="/showcase.html">Showcase</a>
-        <a href="/en/demos/invoices/" class="btn btn--sm">EN</a>
-      </nav>
-    </div>
-  </header>
+    <nav class="nav">
+      <a href="/">Accueil</a>
+      <a href="/about.html">À propos</a>
+      <a href="/showcase.html">Showcase</a>
+      <a href="/en/demos/invoices/" class="btn btn--sm">EN</a>
+    </nav>
+  </div>
+</header>
 
   <main class="demo-page">
     <div class="demo-wrap">
