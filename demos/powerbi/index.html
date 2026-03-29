@@ -13,18 +13,35 @@
   <link rel="stylesheet" href="../../styles.css?v=powerbi-fr-v1">
 
   <style>
-    .demo-page{
-      padding: 56px 0 72px;
-    }
+.demo-page{
+  padding: 56px 0 72px;
+}
 
-    .demo-wrap{
-      max-width: 980px;
-      margin: 0 auto;
-    }
+.demo-wrap{
+  max-width: 980px;
+  margin: 0 auto;
+}
 
-    .demo-hero{
-      margin-bottom: 40px;
-    }
+.brand--personal{gap:12px;}
+.brand-text{display:flex;flex-direction:column;line-height:1.05;}
+.brand-text .brand-name{font-size:15px;font-weight:700;letter-spacing:.01em;}
+.brand-text .brand-label{font-size:11px;color:#aeb6c4;font-weight:500;text-transform:uppercase;letter-spacing:.14em;}
+
+.demo-hero{
+  margin-bottom: 40px;
+}
+
+.section-kicker{
+  display:inline-block;
+  margin:0 0 12px;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:#aeb6c4;
+}
+
+.demo-hero h1{
 
     .demo-hero h1{
       margin: 0 0 14px;
@@ -151,32 +168,35 @@
 
 <body class="powerbi">
   <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="../../" aria-label="Accueil">
-        <img src="../../assets/logo.jpg" alt="logo" class="brand-mark">
-        <span>Jérôme Jeannin</span>
-      </a>
+  <div class="container header-inner">
+    <a class="brand brand--personal" href="../../" aria-label="Jérôme Jeannin">
+      <img src="../../assets/logo.jpg" alt="logo" class="brand-mark">
+      <span class="brand-text">
+        <span class="brand-name">Jérôme Jeannin</span>
+        <span class="brand-label">Hestia Aura</span>
+      </span>
+    </a>
 
-      <nav class="nav">
-        <a href="../../">Accueil</a>
-        <a href="../../about.html">À propos</a>
-        <a href="../../showcase.html">Showcase</a>
-      </nav>
-    </div>
-  </header>
+    <nav class="nav">
+      <a href="../../">Accueil</a>
+      <a href="../../about.html">À propos</a>
+      <a href="../../showcase.html">Showcase</a>
+    </nav>
+  </div>
+</header>
 
   <main class="demo-page">
     <div class="container">
       <div class="demo-wrap">
-        <section class="demo-hero">
-          <h1>Analyse & reporting Power BI</h1>
-          <p>
-            Exemple de construction d’un reporting permettant de suivre des indicateurs clés
-            - population, chômage, PIB - sur plusieurs années, avec une approche structurée
-            de la donnée et de la modélisation.
-          </p>
-        </section>
-
+<section class="demo-hero">
+  <p class="section-kicker">BI & reporting · Power BI</p>
+  <h1>Analyse & reporting Power BI</h1>
+  <p>
+    Exemple de construction d’un reporting permettant de suivre des indicateurs clés
+    - population, chômage, PIB - sur plusieurs années, avec une approche structurée
+    de la donnée et de la modélisation.
+  </p>
+</section>
         <section class="demo-section">
           <h2>Contexte métier</h2>
           <p>
