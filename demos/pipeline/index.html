@@ -1,173 +1,517 @@
-<!DOCTYPE html><html lang="fr"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pipeline & Dashboard — Hestia Aura</title>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pipeline / Data Flow | Jérôme Jeannin</title>
+<meta name="description" content="Cas d’usage Pipeline / Data Flow - structuration de flux de données, transformation, cohérence et exploitation pour l’analyse.">
 <link rel="icon" href="/assets/logo.jpg">
 <link rel="apple-touch-icon" href="/assets/logo.jpg">
-<link rel="stylesheet" href="/styles.css?v=final3">
+<link rel="stylesheet" href="/styles.css?v=pipeline-fr-v2">
 <style>
-/* Mise en page locale */
-.page {padding: 24px 0}
-.container.narrow{max-width:1060px}
+/* Page */
+.page { padding: 32px 0 72px; }
+.container.narrow { max-width: 1060px; }
 
-/* Header */
-.header {display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
-.header h1{font-size:28px;margin:0}
-.header .muted{opacity:.8}
-.actions{display:flex;gap:8px;flex-wrap:wrap}
-.actions .btn{height:40px;padding:0 16px;border-radius:10px;font-weight:700;display:inline-flex;align-items:center}
-.actions .btn--dark{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:#fff}
+/* Hero éditorial */
+.demo-hero {
+  margin-bottom: 36px;
+}
+.demo-hero h1 {
+  margin: 0 0 12px;
+  font-size: 40px;
+  line-height: 1.02;
+  letter-spacing: -.03em;
+  font-family: "Space Grotesk", Inter, system-ui, sans-serif;
+}
+.demo-hero p {
+  margin: 0;
+  max-width: 900px;
+  color: #e5e7eb;
+  font-size: 18px;
+  line-height: 1.75;
+}
 
-/* Grille */
-.grid-2-1{display:grid;grid-template-columns: 1.5fr 1fr;gap:18px}
-@media (max-width: 960px){.grid-2-1{grid-template-columns:1fr;}}
+/* Sections de texte */
+.demo-section {
+  margin-bottom: 38px;
+}
+.demo-section h2 {
+  margin: 0 0 12px;
+  font-size: 28px;
+  line-height: 1.08;
+  letter-spacing: -.03em;
+  font-family: "Space Grotesk", Inter, system-ui, sans-serif;
+}
+.demo-section p,
+.demo-section li {
+  color: #e5e7eb;
+  font-size: 17px;
+  line-height: 1.75;
+}
+.demo-section ul {
+  margin: 0;
+  padding-left: 22px;
+}
 
-/* Carte “pipeline/tableau” */
-.card{position:relative}
-/* >>> Désactive l’effet hover global et supprime la flèche décorative sur CETTE page uniquement */
-.card:hover{transform:none!important}
-.card::after{display:none!important}
+/* Carte intro démo */
+.demo-note {
+  background: #0f1117;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+  padding: 18px 20px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.22);
+}
+.demo-note strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
 
-.pipeline{background:#0b0d12;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px}
-.pipeline svg{width:100%;height:160px;display:block}
-.stage{font-weight:700}
-.badge{display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:4px 8px;border-radius:999px;font-size:12px;margin-left:8px}
+/* Header local démo */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.header h2 {
+  font-size: 28px;
+  margin: 0 0 8px;
+  line-height: 1.08;
+  letter-spacing: -.03em;
+  font-family: "Space Grotesk", Inter, system-ui, sans-serif;
+}
+.header .muted {
+  opacity: .85;
+  color: #c7ccd3;
+}
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.actions .btn {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+}
+.actions .btn--dark {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+  color: #fff;
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 10px 0 18px;
+}
+.stat {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+/* Grille démo */
+.grid-2-1 {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 18px;
+}
+@media (max-width: 960px) {
+  .grid-2-1 { grid-template-columns: 1fr; }
+}
+
+/* Cartes */
+.card {
+  position: relative;
+}
+.card:hover { transform: none !important; }
+.card::after { display: none !important; }
+
+/* Pipeline */
+.pipeline {
+  background: #0b0d12;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 16px;
+  padding: 16px;
+}
+.pipeline svg {
+  width: 100%;
+  height: 160px;
+  display: block;
+}
+.stage {
+  font-weight: 700;
+}
+.badge {
+  display: inline-block;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  margin-left: 8px;
+}
 
 /* Tableau */
-.table{width:100%;border-collapse:separate;border-spacing:0 8px;margin-top:10px}
-.table th{font-weight:700;text-align:left;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.12)}
-.table td{padding:8px 12px;background:rgba(255,255,255,.04)}
-.table tr td:first-child{border-top-left-radius:10px;border-bottom-left-radius:10px}
-.table tr td:last-child{border-top-right-radius:10px;border-bottom-right-radius:10px}
-.table tfoot td{background:transparent;padding-top:12px}
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  margin-top: 10px;
+}
+.table th {
+  font-weight: 700;
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+.table td {
+  padding: 8px 12px;
+  background: rgba(255,255,255,.04);
+}
+.table tr td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+.table tr td:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.table tfoot td {
+  background: transparent;
+  padding-top: 12px;
+}
 
 /* KPI */
-.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-@media (max-width:960px){.kpis{grid-template-columns:1fr}}
-.kpi{background:#0b0d12;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px}
-.kpi .label{opacity:.8;font-size:13px}
-.kpi .value{font-size:22px;font-weight:800;margin:2px 0 8px}
-.spark{width:100%;height:56px;display:block}
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+}
+@media (max-width:960px) {
+  .kpis { grid-template-columns: 1fr; }
+}
+.kpi {
+  background: #0b0d12;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 16px;
+  padding: 14px;
+}
+.kpi .label {
+  opacity: .8;
+  font-size: 13px;
+}
+.kpi .value {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 2px 0 8px;
+}
+.spark {
+  width: 100%;
+  height: 56px;
+  display: block;
+}
 
-/* Légende sous KPI */
-.legend{margin-top:12px;background:#0b0d12;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px}
-.legend h4{margin:0 0 8px 0;font-size:14px;opacity:.9}
-.legend ul{margin:0;padding-left:18px}
-.legend li{margin:4px 0;opacity:.9}
+/* Légende */
+.legend {
+  margin-top: 12px;
+  background: #0b0d12;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 12px;
+  padding: 12px;
+}
+.legend h4 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  opacity: .9;
+}
+.legend ul {
+  margin: 0;
+  padding-left: 18px;
+}
+.legend li {
+  margin: 4px 0;
+  opacity: .9;
+}
 
 /* ROI */
-.roi{background:#0b1018;border:1px dashed rgba(120,132,255,.5);border-radius:16px;padding:14px}
-.roi strong{font-size:18px}
+.roi {
+  background: #0b1018;
+  border: 1px dashed rgba(120,132,255,.5);
+  border-radius: 16px;
+  padding: 14px;
+}
+.roi strong {
+  font-size: 18px;
+}
 
-/* Barre outils */
-.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}
-.stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:6px 10px;font-size:12px}
+/* CTA */
+.demo-cta {
+  margin-top: 60px;
+  padding: 24px;
+  background: #0f1117;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.22);
+}
+.demo-cta h2 {
+  margin: 0 0 12px;
+  font-size: 28px;
+  line-height: 1.08;
+  letter-spacing: -.03em;
+  font-family: "Space Grotesk", Inter, system-ui, sans-serif;
+}
+.demo-cta p {
+  margin: 0 0 18px;
+  color: #e5e7eb;
+  font-size: 17px;
+  line-height: 1.75;
+}
+.demo-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 
-.back{margin-top:16px;display:inline-block}
+.back {
+  margin-top: 16px;
+  display: inline-block;
+}
+
+@media (max-width: 760px) {
+  .page { padding: 24px 0 56px; }
+  .demo-hero h1 { font-size: 34px; }
+  .demo-hero p,
+  .demo-section p,
+  .demo-section li,
+  .demo-cta p {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  .demo-section h2,
+  .demo-cta h2,
+  .header h2 {
+    font-size: 24px;
+  }
+}
 </style>
-</head><body>
-<header class="site-header"><div class="container header-inner">
-  <a class="brand" href="/" aria-label="Hestia Aura">
-    <img src="/assets/logo.jpg" alt="logo" class="brand-mark"><span class="brand-name">Hestia <strong>Aura</strong></span>
-  </a>
-  <nav class="nav">
-    <a href="/">Accueil</a>
-    <a href="/about.html">À propos</a>
-    <a href="/showcase.html">Showcase</a>
-    <a class="btn btn--sm" href="/en/demos/pipeline/">EN</a>
-  </nav>
-</div></header>
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="Hestia Aura">
+      <img src="/assets/logo.jpg" alt="logo" class="brand-mark">
+      <span class="brand-name">Hestia <strong>Aura</strong></span>
+    </a>
+    <nav class="nav">
+      <a href="/">Accueil</a>
+      <a href="/about.html">À propos</a>
+      <a href="/showcase.html">Showcase</a>
+      <a class="btn btn--sm" href="/en/demos/pipeline/">EN</a>
+    </nav>
+  </div>
+</header>
 
 <main class="page">
   <div class="container narrow">
-    <div class="header">
-      <div>
-        <h1>Pipeline & Dashboard</h1>
-        <div class="muted">ETL (Extract → Transform → Load) sur données fictives, table normalisée, KPIs et graphiques. Export CSV.</div>
+    <section class="demo-hero">
+      <h1>Pipeline / Data Flow</h1>
+      <p>
+        Exemple de structuration d’un flux de données permettant de transformer des sources
+        brutes ou hétérogènes en un flux cohérent, exploitable et prêt à être utilisé
+        pour l’analyse.
+      </p>
+    </section>
+
+    <section class="demo-section">
+      <h2>Contexte métier</h2>
+      <p>
+        Dans beaucoup d’organisations, les données nécessaires au pilotage existent déjà,
+        mais restent dispersées entre plusieurs sources, formats ou étapes de traitement.
+        Avant même de parler de restitution, il faut donc organiser le flux, clarifier
+        les transformations et construire une base exploitable.
+      </p>
+    </section>
+
+    <section class="demo-section">
+      <h2>Problématique</h2>
+      <p>
+        Comment transformer des données hétérogènes en un flux structuré, cohérent
+        et suffisamment robuste pour alimenter une logique d’analyse ou de reporting fiable ?
+      </p>
+    </section>
+
+    <section class="demo-section">
+      <h2>Approche</h2>
+      <ul>
+        <li>Clarification des sources et du besoin de sortie</li>
+        <li>Organisation des étapes de traitement</li>
+        <li>Nettoyage et harmonisation des données</li>
+        <li>Structuration d’un flux lisible et maintenable</li>
+        <li>Production d’une sortie exploitable pour l’analyse ou le reporting</li>
+      </ul>
+    </section>
+
+    <section class="demo-section">
+      <h2>Ce que montre la démo</h2>
+      <div class="demo-note">
+        <strong>Ce que vous voyez ici</strong>
+        <p>
+          La démonstration ci-dessous illustre une logique simple de pipeline :
+          extraction, transformation puis chargement dans une structure exploitable.
+          Le but n’est pas de montrer un outil final, mais de rendre visible le cheminement
+          de la donnée et la façon dont un flux peut être organisé pour devenir utile.
+        </p>
       </div>
-      <div class="actions">
-        <button id="btnCsv" class="btn btn--dark">Télécharger CSV</button>
-        <a href="/showcase.html" class="btn">← Retour au Showcase</a>
+    </section>
+
+    <section class="demo-section">
+      <div class="header">
+        <div>
+          <h2>Démonstration interactive</h2>
+          <div class="muted">
+            ETL (Extract → Transform → Load) sur données fictives, table normalisée,
+            KPIs et graphiques. Export CSV.
+          </div>
+        </div>
+        <div class="actions">
+          <button id="btnCsv" class="btn btn--dark">Télécharger CSV</button>
+          <a href="/showcase.html" class="btn">← Retour au Showcase</a>
+        </div>
       </div>
-    </div>
 
-    <div class="toolbar">
-      <label for="ds">Exemple :</label>
-      <select id="ds" class="btn btn--dark">
-        <option value="sales">Ventes mensuelles (CH)</option>
-        <option value="tickets">Tickets support (SLA)</option>
-        <option value="invoices">Factures clients (DSO)</option>
-      </select>
-      <span id="statRows" class="stat">0 lignes</span>
-      <span id="statPeriod" class="stat">Période —</span>
-    </div>
+      <div class="toolbar">
+        <label for="ds">Exemple :</label>
+        <select id="ds" class="btn btn--dark">
+          <option value="sales">Ventes mensuelles (CH)</option>
+          <option value="tickets">Tickets support (SLA)</option>
+          <option value="invoices">Factures clients (DSO)</option>
+        </select>
+        <span id="statRows" class="stat">0 lignes</span>
+        <span id="statPeriod" class="stat">Période —</span>
+      </div>
 
-    <div class="grid-2-1">
-      <section class="card">
-        <div class="pipeline">
-          <div class="stage">Pipeline <span class="badge" id="badgeStage">Prêt</span></div>
-          <svg viewBox="0 0 800 160" aria-label="Schéma ETL">
-            <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7c74ff"/><stop offset="1" stop-color="#49b1ff"/></linearGradient></defs>
-            <rect x="20"  y="40" width="180" height="60" rx="12" fill="url(#g1)" opacity=".15"></rect>
-            <rect x="310" y="40" width="180" height="60" rx="12" fill="url(#g1)" opacity=".15"></rect>
-            <rect x="600" y="40" width="180" height="60" rx="12" fill="url(#g1)" opacity=".15"></rect>
-            <text x="110" y="75" text-anchor="middle" fill="#fff" font-weight="700">Extract</text>
-            <text x="400" y="75" text-anchor="middle" fill="#fff" font-weight="700">Transform</text>
-            <text x="690" y="75" text-anchor="middle" fill="#fff" font-weight="700">Load</text>
-            <path d="M 200 70 L 310 70" stroke="url(#g1)" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
-            <path d="M 490 70 L 600 70" stroke="url(#g1)" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
-            <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7c74ff"></path></marker></defs>
-            <circle r="4" fill="#7c74ff"><animateMotion dur="1.8s" repeatCount="indefinite" path="M 200 70 L 310 70"></animateMotion></circle>
-            <circle r="4" fill="#49b1ff"><animateMotion dur="1.8s" repeatCount="indefinite" path="M 490 70 L 600 70"></animateMotion></circle>
-          </svg>
+      <div class="grid-2-1">
+        <section class="card">
+          <div class="pipeline">
+            <div class="stage">Pipeline <span class="badge" id="badgeStage">Prêt</span></div>
+            <svg viewBox="0 0 800 160" aria-label="Schéma ETL">
+              <defs>
+                <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#7c74ff"></stop>
+                  <stop offset="1" stop-color="#49b1ff"></stop>
+                </linearGradient>
+                <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#7c74ff"></path>
+                </marker>
+              </defs>
 
-          <table class="table" id="tbl">
-            <thead><tr id="thead"></tr></thead>
-            <tbody id="tbody"></tbody>
-            <tfoot><tr><td id="tfoot" colspan="6"></td></tr></tfoot>
-          </table>
-        </div>
-      </section>
+              <rect x="20" y="40" width="180" height="60" rx="12" fill="url(#g1)" opacity=".15"></rect>
+              <rect x="310" y="40" width="180" height="60" rx="12" fill="url(#g1)" opacity=".15"></rect>
+              <rect x="600" y="40" width="180" height="60" rx="12" fill="url(#g1)" opacity=".15"></rect>
 
-      <aside class="stack">
-        <div class="kpis">
-          <div class="kpi" title="">
-            <div class="label" id="klabel1">KPI #1</div>
-            <div class="value kpi-value" id="kpi1">—</div>
-            <svg id="sp1" class="spark"></svg>
+              <text x="110" y="75" text-anchor="middle" fill="#fff" font-weight="700">Extract</text>
+              <text x="400" y="75" text-anchor="middle" fill="#fff" font-weight="700">Transform</text>
+              <text x="690" y="75" text-anchor="middle" fill="#fff" font-weight="700">Load</text>
+
+              <path d="M 200 70 L 310 70" stroke="url(#g1)" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
+              <path d="M 490 70 L 600 70" stroke="url(#g1)" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
+
+              <circle r="4" fill="#7c74ff">
+                <animateMotion dur="1.8s" repeatCount="indefinite" path="M 200 70 L 310 70"></animateMotion>
+              </circle>
+              <circle r="4" fill="#49b1ff">
+                <animateMotion dur="1.8s" repeatCount="indefinite" path="M 490 70 L 600 70"></animateMotion>
+              </circle>
+            </svg>
+
+            <table class="table" id="tbl">
+              <thead><tr id="thead"></tr></thead>
+              <tbody id="tbody"></tbody>
+              <tfoot><tr><td id="tfoot" colspan="6"></td></tr></tfoot>
+            </table>
           </div>
-          <div class="kpi" title="">
-            <div class="label" id="klabel2">KPI #2</div>
-            <div class="value kpi-value" id="kpi2">—</div>
-            <svg id="sp2" class="spark"></svg>
+        </section>
+
+        <aside class="stack">
+          <div class="kpis">
+            <div class="kpi" title="">
+              <div class="label" id="klabel1">KPI #1</div>
+              <div class="value kpi-value" id="kpi1">—</div>
+              <svg id="sp1" class="spark"></svg>
+            </div>
+            <div class="kpi" title="">
+              <div class="label" id="klabel2">KPI #2</div>
+              <div class="value kpi-value" id="kpi2">—</div>
+              <svg id="sp2" class="spark"></svg>
+            </div>
+            <div class="kpi" title="">
+              <div class="label" id="klabel3">KPI #3</div>
+              <div class="value kpi-value" id="kpi3">—</div>
+              <svg id="sp3" class="spark"></svg>
+            </div>
           </div>
-          <div class="kpi" title="">
-            <div class="label" id="klabel3">KPI #3</div>
-            <div class="value kpi-value" id="kpi3">—</div>
-            <svg id="sp3" class="spark"></svg>
+
+          <div class="legend" id="legend"></div>
+
+          <div class="roi" id="roi">
+            <strong>Gain de temps estimé</strong>
+            <div class="muted">Processus manuel : <span id="tMan">—</span> → Automatisé : <span id="tAuto">—</span></div>
+            <div style="margin-top:6px">Économie : <span id="pct">—</span></div>
           </div>
-        </div>
+        </aside>
+      </div>
 
-        <div class="legend" id="legend"></div>
+      <a class="back" href="/showcase.html">← Retour au Showcase</a>
+    </section>
 
-        <div class="roi" id="roi">
-          <strong>Gain de temps estimé</strong>
-          <div class="muted">Processus manuel : <span id="tMan">—</span> → Automatisé : <span id="tAuto">—</span></div>
-          <div style="margin-top:6px">Économie : <span id="pct">—</span></div>
-        </div>
-      </aside>
-    </div>
+    <section class="demo-section">
+      <h2>Valeur apportée</h2>
+      <ul>
+        <li>Clarification des flux de données</li>
+        <li>Réduction des erreurs et incohérences</li>
+        <li>Base plus fiable pour les analyses et le reporting</li>
+        <li>Meilleure maintenabilité des traitements</li>
+      </ul>
+    </section>
 
-    <a class="back" href="/showcase.html">← Retour au Showcase</a>
+    <section class="demo-cta">
+      <h2>Aller plus loin</h2>
+      <p>
+        Ce type de logique s’applique à de nombreux contextes : consolidation de données,
+        préparation pour le reporting, structuration de traitements ou mise en place
+        de flux plus robustes entre sources et usages métier.
+      </p>
+      <div class="demo-actions">
+        <a href="mailto:contact@hestiaaura.com" class="btn">Me contacter</a>
+        <a href="/showcase.html" class="btn btn--outline">Retour au showcase</a>
+      </div>
+    </section>
   </div>
 </main>
 
-<footer class="site-footer"><div class="container footer-inner">
-  <span>© <span id="y"></span> Jérôme Jeannin</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
-</div></footer>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span>© <span id="y"></span> Jérôme Jeannin</span>
+    <a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+  </div>
+</footer>
 
 <script>
 /* ===== Helpers formatage ===== */
-const nfCH = new Intl.NumberFormat('fr-CH'); // séparateur ’ (CH)
+const nfCH = new Intl.NumberFormat('fr-CH');
 
 /* Jeux de données (FR) */
 const datasets = {
@@ -175,28 +519,31 @@ const datasets = {
     label: "Ventes mensuelles (CH)",
     headers: ["mois","canal","montant_chf"],
     rows: [
-      ["2024-01","Web", 42150],["2024-02","Web", 43890],["2024-03","Web", 46500],["2024-04","Web", 47820],
-      ["2024-01","Boutique", 18200],["2024-02","Boutique", 17650],["2024-03","Boutique", 21500],["2024-04","Boutique", 22800]
+      ["2024-01","Web",42150],["2024-02","Web",43890],["2024-03","Web",46500],["2024-04","Web",47820],
+      ["2024-01","Boutique",18200],["2024-02","Boutique",17650],["2024-03","Boutique",21500],["2024-04","Boutique",22800]
     ],
-    kpis: (rows)=>{
+    kpis: (rows) => {
       const byMonth = {};
-      rows.forEach(r=>{ byMonth[r[0]]=(byMonth[r[0]]||0)+r[2]; });
+      rows.forEach(r => { byMonth[r[0]] = (byMonth[r[0]] || 0) + r[2]; });
       const months = Object.keys(byMonth).sort();
-      const vals = months.map(m=>byMonth[m]);
-      const total = vals.reduce((a,b)=>a+b,0);
-      const growth = vals.length>1 ? (vals.at(-1)-vals.at(-2))/vals.at(-2) : 0;
-      const avg = total/vals.length;
+      const vals = months.map(m => byMonth[m]);
+      const total = vals.reduce((a,b) => a + b, 0);
+      const growth = vals.length > 1 ? (vals.at(-1) - vals.at(-2)) / vals.at(-2) : 0;
+      const avg = total / vals.length;
       return {
-        k1: `${nfCH.format(total)} CHF`,          s1: vals,
-        k2: `${(growth*100).toFixed(1)} % MoM`,  s2: vals.slice(-4),
-        k3: `${nfCH.format(Math.round(avg))} CHF/m`, s3: vals
+        k1: `${nfCH.format(total)} CHF`,
+        s1: vals,
+        k2: `${(growth * 100).toFixed(1)} % MoM`,
+        s2: vals.slice(-4),
+        k3: `${nfCH.format(Math.round(avg))} CHF/m`,
+        s3: vals
       };
     },
-    roi:{ manual:"6 h / mois", auto:"20 min", pct: "−94 %"},
-    labels:[
-      {text:"CA total", tip:"Somme des ventes Web + Boutique sur la période."},
-      {text:"Croissance MoM", tip:"Variation du dernier mois vs mois précédent (Month-over-Month)."},
-      {text:"CA moyen mensuel", tip:"Moyenne mensuelle sur la période."}
+    roi: { manual: "6 h / mois", auto: "20 min", pct: "−94 %" },
+    labels: [
+      { text: "CA total", tip: "Somme des ventes Web + Boutique sur la période." },
+      { text: "Croissance MoM", tip: "Variation du dernier mois vs mois précédent (Month-over-Month)." },
+      { text: "CA moyen mensuel", tip: "Moyenne mensuelle sur la période." }
     ]
   },
   tickets: {
@@ -207,131 +554,159 @@ const datasets = {
       ["2024-03-02","P1",2],["2024-03-02","P2",15],["2024-03-02","P3",18],
       ["2024-03-03","P1",1],["2024-03-03","P2",9],["2024-03-03","P3",17]
     ],
-    kpis:(rows)=>{
-      const total = rows.reduce((a,b)=>a+b[2],0);
-      const p1 = rows.filter(r=>r[1]==="P1").reduce((a,b)=>a+b[2],0);
-      const p23 = total-p1;
+    kpis: (rows) => {
+      const total = rows.reduce((a,b) => a + b[2], 0);
+      const p1 = rows.filter(r => r[1] === "P1").reduce((a,b) => a + b[2], 0);
+      const p23 = total - p1;
       return {
-        k1:`${nfCH.format(total)} résolus`, s1:[p1,p23],
-        k2:`${nfCH.format(p1)} P1`,         s2:[p1],
-        k3:`${nfCH.format(p23)} P2/P3`,     s3:[p23]
+        k1: `${nfCH.format(total)} résolus`,
+        s1: [p1, p23],
+        k2: `${nfCH.format(p1)} P1`,
+        s2: [p1],
+        k3: `${nfCH.format(p23)} P2/P3`,
+        s3: [p23]
       };
     },
-    roi:{ manual:"3 h / semaine", auto:"10 min", pct: "−95 %"},
-    labels:[
-      {text:"Tickets résolus", tip:"Nombre total de tickets résolus sur la période."},
-      {text:"Tickets critiques (P1)", tip:"Tickets de priorité 1 résolus."},
-      {text:"Tickets P2+P3", tip:"Tickets de priorités 2 et 3 résolus."}
+    roi: { manual: "3 h / semaine", auto: "10 min", pct: "−95 %" },
+    labels: [
+      { text: "Tickets résolus", tip: "Nombre total de tickets résolus sur la période." },
+      { text: "Tickets critiques (P1)", tip: "Tickets de priorité 1 résolus." },
+      { text: "Tickets P2+P3", tip: "Tickets de priorités 2 et 3 résolus." }
     ]
   },
   invoices: {
     label: "Factures clients (DSO)",
     headers: ["date","client","montant_chf","jours_encours"],
     rows: [
-      ["2024-01-15","HelvetiaTech", 1490, 35],
-      ["2024-01-31","LémanBank",    2890, 42],
-      ["2024-02-12","RomandieCom",  1320, 28],
-      ["2024-03-01","Alpine SA",    5100, 31]
+      ["2024-01-15","HelvetiaTech",1490,35],
+      ["2024-01-31","LémanBank",2890,42],
+      ["2024-02-12","RomandieCom",1320,28],
+      ["2024-03-01","Alpine SA",5100,31]
     ],
-    kpis:(rows)=>{
-      const total = rows.reduce((a,b)=>a+b[2],0);
-      const dso = rows.reduce((a,b)=>a+b[3],0)/rows.length;
-      const top = rows.reduce((m,r)=>r[2]>m? r[2]:m,0);
+    kpis: (rows) => {
+      const total = rows.reduce((a,b) => a + b[2], 0);
+      const dso = rows.reduce((a,b) => a + b[3], 0) / rows.length;
+      const top = rows.reduce((m,r) => r[2] > m ? r[2] : m, 0);
       return {
-        k1:`${nfCH.format(total)} CHF`, s1:rows.map(r=>r[2]),
-        k2:`DSO ${dso.toFixed(0)} j`,   s2:rows.map(r=>r[3]),
-        k3:`Ticket max ${nfCH.format(top)} CHF`, s3:[top]
+        k1: `${nfCH.format(total)} CHF`,
+        s1: rows.map(r => r[2]),
+        k2: `DSO ${dso.toFixed(0)} j`,
+        s2: rows.map(r => r[3]),
+        k3: `Ticket max ${nfCH.format(top)} CHF`,
+        s3: [top]
       };
     },
-    roi:{ manual:"1 j / mois", auto:"30 min", pct: "−94 %"},
-    labels:[
-      {text:"Montant total facturé", tip:"Somme des montants de toutes les factures de la période."},
-      {text:"DSO moyen (jours)",     tip:"Délai moyen de paiement (Days Sales Outstanding)."},
-      {text:"Plus gros ticket",      tip:"Montant de la facture la plus élevée."}
+    roi: { manual: "1 j / mois", auto: "30 min", pct: "−94 %" },
+    labels: [
+      { text: "Montant total facturé", tip: "Somme des montants de toutes les factures de la période." },
+      { text: "DSO moyen (jours)", tip: "Délai moyen de paiement (Days Sales Outstanding)." },
+      { text: "Plus gros ticket", tip: "Montant de la facture la plus élevée." }
     ]
   }
 };
 
 /* Utils */
-function toCSV(headers, rows){
-  const esc = v => `"${String(v).replaceAll(`"`,`""`)}"`;
-  return [headers.map(esc).join(","), ...rows.map(r=>r.map(esc).join(","))].join("\n");
+function toCSV(headers, rows) {
+  const esc = v => `"${String(v).replaceAll('"','""')}"`;
+  return [headers.map(esc).join(","), ...rows.map(r => r.map(esc).join(","))].join("\\n");
 }
-function el(tag, attrs={}, children=[]){
-  const e=document.createElement(tag);
-  Object.entries(attrs).forEach(([k,v])=>{ if(k==="text") e.textContent=v; else e.setAttribute(k,v); });
-  children.forEach(c=>e.appendChild(c));
+function el(tag, attrs = {}, children = []) {
+  const e = document.createElement(tag);
+  Object.entries(attrs).forEach(([k,v]) => {
+    if (k === "text") e.textContent = v;
+    else e.setAttribute(k, v);
+  });
+  children.forEach(c => e.appendChild(c));
   return e;
 }
-function renderSpark(svgId, series){
+function renderSpark(svgId, series) {
   const svg = document.getElementById(svgId);
-  const w=svg.clientWidth||260, h=svg.clientHeight||56, p=6;
-  svg.setAttribute("viewBox",`0 0 ${w} ${h}`);
-  if(!series || series.length===0){ svg.innerHTML=""; return; }
-  const min=Math.min(...series), max=Math.max(...series); const span=max-min||1;
-  const step=(w-2*p)/(series.length-1||1);
-  const pts = series.map((v,i)=>[p+i*step, h-p-((v-min)/span)*(h-2*p)]);
-  const d = pts.map((p,i)=> (i? "L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
+  const w = svg.clientWidth || 260;
+  const h = svg.clientHeight || 56;
+  const p = 6;
+  svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+  if (!series || series.length === 0) {
+    svg.innerHTML = "";
+    return;
+  }
+  const min = Math.min(...series), max = Math.max(...series);
+  const span = max - min || 1;
+  const step = (w - 2 * p) / (series.length - 1 || 1);
+  const pts = series.map((v,i) => [p + i * step, h - p - ((v - min) / span) * (h - 2 * p)]);
+  const d = pts.map((pt,i) => (i ? "L" : "M") + pt[0].toFixed(1) + " " + pt[1].toFixed(1)).join(" ");
   svg.innerHTML = `<path d="${d}" fill="none" stroke="#7c74ff" stroke-width="2"/>`;
 }
-
-/* Légende sous KPI */
-function renderLegend(cfg){
-  const el = document.getElementById('legend');
-  el.innerHTML = '';
-  const title = document.createElement('h4');
-  title.textContent = 'Légende des indicateurs';
-  el.appendChild(title);
-  const ul = document.createElement('ul');
-  cfg.forEach(item=>{
-    const li = document.createElement('li');
-    li.textContent = `${item.text} — ${item.tip}`;
+function renderLegend(cfg) {
+  const node = document.getElementById("legend");
+  node.innerHTML = "";
+  const title = document.createElement("h4");
+  title.textContent = "Légende des indicateurs";
+  node.appendChild(title);
+  const ul = document.createElement("ul");
+  cfg.forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = `${item.text} - ${item.tip}`;
     ul.appendChild(li);
   });
-  el.appendChild(ul);
+  node.appendChild(ul);
 }
-
-/* Labels + tooltips KPI */
-const kl1=document.getElementById('klabel1'), kl2=document.getElementById('klabel2'), kl3=document.getElementById('klabel3');
-function setKpiLabels(cfg){
+const kl1 = document.getElementById("klabel1");
+const kl2 = document.getElementById("klabel2");
+const kl3 = document.getElementById("klabel3");
+function setKpiLabels(cfg) {
   kl1.textContent = cfg[0].text; kl1.parentElement.title = cfg[0].tip;
   kl2.textContent = cfg[1].text; kl2.parentElement.title = cfg[1].tip;
   kl3.textContent = cfg[2].text; kl3.parentElement.title = cfg[2].tip;
 }
 
 /* Réfs UI */
-const dsSel = document.getElementById('ds');
-const badge = document.getElementById('badgeStage');
-const thead = document.getElementById('thead');
-const tbody = document.getElementById('tbody');
-const tfoot = document.getElementById('tfoot');
-const statRows = document.getElementById('statRows');
-const statPeriod = document.getElementById('statPeriod');
-const k1 = document.getElementById('kpi1'), k2=document.getElementById('kpi2'), k3=document.getElementById('kpi3');
+const dsSel = document.getElementById("ds");
+const badge = document.getElementById("badgeStage");
+const thead = document.getElementById("thead");
+const tbody = document.getElementById("tbody");
+const tfoot = document.getElementById("tfoot");
+const statRows = document.getElementById("statRows");
+const statPeriod = document.getElementById("statPeriod");
+const k1 = document.getElementById("kpi1");
+const k2 = document.getElementById("kpi2");
+const k3 = document.getElementById("kpi3");
 
 /* Chargement dataset */
-function load(dsKey){
+function load(dsKey) {
   const ds = datasets[dsKey];
-  badge.textContent="Extraction…";
-  setTimeout(()=>{ badge.textContent="Transformation…";
-    setTimeout(()=>{ badge.textContent="Chargement OK";
-      thead.innerHTML=""; ds.headers.forEach(h=>thead.appendChild(el("th",{text:h})));
-      tbody.innerHTML="";
-      ds.rows.forEach(r=>{
-        const tr=el("tr"); r.forEach(v=>tr.appendChild(el("td",{text:v}))); tbody.appendChild(tr);
+  badge.textContent = "Extraction…";
+  setTimeout(() => {
+    badge.textContent = "Transformation…";
+    setTimeout(() => {
+      badge.textContent = "Chargement OK";
+
+      thead.innerHTML = "";
+      ds.headers.forEach(h => thead.appendChild(el("th", { text: h })));
+
+      tbody.innerHTML = "";
+      ds.rows.forEach(r => {
+        const tr = el("tr");
+        r.forEach(v => tr.appendChild(el("td", { text: v })));
+        tbody.appendChild(tr);
       });
+
       statRows.textContent = `${ds.rows.length} lignes`;
-      const first=ds.rows[0]?.[0]||"—", last=ds.rows.at(-1)?.[0]||"—";
+      const first = ds.rows[0]?.[0] || "—";
+      const last = ds.rows.at(-1)?.[0] || "—";
       statPeriod.textContent = `Période ${first} → ${last}`;
       tfoot.textContent = ds.label;
 
       const kp = ds.kpis(ds.rows);
-      k1.textContent = kp.k1; k2.textContent = kp.k2; k3.textContent = kp.k3;
-      renderSpark("sp1", kp.s1); renderSpark("sp2", kp.s2); renderSpark("sp3", kp.s3);
+      k1.textContent = kp.k1;
+      k2.textContent = kp.k2;
+      k3.textContent = kp.k3;
+      renderSpark("sp1", kp.s1);
+      renderSpark("sp2", kp.s2);
+      renderSpark("sp3", kp.s3);
 
-      document.getElementById('tMan').textContent = ds.roi.manual;
-      document.getElementById('tAuto').textContent = ds.roi.auto;
-      document.getElementById('pct').textContent = ds.roi.pct;
+      document.getElementById("tMan").textContent = ds.roi.manual;
+      document.getElementById("tAuto").textContent = ds.roi.auto;
+      document.getElementById("pct").textContent = ds.roi.pct;
 
       setKpiLabels(ds.labels);
       renderLegend(ds.labels);
@@ -340,18 +715,21 @@ function load(dsKey){
 }
 
 /* Export CSV */
-document.getElementById('btnCsv').addEventListener('click', ()=>{
+document.getElementById("btnCsv").addEventListener("click", () => {
   const ds = datasets[dsSel.value];
   const csv = toCSV(ds.headers, ds.rows);
-  const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href=url; a.download = "pipeline_export.csv"; a.click();
+  a.href = url;
+  a.download = "pipeline_export.csv";
+  a.click();
   URL.revokeObjectURL(url);
 });
 
-dsSel.addEventListener('change', e=>load(e.target.value));
-load('sales');
-document.getElementById('y').textContent = new Date().getFullYear();
+dsSel.addEventListener("change", e => load(e.target.value));
+load("sales");
+document.getElementById("y").textContent = new Date().getFullYear();
 </script>
-</body></html>
+</body>
+</html>
