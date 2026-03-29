@@ -1,857 +1,234 @@
+<!-- VERSION OPTIMISÉE V2 - Extraction de factures Azure IA -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Extraction de factures Azure IA | Jérôme Jeannin</title>
-  <meta name="description" content="Cas d’usage d’automatisation documentaire sur Azure : extraction de factures PDF, structuration des données et génération d’un export exploitable.">
-  <link rel="icon" href="/assets/logo.jpg">
-  <link rel="apple-touch-icon" href="/assets/logo.jpg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=invoices-fr-v2">
-
-  <style>
-    :root{
-      --page-max:1180px;
-      --demo-border:rgba(255,255,255,.08);
-      --demo-panel:#0f1117;
-      --demo-panel-2:#0b0d12;
-      --demo-text:#e6edf3;
-      --demo-muted:#c7ccd3;
-      --demo-accent:#6366f1;
-      --demo-accent-2:#4fd2ff;
-      --demo-accent-3:#8a5bff;
-      --demo-shadow:0 12px 30px rgba(0,0,0,.22);
-    }
-
-    .demo-page{
-      padding:32px 0 72px;
-    }
-
-    .demo-wrap{
-      max-width:var(--page-max);
-      margin:0 auto;
-      padding:0 20px;
-    }
-
-    .page-title,
-    .section-title,
-    .section-kicker,
-    .step-title{
-      font-family:"Space Grotesk",Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      letter-spacing:-.03em;
-    }
-
-    .demo-hero{
-      margin-bottom:34px;
-    }
-
-    .section-kicker{
-      display:inline-block;
-      margin:0 0 12px;
-      font-size:12px;
-      font-weight:700;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      color:#aeb6c4;
-    }
-
-    .page-title{
-      margin:0 0 14px;
-      max-width:820px;
-      font-size:clamp(36px,5vw,60px);
-      line-height:.98;
-    }
-
-    .page-subtitle{
-      margin:0;
-      max-width:940px;
-      color:var(--demo-text);
-      font-size:18px;
-      line-height:1.78;
-    }
-
-    .hero-visual{
-      margin-top:26px;
-      background:
-        radial-gradient(circle at 82% 18%, rgba(138,91,255,.18) 0, transparent 24%),
-        radial-gradient(circle at 20% 82%, rgba(79,210,255,.12) 0, transparent 22%),
-        linear-gradient(140deg, rgba(8,11,22,.98), rgba(11,17,31,.95));
-      border:1px solid var(--demo-border);
-      border-radius:24px;
-      padding:24px;
-      box-shadow:var(--demo-shadow);
-    }
-
-    .hero-visual-grid{
-      display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:14px;
-      align-items:center;
-    }
-
-    .hero-step{
-      position:relative;
-      min-height:120px;
-      padding:18px 16px;
-      border-radius:18px;
-      background:rgba(10,14,25,.68);
-      border:1px solid rgba(255,255,255,.08);
-      backdrop-filter:blur(8px);
-    }
-
-    .step-title{
-      margin:0 0 8px;
-      font-size:20px;
-      line-height:1.08;
-    }
-
-    .hero-step p{
-      margin:0;
-      color:#d6dbe4;
-      font-size:14px;
-      line-height:1.6;
-    }
-
-    .hero-arrow{
-      position:relative;
-      height:4px;
-      border-radius:999px;
-      background:linear-gradient(90deg, rgba(79,210,255,.18), rgba(79,210,255,.95), rgba(138,91,255,.82));
-      box-shadow:0 0 16px rgba(79,210,255,.24);
-    }
-
-    .hero-arrow::after{
-      content:"";
-      position:absolute;
-      right:-2px;
-      top:50%;
-      width:10px;
-      height:10px;
-      margin-top:-5px;
-      border-radius:50%;
-      background:#9ee9ff;
-      box-shadow:0 0 18px rgba(79,210,255,.55);
-    }
-
-    .section{
-      margin-top:38px;
-    }
-
-    .section-title{
-      margin:0 0 12px;
-      font-size:30px;
-      line-height:1.08;
-    }
-
-    .section-copy{
-      color:var(--demo-text);
-      font-size:17px;
-      line-height:1.8;
-      max-width:980px;
-    }
-
-    .section-copy p{
-      margin:0;
-    }
-
-    .section-copy p + p{
-      margin-top:16px;
-    }
-
-    .approach-grid{
-      display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:14px;
-      margin-top:18px;
-    }
-
-    .approach-card{
-      padding:18px 16px;
-      border-radius:18px;
-      background:var(--demo-panel);
-      border:1px solid var(--demo-border);
-      box-shadow:var(--demo-shadow);
-    }
-
-    .approach-card strong{
-      display:block;
-      margin-bottom:8px;
-      font-size:16px;
-      color:#fff;
-    }
-
-    .approach-card span{
-      color:var(--demo-muted);
-      font-size:14px;
-      line-height:1.6;
-    }
-
-    .demo-shell{
-      margin-top:22px;
-    }
-
-    .demo-toolbar{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      flex-wrap:wrap;
-      margin-bottom:18px;
-    }
-
-    .demo-toolbar label{
-      font-size:14px;
-      font-weight:600;
-      color:#fff;
-    }
-
-    .demo-toolbar select{
-      background:#0f1117;
-      color:var(--demo-text);
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:10px;
-      padding:10px 12px;
-      font:inherit;
-      min-width:210px;
-    }
-
-    .demo-toolbar .btn{
-      min-height:44px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .demo-grid{
-      display:grid;
-      grid-template-columns:1fr 1.2fr;
-      gap:28px;
-      align-items:start;
-    }
-
-    .panel{
-      background:var(--demo-panel);
-      border:1px solid var(--demo-border);
-      border-radius:20px;
-      padding:18px;
-      box-shadow:var(--demo-shadow);
-    }
-
-    .invoice-preview{
-      width:100%;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.08);
-      object-fit:cover;
-      background:#0b0d12;
-      display:block;
-    }
-
-    .preview-caption{
-      margin-top:12px;
-      color:var(--demo-muted);
-      font-size:14px;
-      line-height:1.6;
-    }
-
-    .kpis{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:10px;
-      margin-bottom:10px;
-    }
-
-    .kpi{
-      background:var(--demo-panel-2);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:14px;
-      padding:12px;
-    }
-
-    .kpi .label{
-      color:var(--demo-muted);
-      font-size:12px;
-      line-height:1.35;
-      margin-bottom:4px;
-    }
-
-    .kpi .val{
-      font-weight:800;
-      font-size:18px;
-      line-height:1.2;
-    }
-
-    .lines-title{
-      margin:14px 0 8px;
-      font-size:15px;
-      font-weight:700;
-      color:#fff;
-    }
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-      margin-top:6px;
-    }
-
-    th,td{
-      border-bottom:1px solid rgba(255,255,255,.08);
-      padding:9px 6px;
-      text-align:left;
-      vertical-align:top;
-    }
-
-    th{
-      color:var(--demo-muted);
-      font-weight:600;
-      font-size:14px;
-    }
-
-    td{
-      color:var(--demo-text);
-      font-size:15px;
-    }
-
-    .json-wrap{
-      margin-top:14px;
-      border-top:1px solid rgba(255,255,255,.08);
-      padding-top:14px;
-    }
-
-    .json-wrap[hidden]{
-      display:none;
-    }
-
-    .json-label{
-      display:block;
-      margin-bottom:8px;
-      color:#aeb6c4;
-      font-size:12px;
-      font-weight:700;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-    }
-
-    pre{
-      margin:0;
-      padding:14px;
-      border-radius:14px;
-      background:#0b0d12;
-      border:1px solid rgba(255,255,255,.08);
-      white-space:pre-wrap;
-      word-break:break-word;
-      color:var(--demo-text);
-      font-size:13px;
-      line-height:1.65;
-      overflow:auto;
-    }
-
-    .value-grid{
-      display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:14px;
-      margin-top:18px;
-    }
-
-    .value-card{
-      padding:18px 16px;
-      border-radius:18px;
-      background:var(--demo-panel);
-      border:1px solid var(--demo-border);
-      box-shadow:var(--demo-shadow);
-    }
-
-    .value-card strong{
-      display:block;
-      margin-bottom:8px;
-      font-size:16px;
-      color:#fff;
-    }
-
-    .value-card span{
-      color:var(--demo-muted);
-      font-size:14px;
-      line-height:1.6;
-    }
-
-    .demo-cta{
-      margin-top:42px;
-      padding:24px;
-      background:linear-gradient(180deg, rgba(11,15,27,.96), rgba(9,13,22,.92));
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:22px;
-      box-shadow:var(--demo-shadow);
-    }
-
-    .demo-cta h2{
-      margin:0 0 12px;
-      font-size:28px;
-      line-height:1.08;
-      letter-spacing:-.03em;
-      font-family:"Space Grotesk",Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-    }
-
-    .demo-cta p{
-      margin:0 0 18px;
-      color:var(--demo-text);
-      font-size:17px;
-      line-height:1.75;
-    }
-
-    .demo-actions{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-
-    @media (max-width:1100px){
-      .hero-visual-grid,
-      .approach-grid,
-      .value-grid{
-        grid-template-columns:1fr 1fr;
-      }
-
-      .hero-arrow{
-        display:none;
-      }
-
-      .demo-grid{
-        grid-template-columns:1fr;
-      }
-    }
-
-    @media (max-width:760px){
-      .demo-wrap{
-        padding:0 18px;
-      }
-
-      .demo-page{
-        padding:24px 0 56px;
-      }
-
-      .page-subtitle,
-      .section-copy,
-      .demo-cta p{
-        font-size:16px;
-        line-height:1.7;
-      }
-
-      .hero-visual-grid,
-      .approach-grid,
-      .value-grid,
-      .kpis{
-        grid-template-columns:1fr;
-      }
-
-      .page-title{
-        font-size:34px;
-      }
-
-      .section-title,
-      .demo-cta h2{
-        font-size:24px;
-      }
-
-      .hero-visual,
-      .panel,
-      .demo-cta{
-        padding:18px;
-      }
-
-      .demo-toolbar{
-        align-items:stretch;
-      }
-
-      .demo-toolbar select,
-      .demo-toolbar .btn{
-        width:100%;
-      }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Extraction de factures Azure IA | Jérôme Jeannin</title>
+
+<link rel="stylesheet" href="/styles.css?v=invoices-v2">
+
+<style>
+:root{
+  --gap-section:28px;
+}
+
+/* ===== GLOBAL ===== */
+.demo-wrap{
+  max-width:1100px;
+  margin:auto;
+  padding:24px;
+}
+
+.section{
+  margin-top:var(--gap-section);
+}
+
+/* ===== HERO ===== */
+.flow{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-top:24px;
+  flex-wrap:wrap;
+}
+
+.flow-card{
+  flex:1;
+  min-width:180px;
+  background:#0f1117;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  padding:16px;
+}
+
+.flow-card strong{
+  display:block;
+  margin-bottom:6px;
+}
+
+.flow-arrow{
+  font-size:20px;
+  opacity:.5;
+}
+
+/* ===== TEXT ===== */
+.section p{
+  line-height:1.7;
+  margin-top:10px;
+}
+
+/* ===== DEMO ===== */
+.demo-grid{
+  display:grid;
+  grid-template-columns:1fr 1.2fr;
+  gap:20px;
+}
+
+@media(max-width:900px){
+  .demo-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+.panel{
+  background:#0f1117;
+  border-radius:16px;
+  padding:16px;
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.kpis{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.kpi{
+  background:#0b0d12;
+  padding:10px;
+  border-radius:10px;
+}
+
+.kpi .label{
+  font-size:12px;
+  opacity:.6;
+}
+
+.kpi .val{
+  font-weight:bold;
+}
+
+</style>
 </head>
+
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
-        <img src="/assets/logo.jpg" alt="logo" class="brand-mark">
-        <span class="brand-text">
-          <span class="brand-name">Jérôme Jeannin</span>
-          <span class="brand-label">Hestia Aura</span>
-        </span>
-      </a>
 
-      <nav class="nav">
-        <a href="/">Accueil</a>
-        <a href="/about.html">À propos</a>
-        <a href="/showcase.html">Showcase</a>
-        <a href="/en/demos/invoices/" class="btn btn--sm">EN</a>
-      </nav>
-    </div>
-  </header>
+<div class="demo-wrap">
 
-  <main class="demo-page">
-    <div class="demo-wrap">
-      <section class="demo-hero">
-        <p class="section-kicker">Automatisation documentaire · Azure IA</p>
-        <h1 class="page-title">Extraction de factures Azure IA</h1>
-        <p class="page-subtitle">
-          Automatiser le traitement de factures PDF pour produire une donnée structurée,
-          exploitable et directement intégrable dans les outils de gestion, de contrôle
-          ou de reporting.
-        </p>
+<h1>Extraction de factures Azure IA</h1>
+<p>
+Automatiser le traitement de factures PDF pour produire une donnée structurée,
+fiable et directement exploitable dans des outils de gestion, de contrôle ou de reporting.
+</p>
 
-        <div class="hero-visual" aria-hidden="true">
-          <div class="hero-visual-grid">
-            <div class="hero-step">
-              <h3 class="step-title">PDF</h3>
-              <p>Factures reçues dans des formats variés, avec des champs et mises en page hétérogènes.</p>
-            </div>
-            <div class="hero-arrow"></div>
-            <div class="hero-step">
-              <h3 class="step-title">Extraction</h3>
-              <p>Lecture automatique des informations clés pour réduire la saisie manuelle.</p>
-            </div>
-            <div class="hero-arrow"></div>
-            <div class="hero-step">
-              <h3 class="step-title">Structuration</h3>
-              <p>Transformation des données extraites en un format cohérent et exploitable.</p>
-            </div>
-            <div class="hero-arrow"></div>
-            <div class="hero-step">
-              <h3 class="step-title">Export</h3>
-              <p>Production d’un résultat directement réutilisable pour contrôle, suivi ou intégration.</p>
-            </div>
-          </div>
-        </div>
-      </section>
+<!-- ===== FLOW ===== -->
+<div class="flow">
+  <div class="flow-card">
+    <strong>PDF</strong>
+    Factures reçues sous différents formats
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-card">
+    <strong>Extraction</strong>
+    Lecture automatique des champs clés
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-card">
+    <strong>Structuration</strong>
+    Données nettoyées et normalisées
+  </div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-card">
+    <strong>Export</strong>
+    Données prêtes à être exploitées
+  </div>
+</div>
 
-      <section class="section">
-        <h2 class="section-title">Contexte métier</h2>
-        <div class="section-copy">
-          <p>
-            Dans de nombreux contextes, les factures arrivent sous forme de PDF et doivent
-            ensuite être relues, ressaisies ou reformatées pour pouvoir être exploitées.
-            Ce travail est répétitif, chronophage et source d’erreurs, surtout lorsque
-            les formats changent selon les fournisseurs, les zones géographiques ou les usages comptables.
-          </p>
-        </div>
-      </section>
+<!-- ===== CONTEXTE ===== -->
+<div class="section">
+<h2>Contexte métier</h2>
+<p>
+Dans de nombreuses organisations, les factures arrivent sous forme de PDF et doivent ensuite être relues, ressaisies ou transformées pour pouvoir être exploitées.
+Ce travail est répétitif, chronophage et source d’erreurs, en particulier lorsque les formats varient selon les fournisseurs ou les pays.
+</p>
+</div>
 
-      <section class="section">
-        <h2 class="section-title">Problématique</h2>
-        <div class="section-copy">
-          <p>
-            Comment passer d’un document reçu en entrée à une donnée fiable, structurée
-            et prête à être utilisée, sans dépendre d’une saisie manuelle systématique ?
-          </p>
-        </div>
-      </section>
+<!-- ===== PROBLEMATIQUE ===== -->
+<div class="section">
+<h2>Problématique</h2>
+<p>
+Comment passer d’un document brut à une donnée fiable, structurée et directement exploitable,
+sans dépendre d’une saisie manuelle systématique ?
+</p>
+</div>
 
-      <section class="section">
-        <h2 class="section-title">Approche</h2>
-        <div class="section-copy">
-          <p>
-            La logique consiste à déposer les documents, extraire automatiquement les champs utiles,
-            structurer les résultats, puis générer un format exploitable. Dans ce cas d’usage,
-            l’environnement Azure sert de support à cette chaîne d’automatisation documentaire,
-            avec une logique de dépôt, de traitement, de contrôle et d’export.
-          </p>
-        </div>
+<!-- ===== APPROCHE ===== -->
+<div class="section">
+<h2>Approche</h2>
+<p>
+La solution repose sur une chaîne d’automatisation documentaire.
+Les factures sont déposées dans un stockage centralisé, traitées automatiquement,
+puis transformées en données structurées exploitables.
+</p>
 
-        <div class="approach-grid">
-          <div class="approach-card">
-            <strong>Dépôt des documents</strong>
-            <span>Réception des factures PDF dans un point d’entrée dédié.</span>
-          </div>
-          <div class="approach-card">
-            <strong>Extraction automatique</strong>
-            <span>Lecture des champs clés utiles au traitement métier.</span>
-          </div>
-          <div class="approach-card">
-            <strong>Structuration</strong>
-            <span>Mise en forme cohérente pour faciliter le contrôle et l’exploitation.</span>
-          </div>
-          <div class="approach-card">
-            <strong>Export</strong>
-            <span>Production d’une sortie réutilisable dans les outils de gestion ou de reporting.</span>
-          </div>
-        </div>
-      </section>
+<p>
+Dans ce cas d’usage, l’environnement Azure est utilisé comme support :
+Blob Storage pour le dépôt et les exports,
+Logic App pour orchestrer les traitements,
+et Document Intelligence pour extraire automatiquement les champs clés des documents.
+</p>
+</div>
 
-      <section class="section">
-        <h2 class="section-title">Ce que montre la démo</h2>
-        <div class="section-copy">
-          <p>
-            La démonstration ci-dessous illustre le passage d’un document brut à une donnée structurée.
-            On y retrouve un aperçu du document, les champs principaux extraits, les lignes détectées
-            et, en option, le JSON produit en sortie. L’objectif n’est pas de documenter la solution
-            dans le détail, mais de montrer comment un traitement documentaire peut devenir un flux exploitable.
-          </p>
-        </div>
+<!-- ===== DEMO ===== -->
+<div class="section">
+<h2>Ce que montre la démo</h2>
 
-        <div class="demo-shell">
-          <div class="demo-toolbar">
-            <label for="sample">Exemple :</label>
-            <select id="sample" aria-label="Choisir un exemple de facture">
-              <option value="eu">Facture UE (TVA)</option>
-              <option value="us">Facture US (sales tax)</option>
-              <option value="ch">Facture Suisse (QR-facture)</option>
-            </select>
-            <button id="dl" class="btn">Télécharger CSV</button>
-            <button id="toggleJson" class="btn btn--outline">Afficher le JSON</button>
-          </div>
+<select id="sample">
+<option value="eu">Facture UE (TVA)</option>
+<option value="us">Facture US (sales tax)</option>
+<option value="ch">Facture Suisse (QR-facture)</option>
+</select>
 
-          <div class="demo-grid">
-            <div class="panel">
-              <img id="thumb" src="/assets/media/invoice-eu.svg" alt="Aperçu facture" class="invoice-preview">
-              <div class="preview-caption">
-                Exemple de document source utilisé comme entrée du traitement. La démonstration permet
-                d’illustrer la variété possible des cas selon les formats et les zones.
-              </div>
-            </div>
+<div class="demo-grid">
 
-            <div class="panel">
-              <div class="kpis">
-                <div class="kpi">
-                  <div class="label">Fournisseur</div>
-                  <div class="val" id="k_supplier">—</div>
-                </div>
-                <div class="kpi">
-                  <div class="label">N° facture</div>
-                  <div class="val" id="k_num">—</div>
-                </div>
-                <div class="kpi">
-                  <div class="label">Date</div>
-                  <div class="val" id="k_date">—</div>
-                </div>
-              </div>
+<div class="panel">
+<img id="thumb" src="/assets/media/invoice-eu.svg" style="width:100%">
+</div>
 
-              <div class="kpis">
-                <div class="kpi">
-                  <div class="label">Total</div>
-                  <div class="val" id="k_total">—</div>
-                </div>
-                <div class="kpi">
-                  <div class="label">TVA / Taxe</div>
-                  <div class="val" id="k_vat">—</div>
-                </div>
-                <div class="kpi">
-                  <div class="label">Devise</div>
-                  <div class="val" id="k_currency">—</div>
-                </div>
-              </div>
+<div class="panel">
 
-              <div class="lines-title">Lignes détectées</div>
-              <table id="lines">
-                <thead>
-                  <tr>
-                    <th>Description</th>
-                    <th>Qté</th>
-                    <th>Unité</th>
-                    <th>Montant</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
+<div class="kpis">
+<div class="kpi"><div class="label">Fournisseur</div><div id="k_supplier"></div></div>
+<div class="kpi"><div class="label">Facture</div><div id="k_num"></div></div>
+<div class="kpi"><div class="label">Date</div><div id="k_date"></div></div>
+</div>
 
-              <div id="jsonWrap" class="json-wrap" hidden>
-                <span class="json-label">Sortie structurée</span>
-                <pre id="json"></pre>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+<br>
 
-      <section class="section">
-        <h2 class="section-title">Valeur apportée</h2>
-        <div class="value-grid">
-          <div class="value-card">
-            <strong>Réduction du travail manuel</strong>
-            <span>Moins de ressaisie et moins d’opérations répétitives pour les équipes.</span>
-          </div>
-          <div class="value-card">
-            <strong>Données plus cohérentes</strong>
-            <span>Standardisation des informations clés pour faciliter le contrôle et l’exploitation.</span>
-          </div>
-          <div class="value-card">
-            <strong>Traitement plus fluide</strong>
-            <span>Passage plus rapide du document source à un format prêt à être utilisé.</span>
-          </div>
-          <div class="value-card">
-            <strong>Base réutilisable</strong>
-            <span>Export exploitable pour comptabilité, reporting, suivi ou intégration plus large.</span>
-          </div>
-        </div>
-      </section>
+<div class="kpis">
+<div class="kpi"><div class="label">Total</div><div id="k_total"></div></div>
+<div class="kpi"><div class="label">TVA</div><div id="k_vat"></div></div>
+<div class="kpi"><div class="label">Devise</div><div id="k_currency"></div></div>
+</div>
 
-      <section class="demo-cta">
-        <h2>Aller plus loin</h2>
-        <p>
-          Ce type de cas d’usage peut s’intégrer dans une chaîne plus large :
-          automatisation documentaire, alimentation d’un pipeline de données,
-          contrôle opérationnel ou préparation d’une restitution dans un tableau de bord.
-        </p>
-        <div class="demo-actions">
-          <a href="mailto:contact@hestiaaura.com" class="btn">Me contacter</a>
-          <a href="/showcase.html" class="btn btn--outline">Retour au showcase</a>
-        </div>
-      </section>
-    </div>
-  </main>
+</div>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <span>© <span id="y"></span> Jérôme Jeannin</span>
-      <a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
-    </div>
-  </footer>
+</div>
+</div>
 
-  <script src="/app.js?v=invoices-fr-v2"></script>
-  <script>
-    const samples = {
-      eu: {
-        img: '/assets/media/invoice-eu.svg',
-        data: {
-          supplier: 'ACME SAS',
-          invoice_number: 'FV-2024-031',
-          date: '2024-08-01',
-          total: 1290.50,
-          vat: 107.54,
-          currency: 'EUR',
-          lines: [
-            {desc:'Support package', qty:1, unit:800, amount:800},
-            {desc:'Licenses (3)', qty:3, unit:140.17, amount:420.51},
-            {desc:'Shipping', qty:1, unit:69.99, amount:69.99}
-          ]
-        }
-      },
-      us: {
-        img: '/assets/media/invoice-us.svg',
-        data: {
-          supplier: 'Northwind LLC',
-          invoice_number: 'INV-2024-905',
-          date: '2024-07-18',
-          total: 980.00,
-          vat: 78.40,
-          currency: 'USD',
-          lines: [
-            {desc:'Data pipeline setup', qty:1, unit:820.00, amount:820.00},
-            {desc:'Cloud storage (mois 1)', qty:1, unit:160.00, amount:160.00}
-          ]
-        }
-      },
-      ch: {
-        img: '/assets/media/invoice-ch.svg',
-        data: {
-          supplier: 'HelvetiaTech SA',
-          invoice_number: 'QR-2024-118',
-          date: '2024-09-01',
-          total: 2150.30,
-          vat: 166.20,
-          currency: 'CHF',
-          reference: 'RF18539007547034',
-          lines: [
-            {desc:'Abonnement plateforme', qty:1, unit:1490.00, amount:1490.00},
-            {desc:'Heures d’intégration (6h)', qty:6, unit:85.05, amount:510.30},
-            {desc:'Frais administratifs', qty:1, unit:150.00, amount:150.00}
-          ]
-        }
-      }
-    };
+</div>
 
-    const els = {
-      sample: document.getElementById('sample'),
-      thumb: document.getElementById('thumb'),
-      k_supplier: document.getElementById('k_supplier'),
-      k_num: document.getElementById('k_num'),
-      k_date: document.getElementById('k_date'),
-      k_total: document.getElementById('k_total'),
-      k_vat: document.getElementById('k_vat'),
-      k_currency: document.getElementById('k_currency'),
-      lines: document.querySelector('#lines tbody'),
-      json: document.getElementById('json'),
-      jsonWrap: document.getElementById('jsonWrap'),
-      dl: document.getElementById('dl'),
-      toggleJson: document.getElementById('toggleJson')
-    };
+<script>
+const data = {
+eu:{supplier:"ACME SAS",invoice_number:"FV-2024-031",date:"2024-08-01",total:1290.5,vat:107.54,currency:"EUR"},
+us:{supplier:"Northwind LLC",invoice_number:"INV-905",date:"2024-07-18",total:980,vat:78.4,currency:"USD"},
+ch:{supplier:"HelvetiaTech SA",invoice_number:"QR-118",date:"2024-09-01",total:2150.3,vat:166.2,currency:"CHF"}
+};
 
-    els.thumb.addEventListener('error', () => {
-      els.thumb.src = '/assets/media/invoice-eu.svg';
-    });
+function render(k){
+const d=data[k];
+document.getElementById("k_supplier").innerText=d.supplier;
+document.getElementById("k_num").innerText=d.invoice_number;
+document.getElementById("k_date").innerText=d.date;
+document.getElementById("k_total").innerText=d.total;
+document.getElementById("k_vat").innerText=d.vat;
+document.getElementById("k_currency").innerText=d.currency;
+}
 
-    function format(n){
-      return new Intl.NumberFormat('fr-CH', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }).format(n);
-    }
+document.getElementById("sample").addEventListener("change",(e)=>render(e.target.value));
+render("eu");
+</script>
 
-    function render(inv){
-      els.k_supplier.textContent = inv.supplier || '—';
-      els.k_num.textContent = inv.invoice_number || '—';
-      els.k_date.textContent = inv.date || '—';
-      els.k_total.textContent = (inv.total != null ? format(inv.total) : '—') + (inv.currency ? ' ' + inv.currency : '');
-      els.k_vat.textContent = inv.vat != null ? format(inv.vat) : '—';
-      els.k_currency.textContent = inv.currency || '—';
-
-      els.lines.innerHTML = '';
-      (inv.lines || []).forEach(l => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = '<td>' + l.desc + '</td><td>' + l.qty + '</td><td>' + format(l.unit) + '</td><td>' + format(l.amount) + '</td>';
-        els.lines.appendChild(tr);
-      });
-
-      els.json.textContent = JSON.stringify(inv, null, 2);
-    }
-
-    function toCSV(inv){
-      const rows = [['desc','qty','unit','amount']];
-      for (const l of inv.lines || []) {
-        rows.push([l.desc, l.qty, l.unit, l.amount]);
-      }
-      return rows.map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\n');
-    }
-
-    let current = samples.eu;
-
-    function applySample(key){
-      current = samples[key];
-      els.thumb.src = current.img;
-      render(current.data);
-    }
-
-    els.sample.addEventListener('change', e => applySample(e.target.value));
-
-    els.toggleJson.addEventListener('click', () => {
-      const hidden = els.jsonWrap.hasAttribute('hidden');
-      if (hidden) {
-        els.jsonWrap.removeAttribute('hidden');
-        els.toggleJson.textContent = 'Masquer le JSON';
-      } else {
-        els.jsonWrap.setAttribute('hidden', '');
-        els.toggleJson.textContent = 'Afficher le JSON';
-      }
-    });
-
-    els.dl.addEventListener('click', () => {
-      const csv = toCSV(current.data);
-      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'invoice_lines.csv';
-      a.click();
-      URL.revokeObjectURL(a.href);
-    });
-
-    const urlSample = new URLSearchParams(location.search).get('sample');
-    const valid = ['eu','us','ch'];
-    const initial = valid.includes(urlSample) ? urlSample : 'eu';
-    els.sample.value = initial;
-    applySample(initial);
-
-    document.getElementById('y').textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>
