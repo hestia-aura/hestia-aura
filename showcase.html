@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=showcase-fr-v1">
+  <link rel="stylesheet" href="/styles.css?v=showcase-fr-v2">
   <style>
     :root{
       --bg:#07090f;
@@ -212,7 +212,7 @@
     .section-copy p{margin:0;}
     .section-copy p + p{margin-top:18px;}
 
-    .category-pills{
+    .category-filters{
       display:flex;
       gap:10px;
       flex-wrap:wrap;
@@ -221,14 +221,30 @@
       list-style:none;
     }
 
-    .category-pills li{
-      padding:10px 14px;
-      border-radius:999px;
+    .filter-btn{
+      appearance:none;
       border:1px solid rgba(255,255,255,.12);
       color:#d8dde6;
       font-size:14px;
       line-height:1;
       background:rgba(255,255,255,.02);
+      border-radius:999px;
+      padding:10px 14px;
+      cursor:pointer;
+      transition:background .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
+    }
+
+    .filter-btn:hover{
+      transform:translateY(-1px);
+      border-color:rgba(108,108,255,.28);
+      background:rgba(108,108,255,.08);
+    }
+
+    .filter-btn.is-active{
+      background:linear-gradient(90deg, rgba(108,108,255,.94), rgba(118,90,255,.92));
+      border-color:transparent;
+      color:#fff;
+      box-shadow:0 0 16px rgba(108,108,255,.18);
     }
 
     .usecase-grid{
@@ -250,13 +266,17 @@
       box-shadow:0 12px 30px rgba(0,0,0,.22);
       color:inherit;
       text-decoration:none;
-      transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+      transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease, opacity .2s ease;
     }
 
     .usecase-card:hover{
       transform:translateY(-3px);
       border-color:rgba(108,108,255,.35);
       box-shadow:0 18px 34px rgba(0,0,0,.28);
+    }
+
+    .usecase-card.is-hidden{
+      display:none;
     }
 
     .usecase-header{
@@ -449,25 +469,25 @@
         <div class="showcase-hub" aria-hidden="true">
           <div class="hub-glow"></div>
           <div class="hub-grid">
-            <article class="hub-card hub-card-1">
+            <article class="hub-card">
               <span class="hub-kicker">Catégorie</span>
               <h3>BI & Reporting</h3>
               <p>Lecture, pilotage, modélisation et restitution.</p>
             </article>
 
-            <article class="hub-card hub-card-2">
+            <article class="hub-card">
               <span class="hub-kicker">Catégorie</span>
               <h3>Data pipeline</h3>
               <p>Structuration, transformation et circulation de la donnée.</p>
             </article>
 
-            <article class="hub-card hub-card-3">
+            <article class="hub-card">
               <span class="hub-kicker">Catégorie</span>
               <h3>Automatisation</h3>
               <p>Réduction des tâches manuelles et fiabilisation des flux.</p>
             </article>
 
-            <article class="hub-card hub-card-4">
+            <article class="hub-card">
               <span class="hub-kicker">Catégorie</span>
               <h3>IA appliquée</h3>
               <p>Cas d’usage concrets, recherche et traitement intelligent.</p>
@@ -490,12 +510,13 @@
           <p>Ces cas ne sont pas des démonstrations isolées, mais des lectures structurées de problématiques réelles : comprendre un besoin, organiser la donnée, choisir le bon niveau de modélisation et produire un résultat exploitable.</p>
         </div>
 
-        <ul class="category-pills">
-          <li>BI & Reporting</li>
-          <li>Data pipeline</li>
-          <li>Automatisation</li>
-          <li>IA appliquée</li>
-        </ul>
+        <div class="category-filters" id="categoryFilters" aria-label="Filtres de catégories">
+          <button class="filter-btn is-active" type="button" data-filter="all">Tous</button>
+          <button class="filter-btn" type="button" data-filter="bi-reporting">BI & Reporting</button>
+          <button class="filter-btn" type="button" data-filter="data-pipeline">Data pipeline</button>
+          <button class="filter-btn" type="button" data-filter="automation">Automatisation</button>
+          <button class="filter-btn" type="button" data-filter="ai">IA appliquée</button>
+        </div>
       </div>
     </section>
 
@@ -503,28 +524,28 @@
       <div class="container">
         <h2 class="section-title">Cas d’usage</h2>
 
-        <div class="usecase-grid">
-          <a class="usecase-card" href="/demos/pipeline/">
+        <div class="usecase-grid" id="usecaseGrid">
+          <a class="usecase-card" href="/demos/pipeline/" data-case="pipeline" data-category="data-pipeline">
             <div class="usecase-header">
               <h3 class="usecase-title">Pipeline / Data Flow</h3>
               <span class="usecase-arrow">→</span>
             </div>
             <div class="usecase-block">
               <span class="usecase-label">Problématique</span>
-              <div class="usecase-text">Passer de données brutes à un pilotage lisible et fiable.</div>
+              <div class="usecase-text">Passer de données brutes à un flux structuré, cohérent et exploitable.</div>
             </div>
             <div class="usecase-block">
               <span class="usecase-label">Ce que le cas illustre</span>
-              <div class="usecase-text">Structuration d’un flux de données, préparation et restitution sous forme de dashboard.</div>
+              <div class="usecase-text">Organisation d’un pipeline de transformation permettant de clarifier le cheminement de la donnée avant analyse.</div>
             </div>
             <div class="usecase-pills">
               <span class="pill">Pipeline</span>
-              <span class="pill">Modélisation</span>
-              <span class="pill">Reporting</span>
+              <span class="pill">Transformation</span>
+              <span class="pill">Flux</span>
             </div>
           </a>
 
-          <a class="usecase-card" href="/demos/powerbi/">
+          <a class="usecase-card" href="/demos/powerbi/" data-case="powerbi" data-category="bi-reporting">
             <div class="usecase-header">
               <h3 class="usecase-title">Analyse Power BI</h3>
               <span class="usecase-arrow">→</span>
@@ -544,7 +565,7 @@
             </div>
           </a>
 
-          <a class="usecase-card" href="/demos/invoices/">
+          <a class="usecase-card" href="/demos/invoices/" data-case="invoices" data-category="automation ai">
             <div class="usecase-header">
               <h3 class="usecase-title">Extraction de factures IA</h3>
               <span class="usecase-arrow">→</span>
@@ -564,7 +585,7 @@
             </div>
           </a>
 
-          <a class="usecase-card" href="/demos/sql/">
+          <a class="usecase-card" href="/demos/sql/" data-case="sql" data-category="bi-reporting data-pipeline">
             <div class="usecase-header">
               <h3 class="usecase-title">Requête & analyse SQL</h3>
               <span class="usecase-arrow">→</span>
@@ -584,7 +605,7 @@
             </div>
           </a>
 
-          <a class="usecase-card" href="/demos/python/">
+          <a class="usecase-card" href="/demos/python/" data-case="python" data-category="automation data-pipeline">
             <div class="usecase-header">
               <h3 class="usecase-title">Automatisation Python</h3>
               <span class="usecase-arrow">→</span>
@@ -604,7 +625,7 @@
             </div>
           </a>
 
-          <a class="usecase-card" href="/demos/rag/">
+          <a class="usecase-card" href="/demos/rag/" data-case="rag" data-category="ai">
             <div class="usecase-header">
               <h3 class="usecase-title">Recherche intelligente documentaire</h3>
               <span class="usecase-arrow">→</span>
@@ -624,7 +645,7 @@
             </div>
           </a>
 
-          <a class="usecase-card" href="/demos/email-router/">
+          <a class="usecase-card" href="/demos/email-router/" data-case="email-router" data-category="automation ai">
             <div class="usecase-header">
               <h3 class="usecase-title">Routage d’e-mails automatisé</h3>
               <span class="usecase-arrow">→</span>
@@ -684,10 +705,43 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <span>© <span id="y"></span> Jérôme Jeannin</span>
-      <a href="mailto:contact@hestiaura.com">contact@hestiaura.com</a>
+      <a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
     </div>
   </footer>
 
-  <script src="/app.js?v=showcase-fr-v1"></script>
+  <script src="/app.js?v=showcase-fr-v2"></script>
+  <script>
+    (function () {
+      const buttons = Array.from(document.querySelectorAll('.filter-btn'));
+      const cards = Array.from(document.querySelectorAll('.usecase-card'));
+
+      if (!buttons.length || !cards.length) return;
+
+      function setActiveButton(activeBtn) {
+        buttons.forEach(btn => btn.classList.remove('is-active'));
+        activeBtn.classList.add('is-active');
+      }
+
+      function filterCards(filterValue) {
+        cards.forEach(card => {
+          const categories = (card.dataset.category || '').split(' ').filter(Boolean);
+
+          if (filterValue === 'all' || categories.includes(filterValue)) {
+            card.classList.remove('is-hidden');
+          } else {
+            card.classList.add('is-hidden');
+          }
+        });
+      }
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', function () {
+          const filterValue = btn.dataset.filter || 'all';
+          setActiveButton(btn);
+          filterCards(filterValue);
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
