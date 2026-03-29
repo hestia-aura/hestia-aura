@@ -1,177 +1,104 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<section class="demo-hero">
+  <h1>Analyse & reporting Power BI</h1>
+  <p>
+    Exemple de construction d’un reporting permettant de suivre des indicateurs clés
+    (population, chômage, PIB) sur plusieurs années, avec une approche structurée
+    de la donnée et de la modélisation.
+  </p>
+</section>
 
-  <title>Power BI — Démographie & Économie IDF (2011–2022) | Hestia Aura</title>
-  <link rel="icon" href="/assets/logo.jpg">
-  <link rel="apple-touch-icon" href="/assets/logo.jpg">
-  <link rel="stylesheet" href="/styles.css">
-  <meta name="description" content="Rapport Power BI combinant Power Query et modèle DAX : P1 Évolution, P2 Répartition, P3 Scénarios & indicateurs. Captures zoomables.">
-</head>
+<section class="demo-section">
+  <h2>Contexte métier</h2>
+  <p>
+    Dans de nombreux cas, les données existent mais restent difficiles à exploiter :
+    sources multiples, formats hétérogènes, absence de structuration claire.
+    L’objectif est de transformer ces données en un outil de pilotage simple et lisible.
+  </p>
+</section>
 
-<body class="powerbi">
-  <!-- Header -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="/">
-        <img src="/assets/logo.jpg" alt="Hestia Aura – logo" class="brand-mark">
-        <span class="brand-name">Hestia <strong>Aura</strong></span>
-      </a>
-      <nav class="nav">
-        <a href="/index.html">Accueil</a>
-        <a href="/about.html">À propos</a>
-        <a href="/showcase.html">Showcase</a>
-        <a href="#" class="btn btn--sm lang-switch">EN</a>
-      </nav>
-    </div>
-  </header>
+<section class="demo-section">
+  <h2>Problématique</h2>
+  <p>
+    Comment construire un reporting fiable permettant de suivre plusieurs indicateurs
+    dans le temps, tout en garantissant la cohérence des données et la simplicité d’utilisation ?
+  </p>
+</section>
 
-  <main id="main" class="container">
-    <h1>Power BI — Démographie & Économie IDF (2011–2022)</h1>
+<section class="demo-section">
+  <h2>Approche</h2>
+  <ul>
+    <li>Préparation et nettoyage des données (Power Query)</li>
+    <li>Harmonisation des sources et des formats</li>
+    <li>Modélisation des données pour faciliter les analyses</li>
+    <li>Création d’indicateurs avec DAX</li>
+    <li>Construction de visualisations lisibles et interactives</li>
+  </ul>
+</section>
 
-    <!-- Contexte déplacé ici -->
-    <section class="intro-context">
-      <h2>Contexte & périmètre</h2>
-      <p>Population totale, chômage moyen %, PIB agrégé 2011–2022. Lecture temporelle + géographique.</p>
-    </section>
+<section class="demo-section">
+  <h2>Démonstration</h2>
 
-    <p>Rapport combinant préparation <strong>Power Query</strong> et modèle <strong>DAX</strong>. Trois volets :
-      <em>P1 Évolution</em>, <em>P2 Répartition</em>, <em>P3 Scénarios & indicateurs</em>.
-    </p>
+  <p>
+    Exemple de restitution sous forme de dashboard Power BI.
+    Les visualisations permettent de suivre l’évolution des indicateurs,
+    d’explorer les données par segment et de comparer les périodes.
+  </p>
 
-    <a class="btn" href="/showcase.html">← Retour au Showcase</a>
+  <section class="demo-section">
+  <h2>Valeur apportée</h2>
+  <ul>
+    <li>Meilleure lisibilité des indicateurs clés</li>
+    <li>Gain de temps dans l’analyse</li>
+    <li>Fiabilisation des données utilisées</li>
+    <li>Aide à la prise de décision</li>
+  </ul>
+</section>
 
-    <!-- Tags en bulles -->
-    <ul class="tags" aria-label="Technologies">
-      <li><span>Power BI</span></li>
-      <li><span>Power Query</span></li>
-      <li><span>DAX</span></li>
-    </ul>
-
-    <ul class="toc">
-      <li>→ P1 — Évolution</li>
-      <li>→ P2 — Répartition</li>
-      <li>→ P3 — Scénarios & indicateurs</li>
-    </ul>
-
-    <!-- P1 -->
-    <section>
-      <h2>P1 — Évolution du recensement & économie en Île-de-France (2011–2022)</h2>
-      <div class="capsule capsule--lr">
-        <figure class="capsule-media zoomable">
-          <img src="/assets/media/PBI%20P1.jpg"
-               alt="Vue d’ensemble : population, chômage et PIB en IDF (2011–2022)"
-               loading="lazy">
-          <figcaption>Vue d’ensemble (time-series, carte centrée sur Paris, segments d’années/types).</figcaption>
-        </figure>
-
-        <div class="capsule-body">
-          <h3>Préparation (Power Query)</h3>
-          <ul>
-            <li>Import RP2011/2016/2022, taux chômage moyen %, PIB annuel.</li>
-            <li>Harmonisation des millésimes, normalisation des libellés, typage des colonnes.</li>
-            <li>Contrôles : unicité année-valeur, gestion des valeurs manquantes.</li>
-          </ul>
-
-          <h3>Modèle DAX (indicateurs)</h3>
-          <ul>
-            <li><em>Population totale</em>, <em>Chômage moyen %</em>, <em>PIB total</em>.</li>
-            <li>Agrégations annuelles/moyennes sur période sélectionnée.</li>
-          </ul>
-
-          <h3>Visualisations & interactions</h3>
-          <ul>
-            <li>Courbe d’évolution de la population.</li>
-            <li>Carte (bulle proportionnelle) centrée sur Paris.</li>
-            <li>Barres horizontales par type de population.</li>
-            <li>Lignes d’évolution chômage % et somme de PIB.</li>
-            <li>Segments d’années et de types de population.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- P2 -->
-    <section>
-      <h2>P2 — Exploration & détails : Répartition par type de population (2011–2022)</h2>
-      <div class="capsule capsule--lr">
-        <figure class="capsule-media zoomable">
-          <img src="/assets/media/PBI%20P2.jpg"
-               alt="Répartition détaillée par type de population (2011–2022)"
-               loading="lazy">
-          <figcaption>Répartition par type, focus par département, zoom sur les extrêmes.</figcaption>
-        </figure>
-
-        <div class="capsule-body">
-          <h3>Préparation (Power Query)</h3>
-          <ul>
-            <li>Harmonisation des catégories entre millésimes, normalisation des libellés.</li>
-            <li>Colonnes dérivées pour comparaisons inter-annuelles.</li>
-            <li>Contrôles de qualité : doublons, valeurs manquantes, cohérence des totaux.</li>
-          </ul>
-
-          <h3>Modèle DAX (indicateurs)</h3>
-          <ul>
-            <li>Moyennes et parts (%) par type sur la période sélectionnée.</li>
-            <li>Variations <abbr title="Year-over-Year">YoY</abbr> (valeur &amp; %), ratios vs total.</li>
-            <li>Mesures prêtes pour l’arborescence de décomposition.</li>
-          </ul>
-
-          <h3>Visualisations & interactions</h3>
-          <ul>
-            <li>Anneau des parts par type + barres par type/année.</li>
-            <li>Courbe population/PIB pour les tendances.</li>
-            <li>Segments Année &amp; Type, sélection croisée et info-bulles.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- P3 -->
-    <section>
-      <h2>P3 — Scénarios & indicateurs</h2>
-      <div class="capsule capsule--lr">
-        <figure class="capsule-media zoomable">
-          <img src="/assets/media/PBI%20P3.jpg"
-               alt="Scénarios et indicateurs clés (cartes & graphes)"
-               loading="lazy">
-          <figcaption>Paramètres de scénario + indicateurs (mesures DAX documentées).</figcaption>
-        </figure>
-
-        <div class="capsule-body">
-          <h3>Préparation (Paramètres)</h3>
-          <ul>
-            <li>Table paramètre <em>Variation PIB %</em> (what-if) exposée en segment.</li>
-            <li>Segments Année et Type pour le contexte.</li>
-            <li>Formats &amp; unités homogènes sur les KPI.</li>
-          </ul>
-
-          <h3>Modèle DAX (indicateurs)</h3>
-          <ul>
-            <li><strong>PIB total (scénario)</strong> = PIB ajusté par le paramètre.</li>
-            <li>KPI : PIB total, Population (année sél.), CAGR PIB %, CAGR Population %, Chômage moyen %.</li>
-            <li>Dynamiques YoY (PIB/Population) et Part PCA %.</li>
-          </ul>
-
-          <h3>Visualisations & interactions</h3>
-          <ul>
-            <li>Cartes KPI + combo colonne/ligne (PIB vs scénario).</li>
-            <li>Table de synthèse par année (valeurs, YoY, parts).</li>
-            <li>Segment <em>Variation PIB %</em> : mise à jour instantanée de tous les visuels.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Lightbox (zoom image) -->
-  <div class="image-modal" id="imgModal" aria-hidden="true">
-    <button class="close" id="imgModalClose" aria-label="Fermer l’image">×</button>
-    <img id="imgModalImg" alt="">
+  <section class="demo-cta">
+  <h2>Aller plus loin</h2>
+  <p>
+    Ce type de reporting peut être adapté à de nombreux contextes métier :
+    finance, opérations, performance commerciale ou suivi d’activité.
+  </p>
+  <a href="../../contact.html" class="btn-primary">Me contacter</a>
+</section>
+  <div class="demo-images">
+    <img src="assets/powerbi-1.png" alt="Dashboard Power BI">
+    <img src="assets/powerbi-2.png" alt="Analyse des indicateurs">
+    <img src="assets/powerbi-3.png" alt="Vue détaillée">
   </div>
+</section>
 
-  <script src="/app.js"></script>
-</body>
-</html>
+.demo-hero {
+  margin-bottom: 40px;
+}
+
+.demo-hero h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.demo-section {
+  margin-bottom: 40px;
+}
+
+.demo-section h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.demo-images {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.demo-images img {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.demo-cta {
+  margin-top: 60px;
+}
