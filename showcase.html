@@ -93,96 +93,104 @@
       margin-top:28px;
     }
 
-    .hero-visual{
+    .showcase-hub{
       position:relative;
       min-height:420px;
       border-radius:28px;
       overflow:hidden;
       border:1px solid rgba(255,255,255,.08);
       background:
-        radial-gradient(circle at 82% 16%, rgba(138,91,255,.28) 0, transparent 22%),
-        radial-gradient(circle at 18% 78%, rgba(79,210,255,.18) 0, transparent 20%),
+        radial-gradient(circle at 82% 18%, rgba(138,91,255,.24) 0, transparent 24%),
+        radial-gradient(circle at 18% 82%, rgba(79,210,255,.14) 0, transparent 22%),
         linear-gradient(140deg, rgba(8,11,22,.98), rgba(11,17,31,.95));
       box-shadow:var(--shadow);
       isolation:isolate;
+      padding:30px;
     }
 
-    .flow-layer{
+    .hub-glow{
       position:absolute;
       inset:0;
+      background:
+        radial-gradient(circle at 78% 18%, rgba(138,91,255,.20) 0, transparent 22%),
+        radial-gradient(circle at 22% 78%, rgba(79,210,255,.12) 0, transparent 20%);
       pointer-events:none;
-      opacity:.96;
     }
 
-    .flow-line{
-      position:absolute;
-      height:4px;
-      border-radius:999px;
-      background:linear-gradient(90deg, rgba(79,210,255,.15), rgba(79,210,255,.95), rgba(138,91,255,.9));
-      box-shadow:0 0 16px rgba(79,210,255,.35);
-      transform-origin:left center;
-    }
-
-    .flow-line::after{
-      content:"";
-      position:absolute;
-      right:-3px;
-      top:50%;
-      width:10px;
-      height:10px;
-      margin-top:-5px;
-      border-radius:50%;
-      background:#9ee9ff;
-      box-shadow:0 0 18px rgba(79,210,255,.65);
-    }
-
-    .flow-line.line-1{width:66%; top:18%; left:-3%; transform:rotate(7deg);}
-    .flow-line.line-2{width:58%; top:31%; left:10%; transform:rotate(-10deg);}
-    .flow-line.line-3{width:76%; top:47%; left:-5%; transform:rotate(6deg);}
-    .flow-line.line-4{width:54%; top:60%; left:18%; transform:rotate(-8deg);}
-    .flow-line.line-5{width:68%; top:74%; left:3%; transform:rotate(10deg);}
-    .flow-line.line-6{width:44%; top:82%; left:24%; transform:rotate(-14deg);}
-
-    .flow-node{
-      position:absolute;
-      width:10px;
-      height:10px;
-      border-radius:50%;
-      background:#fff;
-      box-shadow:0 0 18px rgba(109,124,255,.6);
-      opacity:.95;
-    }
-
-    .flow-node.n1{top:16%; left:18%;}
-    .flow-node.n2{top:24%; left:56%;}
-    .flow-node.n3{top:40%; left:24%;}
-    .flow-node.n4{top:51%; left:58%;}
-    .flow-node.n5{top:68%; left:36%;}
-    .flow-node.n6{top:77%; left:71%;}
-
-    .hero-panel{
-      position:absolute;
-      left:28px;
-      right:28px;
-      bottom:28px;
-      display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:12px;
+    .hub-grid{
+      position:relative;
       z-index:2;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+      height:100%;
+      align-content:center;
+      min-height:360px;
     }
 
-    .hero-chip{
-      padding:14px 12px;
-      border-radius:18px;
-      background:rgba(10,14,25,.72);
+    .hub-card{
+      position:relative;
+      padding:18px 18px 16px;
+      border-radius:22px;
+      background:rgba(10,14,25,.68);
       border:1px solid rgba(255,255,255,.08);
       backdrop-filter:blur(8px);
       box-shadow:0 8px 24px rgba(0,0,0,.24);
-      text-align:center;
-      font-size:14px;
-      font-weight:600;
-      color:#eef1f6;
+      transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
     }
+
+    .hub-card:hover{
+      transform:translateY(-2px);
+      border-color:rgba(108,108,255,.28);
+      box-shadow:0 14px 30px rgba(0,0,0,.28);
+    }
+
+    .hub-kicker{
+      display:inline-block;
+      margin-bottom:10px;
+      color:#aeb6c4;
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+    }
+
+    .hub-card h3{
+      margin:0 0 8px;
+      font-size:22px;
+      line-height:1.08;
+      letter-spacing:-.03em;
+      font-family:"Space Grotesk",Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    }
+
+    .hub-card p{
+      margin:0;
+      color:#d6dbe4;
+      font-size:15px;
+      line-height:1.6;
+    }
+
+    .hub-lines{
+      position:absolute;
+      inset:0;
+      z-index:1;
+      pointer-events:none;
+      opacity:.9;
+    }
+
+    .hub-line{
+      position:absolute;
+      height:3px;
+      border-radius:999px;
+      background:linear-gradient(90deg, rgba(79,210,255,.16), rgba(79,210,255,.92), rgba(138,91,255,.82));
+      box-shadow:0 0 16px rgba(79,210,255,.24);
+      transform-origin:left center;
+    }
+
+    .hub-line-1{width:28%; top:30%; left:35%; transform:rotate(-12deg);}
+    .hub-line-2{width:24%; top:46%; left:41%; transform:rotate(10deg);}
+    .hub-line-3{width:20%; top:57%; left:29%; transform:rotate(-8deg);}
+    .hub-line-4{width:18%; top:38%; left:47%; transform:rotate(18deg);}
 
     .section{
       padding:62px 0;
@@ -364,11 +372,11 @@
       .contact-wrap{
         grid-template-columns:1fr;
       }
-      .hero-visual{
+      .showcase-hub{
         min-height:380px;
       }
-      .hero-panel{
-        grid-template-columns:repeat(2,minmax(0,1fr));
+      .hub-grid{
+        min-height:auto;
       }
     }
 
@@ -388,11 +396,15 @@
         font-size:16px;
         line-height:1.7;
       }
-      .hero-panel{
+      .showcase-hub{
+        padding:22px;
+      }
+      .hub-grid{
         grid-template-columns:1fr;
-        left:22px;
-        right:22px;
-        bottom:22px;
+        gap:14px;
+      }
+      .hub-lines{
+        display:none;
       }
       .brand-text .brand-label{font-size:10px;letter-spacing:.12em;}
       .method-card,
@@ -434,27 +446,39 @@
           </div>
         </div>
 
-        <div class="hero-visual" aria-hidden="true">
-          <div class="flow-layer">
-            <div class="flow-line line-1"></div>
-            <div class="flow-line line-2"></div>
-            <div class="flow-line line-3"></div>
-            <div class="flow-line line-4"></div>
-            <div class="flow-line line-5"></div>
-            <div class="flow-line line-6"></div>
-            <span class="flow-node n1"></span>
-            <span class="flow-node n2"></span>
-            <span class="flow-node n3"></span>
-            <span class="flow-node n4"></span>
-            <span class="flow-node n5"></span>
-            <span class="flow-node n6"></span>
+        <div class="showcase-hub" aria-hidden="true">
+          <div class="hub-glow"></div>
+          <div class="hub-grid">
+            <article class="hub-card hub-card-1">
+              <span class="hub-kicker">Catégorie</span>
+              <h3>BI & Reporting</h3>
+              <p>Lecture, pilotage, modélisation et restitution.</p>
+            </article>
+
+            <article class="hub-card hub-card-2">
+              <span class="hub-kicker">Catégorie</span>
+              <h3>Data pipeline</h3>
+              <p>Structuration, transformation et circulation de la donnée.</p>
+            </article>
+
+            <article class="hub-card hub-card-3">
+              <span class="hub-kicker">Catégorie</span>
+              <h3>Automatisation</h3>
+              <p>Réduction des tâches manuelles et fiabilisation des flux.</p>
+            </article>
+
+            <article class="hub-card hub-card-4">
+              <span class="hub-kicker">Catégorie</span>
+              <h3>IA appliquée</h3>
+              <p>Cas d’usage concrets, recherche et traitement intelligent.</p>
+            </article>
           </div>
 
-          <div class="hero-panel">
-            <div class="hero-chip">BI & Reporting</div>
-            <div class="hero-chip">Data pipeline</div>
-            <div class="hero-chip">Automatisation</div>
-            <div class="hero-chip">IA appliquée</div>
+          <div class="hub-lines">
+            <span class="hub-line hub-line-1"></span>
+            <span class="hub-line hub-line-2"></span>
+            <span class="hub-line hub-line-3"></span>
+            <span class="hub-line hub-line-4"></span>
           </div>
         </div>
       </div>
