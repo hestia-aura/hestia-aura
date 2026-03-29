@@ -553,3 +553,34 @@ a.btn--primary,
   opacity: .6;
   margin-bottom: 10px;
 }
+
+/* =========================
+   PAGE INVOICES - SPACING FIX
+   ========================= */
+
+.page-invoices section {
+  margin: 60px 0;
+}
+
+.page-invoices section h2 {
+  margin-bottom: 20px;
+}
+
+.page-invoices section p {
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+
+.page-invoices .approach-grid {
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.page-invoices .demo-section {
+  margin-top: 40px;
+}
+
+/* Option léger padding pour éviter effet collé */
+.page-invoices section {
+  padding-top: 10px;
+}
