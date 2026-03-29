@@ -415,3 +415,62 @@ a.btn--primary,
 /* Grids internes pour P3 (gros terminal + mini screenshot) */
 .grid-2-rows{ display:grid; gap:14px; }
 
+.demo-hero {
+  margin-bottom: 40px;
+}
+
+.demo-hero h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.demo-hero p {
+  line-height: 1.7;
+}
+
+.demo-section {
+  margin-bottom: 40px;
+}
+
+.demo-section h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.demo-section p,
+.demo-section li {
+  line-height: 1.7;
+}
+
+.demo-section ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.demo-images {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.demo-images img {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: block;
+}
+
+.demo-cta {
+  margin-top: 60px;
+}
+
+.demo-cta h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.demo-cta p {
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
