@@ -13,9 +13,23 @@
 .page { padding: 32px 0 72px; }
 .container.narrow { max-width: 1060px; }
 
+.brand--personal{gap:12px;}
+.brand-text{display:flex;flex-direction:column;line-height:1.05;}
+.brand-text .brand-name{font-size:15px;font-weight:700;letter-spacing:.01em;}
+.brand-text .brand-label{font-size:11px;color:#aeb6c4;font-weight:500;text-transform:uppercase;letter-spacing:.14em;}
+
 /* Hero éditorial */
 .demo-hero {
   margin-bottom: 36px;
+}
+.section-kicker{
+  display:inline-block;
+  margin:0 0 12px;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:#aeb6c4;
 }
 .demo-hero h1 {
   margin: 0 0 12px;
@@ -330,13 +344,14 @@
 <main class="page">
   <div class="container narrow">
     <section class="demo-hero">
-      <h1>Pipeline / Data Flow</h1>
-      <p>
-        Exemple de structuration d’un flux de données permettant de transformer des sources
-        brutes ou hétérogènes en un flux cohérent, exploitable et prêt à être utilisé
-        pour l’analyse.
-      </p>
-    </section>
+  <p class="section-kicker">Structuration des données · Data flow</p>
+  <h1>Pipeline / Data Flow</h1>
+  <p>
+    Exemple de structuration d’un flux de données permettant de transformer des sources
+    brutes ou hétérogènes en un flux cohérent, exploitable et prêt à être utilisé
+    pour l’analyse.
+  </p>
+</section>
 
     <div class="pv-label">Vue simplifiée du flux</div>
     
