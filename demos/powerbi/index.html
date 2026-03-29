@@ -1,70 +1,269 @@
-<section class="demo-hero">
-  <h1>Analyse & reporting Power BI</h1>
-  <p>
-    Exemple de construction d’un reporting permettant de suivre des indicateurs clés
-    (population, chômage, PIB) sur plusieurs années, avec une approche structurée
-    de la donnée et de la modélisation.
-  </p>
-</section>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Analyse & reporting Power BI | Jérôme Jeannin</title>
+  <meta name="description" content="Cas d’usage Power BI - analyse et reporting autour d’indicateurs clés, avec structuration des données, modélisation et visualisation.">
+  <link rel="icon" href="../../assets/logo.jpg">
+  <link rel="apple-touch-icon" href="../../assets/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css?v=powerbi-fr-v1">
 
-<section class="demo-section">
-  <h2>Contexte métier</h2>
-  <p>
-    Dans de nombreux cas, les données existent mais restent difficiles à exploiter :
-    sources multiples, formats hétérogènes, absence de structuration claire.
-    L’objectif est de transformer ces données en un outil de pilotage simple et lisible.
-  </p>
-</section>
+  <style>
+    .demo-page{
+      padding: 56px 0 72px;
+    }
 
-<section class="demo-section">
-  <h2>Problématique</h2>
-  <p>
-    Comment construire un reporting fiable permettant de suivre plusieurs indicateurs
-    dans le temps, tout en garantissant la cohérence des données et la simplicité d’utilisation ?
-  </p>
-</section>
+    .demo-wrap{
+      max-width: 980px;
+      margin: 0 auto;
+    }
 
-<section class="demo-section">
-  <h2>Approche</h2>
-  <ul>
-    <li>Préparation et nettoyage des données (Power Query)</li>
-    <li>Harmonisation des sources et des formats</li>
-    <li>Modélisation des données pour faciliter les analyses</li>
-    <li>Création d’indicateurs avec DAX</li>
-    <li>Construction de visualisations lisibles et interactives</li>
-  </ul>
-</section>
+    .demo-hero{
+      margin-bottom: 40px;
+    }
 
-<section class="demo-section">
-  <h2>Démonstration</h2>
-  <p>
-    Exemple de restitution sous forme de dashboard Power BI.
-    Les visualisations permettent de suivre l’évolution des indicateurs,
-    d’explorer les données par segment et de comparer les périodes.
-  </p>
+    .demo-hero h1{
+      margin: 0 0 14px;
+      font-family: "Space Grotesk", Inter, system-ui, sans-serif;
+      font-size: clamp(34px, 5vw, 54px);
+      line-height: 1.02;
+      letter-spacing: -.03em;
+    }
 
-  <div class="demo-images">
-    <img src="assets/powerbi-1.png" alt="Dashboard Power BI">
-    <img src="assets/powerbi-2.png" alt="Analyse des indicateurs">
-    <img src="assets/powerbi-3.png" alt="Vue détaillée">
-  </div>
-</section>
+    .demo-hero p{
+      margin: 0;
+      max-width: 880px;
+      color: #e5e7eb;
+      font-size: 18px;
+      line-height: 1.75;
+    }
 
-<section class="demo-section">
-  <h2>Valeur apportée</h2>
-  <ul>
-    <li>Meilleure lisibilité des indicateurs clés</li>
-    <li>Gain de temps dans l’analyse</li>
-    <li>Fiabilisation des données utilisées</li>
-    <li>Aide à la prise de décision</li>
-  </ul>
-</section>
+    .demo-section{
+      margin-bottom: 42px;
+    }
 
-<section class="demo-cta">
-  <h2>Aller plus loin</h2>
-  <p>
-    Ce type de reporting peut être adapté à de nombreux contextes métier :
-    finance, opérations, performance commerciale ou suivi d’activité.
-  </p>
-  <a href="mailto:contact@hestiaaura.com" class="btn-primary">Me contacter</a>
-</section>
+    .demo-section h2{
+      margin: 0 0 12px;
+      font-family: "Space Grotesk", Inter, system-ui, sans-serif;
+      font-size: 28px;
+      line-height: 1.08;
+      letter-spacing: -.03em;
+    }
+
+    .demo-section p,
+    .demo-section li{
+      color: #e5e7eb;
+      font-size: 17px;
+      line-height: 1.75;
+    }
+
+    .demo-section ul{
+      margin: 0;
+      padding-left: 22px;
+    }
+
+    .demo-images{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .demo-figure{
+      margin: 0;
+      background: #0f1117;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.22);
+    }
+
+    .demo-figure img{
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: #0b0c10;
+    }
+
+    .demo-figure figcaption{
+      margin-top: 10px;
+      color: #c7ccd3;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .demo-cta{
+      margin-top: 60px;
+      padding: 24px;
+      background: #0f1117;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.22);
+    }
+
+    .demo-cta h2{
+      margin: 0 0 12px;
+      font-family: "Space Grotesk", Inter, system-ui, sans-serif;
+      font-size: 28px;
+      line-height: 1.08;
+      letter-spacing: -.03em;
+    }
+
+    .demo-cta p{
+      margin: 0 0 18px;
+      color: #e5e7eb;
+      font-size: 17px;
+      line-height: 1.75;
+    }
+
+    .demo-actions{
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 760px){
+      .demo-page{
+        padding: 40px 0 56px;
+      }
+
+      .demo-hero p,
+      .demo-section p,
+      .demo-section li,
+      .demo-cta p{
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
+      .demo-section h2,
+      .demo-cta h2{
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body class="powerbi">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="../../" aria-label="Accueil">
+        <img src="../../assets/logo.jpg" alt="logo" class="brand-mark">
+        <span>Jérôme Jeannin</span>
+      </a>
+
+      <nav class="nav">
+        <a href="../../">Accueil</a>
+        <a href="../../about.html">À propos</a>
+        <a href="../../showcase.html">Showcase</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="demo-page">
+    <div class="container">
+      <div class="demo-wrap">
+        <section class="demo-hero">
+          <h1>Analyse & reporting Power BI</h1>
+          <p>
+            Exemple de construction d’un reporting permettant de suivre des indicateurs clés
+            - population, chômage, PIB - sur plusieurs années, avec une approche structurée
+            de la donnée et de la modélisation.
+          </p>
+        </section>
+
+        <section class="demo-section">
+          <h2>Contexte métier</h2>
+          <p>
+            Dans de nombreux cas, les données existent mais restent difficiles à exploiter :
+            sources multiples, formats hétérogènes, absence de structuration claire.
+            L’objectif est de transformer ces données en un outil de pilotage simple et lisible.
+          </p>
+        </section>
+
+        <section class="demo-section">
+          <h2>Problématique</h2>
+          <p>
+            Comment construire un reporting fiable permettant de suivre plusieurs indicateurs
+            dans le temps, tout en garantissant la cohérence des données et la simplicité d’utilisation ?
+          </p>
+        </section>
+
+        <section class="demo-section">
+          <h2>Approche</h2>
+          <ul>
+            <li>Préparation et nettoyage des données avec Power Query</li>
+            <li>Harmonisation des sources et des formats</li>
+            <li>Modélisation des données pour faciliter les analyses</li>
+            <li>Création d’indicateurs avec DAX</li>
+            <li>Construction de visualisations lisibles et interactives</li>
+          </ul>
+        </section>
+
+        <section class="demo-section">
+          <h2>Démonstration</h2>
+          <p>
+            Exemple de restitution sous forme de dashboard Power BI.
+            Les visualisations permettent de suivre l’évolution des indicateurs,
+            d’explorer les données par segment et de comparer les périodes.
+          </p>
+
+          <div class="demo-images">
+            <figure class="demo-figure">
+              <img src="./assets/powerbi-1.png" alt="Dashboard Power BI">
+              <figcaption>Vue d’ensemble du reporting et des principaux indicateurs.</figcaption>
+            </figure>
+
+            <figure class="demo-figure">
+              <img src="./assets/powerbi-2.png" alt="Analyse des indicateurs">
+              <figcaption>Analyse détaillée des indicateurs et lecture des évolutions.</figcaption>
+            </figure>
+
+            <figure class="demo-figure">
+              <img src="./assets/powerbi-3.png" alt="Vue détaillée">
+              <figcaption>Exemple de restitution complémentaire pour affiner la lecture métier.</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section class="demo-section">
+          <h2>Valeur apportée</h2>
+          <ul>
+            <li>Meilleure lisibilité des indicateurs clés</li>
+            <li>Gain de temps dans l’analyse</li>
+            <li>Fiabilisation des données utilisées</li>
+            <li>Aide à la prise de décision</li>
+          </ul>
+        </section>
+
+        <section class="demo-cta">
+          <h2>Aller plus loin</h2>
+          <p>
+            Ce type de reporting peut être adapté à de nombreux contextes métier :
+            finance, opérations, performance commerciale ou suivi d’activité.
+          </p>
+
+          <div class="demo-actions">
+            <a href="mailto:contact@hestiaaura.com" class="btn">Me contacter</a>
+            <a href="../../showcase.html" class="btn btn--outline">Retour au showcase</a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© <span id="y"></span> Jérôme Jeannin</span>
+      <a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+    </div>
+  </footer>
+
+  <script src="../../app.js?v=powerbi-fr-v1"></script>
+</body>
+</html>
