@@ -10,8 +10,15 @@
 <link rel="stylesheet" href="/styles.css?v=pipeline-fr-v2">
 <style>
 /* Page */
-.page { padding: 32px 0 72px; }
-.container.narrow { max-width: 1060px; }
+.page { padding: 32px 0 68px; }
+.container.narrow { max-width: 1100px; }
+
+.page-title,
+.section-title,
+.section-kicker{
+  font-family:"Space Grotesk",Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  letter-spacing:-.03em;
+}
 
 .brand--personal{gap:12px;}
 .brand-text{display:flex;flex-direction:column;line-height:1.05;}
@@ -22,28 +29,32 @@
 .demo-hero {
   margin-bottom: 24px;
 }
+
 .section-kicker{
   display:inline-block;
-  margin:0 0 10px;
-  font-size:11px;
-  font-weight:600;
-  letter-spacing:.12em;
+  margin:0 0 12px;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.14em;
   text-transform:uppercase;
-  color:#8b93a6;
+  color:#aeb6c4;
 }
+
 .demo-hero h1 {
-  margin: 0 0 12px;
-  font-size: 40px;
-  line-height: 1.02;
-  letter-spacing: -.03em;
+  margin: 0 0 14px;
+  max-width: 900px;
+  font-size: clamp(36px,5vw,60px);
+  line-height: .98;
   font-family: "Space Grotesk", Inter, system-ui, sans-serif;
+  letter-spacing: -.03em;
 }
+
 .demo-hero p {
   margin: 0;
-  max-width: 900px;
+  max-width: 960px;
   color: #e5e7eb;
   font-size: 18px;
-  line-height: 1.75;
+  line-height: 1.78;
 }
 
 /* Sections de texte */
@@ -332,11 +343,12 @@
         <span class="brand-label">Hestia Aura</span>
       </span>
     </a>
+
     <nav class="nav">
       <a href="/">Accueil</a>
       <a href="/about.html">À propos</a>
       <a href="/showcase.html">Showcase</a>
-      <a class="btn btn--sm" href="/en/demos/pipeline/">EN</a>
+      <a href="/en/demos/pipeline/" class="btn btn--sm">EN</a>
     </nav>
   </div>
 </header>
