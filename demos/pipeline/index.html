@@ -14,50 +14,6 @@
 .page { padding: 32px 0 68px; }
 .container.narrow { max-width: 1100px; }
 
-.page-title,
-.section-title,
-.section-kicker{
-  font-family:"Space Grotesk",Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-  letter-spacing:-.03em;
-}
-
-.brand--personal{gap:12px;}
-.brand-text{display:flex;flex-direction:column;line-height:1.05;}
-.brand-text .brand-name{font-size:15px;font-weight:700;letter-spacing:.01em;}
-.brand-text .brand-label{font-size:11px;color:#aeb6c4;font-weight:500;text-transform:uppercase;letter-spacing:.14em;}
-
-/* Hero éditorial */
-.demo-hero{
-  margin-bottom:24px;
-}
-
-.section-kicker{
-  display:inline-block;
-  margin:0 0 12px;
-  font-size:12px;
-  font-weight:700;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  color:#aeb6c4;
-}
-
-.demo-hero h1{
-  margin:0 0 14px;
-  max-width:900px;
-  font-size:clamp(36px,5vw,60px);
-  line-height:.98;
-  font-family:"Space Grotesk",Inter,system-ui,sans-serif;
-  letter-spacing:-.03em;
-}
-
-.demo-hero p{
-  margin:0;
-  max-width:960px;
-  color:#e5e7eb;
-  font-size:18px;
-  line-height:1.78;
-}
-
 /* Sections de texte */
 .demo-section {
   margin-bottom: 38px;
@@ -336,26 +292,26 @@
 </head>
 <body>
 <header class="site-header">
-  <div class="container header-inner">
-    <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="Jérôme Jeannin">
       <img src="/assets/logo.jpg" alt="logo" class="brand-mark">
-      <span class="brand-text">
+      <div class="brand-text">
         <span class="brand-name">Jérôme Jeannin</span>
         <span class="brand-label">Hestia Aura</span>
-      </span>
+      </div>
     </a>
 
     <nav class="nav">
       <a href="/">Accueil</a>
       <a href="/about.html">À propos</a>
       <a href="/showcase.html">Showcase</a>
-      <a href="/en/demos/pipeline/" class="btn btn--sm">EN</a>
+      <a href="/en/" class="btn">EN</a>
     </nav>
   </div>
 </header>
 
 <main class="page">
-  <div class="container narrow">
+  <div class="demo-container">
 <section class="demo-hero">
   <p class="section-kicker">Structuration des données · Data flow</p>
   <h1>Pipeline / Data Flow</h1>
