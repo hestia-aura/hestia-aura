@@ -14,12 +14,20 @@
 
   <style>
 .demo-page{
-  padding: 32px 0 56px;
+  padding: 32px 0 68px;
 }
 
 .demo-wrap{
-  max-width: 980px;
+  max-width: 1100px;
   margin: 0 auto;
+  padding: 0 20px;
+}
+
+.page-title,
+.section-title,
+.section-kicker{
+  font-family:"Space Grotesk",Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  letter-spacing:-.03em;
 }
 
 .brand--personal{gap:12px;}
@@ -33,31 +41,30 @@
 
 .section-kicker{
   display:inline-block;
-  margin:0 0 10px;
-  font-size:11px;
-  font-weight:600;
-  letter-spacing:.12em;
+  margin:0 0 12px;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.14em;
   text-transform:uppercase;
-  color:#8b93a6;
+  color:#aeb6c4;
 }
 
 .demo-hero h1{
+  margin: 0 0 14px;
+  max-width: 900px;
+  font-family: "Space Grotesk", Inter, system-ui, sans-serif;
+  font-size: clamp(36px, 5vw, 60px);
+  line-height: .98;
+  letter-spacing: -.03em;
+}
 
-    .demo-hero h1{
-      margin: 0 0 14px;
-      font-family: "Space Grotesk", Inter, system-ui, sans-serif;
-      font-size: clamp(34px, 5vw, 54px);
-      line-height: 1.02;
-      letter-spacing: -.03em;
-    }
-
-    .demo-hero p{
-      margin: 0;
-      max-width: 880px;
-      color: #e5e7eb;
-      font-size: 18px;
-      line-height: 1.75;
-    }
+.demo-hero p{
+  margin: 0;
+  max-width: 960px;
+  color: #e5e7eb;
+  font-size: 18px;
+  line-height: 1.78;
+}
 
     .demo-section{
       margin-bottom: 42px;
@@ -167,10 +174,10 @@
 </head>
 
 <body class="powerbi">
-  <header class="site-header">
+<header class="site-header">
   <div class="container header-inner">
-    <a class="brand brand--personal" href="../../" aria-label="Jérôme Jeannin">
-      <img src="../../assets/logo.jpg" alt="logo" class="brand-mark">
+    <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
+      <img src="/assets/logo.jpg" alt="logo" class="brand-mark">
       <span class="brand-text">
         <span class="brand-name">Jérôme Jeannin</span>
         <span class="brand-label">Hestia Aura</span>
@@ -178,9 +185,10 @@
     </a>
 
     <nav class="nav">
-      <a href="../../">Accueil</a>
-      <a href="../../about.html">À propos</a>
-      <a href="../../showcase.html">Showcase</a>
+      <a href="/">Accueil</a>
+      <a href="/about.html">À propos</a>
+      <a href="/showcase.html">Showcase</a>
+      <a href="/en/demos/powerbi/" class="btn btn--sm">EN</a>
     </nav>
   </div>
 </header>
