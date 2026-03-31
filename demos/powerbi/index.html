@@ -10,60 +10,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../styles.css?v=powerbi-fr-v1">
+  <link rel="stylesheet" href="/styles.css?v=powerbi-fr-v1">
+<link rel="stylesheet" href="/assets/css/demo.css">
 
   <style>
 .demo-page{
   padding: 32px 0 68px;
-}
-
-.demo-wrap{
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.page-title,
-.section-title,
-.section-kicker{
-  font-family:"Space Grotesk",Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-  letter-spacing:-.03em;
-}
-
-.brand--personal{gap:12px;}
-.brand-text{display:flex;flex-direction:column;line-height:1.05;}
-.brand-text .brand-name{font-size:15px;font-weight:700;letter-spacing:.01em;}
-.brand-text .brand-label{font-size:11px;color:#aeb6c4;font-weight:500;text-transform:uppercase;letter-spacing:.14em;}
-
-.demo-hero{
-  margin-bottom:24px;
-}
-
-.section-kicker{
-  display:inline-block;
-  margin:0 0 12px;
-  font-size:12px;
-  font-weight:700;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  color:#aeb6c4;
-}
-
-.demo-hero h1{
-  margin:0 0 14px;
-  max-width:900px;
-  font-family:"Space Grotesk",Inter,system-ui,sans-serif;
-  font-size:clamp(36px,5vw,60px);
-  line-height:.98;
-  letter-spacing:-.03em;
-}
-
-.demo-hero p{
-  margin:0;
-  max-width:960px;
-  color:#e5e7eb;
-  font-size:18px;
-  line-height:1.78;
 }
 
     .demo-section{
@@ -175,28 +127,27 @@
 
 <body class="powerbi">
 <header class="site-header">
-  <div class="container header-inner">
-    <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="Jérôme Jeannin">
       <img src="/assets/logo.jpg" alt="logo" class="brand-mark">
-      <span class="brand-text">
+      <div class="brand-text">
         <span class="brand-name">Jérôme Jeannin</span>
         <span class="brand-label">Hestia Aura</span>
-      </span>
+      </div>
     </a>
 
     <nav class="nav">
       <a href="/">Accueil</a>
       <a href="/about.html">À propos</a>
       <a href="/showcase.html">Showcase</a>
-      <a href="/en/demos/powerbi/" class="btn btn--sm">EN</a>
+      <a href="/en/" class="btn">EN</a>
     </nav>
   </div>
 </header>
 
-  <main class="demo-page">
-    <div class="container">
-      <div class="demo-wrap">
-<section class="demo-hero">
+<main class="demo-page">
+  <div class="demo-container">
+    <section class="demo-hero">
   <p class="section-kicker">BI & reporting · Power BI</p>
   <h1>Analyse & reporting Power BI</h1>
   <p>
@@ -282,7 +233,6 @@
           </div>
         </section>
       </div>
-    </div>
   </main>
 
   <footer class="site-footer">
