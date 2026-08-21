@@ -1032,7 +1032,10 @@
         return;
       }
 
-      const citedResults = results.slice(0, 3);
+      const minimumCitationScore = Math.max(3, Math.ceil(results[0].score * .25));
+      const citedResults = results
+        .filter((item) => item.score >= minimumCitationScore)
+        .slice(0, 3);
       answerPlaceholder.hidden = true;
       answerContent.hidden = false;
       answerText.textContent = citedResults[0].document.content;
