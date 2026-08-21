@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pipeline & Dashboard — Hestia Aura</title>
+<title>Pipeline & Dashboard - Hestia Aura</title>
 <link rel="icon" href="/assets/logo.jpg">
 <link rel="apple-touch-icon" href="/assets/logo.jpg">
 <link rel="stylesheet" href="/styles.css?v=final3">
@@ -85,7 +85,7 @@
         <option value="invoices">Customer invoices (DSO)</option>
       </select>
       <span id="statRows" class="stat">0 rows</span>
-      <span id="statPeriod" class="stat">Period —</span>
+      <span id="statPeriod" class="stat">Period -</span>
     </div>
 
     <div class="grid-2-1">
@@ -119,17 +119,17 @@
         <div class="kpis">
           <div class="kpi" title="">
             <div class="label" id="klabel1">KPI #1</div>
-            <div class="value kpi-value" id="kpi1">—</div>
+            <div class="value kpi-value" id="kpi1">-</div>
             <svg id="sp1" class="spark"></svg>
           </div>
           <div class="kpi" title="">
             <div class="label" id="klabel2">KPI #2</div>
-            <div class="value kpi-value" id="kpi2">—</div>
+            <div class="value kpi-value" id="kpi2">-</div>
             <svg id="sp2" class="spark"></svg>
           </div>
           <div class="kpi" title="">
             <div class="label" id="klabel3">KPI #3</div>
-            <div class="value kpi-value" id="kpi3">—</div>
+            <div class="value kpi-value" id="kpi3">-</div>
             <svg id="sp3" class="spark"></svg>
           </div>
         </div>
@@ -138,8 +138,8 @@
 
         <div class="roi" id="roi">
           <strong>Estimated time saved</strong>
-          <div class="muted">Manual process: <span id="tMan">—</span> → Automated: <span id="tAuto">—</span></div>
-          <div style="margin-top:6px">Savings: <span id="pct">—</span></div>
+          <div class="muted">Manual process: <span id="tMan">-</span> → Automated: <span id="tAuto">-</span></div>
+          <div style="margin-top:6px">Savings: <span id="pct">-</span></div>
         </div>
       </aside>
     </div>
@@ -268,7 +268,7 @@ function renderLegend(cfg){
   const ul = document.createElement('ul');
   cfg.forEach(item=>{
     const li = document.createElement('li');
-    li.textContent = `${item.text} — ${item.tip}`;
+    li.textContent = `${item.text} - ${item.tip}`;
     ul.appendChild(li);
   });
   el.appendChild(ul);
@@ -299,7 +299,7 @@ function load(dsKey){
       thead.innerHTML=""; ds.headers.forEach(h=>thead.appendChild(el("th",{text:h})));
       tbody.innerHTML=""; ds.rows.forEach(r=>{ const tr=el("tr"); r.forEach(v=>tr.appendChild(el("td",{text:v}))); tbody.appendChild(tr); });
       statRows.textContent = `${ds.rows.length} rows`;
-      const first=ds.rows[0]?.[0]||"—", last=ds.rows.at(-1)?.[0]||"—";
+      const first=ds.rows[0]?.[0]||"-", last=ds.rows.at(-1)?.[0]||"-";
       statPeriod.textContent = `Period ${first} → ${last}`;
       tfoot.textContent = ds.label;
 

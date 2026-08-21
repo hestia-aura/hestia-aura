@@ -422,7 +422,7 @@
           <option value="invoices">Factures clients (DSO)</option>
         </select>
         <span id="statRows" class="stat">0 lignes</span>
-        <span id="statPeriod" class="stat">Période —</span>
+        <span id="statPeriod" class="stat">Période -</span>
       </div>
 
       <div class="grid-2-1">
@@ -471,17 +471,17 @@
           <div class="kpis">
             <div class="kpi" title="">
               <div class="label" id="klabel1">KPI #1</div>
-              <div class="value kpi-value" id="kpi1">—</div>
+              <div class="value kpi-value" id="kpi1">-</div>
               <svg id="sp1" class="spark"></svg>
             </div>
             <div class="kpi" title="">
               <div class="label" id="klabel2">KPI #2</div>
-              <div class="value kpi-value" id="kpi2">—</div>
+              <div class="value kpi-value" id="kpi2">-</div>
               <svg id="sp2" class="spark"></svg>
             </div>
             <div class="kpi" title="">
               <div class="label" id="klabel3">KPI #3</div>
-              <div class="value kpi-value" id="kpi3">—</div>
+              <div class="value kpi-value" id="kpi3">-</div>
               <svg id="sp3" class="spark"></svg>
             </div>
           </div>
@@ -490,8 +490,8 @@
 
           <div class="roi" id="roi">
             <strong>Gain de temps estimé</strong>
-            <div class="muted">Processus manuel : <span id="tMan">—</span> → Automatisé : <span id="tAuto">—</span></div>
-            <div style="margin-top:6px">Économie : <span id="pct">—</span></div>
+            <div class="muted">Processus manuel : <span id="tMan">-</span> → Automatisé : <span id="tAuto">-</span></div>
+            <div style="margin-top:6px">Économie : <span id="pct">-</span></div>
           </div>
         </aside>
       </div>
@@ -713,8 +713,8 @@ function load(dsKey) {
       });
 
       statRows.textContent = `${ds.rows.length} lignes`;
-      const first = ds.rows[0]?.[0] || "—";
-      const last = ds.rows.at(-1)?.[0] || "—";
+      const first = ds.rows[0]?.[0] || "-";
+      const last = ds.rows.at(-1)?.[0] || "-";
       statPeriod.textContent = `Période ${first} → ${last}`;
       tfoot.textContent = ds.label;
 
