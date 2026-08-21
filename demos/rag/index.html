@@ -1032,7 +1032,7 @@
         return;
       }
 
-      const minimumCitationScore = Math.max(3, Math.ceil(results[0].score * .25));
+      const minimumCitationScore = Math.max(4, Math.ceil(results[0].score * .4));
       const citedResults = results
         .filter((item) => item.score >= minimumCitationScore)
         .slice(0, 3);
