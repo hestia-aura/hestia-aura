@@ -90,65 +90,86 @@ document.addEventListener('DOMContentLoaded',()=>{
 })();
 // Contact form (Web3Forms)
 (function () {
-const form = document.getElementById('contactForm') 
-          || document.querySelector('form.contact-form');
+  const form = document.getElementById('contactForm')
+            || document.querySelector('form.contact-form');
   if (!form) return;
 
-  // Si jamais l'action manque, évite l'alerte d'origine
-  form.removeAttribute('data-needs-setup');
+  const status = form.querySelector('.form-status');
+  const btn = form.querySelector('button[type="submit"]');
+  if (!status || !btn) return;
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const status = form.querySelector('.form-status');
-    const btn = form.querySelector('button[type="submit"]');
-    status.textContent = 'Envoi…';
+  const isEnglish = document.documentElement.lang.startsWith('en');
+  const messages = isEnglish
+    ? {
+        sending: 'Sending...',
+        success: 'Thank you, your message has been sent.',
+        error: 'Unable to send your message. Please try again later.'
+      }
+    : {
+        sending: 'Envoi en cours...',
+        success: 'Merci, votre message a bien été envoyé.',
+        error: 'Impossible d\'envoyer votre message. Réessayez plus tard.'
+      };
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    status.textContent = messages.sending;
     btn.disabled = true;
 
     try {
-      const res = await fetch(form.action, {
-        method: form.method,
-        body: new FormData(form)
+      const payload = Object.fromEntries(new FormData(form).entries());
+      const response = await fetch(form.action, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
       });
-      const data = await res.json();
-      if (data.success) {
-        status.textContent = 'Merci, votre message a bien été envoyé ✔';
-        form.reset();
-      } else {
-        status.textContent = 'Erreur : ' + (data.message || 'envoi impossible.');
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || messages.error);
       }
-    } catch (err) {
-      status.textContent = 'Erreur réseau. Réessayez plus tard.';
+
+      status.textContent = messages.success;
+      form.reset();
+    } catch (error) {
+      status.textContent = messages.error;
     } finally {
       btn.disabled = false;
-      setTimeout(() => (status.textContent = ''), 5000);
     }
   });
 })();
 // ==== Zoom images (lightbox) ====
-(function(){
+(function () {
   const modal = document.getElementById('imgModal');
   const modalImg = document.getElementById('imgModalImg');
   const modalClose = document.getElementById('imgModalClose');
+  const zoomableImages = document.querySelectorAll('.zoomable img');
 
-  document.querySelectorAll('.zoomable img').forEach(img => {
+  if (!modal || !modalImg || !modalClose || zoomableImages.length === 0) return;
+
+  const closeModal = () => {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+  };
+
+  zoomableImages.forEach((img) => {
     img.addEventListener('click', () => {
       modalImg.src = img.src;
       modalImg.alt = img.alt;
       modal.classList.add('open');
-      modal.setAttribute('aria-hidden','false');
+      modal.setAttribute('aria-hidden', 'false');
     });
   });
 
-  modalClose.addEventListener('click', () => {
-    modal.classList.remove('open');
-    modal.setAttribute('aria-hidden','true');
+  modalClose.addEventListener('click', closeModal);
+  modal.addEventListener('click', (event) => {
+    if (event.target === modal) closeModal();
   });
-
-  modal.addEventListener('click', e => {
-    if(e.target === modal){
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden','true');
-    }
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && modal.classList.contains('open')) closeModal();
   });
 })();
 // Gestion du switch FR/EN
