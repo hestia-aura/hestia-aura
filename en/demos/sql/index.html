@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SQL — Modeling, Queries, Data Quality & Pipeline | Hestia Aura</title>
+  <title>SQL - Modeling, Queries, Data Quality & Pipeline | Hestia Aura</title>
 
   <link rel="icon" href="/assets/logo.jpg" />
   <link rel="apple-touch-icon" href="/assets/logo.jpg" />
   <link rel="stylesheet" href="/styles.css?v=final3" />
 
   <meta name="description" content="SQL Showcase: relational model, monthly KPIs, query optimization (sargable), data quality checks and pipeline audit log." />
-  <meta property="og:title" content="SQL Showcase — Hestia Aura" />
+  <meta property="og:title" content="SQL Showcase - Hestia Aura" />
   <meta property="og:description" content="Hands-on SQL examples: modeling, analytical queries, performance, data quality and lightweight ETL pipeline." />
   <meta property="og:image" content="/assets/logo.jpg" />
 </head>
@@ -35,10 +35,10 @@
     <!-- HERO -->
     <section class="hero">
       <div class="container">
-        <h1>SQL — Modeling, Queries, Data Quality & Pipeline</h1>
+        <h1>SQL - Modeling, Queries, Data Quality & Pipeline</h1>
 
         <p>
-          Educational examples on a fictitious e-commerce dataset (CH/EU), covering 2019–2024.
+          Educational examples on a fictitious e-commerce dataset (CH/EU), covering 2019-2024.
           The point is not to “show a stack”, but to highlight
           <strong>what you can actually do with SQL</strong>: build a simple model, produce readable KPIs,
           read an execution plan to optimize a query (<em>sargable</em>), validate
@@ -57,10 +57,10 @@
         </p>
 
         <ul class="hero-badges" style="margin-top:8px">
-          <li><a href="#p1">P1 — Model & KPIs</a></li>
-          <li><a href="#p2">P2 — Optimized queries</a></li>
-          <li><a href="#p3">P3 — Data quality</a></li>
-          <li><a href="#p4">P4 — Pipeline & log</a></li>
+          <li><a href="#p1">P1 - Model & KPIs</a></li>
+          <li><a href="#p2">P2 - Optimized queries</a></li>
+          <li><a href="#p3">P3 - Data quality</a></li>
+          <li><a href="#p4">P4 - Pipeline & log</a></li>
         </ul>
       </div>
     </section>
@@ -68,7 +68,7 @@
     <!-- P1 -->
     <section id="p1" class="section">
       <div class="container">
-        <h2>P1 — Modeling & Business Queries</h2>
+        <h2>P1 - Modeling & Business Queries</h2>
 
         <div class="capsule capsule--lr">
           <figure class="capsule-media figure">
@@ -107,7 +107,7 @@
     <!-- P2 -->
     <section id="p2" class="section">
       <div class="container">
-        <h2>P2 — Performance & Indexing (Execution Plans)</h2>
+        <h2>P2 - Performance & Indexing (Execution Plans)</h2>
 
         <div class="capsule">
           <p>
@@ -119,7 +119,7 @@
 
           <div class="capsule--lr">
             <figure class="capsule-media figure figure--plan">
-              <img src="/assets/media/SQL_P2_BEFORE.jpg" alt="Execution plan before — non-sargable query" data-zoom="1" />
+              <img src="/assets/media/SQL_P2_BEFORE.jpg" alt="Execution plan before - non-sargable query" data-zoom="1" />
               <figcaption>
                 <strong>Before</strong>: non-sargable filter (<code>CONVERT(date, o.order_date)</code>),
                 index cannot be used effectively → wide scan.
@@ -128,7 +128,7 @@
 
             <div class="capsule-body">
               <figure class="figure figure--plan">
-                <img src="/assets/media/SQL_P2_AFTER.jpg" alt="Execution plan after — sargable query with index" data-zoom="1" />
+                <img src="/assets/media/SQL_P2_AFTER.jpg" alt="Execution plan after - sargable query with index" data-zoom="1" />
                 <figcaption>
                   <strong>After</strong>: direct bounds on indexed column
                   (<code>o.order_date &gt;= '2021-01-01' AND o.order_date &lt; '2023-01-01'</code>)
@@ -150,14 +150,14 @@
     <!-- P3 -->
     <section id="p3" class="section">
       <div class="container">
-        <h2>P3 — Data Quality & Reliability</h2>
+        <h2>P3 - Data Quality & Reliability</h2>
 
         <div class="capsule capsule--lr">
           <figure class="capsule-media figure">
             <img src="/assets/media/SQL_P3_QUALITY.jpg" alt="Data quality summary view: duplicates, nulls, negative payments, missing references" />
             <figcaption>
               Summary view: <strong>rule</strong>, <strong>severity</strong> (high/medium/low),
-              <strong>affected rows</strong> — sorted by priority.
+              <strong>affected rows</strong> - sorted by priority.
             </figcaption>
           </figure>
 
@@ -181,7 +181,7 @@
     <!-- P4 -->
     <section id="p4" class="section">
       <div class="container">
-        <h2>P4 — Lightweight ETL & Execution Log</h2>
+        <h2>P4 - Lightweight ETL & Execution Log</h2>
 
         <div class="capsule capsule--lr">
           <figure class="capsule-media figure">

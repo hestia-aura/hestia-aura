@@ -723,30 +723,30 @@
               <div class="kpis">
                 <div class="kpi">
                   <div class="label">Fournisseur</div>
-                  <div class="val" id="k_supplier">—</div>
+                  <div class="val" id="k_supplier">-</div>
                 </div>
                 <div class="kpi">
                   <div class="label">N° facture</div>
-                  <div class="val" id="k_num">—</div>
+                  <div class="val" id="k_num">-</div>
                 </div>
                 <div class="kpi">
                   <div class="label">Date</div>
-                  <div class="val" id="k_date">—</div>
+                  <div class="val" id="k_date">-</div>
                 </div>
               </div>
 
               <div class="kpis">
                 <div class="kpi">
                   <div class="label">Total</div>
-                  <div class="val" id="k_total">—</div>
+                  <div class="val" id="k_total">-</div>
                 </div>
                 <div class="kpi">
                   <div class="label">TVA / Taxe</div>
-                  <div class="val" id="k_vat">—</div>
+                  <div class="val" id="k_vat">-</div>
                 </div>
                 <div class="kpi">
                   <div class="label">Devise</div>
-                  <div class="val" id="k_currency">—</div>
+                  <div class="val" id="k_currency">-</div>
                 </div>
               </div>
 
@@ -914,12 +914,12 @@
     }
 
     function render(inv){
-      els.k_supplier.textContent = inv.supplier || '—';
-      els.k_num.textContent = inv.invoice_number || '—';
-      els.k_date.textContent = inv.date || '—';
-      els.k_total.textContent = (inv.total != null ? format(inv.total) : '—') + (inv.currency ? ' ' + inv.currency : '');
-      els.k_vat.textContent = inv.vat != null ? format(inv.vat) : '—';
-      els.k_currency.textContent = inv.currency || '—';
+      els.k_supplier.textContent = inv.supplier || '-';
+      els.k_num.textContent = inv.invoice_number || '-';
+      els.k_date.textContent = inv.date || '-';
+      els.k_total.textContent = (inv.total != null ? format(inv.total) : '-') + (inv.currency ? ' ' + inv.currency : '');
+      els.k_vat.textContent = inv.vat != null ? format(inv.vat) : '-';
+      els.k_currency.textContent = inv.currency || '-';
 
       els.lines.innerHTML = '';
       (inv.lines || []).forEach(l => {

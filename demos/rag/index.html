@@ -1,111 +1,1170 @@
-<!DOCTYPE html><html lang="fr"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Démonstration — RAG interne</title>
-<link rel="icon" href="/assets/logo.jpg">
-<link rel="apple-touch-icon" href="/assets/logo.jpg">
-<link rel="stylesheet" href="/styles.css?v=final3">
-<style>
-  .wrap{max-width:1080px;margin:0 auto;padding:24px 20px}
-  h1{font-size:32px;margin:8px 0 10px}
-  .muted{opacity:.85;margin:0 0 10px}
-  .filters{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 10px}
-  .chip{border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:6px 10px;cursor:pointer}
-  .chip.active{background:#1f2330}
-  .search{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0f1117;color:#e6edf3}
-  .meta{color:#94a3b8;font-size:14px;margin-top:6px}
-  .card{background:#0f1117;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px;margin-top:14px}
-  mark{background:rgba(99,102,241,.25);padding:0 2px;border-radius:2px}
-  #count{color:#c7ccd3;margin-top:6px}
-</style>
-</head><body>
-<header class="site-header"><div class="container header-inner">
-  <a class="brand" href="/" aria-label="Hestia Aura">
-    <img src="/assets/logo.jpg" alt="Hestia Aura — logo" class="brand-mark"><span class="brand-name">Hestia <strong>Aura</strong></span>
-  </a>
-<nav class="nav">
-  <a href="/">Accueil</a>
-  <a href="/about.html">À propos</a>
-  <a href="/showcase.html">Showcase</a>
-  <a class="btn btn--sm" href="/en/demos/rag/">EN</a>
-</nav>
-</div></header>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Assistant documentaire interne RAG | Jérôme Jeannin</title>
+  <meta name="description" content="Démonstration d'un assistant documentaire RAG : recherche locale, classement des sources et synthèse extractive traçable sur un corpus fictif.">
+  <link rel="icon" href="/assets/logo.jpg">
+  <link rel="apple-touch-icon" href="/assets/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=rag-fr-v1">
+  <link rel="stylesheet" href="/assets/css/demo.css">
 
-<main class="wrap">
-  <h1>Démonstration — RAG interne</h1>
-  <p class="muted">Recherche simple sur un petit corpus JSON (front-end uniquement, pas de backend).</p>
+  <style>
+    :root {
+      --rag-border: rgba(255,255,255,.09);
+      --rag-panel: #0f1117;
+      --rag-panel-2: #0a0e16;
+      --rag-text: #e6eaf0;
+      --rag-muted: #aeb6c4;
+      --rag-accent: #7374ff;
+      --rag-cyan: #4fd2ff;
+      --rag-green: #55d6a6;
+      --rag-shadow: 0 14px 36px rgba(0,0,0,.24);
+    }
 
-  <input id="q" class="search" placeholder="Rechercher (ex : QR-facture, nLPD, dépenses)…">
-  <div id="tags" class="filters"></div>
-  <div id="count"></div>
-  <div id="list"></div>
-</main>
+    .page-rag .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      line-height: 1.05;
+    }
 
-<footer class="site-footer"><div class="container footer-inner">
-  <span>© <span id="y"></span> Jérôme Jeannin</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
-</div></footer>
+    .page-rag .brand-name {
+      font-size: 14px;
+      font-weight: 700;
+    }
 
-<script>
-  const list  = document.getElementById('list');
-  const q     = document.getElementById('q');
-  const tagsEl= document.getElementById('tags');
-  const count = document.getElementById('count');
-  let corpus  = [];
-  let activeTags = new Set();
+    .page-rag .brand-label {
+      color: #9da5b3;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
 
-  function highlight(text, terms){
-    if(!terms) return text;
-    const esc = s => s.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&');
-    const rx = new RegExp('('+terms.split(/\\s+/).filter(Boolean).map(esc).join('|')+')','gi');
-    return text.replace(rx, '<mark>$1</mark>');
-  }
+    .rag-page {
+      padding: 32px 0 68px;
+    }
 
-  function render(items, terms){
-    list.innerHTML = '';
-    count.textContent = items.length + ' résultat' + (items.length>1?'s':'');
-    items.forEach(it => {
-      const div = document.createElement('div');
-      div.className = 'card';
-      div.innerHTML = '<h3>'+highlight(it.title, terms)+'</h3>'
-        + '<div class="meta">'+it.date+' • '+(it.tags||[]).join(', ')+'</div>'
-        + '<p>'+highlight(it.content, terms)+'</p>';
-      list.appendChild(div);
-    });
-  }
+    .rag-page .demo-container {
+      max-width: 1100px;
+    }
 
-  function renderTags(allTags){
-    tagsEl.innerHTML='';
-    allTags.forEach(t=>{
-      const b=document.createElement('button');
-      b.className='chip'+(activeTags.has(t)?' active':'');
-      b.textContent=t;
-      b.addEventListener('click', ()=>{
-        if(activeTags.has(t)) activeTags.delete(t); else activeTags.add(t);
-        doSearch();
+    .rag-hero {
+      margin-bottom: 22px;
+    }
+
+    .rag-hero h1 {
+      max-width: 940px;
+    }
+
+    .rag-flow {
+      margin-top: 24px;
+      padding: 22px;
+      overflow: hidden;
+      border: 1px solid var(--rag-border);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 82% 14%, rgba(115,116,255,.2), transparent 29%),
+        radial-gradient(circle at 16% 86%, rgba(79,210,255,.11), transparent 25%),
+        linear-gradient(145deg, rgba(8,11,20,.98), rgba(12,16,28,.96));
+      box-shadow: var(--rag-shadow);
+    }
+
+    .rag-flow-grid {
+      display: grid;
+      grid-template-columns: 1fr 42px 1fr 42px 1fr 42px 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .rag-flow-step {
+      min-height: 146px;
+      padding: 17px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 17px;
+      background: rgba(9,13,23,.72);
+      box-shadow: 0 10px 24px rgba(0,0,0,.18);
+    }
+
+    .rag-flow-step span {
+      display: inline-flex;
+      width: 27px;
+      height: 27px;
+      margin-bottom: 12px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--rag-accent), #8a5bff);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .rag-flow-step strong {
+      display: block;
+      margin-bottom: 7px;
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-size: 17px;
+      line-height: 1.2;
+    }
+
+    .rag-flow-step p {
+      margin: 0;
+      color: #c8ced8;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .rag-flow-arrow {
+      position: relative;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(79,210,255,.35), rgba(115,116,255,.9));
+    }
+
+    .rag-flow-arrow::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -1px;
+      width: 8px;
+      height: 8px;
+      border-top: 2px solid #9ee9ff;
+      border-right: 2px solid #9ee9ff;
+      transform: translateY(-50%) rotate(45deg);
+    }
+
+    .case-section {
+      margin-top: 30px;
+    }
+
+    .case-section h2,
+    .rag-cta h2 {
+      margin: 0 0 10px;
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-size: 29px;
+      line-height: 1.1;
+      letter-spacing: -.025em;
+    }
+
+    .case-copy {
+      max-width: 980px;
+      color: var(--rag-text);
+      font-size: 17px;
+      line-height: 1.78;
+    }
+
+    .case-copy p {
+      margin: 0;
+    }
+
+    .case-copy p + p {
+      margin-top: 12px;
+    }
+
+    .approach-grid,
+    .value-grid,
+    .production-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 13px;
+      margin-top: 16px;
+    }
+
+    .approach-item,
+    .value-item,
+    .production-item {
+      padding: 17px;
+      border: 1px solid var(--rag-border);
+      border-radius: 17px;
+      background: var(--rag-panel);
+      box-shadow: var(--rag-shadow);
+    }
+
+    .approach-item strong,
+    .value-item strong,
+    .production-item strong {
+      display: block;
+      margin-bottom: 7px;
+      color: #fff;
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .approach-item span,
+    .value-item span,
+    .production-item span {
+      color: #c4cad4;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .demo-intro {
+      margin-top: 14px;
+      padding: 18px;
+      border: 1px solid var(--rag-border);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(13,17,28,.98), rgba(9,13,22,.94));
+      box-shadow: var(--rag-shadow);
+    }
+
+    .demo-intro strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .demo-intro p {
+      margin: 0;
+      color: var(--rag-text);
+      font-size: 16px;
+      line-height: 1.72;
+    }
+
+    .rag-demo {
+      margin-top: 16px;
+      padding: 20px;
+      border: 1px solid var(--rag-border);
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgba(12,15,24,.98), rgba(8,11,18,.98));
+      box-shadow: var(--rag-shadow);
+    }
+
+    .question-label {
+      display: block;
+      margin-bottom: 8px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .question-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+    }
+
+    #query {
+      min-height: 48px;
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 12px;
+      outline: none;
+      background: #0a0e16;
+      color: #f1f4f8;
+      font: inherit;
+      font-size: 15px;
+    }
+
+    #query:focus {
+      border-color: rgba(115,116,255,.85);
+      box-shadow: 0 0 0 3px rgba(115,116,255,.16);
+    }
+
+    .question-row .btn {
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
+    .sample-label,
+    .filter-label {
+      margin: 16px 0 8px;
+      color: #9da6b5;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .sample-questions,
+    .filter-list,
+    .document-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .sample-question,
+    .filter-chip {
+      padding: 7px 10px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 999px;
+      background: rgba(255,255,255,.035);
+      color: #dce1e8;
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+      transition: border-color .18s ease, background .18s ease, color .18s ease;
+    }
+
+    .sample-question:hover,
+    .filter-chip:hover,
+    .filter-chip[aria-pressed="true"] {
+      border-color: rgba(115,116,255,.55);
+      background: rgba(115,116,255,.13);
+      color: #fff;
+    }
+
+    .local-note {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      margin: 15px 0 0;
+      color: #aeb6c4;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .local-note::before {
+      content: "";
+      flex: 0 0 7px;
+      width: 7px;
+      height: 7px;
+      margin-top: 6px;
+      border-radius: 999px;
+      background: var(--rag-green);
+      box-shadow: 0 0 12px rgba(85,214,166,.5);
+    }
+
+    .answer-panel {
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid rgba(115,116,255,.28);
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 92% 12%, rgba(115,116,255,.12), transparent 28%),
+        #0c101a;
+    }
+
+    .answer-heading {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .answer-heading h3 {
+      margin: 0;
+      color: #fff;
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-size: 20px;
+    }
+
+    .method-badge {
+      flex: 0 0 auto;
+      padding: 5px 9px;
+      border: 1px solid rgba(79,210,255,.28);
+      border-radius: 999px;
+      background: rgba(79,210,255,.09);
+      color: #9ee9ff;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .answer-placeholder,
+    .answer-text {
+      margin: 0;
+      color: #e6eaf0;
+      font-size: 15px;
+      line-height: 1.72;
+    }
+
+    .answer-placeholder {
+      color: #a8b0bd;
+    }
+
+    .answer-citations {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-top: 13px;
+    }
+
+    .citation-chip {
+      padding: 5px 8px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 8px;
+      background: rgba(255,255,255,.04);
+      color: #cfd5de;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .answer-warning {
+      margin: 12px 0 0;
+      color: #929cab;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .results-toolbar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 20px 0 10px;
+    }
+
+    .results-toolbar h3 {
+      margin: 0;
+      color: #fff;
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-size: 20px;
+    }
+
+    #resultCount {
+      color: #9ea7b5;
+      font-size: 12px;
+    }
+
+    .source-list {
+      display: grid;
+      gap: 11px;
+    }
+
+    .source-card {
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+      background: var(--rag-panel);
+    }
+
+    .source-card-header {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .source-card h4 {
+      margin: 0 0 6px;
+      color: #fff;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .source-meta {
+      color: #8f98a7;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .score-badge {
+      flex: 0 0 auto;
+      padding: 5px 8px;
+      border: 1px solid rgba(115,116,255,.28);
+      border-radius: 999px;
+      background: rgba(115,116,255,.09);
+      color: #b9baff;
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .source-content {
+      margin: 12px 0;
+      color: #d9dee6;
+      font-size: 14px;
+      line-height: 1.66;
+    }
+
+    .document-tag {
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.045);
+      color: #aeb6c4;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .empty-results,
+    .loading-state {
+      padding: 28px;
+      border: 1px dashed rgba(255,255,255,.12);
+      border-radius: 14px;
+      color: #9da6b5;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    #showMore {
+      margin-top: 12px;
+    }
+
+    .production-note {
+      margin-top: 14px;
+      padding: 17px 18px;
+      border-left: 3px solid var(--rag-accent);
+      border-radius: 0 14px 14px 0;
+      background: rgba(115,116,255,.08);
+      color: #dce1e8;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .rag-cta {
+      margin-top: 30px;
+      padding: 22px;
+      border: 1px solid var(--rag-border);
+      border-radius: 19px;
+      background: var(--rag-panel);
+      box-shadow: var(--rag-shadow);
+    }
+
+    .rag-cta p {
+      max-width: 900px;
+      margin: 0 0 17px;
+      color: var(--rag-text);
+      font-size: 16px;
+      line-height: 1.72;
+    }
+
+    .rag-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 940px) {
+      .rag-flow-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .rag-flow-arrow {
+        display: none;
+      }
+
+      .approach-grid,
+      .value-grid,
+      .production-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .rag-page {
+        padding-top: 24px;
+      }
+
+      .page-rag .nav a:not(.btn) {
+        display: none;
+      }
+
+      .rag-flow {
+        padding: 16px;
+      }
+
+      .rag-flow-grid,
+      .approach-grid,
+      .value-grid,
+      .production-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .rag-flow-step {
+        min-height: 0;
+      }
+
+      .case-section h2,
+      .rag-cta h2 {
+        font-size: 25px;
+      }
+
+      .case-copy {
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
+      .rag-demo {
+        padding: 15px;
+      }
+
+      .question-row {
+        grid-template-columns: 1fr;
+      }
+
+      .question-row .btn {
+        width: 100%;
+      }
+
+      .answer-heading,
+      .results-toolbar,
+      .source-card-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .footer-inner {
+        gap: 10px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body class="page-rag">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
+        <img src="/assets/logo.jpg" alt="" class="brand-mark">
+        <span class="brand-text">
+          <span class="brand-name">Jérôme Jeannin</span>
+          <span class="brand-label">Hestia Aura</span>
+        </span>
+      </a>
+
+      <nav class="nav" aria-label="Navigation principale">
+        <a href="/">Accueil</a>
+        <a href="/about.html">À propos</a>
+        <a href="/showcase.html">Showcase</a>
+        <a href="/en/demos/rag/" class="btn btn--sm">EN</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="rag-page">
+    <div class="demo-container">
+      <section class="demo-hero rag-hero">
+        <p class="section-kicker">IA appliquée · Recherche documentaire</p>
+        <h1>Assistant documentaire interne avec RAG</h1>
+        <p>
+          Interroger un corpus interne, classer les documents les plus pertinents et restituer une réponse
+          traçable avec ses sources pour accélérer l'accès à l'information métier.
+        </p>
+
+        <div class="rag-flow" aria-label="Flux simplifié d'un assistant RAG">
+          <div class="rag-flow-grid">
+            <div class="rag-flow-step">
+              <span>01</span>
+              <strong>Question métier</strong>
+              <p>L'utilisateur formule son besoin en langage naturel.</p>
+            </div>
+            <div class="rag-flow-arrow" aria-hidden="true"></div>
+            <div class="rag-flow-step">
+              <span>02</span>
+              <strong>Recherche</strong>
+              <p>Le corpus est parcouru et les documents sont classés selon leur pertinence.</p>
+            </div>
+            <div class="rag-flow-arrow" aria-hidden="true"></div>
+            <div class="rag-flow-step">
+              <span>03</span>
+              <strong>Sources</strong>
+              <p>Les passages utiles sont retenus avec leur identifiant et leur origine.</p>
+            </div>
+            <div class="rag-flow-arrow" aria-hidden="true"></div>
+            <div class="rag-flow-step">
+              <span>04</span>
+              <strong>Réponse assistée</strong>
+              <p>Une restitution fondée sur les sources est présentée à l'utilisateur.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Contexte métier</h2>
+        <div class="case-copy">
+          <p>
+            Les procédures, référentiels et guides internes sont souvent dispersés entre plusieurs espaces.
+            Les équipes passent du temps à rechercher la bonne information, à vérifier sa version et à identifier
+            la source suffisamment fiable pour prendre une décision.
+          </p>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Problématique</h2>
+        <div class="case-copy">
+          <p>
+            Comment permettre à un collaborateur de poser une question simplement, retrouver les documents
+            pertinents et obtenir une réponse traçable sans masquer l'origine de l'information ni inventer
+            une réponse lorsque les sources sont insuffisantes ?
+          </p>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Approche</h2>
+        <div class="case-copy">
+          <p>
+            Un système RAG, pour Retrieval-Augmented Generation ou génération augmentée par la recherche,
+            commence par retrouver les informations utiles avant de produire une réponse. Cette démonstration
+            se concentre sur cette couche de recherche et remplace volontairement la génération par une synthèse
+            extractive locale afin que chaque résultat reste vérifiable.
+          </p>
+        </div>
+
+        <div class="approach-grid">
+          <div class="approach-item">
+            <strong>Corpus fictif</strong>
+            <span>Quatorze documents métier couvrant Data, IA, sécurité, finance et reporting.</span>
+          </div>
+          <div class="approach-item">
+            <strong>Recherche pondérée</strong>
+            <span>Le titre, les tags, la source et le contenu contribuent différemment au score.</span>
+          </div>
+          <div class="approach-item">
+            <strong>Sources classées</strong>
+            <span>Les documents les plus pertinents sont ordonnés et conservés comme références.</span>
+          </div>
+          <div class="approach-item">
+            <strong>Réponse traçable</strong>
+            <span>La restitution cite explicitement les documents utilisés et signale les recherches sans résultat.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Ce que montre la démo</h2>
+        <div class="demo-intro">
+          <strong>Interrogez un corpus documentaire fictif</strong>
+          <p>
+            Saisissez une question ou choisissez un exemple. La démonstration classe les documents,
+            affiche le meilleur extrait et cite les sources retenues. Le score est un indicateur transparent
+            fondé sur les termes retrouvés, pas une probabilité calculée par un modèle d'IA.
+          </p>
+        </div>
+
+        <div class="rag-demo">
+          <label class="question-label" for="query">Question à poser au corpus</label>
+          <div class="question-row">
+            <input id="query" type="search" placeholder="Exemple : comment sécuriser l'accès aux données sensibles ?" autocomplete="off">
+            <button id="searchButton" class="btn" type="button">Rechercher</button>
+            <button id="resetButton" class="btn btn--outline" type="button">Réinitialiser</button>
+          </div>
+
+          <p class="sample-label">Questions d'exemple</p>
+          <div class="sample-questions">
+            <button class="sample-question" type="button" data-question="Comment sécuriser l'accès aux données sensibles ?">Accès aux données sensibles</button>
+            <button class="sample-question" type="button" data-question="Quels contrôles prévoir pour un pipeline de données ?">Qualité d'un pipeline</button>
+            <button class="sample-question" type="button" data-question="Comment fiabiliser un assistant RAG ?">Fiabilité d'un RAG</button>
+            <button class="sample-question" type="button" data-question="Comment automatiser le traitement des factures ?">Traitement des factures</button>
+          </div>
+
+          <p class="filter-label">Filtres documentaires</p>
+          <div id="filters" class="filter-list" aria-label="Filtrer les documents par thème"></div>
+
+          <p class="local-note">
+            Démonstration front-end : le corpus JSON, la recherche, le classement et la synthèse sont exécutés localement.
+            Aucun modèle génératif ni service distant n'est appelé.
+          </p>
+
+          <section class="answer-panel" aria-live="polite">
+            <div class="answer-heading">
+              <h3>Réponse assistée</h3>
+              <span class="method-badge">Synthèse extractive locale</span>
+            </div>
+            <p id="answerPlaceholder" class="answer-placeholder">
+              Posez une question pour afficher l'extrait le plus pertinent et les documents qui le justifient.
+            </p>
+            <div id="answerContent" hidden>
+              <p id="answerText" class="answer-text"></p>
+              <div id="answerCitations" class="answer-citations"></div>
+              <p class="answer-warning">
+                Cette réponse reprend le contenu du corpus. Une version de production devrait évaluer la qualité
+                des réponses, gérer les droits d'accès et refuser explicitement les demandes insuffisamment documentées.
+              </p>
+            </div>
+          </section>
+
+          <div class="results-toolbar">
+            <h3>Sources retrouvées</h3>
+            <span id="resultCount" aria-live="polite">Chargement du corpus...</span>
+          </div>
+
+          <div id="sourceList" class="source-list">
+            <div class="loading-state">Chargement du corpus documentaire...</div>
+          </div>
+
+          <button id="showMore" class="btn btn--outline" type="button" hidden>Afficher tous les documents</button>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Valeur apportée</h2>
+        <div class="value-grid">
+          <div class="value-item">
+            <strong>Accès plus rapide</strong>
+            <span>Réduction du temps consacré à parcourir plusieurs espaces documentaires.</span>
+          </div>
+          <div class="value-item">
+            <strong>Réponse traçable</strong>
+            <span>Conservation des documents utilisés pour vérifier et approfondir le résultat.</span>
+          </div>
+          <div class="value-item">
+            <strong>Connaissance partagée</strong>
+            <span>Mise à disposition plus homogène des procédures et référentiels internes.</span>
+          </div>
+          <div class="value-item">
+            <strong>Risque mieux maîtrisé</strong>
+            <span>Signalement des recherches insuffisantes au lieu de produire une réponse non fondée.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>De la démonstration à la production</h2>
+        <div class="case-copy">
+          <p>
+            Une architecture réelle pourrait ingérer des documents depuis SharePoint ou Azure Blob Storage,
+            les découper en passages, calculer leurs embeddings - des représentations numériques du sens -
+            puis les indexer dans Azure AI Search. Azure OpenAI pourrait ensuite formuler une réponse à partir
+            des passages autorisés, avec citations, contrôle des accès, journalisation et tests de qualité.
+          </p>
+        </div>
+
+        <div class="production-grid">
+          <div class="production-item">
+            <strong>Ingestion</strong>
+            <span>Collecte, nettoyage, découpage et suivi des versions documentaires.</span>
+          </div>
+          <div class="production-item">
+            <strong>Index vectoriel</strong>
+            <span>Recherche par proximité de sens avec filtres métier et droits d'accès.</span>
+          </div>
+          <div class="production-item">
+            <strong>Génération contrôlée</strong>
+            <span>Réponse limitée au contexte retrouvé avec citations et règles de refus.</span>
+          </div>
+          <div class="production-item">
+            <strong>Évaluation continue</strong>
+            <span>Jeu de questions de référence, suivi des erreurs et validation métier.</span>
+          </div>
+        </div>
+
+        <div class="production-note">
+          Le point essentiel n'est pas seulement le modèle utilisé. La qualité dépend aussi du corpus,
+          des droits d'accès, de la fraîcheur des documents, de la stratégie de recherche et des évaluations.
+        </div>
+      </section>
+
+      <section class="rag-cta">
+        <h2>Aller plus loin</h2>
+        <p>
+          Ce type d'assistant peut soutenir un support interne, une base de procédures, un dispositif de conformité
+          ou l'accès à une documentation Data et BI, avec un niveau de contrôle adapté aux informations traitées.
+        </p>
+        <div class="rag-actions">
+          <a href="mailto:contact@hestiaaura.com" class="btn">Me contacter</a>
+          <a href="/showcase.html" class="btn btn--outline">Retour au showcase</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© <span id="y"></span> Jérôme Jeannin</span>
+      <a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+    </div>
+  </footer>
+
+  <script src="/app.js?v=rag-fr-v1"></script>
+  <script>
+    const queryInput = document.getElementById('query');
+    const searchButton = document.getElementById('searchButton');
+    const resetButton = document.getElementById('resetButton');
+    const filterContainer = document.getElementById('filters');
+    const sourceList = document.getElementById('sourceList');
+    const resultCount = document.getElementById('resultCount');
+    const answerPlaceholder = document.getElementById('answerPlaceholder');
+    const answerContent = document.getElementById('answerContent');
+    const answerText = document.getElementById('answerText');
+    const answerCitations = document.getElementById('answerCitations');
+    const showMoreButton = document.getElementById('showMore');
+    const sampleButtons = document.querySelectorAll('.sample-question');
+
+    const stopWords = new Set([
+      'a', 'au', 'aux', 'avec', 'ce', 'ces', 'comment', 'dans', 'de', 'des', 'du',
+      'en', 'et', 'la', 'le', 'les', 'pour', 'prevoir', 'quel', 'quelle', 'quelles',
+      'quels', 'un', 'une'
+    ]);
+
+    let corpus = [];
+    let activeTags = new Set();
+    let currentResults = [];
+    let showAll = false;
+
+    function normalize(value) {
+      return String(value || '')
+        .toLocaleLowerCase('fr')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function tokenize(value) {
+      const words = normalize(value).match(/[a-z0-9]+/g) || [];
+      return Array.from(new Set(words.filter((word) => word.length > 1 && !stopWords.has(word))));
+    }
+
+    function documentSearchText(document) {
+      return {
+        title: normalize(document.title),
+        tags: normalize((document.tags || []).join(' ')),
+        source: normalize(document.source),
+        content: normalize(document.content)
+      };
+    }
+
+    function matchesActiveTags(document) {
+      if (!activeTags.size) {
+        return true;
+      }
+      return Array.from(activeTags).every((tag) => (document.tags || []).includes(tag));
+    }
+
+    function scoreDocument(document, tokens, normalizedPhrase) {
+      if (!matchesActiveTags(document)) {
+        return 0;
+      }
+
+      if (!tokens.length) {
+        return 0;
+      }
+
+      const searchText = documentSearchText(document);
+      let score = 0;
+
+      tokens.forEach((token) => {
+        if (searchText.title.includes(token)) score += 5;
+        if (searchText.tags.includes(token)) score += 4;
+        if (searchText.source.includes(token)) score += 2;
+        if (searchText.content.includes(token)) score += 1;
       });
-      tagsEl.appendChild(b);
-    });
-  }
 
-  function doSearch(){
-    const t = q.value.toLowerCase().trim();
-    const res = corpus.filter(it=>{
-      const hay = (it.title+' '+it.content+' '+(it.tags||[]).join(' ')).toLowerCase();
-      const okText = t ? t.split(/\\s+/).every(w=>hay.includes(w)) : true;
-      const okTags = activeTags.size? (it.tags||[]).some(tag=>activeTags.has(tag)) : true;
-      return okText && okTags;
-    });
-    render(res, t);
-  }
+      const combined = [searchText.title, searchText.tags, searchText.source, searchText.content].join(' ');
+      if (normalizedPhrase.length > 4 && combined.includes(normalizedPhrase)) {
+        score += 8;
+      }
 
-  fetch('/demos/rag/corpus.json')
-    .then(r => r.json())
-    .then(data => {
-      corpus = data;
-      const allTags = Array.from(new Set(corpus.flatMap(it=>it.tags||[]))).sort();
-      renderTags(allTags);
-      render(corpus, '');
+      return score;
+    }
+
+    function searchCorpus(query) {
+      const tokens = tokenize(query);
+      const normalizedPhrase = normalize(query).trim();
+
+      if (!tokens.length) {
+        return corpus
+          .filter(matchesActiveTags)
+          .map((document) => ({ document, score: 0 }))
+          .sort((a, b) => b.document.date.localeCompare(a.document.date));
+      }
+
+      return corpus
+        .map((document) => ({
+          document,
+          score: scoreDocument(document, tokens, normalizedPhrase)
+        }))
+        .filter((item) => item.score > 0)
+        .sort((a, b) => b.score - a.score || b.document.date.localeCompare(a.document.date));
+    }
+
+    function createTag(text, className) {
+      const tag = document.createElement('span');
+      tag.className = className;
+      tag.textContent = text;
+      return tag;
+    }
+
+    function renderSourceCard(item, hasQuery) {
+      const card = document.createElement('article');
+      card.className = 'source-card';
+
+      const header = document.createElement('div');
+      header.className = 'source-card-header';
+
+      const titleGroup = document.createElement('div');
+      const title = document.createElement('h4');
+      title.textContent = item.document.title;
+
+      const meta = document.createElement('div');
+      meta.className = 'source-meta';
+      meta.textContent = item.document.id + ' · ' + item.document.source + ' · ' + item.document.date;
+
+      titleGroup.append(title, meta);
+      header.appendChild(titleGroup);
+
+      if (hasQuery) {
+        header.appendChild(createTag('Score ' + item.score + ' pts', 'score-badge'));
+      }
+
+      const content = document.createElement('p');
+      content.className = 'source-content';
+      content.textContent = item.document.content;
+
+      const tags = document.createElement('div');
+      tags.className = 'document-tags';
+      (item.document.tags || []).forEach((tag) => {
+        tags.appendChild(createTag(tag, 'document-tag'));
+      });
+
+      card.append(header, content, tags);
+      return card;
+    }
+
+    function renderAnswer(query, results) {
+      answerCitations.replaceChildren();
+
+      if (!query.trim()) {
+        answerContent.hidden = true;
+        answerPlaceholder.hidden = false;
+        answerPlaceholder.textContent = 'Posez une question pour afficher l’extrait le plus pertinent et les documents qui le justifient.';
+        return;
+      }
+
+      if (!results.length) {
+        answerContent.hidden = true;
+        answerPlaceholder.hidden = false;
+        answerPlaceholder.textContent = 'Les sources disponibles ne permettent pas de répondre de façon suffisamment fondée. Reformulez la question ou élargissez les filtres.';
+        return;
+      }
+
+      const minimumCitationScore = Math.max(5, Math.ceil(results[0].score * .6));
+      const citedResults = results
+        .filter((item) => item.score >= minimumCitationScore)
+        .slice(0, 3);
+      answerPlaceholder.hidden = true;
+      answerContent.hidden = false;
+      answerText.textContent = citedResults[0].document.content;
+
+      citedResults.forEach((item) => {
+        answerCitations.appendChild(createTag(item.document.id + ' · ' + item.document.title, 'citation-chip'));
+      });
+    }
+
+    function renderResults() {
+      const query = queryInput.value.trim();
+      const hasQuery = tokenize(query).length > 0;
+      const visibleResults = showAll ? currentResults : currentResults.slice(0, 6);
+
+      sourceList.replaceChildren();
+
+      if (!visibleResults.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-results';
+        empty.textContent = 'Aucun document ne correspond à cette recherche et aux filtres sélectionnés.';
+        sourceList.appendChild(empty);
+      } else {
+        visibleResults.forEach((item) => {
+          sourceList.appendChild(renderSourceCard(item, hasQuery));
+        });
+      }
+
+      const visibleCount = Math.min(visibleResults.length, currentResults.length);
+      resultCount.textContent = currentResults.length
+        ? visibleCount + ' document' + (visibleCount > 1 ? 's' : '') + ' affiché' + (visibleCount > 1 ? 's' : '') + ' sur ' + currentResults.length
+        : '0 document retrouvé';
+
+      showMoreButton.hidden = currentResults.length <= 6 || showAll;
+      renderAnswer(query, currentResults);
+    }
+
+    function runSearch() {
+      showAll = false;
+      currentResults = searchCorpus(queryInput.value);
+      renderResults();
+    }
+
+    function renderFilters() {
+      const counts = new Map();
+      corpus.forEach((document) => {
+        (document.tags || []).forEach((tag) => {
+          counts.set(tag, (counts.get(tag) || 0) + 1);
+        });
+      });
+
+      const tags = Array.from(counts.entries())
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'fr'))
+        .slice(0, 10);
+
+      filterContainer.replaceChildren();
+
+      tags.forEach(([tag, count]) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'filter-chip';
+        button.textContent = tag + ' (' + count + ')';
+        button.setAttribute('aria-pressed', 'false');
+
+        button.addEventListener('click', () => {
+          if (activeTags.has(tag)) {
+            activeTags.delete(tag);
+          } else {
+            activeTags.add(tag);
+          }
+          button.setAttribute('aria-pressed', String(activeTags.has(tag)));
+          runSearch();
+        });
+
+        filterContainer.appendChild(button);
+      });
+    }
+
+    function resetDemo() {
+      queryInput.value = '';
+      activeTags.clear();
+      showAll = false;
+      filterContainer.querySelectorAll('.filter-chip').forEach((button) => {
+        button.setAttribute('aria-pressed', 'false');
+      });
+      runSearch();
+      queryInput.focus();
+    }
+
+    searchButton.addEventListener('click', runSearch);
+    resetButton.addEventListener('click', resetDemo);
+    queryInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        runSearch();
+      }
     });
 
-  q.addEventListener('input', doSearch);
-</script>
-</body></html>
+    sampleButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        queryInput.value = button.dataset.question || '';
+        runSearch();
+      });
+    });
+
+    showMoreButton.addEventListener('click', () => {
+      showAll = true;
+      renderResults();
+    });
+
+    fetch('/demos/rag/corpus.json')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Chargement du corpus impossible');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        corpus = Array.isArray(data) ? data : [];
+        renderFilters();
+        runSearch();
+      })
+      .catch(() => {
+        sourceList.replaceChildren();
+        const error = document.createElement('div');
+        error.className = 'empty-results';
+        error.textContent = 'Le corpus ne peut pas être chargé pour le moment.';
+        sourceList.appendChild(error);
+        resultCount.textContent = 'Corpus indisponible';
+        answerPlaceholder.textContent = 'La réponse assistée est indisponible tant que les sources ne sont pas chargées.';
+      });
+  </script>
+</body>
+</html>

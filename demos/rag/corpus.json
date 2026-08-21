@@ -1,110 +1,114 @@
 [
   {
-    "title": "Procédure de facturation clients",
-    "content": "Chaque facture inclut l’ID client, le numéro de commande et la devise. Pour la Suisse, privilégier la QR-facture avec référence. Export CSV : date, montant_ht, tva, total, devise, id_client.",
-    "tags": ["Finance", "Facturation", "Suisse", "QR-facture"],
-    "date": "2024-06-12"
+    "id": "DOC-001",
+    "title": "Automatisation du traitement des factures",
+    "content": "Les factures reçues sont déposées dans un espace sécurisé, puis leurs champs principaux sont extraits et contrôlés. Les documents incomplets sont orientés vers une validation humaine avant export vers le système comptable.",
+    "tags": ["Finance", "Automatisation", "Documents"],
+    "source": "Procédure Finance",
+    "date": "2026-05-14"
   },
   {
-    "title": "FADP (nLPD) — quick summary",
-    "content": "Switzerland’s updated data protection law requires transparency, data minimization and security by design. Explicit consent for sensitive data; right of access and deletion.",
-    "tags": ["Legal", "FADP", "Switzerland", "Privacy"],
-    "date": "2023-09-01"
+    "id": "DOC-002",
+    "title": "Contrôles qualité d'un pipeline de données",
+    "content": "Chaque chargement vérifie le schéma, les valeurs obligatoires, les doublons et les volumes attendus. Les anomalies bloquantes interrompent le flux, tandis que les écarts mineurs sont journalisés avec un responsable et une date de correction.",
+    "tags": ["Data", "Qualité", "Pipeline"],
+    "source": "Standard Data Engineering",
+    "date": "2026-04-28"
   },
   {
-    "title": "QR-facture — rappel express",
-    "content": "La QR-facture remplace les bulletins orange/rouge. Elle contient un QR avec l’IBAN, le montant et la référence (RF…). Vérifier la référence et le format IBAN CH.",
-    "tags": ["Suisse", "Paiements", "QR-facture"],
-    "date": "2023-12-01"
+    "id": "DOC-003",
+    "title": "Accès aux données sensibles",
+    "content": "L'accès aux données sensibles suit le principe du moindre privilège : chaque utilisateur reçoit uniquement les droits nécessaires à son activité. L'authentification multifacteur, la revue périodique des habilitations et la journalisation des accès sont obligatoires.",
+    "tags": ["Sécurité", "Gouvernance", "Données"],
+    "source": "Politique de sécurité",
+    "date": "2026-06-03"
   },
   {
-    "title": "QR-bill essentials",
-    "content": "The Swiss QR-bill encodes IBAN, amount and a reference (RF…). Validate the IBAN (CH) format and ensure the reference matches the payment slip.",
-    "tags": ["Switzerland", "Payments", "QR-bill"],
-    "date": "2023-12-01"
+    "id": "DOC-004",
+    "title": "Classification et traitement des incidents",
+    "content": "Un incident est classé selon son impact métier et le nombre d'utilisateurs concernés. Les incidents critiques déclenchent une prise en charge immédiate, une communication régulière et une analyse des causes avec plan d'actions après rétablissement.",
+    "tags": ["IT", "Support", "Incidents"],
+    "source": "Guide des opérations",
+    "date": "2026-03-19"
   },
   {
-    "title": "nLPD (FADP) — principes",
-    "content": "La nouvelle loi fédérale sur la protection des données impose transparence, minimisation et sécurité. Consentement explicite pour les données sensibles, droits d’accès et de suppression.",
-    "tags": ["Legal", "nLPD", "Suisse", "Protection des données"],
-    "date": "2023-09-01"
+    "id": "DOC-005",
+    "title": "Conservation et suppression des données",
+    "content": "Chaque catégorie de données possède une durée de conservation, un propriétaire et une règle de suppression. Les données arrivées à échéance sont supprimées ou anonymisées, sauf obligation métier ou réglementaire documentée.",
+    "tags": ["Conformité", "Gouvernance", "Données"],
+    "source": "Référentiel de conservation",
+    "date": "2026-02-11"
   },
   {
-    "title": "Finance onboarding (KYC) — outline",
-    "content": "Identity collection, proof of address, PEP/sanctions screening. Any alert must be reviewed and documented before account activation.",
-    "tags": ["Compliance", "KYC", "Finance"],
-    "date": "2024-02-20"
+    "id": "DOC-006",
+    "title": "Mise en production d'un modèle d'IA",
+    "content": "Avant mise en production, le modèle est évalué sur des cas représentatifs, des cas limites et des critères de qualité définis avec le métier. La version, les données de test, les résultats et les conditions de retour arrière sont conservés pour assurer la traçabilité.",
+    "tags": ["IA", "Qualité", "Gouvernance"],
+    "source": "Cadre IA responsable",
+    "date": "2026-05-30"
   },
   {
-    "title": "FINMA — exigences (résumé non officiel)",
-    "content": "Pour les prestataires financiers : gouvernance des risques, continuité, journalisation et contrôles d’accès. Pour un POC data/IA, inclure un plan de tests et de traçabilité.",
-    "tags": ["Compliance", "FINMA", "Suisse"],
-    "date": "2024-04-10"
+    "id": "DOC-007",
+    "title": "Documentation des indicateurs Power BI",
+    "content": "Chaque indicateur doit préciser sa définition métier, sa formule, sa granularité, sa source, sa fréquence de mise à jour et son propriétaire. Toute évolution est validée avec les utilisateurs et ajoutée au dictionnaire des KPI.",
+    "tags": ["Power BI", "Reporting", "KPI"],
+    "source": "Guide BI",
+    "date": "2026-04-07"
   },
   {
-    "title": "Incident management basics",
-    "content": "P1/P2/P3 severity. P1 = customer impact, response <30 min. Post-mortem within 48h with corrective actions and owners.",
-    "tags": ["IT", "Incidents", "Operations"],
-    "date": "2024-05-07"
+    "id": "DOC-008",
+    "title": "Contrôles d'onboarding client",
+    "content": "L'onboarding collecte les informations d'identité et les justificatifs nécessaires, puis vérifie leur cohérence. Toute alerte issue des contrôles de conformité doit être analysée, documentée et validée avant l'activation du dossier.",
+    "tags": ["Conformité", "Finance", "Onboarding"],
+    "source": "Procédure Conformité",
+    "date": "2026-01-22"
   },
   {
-    "title": "Politique de dépenses 2024",
-    "content": "Plafonds : hôtels 220 CHF/nuit en Suisse, trains en 2e classe. Les reçus sont requis sous 10 jours via le portail. Remboursement en CHF à J+7.",
-    "tags": ["RH", "Dépenses", "Suisse"],
-    "date": "2024-01-10"
+    "id": "DOC-009",
+    "title": "Gestion des changements applicatifs",
+    "content": "Une mise en production décrit le changement, les risques, les tests réalisés et le plan de retour arrière. Les changements à fort impact nécessitent une validation formelle et sont évités pendant les périodes métier critiques.",
+    "tags": ["IT", "Production", "Changement"],
+    "source": "Processus de changement",
+    "date": "2026-03-05"
   },
   {
-    "title": "Password policy",
-    "content": "12+ characters, password manager recommended, MFA required. Rotate privileged accounts regularly. No customer data in tickets.",
-    "tags": ["IT", "Security"],
-    "date": "2023-10-05"
+    "id": "DOC-010",
+    "title": "Protection des données personnelles",
+    "content": "La collecte de données personnelles doit répondre à un objectif explicite et se limiter aux informations réellement nécessaires. Les personnes concernées sont informées de l'usage, de la durée de conservation et des modalités d'exercice de leurs droits.",
+    "tags": ["Conformité", "Données", "Confidentialité"],
+    "source": "Charte de confidentialité",
+    "date": "2026-02-26"
   },
   {
-    "title": "Sécurité — mots de passe",
-    "content": "Longueur 12+, gestionnaire recommandé, MFA obligatoire. Rotation sur comptes à privilèges. Aucune donnée client dans les tickets.",
-    "tags": ["IT", "Sécurité"],
-    "date": "2023-10-05"
+    "id": "DOC-011",
+    "title": "Supervision d'un flux de données",
+    "content": "La supervision suit le statut des traitements, leur durée, les volumes chargés et les erreurs rencontrées. Une alerte est envoyée lorsque le flux échoue, dépasse sa durée habituelle ou produit un volume incohérent.",
+    "tags": ["Data", "Pipeline", "Supervision"],
+    "source": "Guide d'exploitation Data",
+    "date": "2026-05-06"
   },
   {
-    "title": "Expense policy 2024",
-    "content": "Hotel cap CHF 220/night in Switzerland, 2nd class trains. Receipts within 10 days via portal. Reimbursement in CHF within 7 days.",
-    "tags": ["HR", "Expenses", "Switzerland"],
-    "date": "2024-01-10"
+    "id": "DOC-012",
+    "title": "Qualité du référentiel client",
+    "content": "Le référentiel client applique des règles d'unicité, de complétude et de cohérence sur les identifiants, coordonnées et statuts. Les doublons potentiels sont rapprochés selon des critères documentés avant toute fusion.",
+    "tags": ["Data", "Qualité", "CRM"],
+    "source": "Règles de qualité CRM",
+    "date": "2026-04-16"
   },
   {
-    "title": "BYOD — terminaux personnels",
-    "content": "Appareils conformes (OS à jour, chiffrement activé). Accès aux données clients via VPN et MDM. Révocation à la sortie du collaborateur.",
-    "tags": ["IT", "Sécurité", "BYOD"],
-    "date": "2023-11-18"
+    "id": "DOC-013",
+    "title": "Fiabilisation d'un assistant RAG",
+    "content": "Un assistant RAG doit citer les documents utilisés, limiter sa réponse aux informations retrouvées et signaler lorsque les sources sont insuffisantes. La qualité se mesure avec un jeu de questions de référence, une revue métier et un suivi des réponses non fondées.",
+    "tags": ["IA", "RAG", "Qualité"],
+    "source": "Guide IA appliquée",
+    "date": "2026-06-12"
   },
   {
-    "title": "Swiss IBAN validation — mod 97",
-    "content": "Ensure CH IBAN format and checksum using mod 97. Reject invalid length/characters; log failed validations for review.",
-    "tags": ["Switzerland", "Payments", "IBAN"],
-    "date": "2024-03-15"
-  },
-  {
-    "title": "Onboarding compliance (KYC)",
-    "content": "Collecte d’identité, preuve d’adresse, screening PEP/sanctions. Toute alerte doit être analysée et documentée avant activation du compte.",
-    "tags": ["Compliance", "KYC", "Finance"],
-    "date": "2024-02-20"
-  },
-  {
-    "title": "Data retention — finance records",
-    "content": "Keep accounting and audit-relevant records for extended periods as required by regulation. Define owners, retention periods and deletion workflows.",
-    "tags": ["Compliance", "Records", "Switzerland"],
-    "date": "2024-01-31"
-  },
-  {
-    "title": "Gestion des incidents",
-    "content": "Classification P1/P2/P3. P1 = impact client large, engagement interne 30 min. Post-mortem en 48 h avec actions correctives.",
-    "tags": ["IT", "Incidents", "Support"],
-    "date": "2024-05-07"
-  },
-  {
-    "title": "Change management (CAB) — outline",
-    "content": "Document changes, risk-level, rollback plan; approvals via CAB for high-risk releases. Freeze periods for critical business dates.",
-    "tags": ["IT", "Change", "Operations"],
-    "date": "2024-04-22"
+    "id": "DOC-014",
+    "title": "Validation et gouvernance des KPI",
+    "content": "Un KPI est validé lorsque sa définition, sa source et ses règles de calcul sont partagées par les équipes concernées. Un propriétaire métier arbitre les évolutions et un contrôle automatique vérifie la fraîcheur et la complétude des données.",
+    "tags": ["Reporting", "KPI", "Gouvernance"],
+    "source": "Comité de pilotage Data",
+    "date": "2026-05-21"
   }
 ]
