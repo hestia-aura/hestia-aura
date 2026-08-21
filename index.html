@@ -885,12 +885,17 @@
             </div>
           </div>
 
-          <form class="contact-form" action="mailto:contact@hestiaaura.com" method="post" enctype="text/plain">
-            <input type="text" name="Nom" placeholder="Nom" required>
-            <input type="email" name="Email" placeholder="E-mail" required>
-            <input type="text" name="Sujet" placeholder="Sujet">
-            <textarea name="Message" placeholder="Votre message"></textarea>
+          <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" class="contact-form">
+            <input type="hidden" name="access_key" value="0fd6281b-4d44-4857-8c2f-f70937b432fa">
+            <input type="hidden" name="subject" value="Nouveau message - Hestia Aura">
+            <input type="hidden" name="from_name" value="Portfolio Hestia Aura">
+            <input type="checkbox" name="botcheck" class="hidden" style="display:none">
+            <input type="text" name="name" placeholder="Nom" autocomplete="name" required>
+            <input type="email" name="email" placeholder="E-mail" autocomplete="email" required>
+            <input type="text" name="Objet" placeholder="Sujet">
+            <textarea name="message" placeholder="Votre message" required></textarea>
             <button class="btn" type="submit">Envoyer</button>
+            <p class="form-status" aria-live="polite"></p>
           </form>
         </div>
       </div>
