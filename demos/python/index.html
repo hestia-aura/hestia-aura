@@ -978,9 +978,9 @@
         <div class="artifact-shell">
           <div class="artifact-tabs" role="tablist" aria-label="Étapes du prototype Python">
             <button class="artifact-tab" id="tab-prepare" type="button" role="tab" aria-selected="true" aria-controls="panel-prepare" data-panel="prepare">1. Préparer</button>
-            <button class="artifact-tab" id="tab-measure" type="button" role="tab" aria-selected="false" aria-controls="panel-measure" data-panel="measure">2. Mesurer</button>
-            <button class="artifact-tab" id="tab-control" type="button" role="tab" aria-selected="false" aria-controls="panel-control" data-panel="control">3. Contrôler</button>
-            <button class="artifact-tab" id="tab-publish" type="button" role="tab" aria-selected="false" aria-controls="panel-publish" data-panel="publish">4. Restituer</button>
+            <button class="artifact-tab" id="tab-measure" type="button" role="tab" aria-selected="false" aria-controls="panel-measure" data-panel="measure" tabindex="-1">2. Mesurer</button>
+            <button class="artifact-tab" id="tab-control" type="button" role="tab" aria-selected="false" aria-controls="panel-control" data-panel="control" tabindex="-1">3. Contrôler</button>
+            <button class="artifact-tab" id="tab-publish" type="button" role="tab" aria-selected="false" aria-controls="panel-publish" data-panel="publish" tabindex="-1">4. Restituer</button>
           </div>
 
           <section class="artifact-panel" id="panel-prepare" role="tabpanel" aria-labelledby="tab-prepare">
@@ -998,12 +998,12 @@
                 </div>
               </article>
               <article class="artifact-card">
-                <button class="artifact-image" type="button" data-image="/assets/media/PY_P1_SCHEMA.jpg" data-alt="Schéma relationnel simplifié du jeu de données">
-                  <img src="/assets/media/PY_P1_SCHEMA.jpg" alt="Schéma relationnel simplifié du jeu de données" loading="lazy">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P1_SCHEMA.jpg" data-alt="Liste des fichiers Parquet générés par le pipeline">
+                  <img src="/assets/media/PY_P1_SCHEMA.jpg" alt="Liste des fichiers Parquet générés par le pipeline" loading="lazy">
                 </button>
                 <div class="artifact-caption">
-                  <strong>Modèle analytique minimal</strong>
-                  <span>Clients, commandes, lignes de commande, produits et paiements structurés autour de clés explicites.</span>
+                  <strong>Sorties Parquet</strong>
+                  <span>Cinq fichiers séparent clients, commandes, lignes de commande, produits et paiements pour les analyses suivantes.</span>
                 </div>
               </article>
             </div>
