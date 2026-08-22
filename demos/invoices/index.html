@@ -3,14 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Extraction de factures Azure IA | Jérôme Jeannin</title>
-  <meta name="description" content="Cas d’usage d’automatisation documentaire sur Azure : extraction de factures PDF, structuration des données et génération d’un export exploitable.">
+  <title>Extraction automatisée de factures avec Azure | Jérôme Jeannin</title>
+  <meta name="description" content="Démonstration d'automatisation documentaire avec Azure : extraction de factures, structuration des données, contrôle et export exploitable sur des exemples fictifs.">
+  <meta property="og:title" content="Extraction automatisée de factures avec Azure | Jérôme Jeannin">
+  <meta property="og:description" content="Du document reçu à une donnée structurée, contrôlable et prête à intégrer un processus métier.">
+  <meta property="og:image" content="/assets/media/invoice-eu.svg">
   <link rel="icon" href="/assets/logo.jpg">
   <link rel="apple-touch-icon" href="/assets/logo.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=invoices-fr-v3">
+  <link rel="stylesheet" href="/styles.css?v=invoices-fr-v4">
 <link rel="stylesheet" href="/assets/css/demo.css">
 
   <style>
@@ -119,6 +122,7 @@
     }
 
     .step-title{
+      display:block;
       margin:0 0 8px;
       font-size:24px;
       line-height:1.02;
@@ -226,6 +230,13 @@
       color:var(--demo-text);
       font-size:16px;
       line-height:1.75;
+    }
+
+    .local-note{
+      margin:10px 0 0;
+      color:#9ca5b4;
+      font-size:12px;
+      line-height:1.6;
     }
 
     .demo-shell{
@@ -386,14 +397,16 @@
       overflow:auto;
     }
 
-    .value-grid{
+    .value-grid,
+    .production-grid{
       display:grid;
       grid-template-columns:repeat(4,minmax(0,1fr));
       gap:14px;
       margin-top:16px;
     }
 
-    .value-card{
+    .value-card,
+    .production-card{
       padding:18px 16px;
       border-radius:18px;
       background:var(--demo-panel);
@@ -401,17 +414,30 @@
       box-shadow:var(--demo-shadow);
     }
 
-    .value-card strong{
+    .value-card strong,
+    .production-card strong{
       display:block;
       margin-bottom:8px;
       font-size:16px;
       color:#fff;
     }
 
-    .value-card span{
+    .value-card span,
+    .production-card span{
       color:var(--demo-muted);
       font-size:14px;
       line-height:1.6;
+    }
+
+    .production-note{
+      margin-top:14px;
+      padding:17px 18px;
+      border-left:3px solid var(--demo-accent);
+      border-radius:0 14px 14px 0;
+      background:rgba(99,102,241,.08);
+      color:#dce1e8;
+      font-size:15px;
+      line-height:1.7;
     }
 
     .demo-cta{
@@ -455,7 +481,8 @@
       }
 
       .approach-grid,
-      .value-grid{
+      .value-grid,
+      .production-grid{
         grid-template-columns:1fr 1fr;
       }
 
@@ -484,6 +511,7 @@
       .hero-flow,
       .approach-grid,
       .value-grid,
+      .production-grid,
       .kpis{
         grid-template-columns:1fr;
       }
@@ -535,7 +563,8 @@
     }
 
     .page-invoices .approach-grid,
-    .page-invoices .value-grid{
+    .page-invoices .value-grid,
+    .page-invoices .production-grid{
       margin-top: 12px !important;
     }
 
@@ -556,14 +585,14 @@
   <header class="site-header">
   <div class="container header-inner">
     <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
-      <img src="/assets/logo.jpg" alt="logo" class="brand-mark">
+      <img src="/assets/logo.jpg" alt="" class="brand-mark">
       <span class="brand-text">
         <span class="brand-name">Jérôme Jeannin</span>
         <span class="brand-label">Hestia Aura</span>
       </span>
     </a>
 
-    <nav class="nav">
+    <nav class="nav" aria-label="Navigation principale">
       <a href="/">Accueil</a>
       <a href="/about.html">À propos</a>
       <a href="/showcase.html">Showcase</a>
@@ -575,8 +604,8 @@
 <main class="demo-page">
   <div class="demo-container">
       <section class="demo-hero">
-        <p class="section-kicker">Automatisation documentaire · Azure IA</p>
-        <h1 class="page-title">Extraction de factures Azure IA</h1>
+        <p class="section-kicker">Automatisation documentaire · Azure AI</p>
+        <h1 class="page-title">Extraction automatisée de factures avec Azure</h1>
         <p class="page-subtitle">
           Automatiser le traitement de factures PDF pour produire une donnée structurée,
           exploitable et directement intégrable dans des outils de gestion, de contrôle
@@ -587,7 +616,7 @@
           <div class="hero-flow">
             <div class="hero-step">
               <span class="step-badge">01</span>
-              <h3 class="step-title">PDF</h3>
+              <strong class="step-title">PDF</strong>
               <p>Factures reçues dans des formats variés, avec des structures et des champs hétérogènes.</p>
             </div>
 
@@ -595,7 +624,7 @@
 
             <div class="hero-step">
               <span class="step-badge">02</span>
-              <h3 class="step-title">Extraction</h3>
+              <strong class="step-title">Extraction</strong>
               <p>Lecture automatique des informations clés utiles au traitement métier.</p>
             </div>
 
@@ -603,7 +632,7 @@
 
             <div class="hero-step">
               <span class="step-badge">03</span>
-              <h3 class="step-title">Structuration</h3>
+              <strong class="step-title">Structuration</strong>
               <p>Mise en forme cohérente des données pour contrôle, exploitation et réutilisation.</p>
             </div>
 
@@ -611,7 +640,7 @@
 
             <div class="hero-step">
               <span class="step-badge">04</span>
-              <h3 class="step-title">Export</h3>
+              <strong class="step-title">Export</strong>
               <p>Production d’un résultat exploitable dans un flux plus large de gestion, de contrôle ou de reporting.</p>
             </div>
           </div>
@@ -696,6 +725,10 @@
             mais de rendre visible la logique métier du traitement : transformer un document en une donnée exploitable.
           </p>
         </div>
+
+        <p class="local-note">
+          Simulation front-end sur des factures fictives : aucun document réel n'est transmis et aucun service Azure ou autre service externe n'est appelé par cette page.
+        </p>
 
         <div class="demo-shell">
           <div class="demo-toolbar">
@@ -807,6 +840,32 @@
         </div>
       </section>
 
+      <section class="section">
+        <h2 class="section-title">De la démonstration à un usage en entreprise</h2>
+        <div class="production-grid">
+          <div class="production-card">
+            <strong>Seuils de confiance</strong>
+            <span>Définir les champs critiques et orienter vers une validation humaine lorsque leur score est insuffisant.</span>
+          </div>
+          <div class="production-card">
+            <strong>Gestion des exceptions</strong>
+            <span>Isoler les documents rejetés, conserver la cause et permettre une reprise contrôlée.</span>
+          </div>
+          <div class="production-card">
+            <strong>Sécurité documentaire</strong>
+            <span>Limiter les accès, protéger le stockage et appliquer la durée de conservation attendue.</span>
+          </div>
+          <div class="production-card">
+            <strong>Suivi et audit</strong>
+            <span>Journaliser volumes, statuts, corrections et version du traitement pour chaque document.</span>
+          </div>
+        </div>
+        <p class="production-note">
+          Les seuils, règles de validation et niveaux d'accès dépendent du processus comptable et du risque associé.
+          Ils doivent être testés sur un échantillon représentatif avant toute automatisation en production.
+        </p>
+      </section>
+
       <section class="demo-cta">
         <h2>Aller plus loin</h2>
         <p>
@@ -833,7 +892,7 @@
     </div>
   </footer>
 
-  <script src="/app.js?v=invoices-fr-v3"></script>
+  <script src="/app.js?v=invoices-fr-v4"></script>
   <script>
     const samples = {
       eu: {
