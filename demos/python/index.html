@@ -3,24 +3,789 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Python - KPIs, qualité & mini-app | Hestia Aura</title>
+  <title>Pipeline analytique en Python | Jérôme Jeannin</title>
+  <meta name="description" content="Démonstration d'un pipeline analytique en Python : ingestion, nettoyage, contrôles qualité, calcul de KPI et restitution dans une application légère.">
+  <meta property="og:title" content="Pipeline analytique en Python | Jérôme Jeannin">
+  <meta property="og:description" content="Un cas d'usage Python appliqué à la préparation, au contrôle et à la restitution de données e-commerce fictives.">
+  <meta property="og:image" content="/assets/logo.jpg">
 
   <link rel="icon" href="/assets/logo.jpg">
   <link rel="apple-touch-icon" href="/assets/logo.jpg">
-  <link rel="stylesheet" href="/styles.css?v=final3">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=python-fr-v1">
+  <link rel="stylesheet" href="/assets/css/demo.css">
 
-  <meta name="description" content="Démo pédagogique Python : génération de données, ingestion & nettoyage, KPIs mensuels avec graphiques, contrôles qualité, journal d’exécution et mini-app Streamlit.">
-  <meta property="og:title" content="Showcase Python - Hestia Aura">
-  <meta property="og:description" content="Pipeline léger en Python : Pandas, SQLite, graphiques Matplotlib, contrôles qualité et mini-app Streamlit.">
-  <meta property="og:image" content="/assets/logo.jpg">
+  <style>
+    :root {
+      --python-border: rgba(255,255,255,.09);
+      --python-panel: #0f1117;
+      --python-panel-2: #0a0e16;
+      --python-text: #e6eaf0;
+      --python-muted: #aeb6c4;
+      --python-accent: #7374ff;
+      --python-cyan: #4fd2ff;
+      --python-green: #55d6a6;
+      --python-amber: #f4c95d;
+      --python-red: #f58282;
+      --python-shadow: 0 14px 36px rgba(0,0,0,.24);
+    }
+
+    .page-python .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      line-height: 1.05;
+    }
+
+    .page-python .brand-name {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .page-python .brand-label {
+      color: #9da5b3;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .python-page {
+      padding: 32px 0 68px;
+    }
+
+    .python-page .demo-container {
+      max-width: 1100px;
+    }
+
+    .python-hero {
+      margin-bottom: 22px;
+    }
+
+    .python-hero h1 {
+      max-width: 960px;
+    }
+
+    .pipeline-flow {
+      margin-top: 24px;
+      padding: 22px;
+      overflow: hidden;
+      border: 1px solid var(--python-border);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 84% 14%, rgba(115,116,255,.2), transparent 30%),
+        radial-gradient(circle at 14% 88%, rgba(79,210,255,.11), transparent 25%),
+        linear-gradient(145deg, rgba(8,11,20,.98), rgba(12,16,28,.96));
+      box-shadow: var(--python-shadow);
+    }
+
+    .pipeline-flow-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .pipeline-flow-step {
+      position: relative;
+      min-height: 152px;
+      padding: 17px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 17px;
+      background: rgba(9,13,23,.76);
+      box-shadow: 0 10px 24px rgba(0,0,0,.18);
+    }
+
+    .pipeline-flow-step:not(:first-child)::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -13px;
+      width: 12px;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(79,210,255,.35), rgba(115,116,255,.9));
+    }
+
+    .pipeline-flow-step > span {
+      display: inline-flex;
+      width: 27px;
+      height: 27px;
+      margin-bottom: 12px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--python-accent), #8a5bff);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .pipeline-flow-step strong {
+      display: block;
+      margin-bottom: 7px;
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-size: 16px;
+      line-height: 1.25;
+    }
+
+    .pipeline-flow-step p {
+      margin: 0;
+      color: #c8ced8;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .case-section {
+      margin-top: 30px;
+    }
+
+    .case-section h2,
+    .python-cta h2 {
+      margin: 0 0 10px;
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-size: 29px;
+      line-height: 1.1;
+      letter-spacing: -.025em;
+    }
+
+    .case-copy {
+      max-width: 980px;
+      color: var(--python-text);
+      font-size: 17px;
+      line-height: 1.78;
+    }
+
+    .case-copy p {
+      margin: 0;
+    }
+
+    .case-copy p + p {
+      margin-top: 12px;
+    }
+
+    .approach-grid,
+    .value-grid,
+    .production-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 13px;
+      margin-top: 16px;
+    }
+
+    .approach-item,
+    .value-item,
+    .production-item {
+      padding: 17px;
+      border: 1px solid var(--python-border);
+      border-radius: 17px;
+      background: var(--python-panel);
+      box-shadow: var(--python-shadow);
+    }
+
+    .approach-item strong,
+    .value-item strong,
+    .production-item strong {
+      display: block;
+      margin-bottom: 7px;
+      color: #fff;
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .approach-item span,
+    .value-item span,
+    .production-item span {
+      color: #c4cad4;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .demo-intro {
+      margin-top: 14px;
+      padding: 18px;
+      border: 1px solid var(--python-border);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(13,17,28,.98), rgba(9,13,22,.94));
+      box-shadow: var(--python-shadow);
+    }
+
+    .demo-intro strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .demo-intro p {
+      margin: 0;
+      color: var(--python-text);
+      font-size: 16px;
+      line-height: 1.72;
+    }
+
+    .lab-shell {
+      margin-top: 16px;
+      padding: 20px;
+      border: 1px solid var(--python-border);
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgba(12,15,24,.98), rgba(8,11,18,.98));
+      box-shadow: var(--python-shadow);
+    }
+
+    .lab-toolbar {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .lab-field {
+      display: flex;
+      flex: 1 1 330px;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .lab-field label {
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .lab-field select {
+      width: 100%;
+      min-height: 46px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 11px;
+      outline: none;
+      background: #0a0e16;
+      color: #eef1f5;
+      font: inherit;
+    }
+
+    .lab-field select:focus {
+      border-color: rgba(115,116,255,.85);
+      box-shadow: 0 0 0 3px rgba(115,116,255,.16);
+    }
+
+    .lab-toolbar .btn {
+      min-height: 46px;
+      padding: 10px 17px;
+    }
+
+    .local-note {
+      margin: 12px 0 0;
+      color: #9ca5b4;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .run-placeholder {
+      margin-top: 16px;
+      padding: 25px;
+      border: 1px dashed rgba(255,255,255,.12);
+      border-radius: 15px;
+      color: #929baa;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .run-output {
+      margin-top: 17px;
+    }
+
+    .run-summary {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 13px;
+    }
+
+    .run-summary h3 {
+      margin: 0;
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-size: 19px;
+    }
+
+    .run-badge {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(85,214,166,.34);
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: rgba(85,214,166,.11);
+      color: #8ee8c2;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .run-badge.warning {
+      border-color: rgba(244,201,93,.35);
+      background: rgba(244,201,93,.1);
+      color: #ffe29a;
+    }
+
+    .run-badge.blocked {
+      border-color: rgba(245,130,130,.36);
+      background: rgba(245,130,130,.1);
+      color: #ffb0b0;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 11px;
+    }
+
+    .metric-card {
+      min-width: 0;
+      padding: 15px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 15px;
+      background: var(--python-panel-2);
+    }
+
+    .metric-label {
+      display: block;
+      margin-bottom: 8px;
+      color: #98a1b0;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .metric-value {
+      display: block;
+      overflow-wrap: anywhere;
+      color: #fff;
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .metric-detail {
+      display: block;
+      margin-top: 7px;
+      color: #9ca5b4;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .run-grid {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 13px;
+      margin-top: 13px;
+    }
+
+    .run-panel {
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+      background: var(--python-panel-2);
+    }
+
+    .run-panel h4 {
+      margin: 0 0 12px;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .step-list,
+    .issue-list {
+      display: grid;
+      gap: 9px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .step-item {
+      display: grid;
+      grid-template-columns: 11px 1fr auto;
+      gap: 9px;
+      align-items: center;
+      color: #dfe4eb;
+      font-size: 13px;
+    }
+
+    .step-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: #697386;
+      box-shadow: 0 0 0 3px rgba(105,115,134,.1);
+    }
+
+    .step-dot.done {
+      background: var(--python-green);
+      box-shadow: 0 0 0 3px rgba(85,214,166,.12);
+    }
+
+    .step-dot.warning {
+      background: var(--python-amber);
+      box-shadow: 0 0 0 3px rgba(244,201,93,.12);
+    }
+
+    .step-dot.blocked {
+      background: var(--python-red);
+      box-shadow: 0 0 0 3px rgba(245,130,130,.12);
+    }
+
+    .step-state {
+      color: #929baa;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .issue-list li {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      color: #d8dde6;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .issue-count {
+      flex: 0 0 auto;
+      min-width: 29px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 999px;
+      padding: 2px 7px;
+      color: #f4f6f8;
+      font-size: 11px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .log-console {
+      grid-column: 1 / -1;
+      min-height: 122px;
+      margin: 0;
+      overflow-x: auto;
+      padding: 15px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 15px;
+      background: #070a10;
+      color: #b9f7dc;
+      font: 12px/1.65 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      white-space: pre-wrap;
+    }
+
+    .artifact-shell {
+      margin-top: 16px;
+      padding: 20px;
+      border: 1px solid var(--python-border);
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgba(12,15,24,.98), rgba(8,11,18,.98));
+      box-shadow: var(--python-shadow);
+    }
+
+    .artifact-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 17px;
+    }
+
+    .artifact-tab {
+      min-height: 40px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 999px;
+      padding: 8px 13px;
+      background: rgba(255,255,255,.03);
+      color: #cbd2dc;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .artifact-tab[aria-selected="true"] {
+      border-color: rgba(115,116,255,.6);
+      background: rgba(115,116,255,.16);
+      color: #fff;
+    }
+
+    .artifact-panel[hidden] {
+      display: none;
+    }
+
+    .artifact-copy {
+      margin-bottom: 14px;
+      color: #d9dee6;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .artifact-copy p {
+      margin: 0;
+    }
+
+    .artifact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+    }
+
+    .artifact-card {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+      background: var(--python-panel-2);
+    }
+
+    .artifact-image {
+      display: block;
+      width: 100%;
+      min-height: 230px;
+      border: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #070a10;
+      cursor: zoom-in;
+    }
+
+    .artifact-image img {
+      display: block;
+      width: 100%;
+      height: 300px;
+      object-fit: contain;
+      background: #070a10;
+    }
+
+    .artifact-caption {
+      padding: 14px;
+    }
+
+    .artifact-caption strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .artifact-caption span {
+      color: #aeb6c4;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .stack-list {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .stack-chip {
+      display: inline-flex;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 999px;
+      padding: 5px 9px;
+      background: rgba(255,255,255,.03);
+      color: #d6dbe3;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .production-note {
+      margin-top: 14px;
+      padding: 17px 18px;
+      border-left: 3px solid var(--python-accent);
+      border-radius: 0 14px 14px 0;
+      background: rgba(115,116,255,.08);
+      color: #dce1e8;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .python-cta {
+      margin-top: 30px;
+      padding: 22px;
+      border: 1px solid var(--python-border);
+      border-radius: 19px;
+      background: var(--python-panel);
+      box-shadow: var(--python-shadow);
+    }
+
+    .python-cta p {
+      max-width: 900px;
+      margin: 0 0 17px;
+      color: var(--python-text);
+      font-size: 16px;
+      line-height: 1.72;
+    }
+
+    .python-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .image-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      place-items: center;
+      padding: 28px;
+      background: rgba(3,5,9,.92);
+    }
+
+    .image-modal.open {
+      display: grid;
+    }
+
+    .image-modal img {
+      display: block;
+      max-width: min(1400px, 94vw);
+      max-height: 86vh;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px;
+      object-fit: contain;
+      background: #070a10;
+      box-shadow: 0 22px 60px rgba(0,0,0,.5);
+    }
+
+    .image-modal-close {
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 10px;
+      padding: 8px 11px;
+      background: #111620;
+      color: #fff;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    @media (max-width: 960px) {
+      .pipeline-flow-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .pipeline-flow-step:not(:first-child)::before {
+        display: none;
+      }
+
+      .approach-grid,
+      .value-grid,
+      .production-grid,
+      .metric-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .run-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .log-console {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .python-page {
+        padding-top: 24px;
+      }
+
+      .page-python .nav a:not(.btn),
+      .page-python .nav span:not(.btn) {
+        display: none;
+      }
+
+      .pipeline-flow {
+        padding: 16px;
+      }
+
+      .pipeline-flow-grid,
+      .approach-grid,
+      .value-grid,
+      .production-grid,
+      .metric-grid,
+      .artifact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pipeline-flow-step {
+        min-height: 0;
+      }
+
+      .case-section h2,
+      .python-cta h2 {
+        font-size: 25px;
+      }
+
+      .case-copy {
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
+      .lab-shell,
+      .artifact-shell {
+        padding: 15px;
+      }
+
+      .lab-toolbar {
+        align-items: stretch;
+      }
+
+      .lab-toolbar .btn {
+        width: 100%;
+      }
+
+      .run-summary {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .artifact-image img {
+        height: 230px;
+      }
+
+      .footer-inner {
+        gap: 10px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .page-python *,
+      .page-python *::before,
+      .page-python *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
 </head>
 
-<body class="powerbi">
-  <!-- En-tête -->
+<body class="page-python">
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="/"><img src="/assets/logo.jpg" class="brand-mark" alt="logo"><span class="brand-name">Hestia <strong>Aura</strong></span></a>
-      <nav class="nav">
+      <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
+        <img src="/assets/logo.jpg" alt="" class="brand-mark">
+        <span class="brand-text">
+          <span class="brand-name">Jérôme Jeannin</span>
+          <span class="brand-label">Hestia Aura</span>
+        </span>
+      </a>
+
+      <nav class="nav" aria-label="Navigation principale">
         <a href="/">Accueil</a>
         <a href="/about.html">À propos</a>
         <a href="/showcase.html">Showcase</a>
@@ -29,213 +794,413 @@
     </div>
   </header>
 
-  <main id="main">
-    <!-- Hero -->
-    <section class="hero">
-      <div class="container">
-        <h1>Python - KPIs, qualité & mini-app</h1>
+  <main class="python-page">
+    <div class="demo-container">
+      <section class="demo-hero python-hero">
+        <p class="section-kicker">Python appliqué · Data engineering</p>
+        <h1>Pipeline analytique e-commerce en Python</h1>
         <p>
-          Jeu de données e-commerce fictif et pipeline léger en <strong>Pandas</strong> :
-          génération → ingestion & nettoyage → KPIs + graphiques →
-          contrôles qualité & journal → mini-app <strong>Streamlit</strong>.
-          L’objectif est d’illustrer un flux « du notebook au produit » simple, reproductible et
-          prêt à brancher sur un tableau de bord.
+          Transformer des fichiers bruts en données contrôlées, calculer des indicateurs fiables
+          et publier une restitution légère pour rapprocher préparation technique et usage métier.
         </p>
 
-        <div class="pills">
-          <span class="pill">Python</span>
-          <span class="pill">Pandas</span>
-          <span class="pill">SQLite</span>
-          <span class="pill">Matplotlib</span>
-          <span class="pill">Streamlit</span>
+        <div class="pipeline-flow" aria-label="Flux simplifié du pipeline Python">
+          <div class="pipeline-flow-grid">
+            <div class="pipeline-flow-step">
+              <span>01</span>
+              <strong>Sources brutes</strong>
+              <p>Des fichiers clients, commandes, produits et paiements alimentent le traitement.</p>
+            </div>
+            <div class="pipeline-flow-step">
+              <span>02</span>
+              <strong>Préparation</strong>
+              <p>Pandas standardise les noms, les types, les dates et les montants.</p>
+            </div>
+            <div class="pipeline-flow-step">
+              <span>03</span>
+              <strong>Contrôles</strong>
+              <p>Les doublons, valeurs manquantes et références incohérentes sont mesurés.</p>
+            </div>
+            <div class="pipeline-flow-step">
+              <span>04</span>
+              <strong>Indicateurs</strong>
+              <p>Les ventes, commandes, clients actifs et paniers moyens sont agrégés.</p>
+            </div>
+            <div class="pipeline-flow-step">
+              <span>05</span>
+              <strong>Restitution</strong>
+              <p>Les résultats sont exportés puis rendus consultables dans une mini-application.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Contexte métier</h2>
+        <div class="case-copy">
+          <p>
+            Une équipe e-commerce reçoit plusieurs fichiers opérationnels dont les formats et la qualité
+            peuvent varier. Avant tout reporting, ces données doivent être harmonisées, reliées entre elles
+            et contrôlées de façon reproductible.
+          </p>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Problématique</h2>
+        <div class="case-copy">
+          <p>
+            Comment passer de fichiers hétérogènes à des indicateurs exploitables sans multiplier les
+            manipulations manuelles, tout en conservant une trace des anomalies et de chaque exécution ?
+          </p>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Approche</h2>
+        <div class="case-copy">
+          <p>
+            Le prototype sépare clairement la préparation, le contrôle, le calcul et la restitution.
+            Pandas traite les données, Parquet fournit un format analytique compact, SQLite permet des
+            requêtes simples et Streamlit expose les résultats dans une interface légère.
+          </p>
         </div>
 
-        <p style="margin-top:12px;">
-          <a class="btn btn--sm btn--primary" href="/showcase.html">↩ Retour au Showcase</a>
+        <div class="approach-grid">
+          <div class="approach-item">
+            <strong>Pipeline reproductible</strong>
+            <span>Les mêmes règles sont rejouées à chaque exécution au lieu d'être appliquées manuellement.</span>
+          </div>
+          <div class="approach-item">
+            <strong>Qualité mesurable</strong>
+            <span>Chaque contrôle retourne un volume affecté et un niveau de sévérité explicite.</span>
+          </div>
+          <div class="approach-item">
+            <strong>Sorties polyvalentes</strong>
+            <span>Parquet pour l'analyse, SQLite pour le SQL et CSV pour l'échange avec d'autres outils.</span>
+          </div>
+          <div class="approach-item">
+            <strong>Exécution traçable</strong>
+            <span>Un journal conserve le statut, les anomalies détectées et le message de chaque traitement.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Ce que montre la démo</h2>
+        <div class="demo-intro">
+          <strong>Explorez trois comportements possibles du pipeline</strong>
+          <p>
+            La simulation illustre un traitement nominal, un lot contenant plusieurs anomalies et un arrêt
+            provoqué par une source indisponible. Elle met en évidence les indicateurs, les contrôles et la
+            journalisation attendus autour d'un pipeline Python.
+          </p>
+        </div>
+
+        <div class="lab-shell">
+          <div class="lab-toolbar">
+            <div class="lab-field">
+              <label for="scenario">Scénario de traitement</label>
+              <select id="scenario">
+                <option value="nominal">Flux nominal</option>
+                <option value="quality">Anomalies de qualité</option>
+                <option value="source">Source de paiements indisponible</option>
+              </select>
+            </div>
+            <button id="runPipeline" class="btn" type="button">Lancer la simulation</button>
+            <button id="resetPipeline" class="btn btn--outline" type="button">Réinitialiser</button>
+          </div>
+
+          <p class="local-note">
+            Simulation front-end locale : elle reproduit les états et contrôles du prototype sans exécuter
+            Python sur ce serveur ni envoyer de données à un service externe.
+          </p>
+
+          <div id="runPlaceholder" class="run-placeholder">
+            Choisissez un scénario puis lancez la simulation pour afficher les étapes, les contrôles et le journal.
+          </div>
+
+          <div id="runOutput" class="run-output" aria-live="polite" hidden>
+            <div class="run-summary">
+              <h3 id="runTitle">Résultat du traitement</h3>
+              <span id="runBadge" class="run-badge">Terminé</span>
+            </div>
+
+            <div class="metric-grid">
+              <div class="metric-card">
+                <span class="metric-label">Lignes reçues</span>
+                <span id="rowsReceived" class="metric-value">0</span>
+                <span id="rowsReceivedDetail" class="metric-detail"></span>
+              </div>
+              <div class="metric-card">
+                <span class="metric-label">Lignes retenues</span>
+                <span id="rowsKept" class="metric-value">0</span>
+                <span id="rowsKeptDetail" class="metric-detail"></span>
+              </div>
+              <div class="metric-card">
+                <span class="metric-label">Commandes</span>
+                <span id="ordersCount" class="metric-value">0</span>
+                <span id="ordersDetail" class="metric-detail"></span>
+              </div>
+              <div class="metric-card">
+                <span class="metric-label">Panier moyen</span>
+                <span id="averageOrder" class="metric-value">0 €</span>
+                <span id="averageOrderDetail" class="metric-detail"></span>
+              </div>
+            </div>
+
+            <div class="run-grid">
+              <section class="run-panel">
+                <h4>Progression du pipeline</h4>
+                <ol id="stepList" class="step-list"></ol>
+              </section>
+
+              <section class="run-panel">
+                <h4>Contrôles qualité</h4>
+                <ul id="issueList" class="issue-list"></ul>
+              </section>
+
+              <pre id="runLog" class="log-console" aria-label="Journal d'exécution"></pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Livrables du prototype</h2>
+        <div class="case-copy">
+          <p>
+            Les captures ci-dessous proviennent du prototype Python initial. Elles documentent le code,
+            les sorties analytiques, les contrôles et l'application Streamlit. Les données sont entièrement fictives.
+          </p>
+        </div>
+
+        <div class="artifact-shell">
+          <div class="artifact-tabs" role="tablist" aria-label="Étapes du prototype Python">
+            <button class="artifact-tab" id="tab-prepare" type="button" role="tab" aria-selected="true" aria-controls="panel-prepare" data-panel="prepare">1. Préparer</button>
+            <button class="artifact-tab" id="tab-measure" type="button" role="tab" aria-selected="false" aria-controls="panel-measure" data-panel="measure" tabindex="-1">2. Mesurer</button>
+            <button class="artifact-tab" id="tab-control" type="button" role="tab" aria-selected="false" aria-controls="panel-control" data-panel="control" tabindex="-1">3. Contrôler</button>
+            <button class="artifact-tab" id="tab-publish" type="button" role="tab" aria-selected="false" aria-controls="panel-publish" data-panel="publish" tabindex="-1">4. Restituer</button>
+          </div>
+
+          <section class="artifact-panel" id="panel-prepare" role="tabpanel" aria-labelledby="tab-prepare">
+            <div class="artifact-copy">
+              <p>Le script force les types attendus, produit les tables propres et les persiste en Parquet et dans SQLite.</p>
+            </div>
+            <div class="artifact-grid">
+              <article class="artifact-card">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P1_CLEAN_SAMPLE.jpg" data-alt="Extrait du script Python de préparation des données">
+                  <img src="/assets/media/PY_P1_CLEAN_SAMPLE.jpg" alt="Extrait du script Python de préparation des données" loading="lazy">
+                </button>
+                <div class="artifact-caption">
+                  <strong>Préparation et persistance</strong>
+                  <span>Conversion des types, écriture des fichiers Parquet et chargement des tables propres dans SQLite.</span>
+                </div>
+              </article>
+              <article class="artifact-card">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P1_SCHEMA.jpg" data-alt="Liste des fichiers Parquet générés par le pipeline">
+                  <img src="/assets/media/PY_P1_SCHEMA.jpg" alt="Liste des fichiers Parquet générés par le pipeline" loading="lazy">
+                </button>
+                <div class="artifact-caption">
+                  <strong>Sorties Parquet</strong>
+                  <span>Cinq fichiers séparent clients, commandes, lignes de commande, produits et paiements pour les analyses suivantes.</span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="artifact-panel" id="panel-measure" role="tabpanel" aria-labelledby="tab-measure" hidden>
+            <div class="artifact-copy">
+              <p>Les agrégations mensuelles alimentent des exports réutilisables dans un rapport, une présentation ou un outil BI.</p>
+            </div>
+            <div class="artifact-grid">
+              <article class="artifact-card">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P2_REVENUE.png" data-alt="Courbe du chiffre d'affaires mensuel fictif">
+                  <img src="/assets/media/PY_P2_REVENUE.png" alt="Courbe du chiffre d'affaires mensuel fictif" loading="lazy">
+                </button>
+                <div class="artifact-caption">
+                  <strong>Évolution du chiffre d'affaires</strong>
+                  <span>Une série mensuelle permet d'identifier les variations et de préparer une analyse de tendance.</span>
+                </div>
+              </article>
+              <article class="artifact-card">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P2_ORDERS.png" data-alt="Histogramme du volume mensuel de commandes fictives">
+                  <img src="/assets/media/PY_P2_ORDERS.png" alt="Histogramme du volume mensuel de commandes fictives" loading="lazy">
+                </button>
+                <div class="artifact-caption">
+                  <strong>Volume de commandes</strong>
+                  <span>Le suivi parallèle du volume aide à distinguer un effet de fréquence d'un effet de panier moyen.</span>
+                </div>
+              </article>
+              <article class="artifact-card">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P2_CSV.jpg" data-alt="Extrait CSV des indicateurs mensuels">
+                  <img src="/assets/media/PY_P2_CSV.jpg" alt="Extrait CSV des indicateurs mensuels" loading="lazy">
+                </button>
+                <div class="artifact-caption">
+                  <strong>Export des KPI</strong>
+                  <span>Le fichier mensuel conserve les ventes, les commandes, les clients actifs et le panier moyen.</span>
+                </div>
+              </article>
+              <article class="artifact-card">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P2_RUN.jpg" data-alt="Trace console de l'exécution des agrégations">
+                  <img src="/assets/media/PY_P2_RUN.jpg" alt="Trace console de l'exécution des agrégations" loading="lazy">
+                </button>
+                <div class="artifact-caption">
+                  <strong>Trace d'exécution</strong>
+                  <span>Les chemins des sorties et un aperçu des résultats facilitent le contrôle rapide du traitement.</span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="artifact-panel" id="panel-control" role="tabpanel" aria-labelledby="tab-control" hidden>
+            <div class="artifact-copy">
+              <p>Les règles de qualité rendent visibles les anomalies avant qu'elles ne contaminent les indicateurs ou la restitution.</p>
+            </div>
+            <div class="artifact-grid">
+              <article class="artifact-card">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P3_QUALITY.jpg" data-alt="Synthèse des contrôles qualité du prototype">
+                  <img src="/assets/media/PY_P3_QUALITY.jpg" alt="Synthèse des contrôles qualité du prototype" loading="lazy">
+                </button>
+                <div class="artifact-caption">
+                  <strong>Règles et sévérités</strong>
+                  <span>Doublons, valeurs manquantes, montants négatifs et références orphelines sont comptabilisés.</span>
+                </div>
+              </article>
+              <article class="artifact-card">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P3_LOGS.jpg" data-alt="Extrait du journal des traitements Python">
+                  <img src="/assets/media/PY_P3_LOGS.jpg" alt="Extrait du journal des traitements Python" loading="lazy">
+                </button>
+                <div class="artifact-caption">
+                  <strong>Journal des traitements</strong>
+                  <span>Le statut, le nombre d'anomalies et le message sont conservés pour l'audit et le diagnostic.</span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="artifact-panel" id="panel-publish" role="tabpanel" aria-labelledby="tab-publish" hidden>
+            <div class="artifact-copy">
+              <p>
+                La mini-application regroupe les KPI et le journal. Elle montre également les échecs d'appels externes,
+                afin que la supervision ne masque pas les traitements incomplets.
+              </p>
+            </div>
+            <div class="artifact-grid">
+              <article class="artifact-card">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P4_APP_HOME.jpg" data-alt="Vue principale de la mini-application Streamlit">
+                  <img src="/assets/media/PY_P4_APP_HOME.jpg" alt="Vue principale de la mini-application Streamlit" loading="lazy">
+                </button>
+                <div class="artifact-caption">
+                  <strong>Application Streamlit</strong>
+                  <span>Table mensuelle, graphiques et journal réunis dans une interface de consultation légère.</span>
+                </div>
+              </article>
+              <article class="artifact-card">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P4_APP_API.jpg" data-alt="Message de retour après un appel d'API dans Streamlit">
+                  <img src="/assets/media/PY_P4_APP_API.jpg" alt="Message de retour après un appel d'API dans Streamlit" loading="lazy">
+                </button>
+                <div class="artifact-caption">
+                  <strong>Intégration externe</strong>
+                  <span>Un appel d'API enrichit le flux et renvoie un message compréhensible dans l'interface.</span>
+                </div>
+              </article>
+              <article class="artifact-card">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P4_LOGS_AFTER.jpg" data-alt="Journal après l'appel d'API externe">
+                  <img src="/assets/media/PY_P4_LOGS_AFTER.jpg" alt="Journal après l'appel d'API externe" loading="lazy">
+                </button>
+                <div class="artifact-caption">
+                  <strong>Écriture du résultat</strong>
+                  <span>Le journal conserve le statut de l'intégration pour rendre les erreurs visibles et diagnosticables.</span>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+
+        <div class="stack-list" aria-label="Technologies utilisées">
+          <span class="stack-chip">Python</span>
+          <span class="stack-chip">Pandas</span>
+          <span class="stack-chip">Parquet</span>
+          <span class="stack-chip">SQLite</span>
+          <span class="stack-chip">Matplotlib</span>
+          <span class="stack-chip">Streamlit</span>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Valeur apportée</h2>
+        <div class="value-grid">
+          <div class="value-item">
+            <strong>Préparation homogène</strong>
+            <span>Les règles de typage et de nettoyage sont documentées puis appliquées de façon constante.</span>
+          </div>
+          <div class="value-item">
+            <strong>Reporting plus fiable</strong>
+            <span>Les anomalies sont détectées avant le calcul et la diffusion des indicateurs.</span>
+          </div>
+          <div class="value-item">
+            <strong>Analyse réutilisable</strong>
+            <span>Les sorties standardisées peuvent alimenter Python, SQL, Excel ou une solution BI.</span>
+          </div>
+          <div class="value-item">
+            <strong>Diagnostic facilité</strong>
+            <span>Le journal permet de comprendre un échec et d'identifier l'étape concernée.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>De la démonstration à la production</h2>
+        <div class="case-copy">
+          <p>
+            Pour un usage réel, le choix d'architecture dépend surtout du volume, de la fréquence et du niveau
+            de disponibilité attendu. Un traitement modéré peut être conteneurisé et orchestré dans Azure.
+            Des volumes plus importants peuvent justifier un moteur distribué comme Spark.
+          </p>
+        </div>
+
+        <div class="production-grid">
+          <div class="production-item">
+            <strong>Ingestion orchestrée</strong>
+            <span>Azure Data Factory ou Fabric Data Factory collecte les fichiers et planifie les dépendances.</span>
+          </div>
+          <div class="production-item">
+            <strong>Traitement industrialisé</strong>
+            <span>Le code Python est testé, versionné et exécuté dans un conteneur ou un service adapté au volume.</span>
+          </div>
+          <div class="production-item">
+            <strong>Qualité et supervision</strong>
+            <span>Pandera ou Great Expectations formalise les règles, tandis qu'Azure Monitor centralise les alertes.</span>
+          </div>
+          <div class="production-item">
+            <strong>Consommation maîtrisée</strong>
+            <span>Lakehouse, base SQL, Power BI ou application métier exposent uniquement les données validées.</span>
+          </div>
+        </div>
+
+        <div class="production-note">
+          Pandas et SQLite sont adaptés à ce prototype local. Ils ne constituent pas une recommandation universelle :
+          la volumétrie, la concurrence, la sécurité, la reprise sur incident et les coûts doivent guider
+          le choix d'une architecture de production.
+        </div>
+      </section>
+
+      <section class="python-cta">
+        <h2>Aller plus loin</h2>
+        <p>
+          Ce type de pipeline peut soutenir un reporting opérationnel, un contrôle de facturation,
+          une préparation de données BI ou l'automatisation d'un suivi métier, avec des règles de qualité
+          adaptées aux décisions prises en aval.
         </p>
-
-        <ul class="hero-badges" style="margin-top:8px">
-          <li><a href="#p1">P1 - Ingestion & nettoyage</a></li>
-          <li><a href="#p2">P2 - KPIs mensuels & graphiques</a></li>
-          <li><a href="#p3">P3 - Contrôles qualité & logs</a></li>
-          <li><a href="#p4">P4 - Mini-app Streamlit</a></li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- P1 -->
-    <section id="p1" class="section py">
-  <div class="container">
-    <h2>P1 - Ingestion & nettoyage</h2>
-
-    <div class="capsule capsule--split">
-      <!-- Colonne gauche : grosse image "listing parquet" + légende -->
-      <figure class="figure fig-lg">
-        <img src="/assets/media/PY_P1_SCHEMA.jpg" alt="Schéma logique & tables clean (customers → orders → order_items, products, payments)">
-        <figcaption class="legend">
-          Modèle minimal <em>clean</em> : <strong>customers → orders → order_items</strong> (+ <em>products</em>, <em>payments</em>).  
-          Les mêmes données sont persistées en <em>Parquet</em> (analyse rapide) et dans <em>SQLite</em> (SQL ad-hoc).
-        </figcaption>
-      </figure>
-
-      <!-- Colonne droite : objectifs + petite image code + seconde figure parquet -->
-      <div class="grid-2-rows">
-        <div>
-          <h3>Objectifs & portée</h3>
-          <p>
-            Transformer des fichiers bruts en un jeu de tables lisibles et typées. On force les formats (dates, montants), on
-            gère les valeurs douteuses, et on écrit deux sorties complémentaires : 
-            <strong>Parquet</strong> (lecture/BI rapide) et <strong>SQLite</strong> (jointures SQL simples).
-          </p>
-          <ul class="feature-list">
-            <li><strong>Validations de base</strong> : coercition numérique, parsing de dates, colonnes requises.</li>
-            <li><strong>Convention de nommage</strong> : snake_case et clés techniques <code>_id</code>.</li>
-            <li><strong>Persistance duale</strong> : Parquet (colonne) pour l’analytics, SQLite pour l’explo ad-hoc.</li>
-          </ul>
+        <div class="python-actions">
+          <a href="mailto:contact@hestiaaura.com" class="btn">Me contacter</a>
+          <a href="/showcase.html" class="btn btn--outline">Retour au showcase</a>
         </div>
-
-        <figure class="figure fig-code">
-          <img src="/assets/media/PY_P1_CLEAN_SAMPLE.jpg" alt="Extrait de script d’ingestion & nettoyage (pandas → Parquet & SQLite)">
-          <figcaption class="legend">
-            Fichiers Parquet produits pendant l’ingestion - format compact & rapide.
-          </figcaption>
-        </figure>
-
-        <figure class="figure">
-          <img src="/assets/media/PY_P1_SCHEMA.jpg" alt="Tables Parquet générées (customers.parquet, orders.parquet, …)">
-          <figcaption class="legend">
-            Sorties Parquet générées (5 fichiers) - vérification rapide du découpage par entité.
-          </figcaption>
-        </figure>
-      </div>
+      </section>
     </div>
-
-    <p class="muted">
-      Bénéfice : démarrer des analyses reproductibles (parquet + SQL) sans dépendre d’un entrepôt externe.
-    </p>
-  </div>
-</section>
-
-
-    <!-- P2 -->
-    <section id="p2" class="section">
-      <div class="container">
-        <h2>P2 - KPIs mensuels & graphiques</h2>
-
-        <div class="capsule">
-          <div class="capsule__left">
-            <figure class="figure">
-              <img src="/assets/media/PY_P2_CSV.jpg" alt="CSV des KPIs mensuels (year_month, revenue_chf, orders_cnt, active_customers, avg_order_value)">
-              <figcaption>Export <code>sales_monthly.csv</code> : un format d’échange universel (BI, Excel, outils no-code).</figcaption>
-            </figure>
-          </div>
-          <div class="capsule__right">
-            <h3>Qu’est-ce qu’on calcule ?</h3>
-            <ul class="feature-list">
-              <li><strong>CA mensuel (CHF)</strong>, <strong>volume de commandes</strong>, <strong>clients actifs</strong>, <strong>panier moyen</strong>.</li>
-              <li>Fenêtre temporelle continue via un calendrier (tous les mois présents, même sans ventes).</li>
-              <li>Exports <strong>CSV</strong> + <strong>PNG</strong> pour partage rapide dans des slides/rapports.</li>
-            </ul>
-
-            <figure class="figure">
-              <img src="/assets/media/PY_P2_REVENUE.png" alt="Courbe : chiffre d'affaires mensuel">
-              <figcaption>Évolution du chiffre d’affaires : on repère les creux, pics et saisonnalités.</figcaption>
-            </figure>
-            <figure class="figure">
-              <img src="/assets/media/PY_P2_ORDERS.png" alt="Barres : nombre de commandes mensuel">
-              <figcaption>Rythme des commandes : utile pour suivre l’adoption et la rétention.</figcaption>
-            </figure>
-            <figure class="figure">
-              <img src="/assets/media/PY_P2_RUN.jpg" alt="Console - script P2 terminé, chemins d'exports">
-              <figcaption>Trace d’exécution : chemins des exports et aperçu des 12 premières lignes.</figcaption>
-            </figure>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- P3 -->
-    <section id="p3" class="section py">
-  <div class="container">
-    <h2>P3 - Contrôles qualité & journal</h2>
-
-    <div class="capsule capsule--split">
-      <!-- Gauche : grand terminal "checks" -->
-      <figure class="figure fig-lg">
-        <img src="/assets/media/PY_P3_QUALITY.jpg" alt="Synthèse des contrôles qualité (doublons, NULL, paiements négatifs, références orphelines)">
-        <figcaption class="legend">
-          Synthèse des règles : doublons (clé composite), valeurs <em>NULL</em>, montants négatifs, références orphelines.
-        </figcaption>
-      </figure>
-
-      <!-- Droite : texte + mini capture journal CSV -->
-      <div class="grid-2-rows">
-        <div>
-          <h3>Pourquoi c’est utile ?</h3>
-          <p>
-            Avant d’alimenter un dashboard, on mesure la santé des données. Chaque règle renvoie un volume affecté et 
-            une sévérité (<em>low</em>/<em>medium</em>/<em>high</em>). Les résultats alimentent un <strong>journal d’exécution</strong> pour suivre
-            l’historique des traitements.
-          </p>
-          <ul class="feature-list">
-            <li><strong>Fichier</strong> <code>logs/job_runs.csv</code> : <code>job_name, timestamp, status, issues_found, message</code>.</li>
-            <li><strong>Exploitable facilement</strong> : on filtre par job, agrège par jour/semaine, alerte via n8n/Make.</li>
-            <li><strong>Base d’un contrôle continu</strong> (DataOps) sans infra lourde.</li>
-          </ul>
-        </div>
-
-        <figure class="figure">
-          <img src="/assets/media/PY_P3_LOGS.jpg" alt="Extrait de journal des jobs (CSV)">
-          <figcaption class="legend">
-            Extrait de journal après un run de qualité - utile pour auditer et diagnostiquer.
-          </figcaption>
-        </figure>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-    <!-- P4 -->
-    <section id="p4" class="section">
-      <div class="container">
-        <h2>P4 - Mini-app Streamlit (KPIs & API)</h2>
-
-        <div class="capsule">
-          <div class="capsule__left">
-            <figure class="figure">
-              <img src="/assets/media/PY_P4_APP_HOME.jpg" alt="Dashboard Streamlit : table derniers mois, 2 graphiques (CA et commandes)">
-              <figcaption>Vue principale : derniers mois en table + deux graphiques. La mini-app lit les exports générés en P2.</figcaption>
-            </figure>
-          </div>
-          <div class="capsule__right">
-            <h3>Interaction & intégration</h3>
-            <p>
-              Un bouton déclenche un appel d’<strong>API externe</strong> (mock FX & météo), concatène un message lisible
-              et inscrit une nouvelle ligne dans le journal. On démontre ainsi comment « brancher le monde extérieur »
-              dans un flux Python très simple.
-            </p>
-            <ul class="feature-list">
-              <li>Écriture append dans <code>job_runs.csv</code> avec un <em>message</em> métier (EUR/CHF, météo Genève).</li>
-              <li>Rechargement instantané côté UI pour visualiser l’impact de l’action.</li>
-              <li>Point d’entrée naturel pour notifier/planifier (cron, Azure, GitHub Actions).</li>
-            </ul>
-
-            <figure class="figure">
-              <img src="/assets/media/PY_P4_APP_API.jpg" alt="Journal Streamlit après appel d'API (message EUR/CHF, météo Genève)">
-              <figcaption>Feedback utilisateur clair + ligne de log persistée.</figcaption>
-            </figure>
-            <figure class="figure">
-              <img src="/assets/media/PY_P4_LOGS_AFTER.jpg" alt="job_runs.csv après l'appel d'API (ligne external_api)">
-              <figcaption>Trace côté fichiers : un nouvel enregistrement <code>external_api</code> horodaté.</figcaption>
-            </figure>
-          </div>
-        </div>
-      </div>
-    </section>
   </main>
 
-  <!-- Pied de page -->
   <footer class="site-footer">
     <div class="container footer-inner">
       <span>© <span id="y"></span> Jérôme Jeannin</span>
@@ -243,47 +1208,282 @@
     </div>
   </footer>
 
-  <!-- Script global (si présent) -->
-  <script src="/app.js?v=final3"></script>
-
-  <!-- Lightbox (déjà stylée par styles.css) -->
-  <div class="image-modal" id="imgModal" aria-hidden="true">
-    <button class="close" id="imgModalClose" aria-label="Fermer l’image">Fermer ✕</button>
-    <img id="imgModalImg" alt="">
+  <div class="image-modal" id="imageModal" role="dialog" aria-modal="true" aria-label="Aperçu agrandi" aria-hidden="true" tabindex="-1">
+    <button class="image-modal-close" id="imageModalClose" type="button">Fermer</button>
+    <img id="imageModalContent" alt="">
   </div>
 
-  <!-- JS léger pour activer le zoom plein écran -->
+  <script src="/app.js?v=python-fr-v1"></script>
   <script>
-    (function(){
-      const modal = document.getElementById('imgModal');
-      const modalImg = document.getElementById('imgModalImg');
-      const closeBtn = document.getElementById('imgModalClose');
-
-      // Cibler toutes les images de la page dans une figure/capsule
-      const zoomables = Array.from(document.querySelectorAll('.figure img, .capsule-media img'));
-
-      function open(src, alt){
-        modalImg.src = src;
-        modalImg.alt = alt || '';
-        modal.classList.add('open');
-        modal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
+    const scenarios = {
+      nominal: {
+        title: 'Flux nominal',
+        badge: 'Terminé',
+        badgeClass: '',
+        rowsReceived: '12 480',
+        rowsReceivedDetail: '5 sources chargées',
+        rowsKept: '12 394',
+        rowsKeptDetail: '99,3 % du lot',
+        orders: '842',
+        ordersDetail: 'Période courante',
+        averageOrder: '388 €',
+        averageOrderDetail: 'Valeur fictive',
+        steps: [
+          ['Sources chargées', 'Terminé', 'done'],
+          ['Types et colonnes contrôlés', 'Terminé', 'done'],
+          ['Tables propres écrites', 'Terminé', 'done'],
+          ['KPI mensuels calculés', 'Terminé', 'done'],
+          ['Restitution actualisée', 'Terminé', 'done']
+        ],
+        issues: [
+          ['42', 'Lignes sans identifiant client isolées'],
+          ['31', 'Doublons de commande écartés'],
+          ['13', 'Montants non numériques mis en quarantaine']
+        ],
+        log: [
+          '09:30:01  INFO   ingestion      12 480 lignes reçues',
+          '09:30:02  INFO   validation     schéma conforme',
+          '09:30:04  WARN   quality        86 lignes isolées',
+          '09:30:05  INFO   aggregation    842 commandes calculées',
+          '09:30:06  INFO   publication    traitement terminé'
+        ]
+      },
+      quality: {
+        title: 'Lot avec anomalies de qualité',
+        badge: 'À corriger',
+        badgeClass: 'warning',
+        rowsReceived: '12 480',
+        rowsReceivedDetail: '5 sources chargées',
+        rowsKept: '11 692',
+        rowsKeptDetail: '93,7 % du lot',
+        orders: '791',
+        ordersDetail: 'Après exclusion',
+        averageOrder: '390 €',
+        averageOrderDetail: 'Valeur fictive',
+        steps: [
+          ['Sources chargées', 'Terminé', 'done'],
+          ['Types et colonnes contrôlés', 'Alerte', 'warning'],
+          ['Lignes non conformes isolées', 'Terminé', 'done'],
+          ['KPI provisoires calculés', 'Alerte', 'warning'],
+          ['Publication suspendue', 'Bloqué', 'blocked']
+        ],
+        issues: [
+          ['318', 'Références client absentes'],
+          ['221', 'Doublons de commande détectés'],
+          ['164', 'Paiements négatifs ou non numériques'],
+          ['85', 'Lignes de commande orphelines']
+        ],
+        log: [
+          '09:42:10  INFO   ingestion      12 480 lignes reçues',
+          '09:42:12  WARN   validation     788 lignes non conformes',
+          '09:42:13  WARN   quality        seuil critique dépassé',
+          '09:42:15  INFO   quarantine     anomalies isolées',
+          '09:42:16  ERROR  publication    validation métier requise'
+        ]
+      },
+      source: {
+        title: 'Source indisponible',
+        badge: 'Bloqué',
+        badgeClass: 'blocked',
+        rowsReceived: '8 206',
+        rowsReceivedDetail: '4 sources sur 5',
+        rowsKept: '0',
+        rowsKeptDetail: 'Traitement interrompu',
+        orders: 'Non calculé',
+        ordersDetail: 'Source incomplète',
+        averageOrder: 'Non calculé',
+        averageOrderDetail: 'Aucune publication',
+        steps: [
+          ['Clients, commandes et produits chargés', 'Terminé', 'done'],
+          ['Source paiements indisponible', 'Bloqué', 'blocked'],
+          ['Contrôles inter-tables', 'En attente', ''],
+          ['KPI mensuels', 'En attente', ''],
+          ['Restitution', 'En attente', '']
+        ],
+        issues: [
+          ['1', 'Fichier paiements introuvable'],
+          ['0', 'Aucune donnée partielle publiée']
+        ],
+        log: [
+          '10:05:21  INFO   ingestion      4 sources chargées',
+          '10:05:23  ERROR  ingestion      payments.csv introuvable',
+          '10:05:23  INFO   safeguard      arrêt contrôlé du pipeline',
+          '10:05:24  INFO   publication    aucune sortie remplacée'
+        ]
       }
-      function close(){
-        modal.classList.remove('open');
-        modal.setAttribute('aria-hidden', 'true');
-        modalImg.src = '';
-        document.body.style.overflow = '';
-      }
+    };
 
-      zoomables.forEach(img => {
-        img.addEventListener('click', () => open(img.src, img.alt));
+    const scenarioSelect = document.getElementById('scenario');
+    const runButton = document.getElementById('runPipeline');
+    const resetButton = document.getElementById('resetPipeline');
+    const runPlaceholder = document.getElementById('runPlaceholder');
+    const runOutput = document.getElementById('runOutput');
+    const runTitle = document.getElementById('runTitle');
+    const runBadge = document.getElementById('runBadge');
+    const stepList = document.getElementById('stepList');
+    const issueList = document.getElementById('issueList');
+    const runLog = document.getElementById('runLog');
+
+    const metricBindings = {
+      rowsReceived: document.getElementById('rowsReceived'),
+      rowsReceivedDetail: document.getElementById('rowsReceivedDetail'),
+      rowsKept: document.getElementById('rowsKept'),
+      rowsKeptDetail: document.getElementById('rowsKeptDetail'),
+      orders: document.getElementById('ordersCount'),
+      ordersDetail: document.getElementById('ordersDetail'),
+      averageOrder: document.getElementById('averageOrder'),
+      averageOrderDetail: document.getElementById('averageOrderDetail')
+    };
+
+    function renderScenario(data) {
+      runTitle.textContent = data.title;
+      runBadge.textContent = data.badge;
+      runBadge.className = 'run-badge' + (data.badgeClass ? ' ' + data.badgeClass : '');
+
+      Object.keys(metricBindings).forEach((key) => {
+        metricBindings[key].textContent = data[key];
       });
 
-      closeBtn.addEventListener('click', close);
-      modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
-      window.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
-    })();
+      stepList.replaceChildren();
+      data.steps.forEach(([label, state, statusClass]) => {
+        const item = document.createElement('li');
+        item.className = 'step-item';
+
+        const dot = document.createElement('span');
+        dot.className = 'step-dot' + (statusClass ? ' ' + statusClass : '');
+        dot.setAttribute('aria-hidden', 'true');
+
+        const name = document.createElement('span');
+        name.textContent = label;
+
+        const stateElement = document.createElement('span');
+        stateElement.className = 'step-state';
+        stateElement.textContent = state;
+
+        item.append(dot, name, stateElement);
+        stepList.appendChild(item);
+      });
+
+      issueList.replaceChildren();
+      data.issues.forEach(([count, label]) => {
+        const item = document.createElement('li');
+        const countElement = document.createElement('span');
+        countElement.className = 'issue-count';
+        countElement.textContent = count;
+        const labelElement = document.createElement('span');
+        labelElement.textContent = label;
+        item.append(countElement, labelElement);
+        issueList.appendChild(item);
+      });
+
+      runLog.textContent = data.log.join('\n');
+      runPlaceholder.hidden = true;
+      runOutput.hidden = false;
+      runOutput.setAttribute('aria-busy', 'false');
+      runButton.disabled = false;
+      runButton.textContent = 'Relancer la simulation';
+    }
+
+    function runSimulation() {
+      const data = scenarios[scenarioSelect.value];
+      runButton.disabled = true;
+      runButton.textContent = 'Traitement en cours...';
+      runOutput.setAttribute('aria-busy', 'true');
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.setTimeout(() => renderScenario(data), reduceMotion ? 0 : 260);
+    }
+
+    function resetSimulation() {
+      scenarioSelect.value = 'nominal';
+      runOutput.hidden = true;
+      runOutput.setAttribute('aria-busy', 'false');
+      runPlaceholder.hidden = false;
+      runButton.disabled = false;
+      runButton.textContent = 'Lancer la simulation';
+    }
+
+    runButton.addEventListener('click', runSimulation);
+    resetButton.addEventListener('click', resetSimulation);
+
+    const artifactTabs = Array.from(document.querySelectorAll('.artifact-tab'));
+    const artifactPanels = Array.from(document.querySelectorAll('.artifact-panel'));
+
+    function activateArtifactTab(tab) {
+      artifactTabs.forEach((item) => {
+        const isActive = item === tab;
+        item.setAttribute('aria-selected', String(isActive));
+        item.tabIndex = isActive ? 0 : -1;
+      });
+
+      artifactPanels.forEach((panel) => {
+        panel.hidden = panel.id !== 'panel-' + tab.dataset.panel;
+      });
+    }
+
+    artifactTabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activateArtifactTab(tab));
+      tab.addEventListener('keydown', (event) => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {
+          return;
+        }
+
+        event.preventDefault();
+        let targetIndex = index;
+
+        if (event.key === 'ArrowRight') targetIndex = (index + 1) % artifactTabs.length;
+        if (event.key === 'ArrowLeft') targetIndex = (index - 1 + artifactTabs.length) % artifactTabs.length;
+        if (event.key === 'Home') targetIndex = 0;
+        if (event.key === 'End') targetIndex = artifactTabs.length - 1;
+
+        activateArtifactTab(artifactTabs[targetIndex]);
+        artifactTabs[targetIndex].focus();
+      });
+    });
+
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('imageModalContent');
+    const modalClose = document.getElementById('imageModalClose');
+    const imageButtons = document.querySelectorAll('.artifact-image');
+    let lastFocusedElement = null;
+
+    function openModal(button) {
+      lastFocusedElement = button;
+      modalImage.src = button.dataset.image;
+      modalImage.alt = button.dataset.alt || '';
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      modalClose.focus();
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      modalImage.src = '';
+      document.body.style.overflow = '';
+      if (lastFocusedElement) lastFocusedElement.focus();
+    }
+
+    imageButtons.forEach((button) => {
+      button.addEventListener('click', () => openModal(button));
+    });
+
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) closeModal();
+    });
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && modal.classList.contains('open')) {
+        closeModal();
+      }
+    });
+
+    const yearElement = document.getElementById('y');
+    if (yearElement && !yearElement.textContent) {
+      yearElement.textContent = new Date().getFullYear();
+    }
   </script>
 </body>
 </html>
