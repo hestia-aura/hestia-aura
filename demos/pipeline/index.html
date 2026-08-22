@@ -130,7 +130,7 @@
     }
     .run-rail {
       position:absolute;
-      right:12.5%;
+      right:6%;
       bottom:5px;
       left:12.5%;
       height:5px;
@@ -661,7 +661,7 @@
         elements.run.disabled = true;
         elements.steps.forEach((step) => step.classList.remove('active','done'));
         const labels = ['Ingestion des lignes', 'Standardisation du schéma', 'Exécution des contrôles', 'Publication de la sortie'];
-        const progress = ['0%', '33.333%', '66.666%', '100%'];
+        const progress = ['0%', '31%', '61%', '92%'];
         labels.forEach((label, index) => {
           timers.push(window.setTimeout(() => {
             elements.steps.forEach((step, stepIndex) => {
