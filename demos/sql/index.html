@@ -1,28 +1,741 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SQL - Modèle, requêtes, qualité & pipeline | Hestia Aura</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SQL pour le reporting et la qualité | Jérôme Jeannin</title>
+  <meta name="description" content="Démonstration SQL appliquée au reporting : modèle relationnel, agrégations métier, contrôles qualité et lecture de plans d'exécution sur des données fictives.">
+  <meta property="og:title" content="SQL pour le reporting et la qualité | Jérôme Jeannin">
+  <meta property="og:description" content="Des requêtes SQL lisibles pour produire des indicateurs, contrôler les données et préparer une restitution BI.">
+  <meta property="og:image" content="/assets/logo.jpg">
 
-  <link rel="icon" href="/assets/logo.jpg" />
-  <link rel="apple-touch-icon" href="/assets/logo.jpg" />
-  <link rel="stylesheet" href="/styles.css?v=final3" />
+  <link rel="icon" href="/assets/logo.jpg">
+  <link rel="apple-touch-icon" href="/assets/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=sql-fr-v1">
+  <link rel="stylesheet" href="/assets/css/demo.css">
 
-  <meta name="description" content="Exemples SQL Server : modèle relationnel, KPIs mensuels, optimisation de requêtes (sargable), contrôles qualité et journal de pipeline." />
-  <meta property="og:title" content="Showcase SQL - Hestia Aura" />
-  <meta property="og:description" content="Modélisation, performance de requêtes, qualité des données et pipeline SQL léger sur un jeu e-commerce fictif." />
-  <meta property="og:image" content="/assets/logo.jpg" />
+  <style>
+    :root {
+      --sql-border: rgba(255,255,255,.09);
+      --sql-panel: #0f1117;
+      --sql-panel-2: #0a0e16;
+      --sql-text: #e6eaf0;
+      --sql-muted: #aeb6c4;
+      --sql-accent: #7374ff;
+      --sql-cyan: #4fd2ff;
+      --sql-green: #55d6a6;
+      --sql-amber: #f4c95d;
+      --sql-shadow: 0 14px 36px rgba(0,0,0,.24);
+    }
+
+    .page-sql .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      line-height: 1.05;
+    }
+
+    .page-sql .brand-name {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .page-sql .brand-label {
+      color: #9da5b3;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .sql-page {
+      padding: 32px 0 68px;
+    }
+
+    .sql-page .demo-container {
+      max-width: 1100px;
+    }
+
+    .sql-hero {
+      margin-bottom: 22px;
+    }
+
+    .sql-hero h1 {
+      max-width: 980px;
+    }
+
+    .sql-flow {
+      margin-top: 24px;
+      padding: 22px;
+      overflow: hidden;
+      border: 1px solid var(--sql-border);
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 84% 14%, rgba(115,116,255,.2), transparent 30%),
+        radial-gradient(circle at 14% 88%, rgba(79,210,255,.11), transparent 25%),
+        linear-gradient(145deg, rgba(8,11,20,.98), rgba(12,16,28,.96));
+      box-shadow: var(--sql-shadow);
+    }
+
+    .sql-flow-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .sql-flow-step {
+      position: relative;
+      min-height: 148px;
+      padding: 17px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 17px;
+      background: rgba(9,13,23,.76);
+      box-shadow: 0 10px 24px rgba(0,0,0,.18);
+    }
+
+    .sql-flow-step:not(:first-child)::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -13px;
+      width: 12px;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(79,210,255,.35), rgba(115,116,255,.9));
+    }
+
+    .sql-flow-step > span {
+      display: inline-flex;
+      width: 27px;
+      height: 27px;
+      margin-bottom: 12px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--sql-accent), #8a5bff);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .sql-flow-step strong {
+      display: block;
+      margin-bottom: 7px;
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-size: 17px;
+      line-height: 1.2;
+    }
+
+    .sql-flow-step p {
+      margin: 0;
+      color: #c8ced8;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .case-section {
+      margin-top: 30px;
+    }
+
+    .case-section h2,
+    .sql-cta h2 {
+      margin: 0 0 10px;
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-size: 29px;
+      line-height: 1.1;
+      letter-spacing: -.025em;
+    }
+
+    .case-copy {
+      max-width: 980px;
+      color: var(--sql-text);
+      font-size: 17px;
+      line-height: 1.78;
+    }
+
+    .case-copy p {
+      margin: 0;
+    }
+
+    .case-copy p + p {
+      margin-top: 12px;
+    }
+
+    .approach-grid,
+    .value-grid,
+    .production-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 13px;
+      margin-top: 16px;
+    }
+
+    .approach-item,
+    .value-item,
+    .production-item {
+      padding: 17px;
+      border: 1px solid var(--sql-border);
+      border-radius: 17px;
+      background: var(--sql-panel);
+      box-shadow: var(--sql-shadow);
+    }
+
+    .approach-item strong,
+    .value-item strong,
+    .production-item strong {
+      display: block;
+      margin-bottom: 7px;
+      color: #fff;
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .approach-item span,
+    .value-item span,
+    .production-item span {
+      color: #c4cad4;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .demo-intro {
+      margin-top: 14px;
+      padding: 18px;
+      border: 1px solid var(--sql-border);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(13,17,28,.98), rgba(9,13,22,.94));
+      box-shadow: var(--sql-shadow);
+    }
+
+    .demo-intro strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .demo-intro p {
+      margin: 0;
+      color: var(--sql-text);
+      font-size: 16px;
+      line-height: 1.72;
+    }
+
+    .query-lab {
+      margin-top: 16px;
+      padding: 20px;
+      border: 1px solid var(--sql-border);
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgba(12,15,24,.98), rgba(8,11,18,.98));
+      box-shadow: var(--sql-shadow);
+    }
+
+    .query-toolbar {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .query-field {
+      display: flex;
+      flex: 1 1 390px;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .query-field label {
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .query-field select {
+      width: 100%;
+      min-height: 46px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 11px;
+      outline: none;
+      background: #0a0e16;
+      color: #eef1f5;
+      font: inherit;
+    }
+
+    .query-field select:focus {
+      border-color: rgba(115,116,255,.85);
+      box-shadow: 0 0 0 3px rgba(115,116,255,.16);
+    }
+
+    .query-toolbar .btn {
+      min-height: 46px;
+      padding: 10px 17px;
+    }
+
+    .local-note {
+      margin: 12px 0 0;
+      color: #9ca5b4;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .query-workspace {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 13px;
+      margin-top: 17px;
+    }
+
+    .query-panel,
+    .result-panel {
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+      background: var(--sql-panel-2);
+    }
+
+    .panel-heading {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .panel-heading h3 {
+      margin: 0;
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-size: 18px;
+    }
+
+    .dialect-badge,
+    .result-badge {
+      display: inline-flex;
+      border: 1px solid rgba(115,116,255,.35);
+      border-radius: 999px;
+      padding: 5px 9px;
+      background: rgba(115,116,255,.1);
+      color: #c8c9ff;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .result-badge {
+      border-color: rgba(85,214,166,.34);
+      background: rgba(85,214,166,.1);
+      color: #8ee8c2;
+    }
+
+    .business-question {
+      margin: 0 0 12px;
+      color: #dce1e8;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .query-code {
+      min-height: 410px;
+      margin: 0;
+      overflow: auto;
+      padding: 15px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 13px;
+      background: #070a10;
+      color: #c9f3e2;
+      font: 12px/1.6 "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      white-space: pre;
+    }
+
+    .result-placeholder {
+      display: grid;
+      min-height: 410px;
+      place-items: center;
+      padding: 24px;
+      border: 1px dashed rgba(255,255,255,.12);
+      border-radius: 13px;
+      color: #929baa;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .result-content[hidden],
+    .result-placeholder[hidden] {
+      display: none;
+    }
+
+    .result-summary {
+      margin: 0 0 13px;
+      color: #dce1e8;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .result-table-wrap {
+      overflow-x: auto;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+    }
+
+    .result-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .result-table th,
+    .result-table td {
+      padding: 9px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      color: #dce1e8;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .result-table th {
+      background: rgba(255,255,255,.04);
+      color: #9ea7b7;
+      font-size: 10px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .result-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .result-insight {
+      margin-top: 13px;
+      padding: 13px;
+      border-left: 3px solid var(--sql-cyan);
+      border-radius: 0 12px 12px 0;
+      background: rgba(79,210,255,.07);
+      color: #dce4eb;
+      font-size: 13px;
+      line-height: 1.62;
+    }
+
+    .artifact-shell {
+      margin-top: 16px;
+      padding: 20px;
+      border: 1px solid var(--sql-border);
+      border-radius: 22px;
+      background: linear-gradient(145deg, rgba(12,15,24,.98), rgba(8,11,18,.98));
+      box-shadow: var(--sql-shadow);
+    }
+
+    .artifact-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 17px;
+    }
+
+    .artifact-tab {
+      min-height: 40px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 999px;
+      padding: 8px 13px;
+      background: rgba(255,255,255,.03);
+      color: #cbd2dc;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .artifact-tab[aria-selected="true"] {
+      border-color: rgba(115,116,255,.6);
+      background: rgba(115,116,255,.16);
+      color: #fff;
+    }
+
+    .artifact-panel[hidden] {
+      display: none;
+    }
+
+    .artifact-copy {
+      margin-bottom: 14px;
+      color: #d9dee6;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .artifact-copy p {
+      margin: 0;
+    }
+
+    .artifact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+    }
+
+    .artifact-card {
+      min-width: 0;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+      background: var(--sql-panel-2);
+    }
+
+    .artifact-card.wide {
+      grid-column: 1 / -1;
+    }
+
+    .artifact-image {
+      display: block;
+      width: 100%;
+      min-height: 230px;
+      border: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #070a10;
+      cursor: zoom-in;
+    }
+
+    .artifact-image img {
+      display: block;
+      width: 100%;
+      height: 310px;
+      object-fit: contain;
+      background: #070a10;
+    }
+
+    .artifact-card.wide .artifact-image img {
+      height: 360px;
+    }
+
+    .artifact-caption {
+      padding: 14px;
+    }
+
+    .artifact-caption strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .artifact-caption span {
+      color: #aeb6c4;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .stack-list {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .stack-chip {
+      display: inline-flex;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 999px;
+      padding: 5px 9px;
+      background: rgba(255,255,255,.03);
+      color: #d6dbe3;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .production-note {
+      margin-top: 14px;
+      padding: 17px 18px;
+      border-left: 3px solid var(--sql-accent);
+      border-radius: 0 14px 14px 0;
+      background: rgba(115,116,255,.08);
+      color: #dce1e8;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .sql-cta {
+      margin-top: 30px;
+      padding: 22px;
+      border: 1px solid var(--sql-border);
+      border-radius: 19px;
+      background: var(--sql-panel);
+      box-shadow: var(--sql-shadow);
+    }
+
+    .sql-cta p {
+      max-width: 900px;
+      margin: 0 0 17px;
+      color: var(--sql-text);
+      font-size: 16px;
+      line-height: 1.72;
+    }
+
+    .sql-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .image-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      place-items: center;
+      padding: 28px;
+      background: rgba(3,5,9,.92);
+    }
+
+    .image-modal.open {
+      display: grid;
+    }
+
+    .image-modal img {
+      display: block;
+      max-width: min(1500px, 94vw);
+      max-height: 86vh;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px;
+      object-fit: contain;
+      background: #070a10;
+      box-shadow: 0 22px 60px rgba(0,0,0,.5);
+    }
+
+    .image-modal-close {
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 10px;
+      padding: 8px 11px;
+      background: #111620;
+      color: #fff;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    @media (max-width: 960px) {
+      .sql-flow-grid,
+      .approach-grid,
+      .value-grid,
+      .production-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .sql-flow-step:not(:first-child)::before {
+        display: none;
+      }
+
+      .query-workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .query-code,
+      .result-placeholder {
+        min-height: 340px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .sql-page {
+        padding-top: 24px;
+      }
+
+      .page-sql .nav a:not(.btn) {
+        display: none;
+      }
+
+      .sql-flow {
+        padding: 16px;
+      }
+
+      .sql-flow-grid,
+      .approach-grid,
+      .value-grid,
+      .production-grid,
+      .artifact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sql-flow-step {
+        min-height: 0;
+      }
+
+      .case-section h2,
+      .sql-cta h2 {
+        font-size: 25px;
+      }
+
+      .case-copy {
+        font-size: 16px;
+        line-height: 1.7;
+      }
+
+      .query-lab,
+      .artifact-shell {
+        padding: 15px;
+      }
+
+      .query-toolbar {
+        align-items: stretch;
+      }
+
+      .query-toolbar .btn {
+        width: 100%;
+      }
+
+      .panel-heading {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .query-code {
+        min-height: 300px;
+        font-size: 11px;
+      }
+
+      .artifact-card.wide {
+        grid-column: auto;
+      }
+
+      .artifact-image img,
+      .artifact-card.wide .artifact-image img {
+        height: 230px;
+      }
+
+      .footer-inner {
+        gap: 10px;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .page-sql *,
+      .page-sql *::before,
+      .page-sql *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
 </head>
 
-<body class="powerbi">
+<body class="page-sql">
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="/">
-        <img src="/assets/logo.jpg" class="brand-mark" alt="logo" />
-        <span class="brand-name">Hestia <strong>Aura</strong></span>
+      <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
+        <img src="/assets/logo.jpg" alt="" class="brand-mark">
+        <span class="brand-text">
+          <span class="brand-name">Jérôme Jeannin</span>
+          <span class="brand-label">Hestia Aura</span>
+        </span>
       </a>
-      <nav class="nav">
+
+      <nav class="nav" aria-label="Navigation principale">
         <a href="/">Accueil</a>
         <a href="/about.html">À propos</a>
         <a href="/showcase.html">Showcase</a>
@@ -31,191 +744,358 @@
     </div>
   </header>
 
-  <main id="main">
-    <!-- HERO -->
-    <section class="hero">
-      <div class="container">
-        <h1>SQL - Modèle, requêtes, qualité & pipeline</h1>
-
+  <main class="sql-page">
+    <div class="demo-container">
+      <section class="demo-hero sql-hero">
+        <p class="section-kicker">SQL appliqué · Reporting et qualité</p>
+        <h1>Requêtes SQL pour le reporting et la qualité des données</h1>
         <p>
-          Exemples pédagogiques sur un jeu e-commerce fictif (CH/EU) couvrant 2019-2024.
-          L’idée n’est pas de « montrer une stack », mais d’illustrer
-          <strong>ce que l’on peut faire avec SQL</strong> : bâtir un modèle simple, produire des agrégats lisibles,
-          lire un plan d’exécution pour optimiser une requête (<em>sargable</em>), vérifier la
-          <strong>qualité des données</strong> et suivre un <strong>pipeline</strong> en production légère.
+          Relier une question métier à une requête lisible, produire des indicateurs contrôlables
+          et détecter les anomalies avant leur utilisation dans un rapport.
         </p>
 
-        <div class="pills">
-          <span class="pill">SQL Server</span>
-          <span class="pill">SSMS</span>
-          <span class="pill">ETL</span>
-          <span class="pill">Data Quality</span>
-        </div>
-
-        <p style="margin-top:12px;">
-          <a class="btn btn--sm btn--primary" href="/showcase.html">↩ Retour au Showcase</a>
-        </p>
-
-        <ul class="hero-badges" style="margin-top:8px">
-          <li><a href="#p1">P1 - Modèle & KPI</a></li>
-          <li><a href="#p2">P2 - Requêtes optimisées</a></li>
-          <li><a href="#p3">P3 - Qualité des données</a></li>
-          <li><a href="#p4">P4 - Pipeline & journal</a></li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- P1 -->
-    <section id="p1" class="section">
-      <div class="container">
-        <h2>P1 - Modélisation & requêtes métier</h2>
-
-        <div class="capsule capsule--lr">
-          <figure class="capsule-media figure">
-            <img src="/assets/media/SQL_P1_ERD.jpg" alt="Schéma relationnel SQL (customers, orders, order_items, products, payments)" />
-            <figcaption>Schéma logique : <strong>customers</strong> → <strong>orders</strong> → <strong>order_items</strong>, avec <strong>products</strong> et <strong>payments</strong>.</figcaption>
-          </figure>
-
-          <div class="capsule-body">
-            <h3>Contexte & objectifs</h3>
-            <p>
-              On part d’un <strong>modèle relationnel minimal</strong> pour illustrer ce que l’on peut faire avec SQL :
-              requêtes claires, indicateurs mensuels, et résultats réutilisables pour un tableau de bord.
-              On s’appuie sur des types explicites, des clés primaires/étrangères et des contraintes simples
-              (<code>NOT NULL</code>, <code>CHECK</code>).
-            </p>
-            <p>
-              Côté requêtes, on combine des CTE (<code>WITH</code>) et quelques
-              <strong>fonctions de fenêtre</strong> (ex. <code>SUM() OVER</code>) pour agréger proprement.
-              Les agrégats cibles : <strong>CA (CHF)</strong>, <strong>nombre de commandes</strong>,
-              <strong>panier moyen</strong> et <strong>clients actifs</strong> par mois.
-            </p>
-
-            <h4>Agrégats mensuels (extrait)</h4>
-            <figure class="figure">
-              <img src="/assets/media/SQL_P1_KPI.jpg" alt="Revenus mensuels, commandes, panier moyen, clients actifs" />
-              <figcaption>
-                Vue « sales_monthly » : <strong>revenue_chf</strong>, <strong>orders_cnt</strong>,
-                <strong>avg_order_value</strong>, <strong>active_customers</strong> (mois).
-              </figcaption>
-            </figure>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- P2 -->
-    <section id="p2" class="section">
-      <div class="container">
-        <h2>P2 - Performance & indexation (lecture de plans)</h2>
-
-        <div class="capsule">
-          <p>
-            L’objectif : <strong>réécrire</strong> une requête pour la rendre <em>sargable</em>
-            (search-ARGument-able) et <strong>exploiter un index</strong> pertinent.
-            Ici, la requête « Top clients sur période » appliquait une fonction sur la colonne de date :
-            l’optimiseur scannait plus que nécessaire.
-          </p>
-
-          <div class="capsule--lr">
-            <figure class="capsule-media figure figure--plan">
-              <img src="/assets/media/SQL_P2_BEFORE.jpg" alt="Plan d'exécution avant - requête non sargable" data-zoom="1" />
-              <figcaption>
-                <strong>Avant</strong> : filtre non sargable (<code>CONVERT(date, o.order_date)</code>),
-                l’index ne peut pas être utilisé efficacement → scan inutilement large.
-              </figcaption>
-            </figure>
-
-            <div class="capsule-body">
-              <figure class="figure figure--plan">
-                <img src="/assets/media/SQL_P2_AFTER.jpg" alt="Plan d'exécution après - requête sargable et index utilisé" data-zoom="1" />
-                <figcaption>
-                  <strong>Après</strong> : bornes directes sur la colonne indexée
-                  (<code>o.order_date &gt;= '2021-01-01' AND o.order_date &lt; '2023-01-01'</code>) +
-                  index composé (<code>order_date, customer_id</code>) : plan plus léger, tri plus économique.
-                </figcaption>
-              </figure>
-
-              <p class="muted" style="margin-top:6px">
-                Bonnes pratiques : limiter les colonnes sélectionnées, préférer <code>EXISTS</code> à
-                <code>IN</code> quand utile, pré-agréger si nécessaire, et <strong>lire le plan</strong>
-                (coûts, opérateurs).
-              </p>
+        <div class="sql-flow" aria-label="Flux simplifié d'une analyse SQL">
+          <div class="sql-flow-grid">
+            <div class="sql-flow-step">
+              <span>01</span>
+              <strong>Question métier</strong>
+              <p>Le besoin est traduit en indicateurs, périmètre, granularité et règles de calcul.</p>
+            </div>
+            <div class="sql-flow-step">
+              <span>02</span>
+              <strong>Requête lisible</strong>
+              <p>Jointures, filtres et agrégations structurent les données utiles à l'analyse.</p>
+            </div>
+            <div class="sql-flow-step">
+              <span>03</span>
+              <strong>Résultat contrôlé</strong>
+              <p>Les volumes, doublons, valeurs absentes et écarts de calcul sont vérifiés.</p>
+            </div>
+            <div class="sql-flow-step">
+              <span>04</span>
+              <strong>Restitution</strong>
+              <p>Le résultat validé peut alimenter un rapport, une extraction ou un contrôle opérationnel.</p>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- P3 -->
-    <section id="p3" class="section">
-      <div class="container">
-        <h2>P3 - Qualité & fiabilité des données</h2>
+      <section class="case-section">
+        <h2>Contexte métier</h2>
+        <div class="case-copy">
+          <p>
+            Les données nécessaires à un reporting sont souvent réparties entre plusieurs tables :
+            clients, commandes, produits, lignes de commande et paiements. Une requête utile doit relier
+            ces objets sans perdre la définition métier de l'indicateur.
+          </p>
+        </div>
+      </section>
 
-        <div class="capsule capsule--lr">
-          <figure class="capsule-media figure">
-            <img src="/assets/media/SQL_P3_QUALITY.jpg" alt="Vue de synthèse des contrôles qualité : doublons, valeurs nulles, paiements négatifs, références manquantes" />
-            <figcaption>
-              Vue de synthèse : <strong>règle</strong>, <strong>sévérité</strong> (high/medium/low),
-              <strong>lignes affectées</strong> - triée par priorité.
-            </figcaption>
-          </figure>
+      <section class="case-section">
+        <h2>Problématique</h2>
+        <div class="case-copy">
+          <p>
+            Comment produire des résultats fiables et compréhensibles pour l'analyse, tout en repérant
+            les données incohérentes et les formulations de requêtes qui peuvent dégrader les performances ?
+          </p>
+        </div>
+      </section>
 
-          <div class="capsule-body">
-            <p>
-              Voici <strong>ce que l’on peut faire avec SQL</strong> pour fiabiliser un jeu de données :
-              règles de qualité (doublons, <code>NULL</code>, références orphelines, montants négatifs),
-              mise en forme homogène et <strong>priorisation</strong> des corrections.
-              Une <strong>vue</strong> consolide les résultats pour les exposer à un tableau de bord
-              ou à des notifications.
-            </p>
-            <ul>
-              <li>Règles simples et explicites (clé composite, contraintes <code>CHECK</code>).</li>
-              <li>Priorisation par sévérité pour traiter d’abord l’impact métier.</li>
-              <li>Exemples de corrections possibles (UPDATE/DELETE sécurisés).</li>
-            </ul>
+      <section class="case-section">
+        <h2>Approche</h2>
+        <div class="case-copy">
+          <p>
+            Le prototype part d'un modèle relationnel simple et illustre trois usages directement liés
+            au reporting : calculer des KPI mensuels, consolider des contrôles qualité et écrire un filtre
+            temporel compatible avec l'utilisation d'un index.
+          </p>
+        </div>
+
+        <div class="approach-grid">
+          <div class="approach-item">
+            <strong>Modèle compréhensible</strong>
+            <span>Clés et relations explicites pour suivre le chemin du client jusqu'au paiement.</span>
+          </div>
+          <div class="approach-item">
+            <strong>Calculs lisibles</strong>
+            <span>Les agrégations intermédiaires rendent la logique plus simple à relire et à adapter.</span>
+          </div>
+          <div class="approach-item">
+            <strong>Qualité visible</strong>
+            <span>Les règles retournent un nom, un volume affecté et un niveau de priorité.</span>
+          </div>
+          <div class="approach-item">
+            <strong>Performance raisonnée</strong>
+            <span>Le plan d'exécution aide à vérifier les accès aux tables au lieu de supposer un gain.</span>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- P4 -->
-    <section id="p4" class="section">
-      <div class="container">
-        <h2>P4 - ETL SQL léger & journal d’exécution</h2>
+      <section class="case-section">
+        <h2>Ce que montre la démo</h2>
+        <div class="demo-intro">
+          <strong>Parcourez trois exemples de requêtes T-SQL</strong>
+          <p>
+            Chaque exemple relie une question métier à une requête et à un résultat fictif. Les requêtes
+            ne sont pas exécutées par cette page : la restitution est simulée localement pour expliquer
+            le raisonnement et les points de contrôle.
+          </p>
+        </div>
 
-        <div class="capsule capsule--lr">
-          <figure class="capsule-media figure">
-            <img src="/assets/media/SQL_P4_PIPELINE.png" alt="Schéma pipeline : staging → clean → mart avec audit" />
-            <figcaption>
-              Pipeline logique : <strong>staging</strong> (brut) → <strong>clean</strong> (normalisé) → <strong>mart</strong> (pour la BI)
-              + zone <strong>audit</strong> (journal & qualité).
-            </figcaption>
-          </figure>
+        <div class="query-lab">
+          <div class="query-toolbar">
+            <div class="query-field">
+              <label for="queryScenario">Exemple à explorer</label>
+              <select id="queryScenario">
+                <option value="monthly">KPI mensuels pour le reporting</option>
+                <option value="quality">Contrôles de qualité consolidés</option>
+                <option value="period">Top clients avec filtre de période</option>
+              </select>
+            </div>
+            <button id="runQuery" class="btn" type="button">Afficher le résultat</button>
+            <button id="resetQuery" class="btn btn--outline" type="button">Réinitialiser</button>
+          </div>
 
-          <div class="capsule-body">
-            <p>
-              Un flux SQL « léger » reste lisible et <strong>idempotent</strong> : chargements incrémentaux,
-              <strong>MERGE/UPSERT</strong>, clés techniques, horodatage. La planification peut se faire via
-              CRON/Azure DevOps à 08:30 CET, avec relance en cas d’échec.
-            </p>
+          <p class="local-note">
+            Démonstration front-end : le code et les résultats sont des exemples fictifs affichés dans le navigateur.
+            Aucun serveur SQL ni aucune donnée externe n'est interrogé.
+          </p>
 
-            <figure class="figure">
-              <img src="/assets/media/SQL_P4_JOBS.jpg" alt="Journal des exécutions : jobs, timestamps, statuts, volumes, message" />
-              <figcaption>
-                Journal des jobs (<code>job_runs</code>) : start/end-ts, status, rows_in/out, message.
-                Exemple pédagogique : ré-exécution après correction, contrainte sur paiements négatifs, delta import, etc.
-              </figcaption>
-            </figure>
+          <div class="query-workspace">
+            <section class="query-panel">
+              <div class="panel-heading">
+                <h3>Requête</h3>
+                <span class="dialect-badge">T-SQL</span>
+              </div>
+              <p id="businessQuestion" class="business-question"></p>
+              <pre class="query-code"><code id="queryCode"></code></pre>
+            </section>
 
-            <p class="muted">
-              Sortie attendue : un pipeline simple, observable et traçable, prêt à être branché
-              sur un dashboard opérationnel.
-            </p>
+            <section class="result-panel" aria-live="polite">
+              <div class="panel-heading">
+                <h3>Résultat fictif</h3>
+                <span id="resultBadge" class="result-badge">En attente</span>
+              </div>
+
+              <div id="resultPlaceholder" class="result-placeholder">
+                Choisissez un exemple puis affichez le résultat pour voir la restitution et le point de contrôle associé.
+              </div>
+
+              <div id="resultContent" class="result-content" hidden>
+                <p id="resultSummary" class="result-summary"></p>
+                <div class="result-table-wrap">
+                  <table class="result-table">
+                    <thead id="resultHead"></thead>
+                    <tbody id="resultBody"></tbody>
+                  </table>
+                </div>
+                <div id="resultInsight" class="result-insight"></div>
+              </div>
+            </section>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section class="case-section">
+        <h2>Livrables du prototype</h2>
+        <div class="case-copy">
+          <p>
+            Les captures documentent le prototype initial réalisé dans SQL Server Management Studio.
+            Elles illustrent le modèle, les résultats, les contrôles et un flux logique, sans prétendre
+            représenter à elles seules une plateforme industrialisée.
+          </p>
+        </div>
+
+        <div class="artifact-shell">
+          <div class="artifact-tabs" role="tablist" aria-label="Étapes du prototype SQL">
+            <button class="artifact-tab" id="tab-model" type="button" role="tab" aria-selected="true" aria-controls="panel-model" data-panel="model">1. Modèle et KPI</button>
+            <button class="artifact-tab" id="tab-performance" type="button" role="tab" aria-selected="false" aria-controls="panel-performance" data-panel="performance" tabindex="-1">2. Lecture du plan</button>
+            <button class="artifact-tab" id="tab-quality" type="button" role="tab" aria-selected="false" aria-controls="panel-quality" data-panel="quality" tabindex="-1">3. Qualité</button>
+            <button class="artifact-tab" id="tab-pipeline" type="button" role="tab" aria-selected="false" aria-controls="panel-pipeline" data-panel="pipeline" tabindex="-1">4. Flux logique</button>
+          </div>
+
+          <section class="artifact-panel" id="panel-model" role="tabpanel" aria-labelledby="tab-model">
+            <div class="artifact-copy">
+              <p>Le modèle relie cinq entités et sert de base à une agrégation mensuelle exploitable pour le reporting.</p>
+            </div>
+            <div class="artifact-grid">
+              <article class="artifact-card">
+                <button class="artifact-image" type="button" data-image="/assets/media/SQL_P1_ERD.jpg" data-alt="Diagramme relationnel du prototype SQL">
+                  <img src="/assets/media/SQL_P1_ERD.jpg" alt="Diagramme relationnel du prototype SQL" loading="lazy">
+                </button>
+                <div class="artifact-caption">
+                  <strong>Relations entre les tables</strong>
+                  <span>Clients, commandes, lignes, produits et paiements sont reliés par leurs clés.</span>
+                </div>
+              </article>
+              <article class="artifact-card">
+                <button class="artifact-image" type="button" data-image="/assets/media/SQL_P1_KPI.jpg" data-alt="Résultat des indicateurs mensuels dans SQL Server">
+                  <img src="/assets/media/SQL_P1_KPI.jpg" alt="Résultat des indicateurs mensuels dans SQL Server" loading="lazy">
+                </button>
+                <div class="artifact-caption">
+                  <strong>Vue mensuelle du prototype</strong>
+                  <span>Chiffre d'affaires, commandes, panier moyen et clients actifs sont regroupés par mois.</span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="artifact-panel" id="panel-performance" role="tabpanel" aria-labelledby="tab-performance" hidden>
+            <div class="artifact-copy">
+              <p>
+                L'exemple compare un filtre appliquant une fonction à la date et une écriture utilisant des bornes directes.
+                Le plan doit être relu sur les données réelles avant de conclure à un gain.
+              </p>
+            </div>
+            <div class="artifact-grid">
+              <article class="artifact-card">
+                <button class="artifact-image" type="button" data-image="/assets/media/SQL_P2_BEFORE.jpg" data-alt="Requête avec filtre de date non sargable et plan d'exécution">
+                  <img src="/assets/media/SQL_P2_BEFORE.jpg" alt="Requête avec filtre de date non sargable et plan d'exécution" loading="lazy">
+                </button>
+                <div class="artifact-caption">
+                  <strong>Avant la réécriture</strong>
+                  <span>La fonction appliquée à la colonne de date peut limiter l'utilisation efficace d'un index.</span>
+                </div>
+              </article>
+              <article class="artifact-card">
+                <button class="artifact-image" type="button" data-image="/assets/media/SQL_P2_AFTER.jpg" data-alt="Requête avec bornes de date directes et plan d'exécution">
+                  <img src="/assets/media/SQL_P2_AFTER.jpg" alt="Requête avec bornes de date directes et plan d'exécution" loading="lazy">
+                </button>
+                <div class="artifact-caption">
+                  <strong>Après la réécriture</strong>
+                  <span>Les bornes directes rendent le filtre sargable. Forcer un index reste à éviter sans mesure et justification.</span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="artifact-panel" id="panel-quality" role="tabpanel" aria-labelledby="tab-quality" hidden>
+            <div class="artifact-copy">
+              <p>Une sortie compacte consolide les contrôles et les classe selon leur impact potentiel sur le reporting.</p>
+            </div>
+            <div class="artifact-grid">
+              <article class="artifact-card wide">
+                <button class="artifact-image" type="button" data-image="/assets/media/SQL_P3_QUALITY.jpg" data-alt="Résultat des contrôles de qualité SQL">
+                  <img src="/assets/media/SQL_P3_QUALITY.jpg" alt="Résultat des contrôles de qualité SQL" loading="lazy">
+                </button>
+                <div class="artifact-caption">
+                  <strong>Contrôles consolidés</strong>
+                  <span>Doublons, clients absents, paiements négatifs et références orphelines sont comptabilisés.</span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="artifact-panel" id="panel-pipeline" role="tabpanel" aria-labelledby="tab-pipeline" hidden>
+            <div class="artifact-copy">
+              <p>
+                Le schéma représente une séparation logique entre données brutes, données nettoyées,
+                restitution et audit. Il s'agit d'une conception pédagogique, pas d'une orchestration active.
+              </p>
+            </div>
+            <div class="artifact-grid">
+              <article class="artifact-card">
+                <button class="artifact-image" type="button" data-image="/assets/media/SQL_P4_PIPELINE.png" data-alt="Schéma logique staging, clean, mart et audit">
+                  <img src="/assets/media/SQL_P4_PIPELINE.png" alt="Schéma logique staging, clean, mart et audit" loading="lazy">
+                </button>
+                <div class="artifact-caption">
+                  <strong>Zones logiques</strong>
+                  <span>Staging, clean, restitution et audit séparent les responsabilités du traitement.</span>
+                </div>
+              </article>
+              <article class="artifact-card">
+                <button class="artifact-image" type="button" data-image="/assets/media/SQL_P4_JOBS.jpg" data-alt="Journal fictif des traitements SQL">
+                  <img src="/assets/media/SQL_P4_JOBS.jpg" alt="Journal fictif des traitements SQL" loading="lazy">
+                </button>
+                <div class="artifact-caption">
+                  <strong>Journal d'exécution</strong>
+                  <span>Statuts, horaires, volumes et messages rendent visibles les traitements réussis ou interrompus.</span>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+
+        <div class="stack-list" aria-label="Technologies et concepts illustrés">
+          <span class="stack-chip">SQL Server</span>
+          <span class="stack-chip">T-SQL</span>
+          <span class="stack-chip">SSMS</span>
+          <span class="stack-chip">Jointures</span>
+          <span class="stack-chip">Agrégations</span>
+          <span class="stack-chip">Qualité des données</span>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Valeur apportée</h2>
+        <div class="value-grid">
+          <div class="value-item">
+            <strong>Indicateurs explicables</strong>
+            <span>La définition métier reste visible dans les jointures, filtres et agrégations.</span>
+          </div>
+          <div class="value-item">
+            <strong>Reporting plus fiable</strong>
+            <span>Les contrôles détectent les données susceptibles de fausser une restitution.</span>
+          </div>
+          <div class="value-item">
+            <strong>Requêtes adaptables</strong>
+            <span>Une structure lisible facilite la revue, la correction et l'évolution du besoin.</span>
+          </div>
+          <div class="value-item">
+            <strong>Diagnostic facilité</strong>
+            <span>Le plan d'exécution et le journal aident à localiser une lenteur ou un échec.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>De la démonstration à un usage en entreprise</h2>
+        <div class="case-copy">
+          <p>
+            Dans un contexte réel, les requêtes doivent être adaptées au schéma, à la volumétrie,
+            aux droits d'accès et aux règles de gestion de l'organisation. La validation métier
+            et la comparaison avec les sources de référence restent indispensables.
+          </p>
+        </div>
+
+        <div class="production-grid">
+          <div class="production-item">
+            <strong>Environnements séparés</strong>
+            <span>Des paramètres de serveur et de base distinguent développement, recette et production.</span>
+          </div>
+          <div class="production-item">
+            <strong>Query folding préservé</strong>
+            <span>Avec Power Query, filtres et colonnes sont poussés vers SQL tant que les étapes restent traduisibles.</span>
+          </div>
+          <div class="production-item">
+            <strong>Droits maîtrisés</strong>
+            <span>Les comptes de lecture accèdent uniquement aux vues et données nécessaires au reporting.</span>
+          </div>
+          <div class="production-item">
+            <strong>Contrôles suivis</strong>
+            <span>Les volumes, anomalies et statuts sont historisés pour faciliter la revue et le support.</span>
+          </div>
+        </div>
+
+        <div class="production-note">
+          Le query folding désigne la traduction des étapes Power Query en requête SQL exécutée par la source.
+          Filtrer tôt et éviter un <code>Table.Buffer()</code> prématuré aide à le préserver. Ces choix doivent
+          être vérifiés dans Power Query et avec le plan généré, car leur effet dépend de la source et des transformations.
+        </div>
+      </section>
+
+      <section class="sql-cta">
+        <h2>Aller plus loin</h2>
+        <p>
+          SQL peut soutenir un reporting opérationnel, un contrôle de qualité, une analyse ponctuelle
+          ou la préparation d'un modèle Power BI, à condition de relier chaque requête à une définition métier claire.
+        </p>
+        <div class="sql-actions">
+          <a href="mailto:contact@hestiaaura.com" class="btn">Me contacter</a>
+          <a href="/showcase.html" class="btn btn--outline">Retour au showcase</a>
+        </div>
+      </section>
+    </div>
   </main>
 
   <footer class="site-footer">
@@ -225,42 +1105,279 @@
     </div>
   </footer>
 
-  <script src="/app.js?v=final3"></script>
-
-  <!-- Modale d'image (zoom plein écran) -->
-  <div class="image-modal" id="imgModal" aria-hidden="true">
-    <button class="close" id="imgModalClose" aria-label="Fermer l’image">✕</button>
-    <img id="imgModalImg" alt="" />
+  <div class="image-modal" id="imageModal" role="dialog" aria-modal="true" aria-label="Aperçu agrandi" aria-hidden="true" tabindex="-1">
+    <button class="image-modal-close" id="imageModalClose" type="button">Fermer</button>
+    <img id="imageModalContent" alt="">
   </div>
 
+  <script src="/app.js?v=sql-fr-v1"></script>
   <script>
-    // Année footer
-    (function(){var y=document.getElementById('y'); if(y){ y.textContent=new Date().getFullYear(); }})();
+    const examples = {
+      monthly: {
+        question: "Quels sont le chiffre d'affaires, le volume de commandes, les clients actifs et le panier moyen par mois ?",
+        code: `WITH order_totals AS (
+  SELECT
+    DATEFROMPARTS(
+      YEAR(o.order_date),
+      MONTH(o.order_date),
+      1
+    ) AS month_start,
+    o.order_id,
+    o.customer_id,
+    SUM(oi.quantity * oi.unit_price) AS order_amount
+  FROM clean.orders AS o
+  INNER JOIN clean.order_items AS oi
+    ON oi.order_id = o.order_id
+  WHERE o.status = 'completed'
+  GROUP BY
+    DATEFROMPARTS(
+      YEAR(o.order_date),
+      MONTH(o.order_date),
+      1
+    ),
+    o.order_id,
+    o.customer_id
+)
+SELECT
+  CONVERT(char(7), month_start, 120) AS year_month,
+  SUM(order_amount) AS revenue,
+  COUNT(*) AS orders_count,
+  COUNT(DISTINCT customer_id) AS active_customers,
+  CAST(AVG(order_amount) AS decimal(12, 2))
+    AS average_order_value
+FROM order_totals
+GROUP BY month_start
+ORDER BY month_start;`,
+        columns: ['Mois', "Chiffre d'affaires", 'Commandes', 'Clients actifs', 'Panier moyen'],
+        rows: [
+          ['2024-01', '12 500 €', '38', '35', '328,95 €'],
+          ['2024-02', '10 920 €', '35', '32', '312,00 €'],
+          ['2024-03', '13 480 €', '41', '38', '328,78 €']
+        ],
+        summary: 'Trois mois fictifs sont agrégés à partir d’une ligne par commande.',
+        insight: "Point de contrôle : vérifier que le statut retenu, la date de rattachement et la définition du chiffre d'affaires correspondent au référentiel métier."
+      },
+      quality: {
+        question: "Quelles anomalies peuvent fausser le reporting et combien de lignes sont concernées ?",
+        code: `SELECT
+  'Commandes sans client' AS check_name,
+  COUNT(*) AS affected_rows,
+  'high' AS severity
+FROM clean.orders AS o
+LEFT JOIN clean.customers AS c
+  ON c.customer_id = o.customer_id
+WHERE c.customer_id IS NULL
 
-    // Zoom images
-    (function(){
-      const modal   = document.getElementById('imgModal');
-      const modalImg= document.getElementById('imgModalImg');
-      const close   = document.getElementById('imgModalClose');
-      if(!modal || !modalImg || !close) return;
+UNION ALL
 
-      document.addEventListener('click', function(e){
-        const img = e.target.closest('.figure img');
-        if(!img) return;
-        modalImg.src = img.src;
-        modal.classList.add('open');
-        modal.setAttribute('aria-hidden','false');
+SELECT
+  'Paiements négatifs',
+  COUNT(*),
+  'medium'
+FROM clean.payments
+WHERE amount < 0
+
+UNION ALL
+
+SELECT
+  'Lignes de commande orphelines',
+  COUNT(*),
+  'medium'
+FROM clean.order_items AS oi
+LEFT JOIN clean.orders AS o
+  ON o.order_id = oi.order_id
+WHERE o.order_id IS NULL;`,
+        columns: ['Contrôle', 'Lignes affectées', 'Sévérité'],
+        rows: [
+          ['Commandes sans client', '5', 'Haute'],
+          ['Paiements négatifs', '4', 'Moyenne'],
+          ['Lignes de commande orphelines', '0', 'Moyenne']
+        ],
+        summary: 'Les règles sont réunies dans une sortie unique pour faciliter la revue.',
+        insight: 'Point de contrôle : un volume nul est aussi une information utile. Il confirme que la règle a été exécutée sans détecter d’anomalie.'
+      },
+      period: {
+        question: "Quels clients ont généré le plus de chiffre d'affaires sur une période donnée ?",
+        code: `DECLARE @date_from date = '2024-01-01';
+DECLARE @date_to date = '2024-04-01';
+
+SELECT TOP (5)
+  c.customer_id,
+  SUM(oi.quantity * oi.unit_price) AS revenue
+FROM clean.orders AS o
+INNER JOIN clean.order_items AS oi
+  ON oi.order_id = o.order_id
+INNER JOIN clean.customers AS c
+  ON c.customer_id = o.customer_id
+WHERE o.order_date >= @date_from
+  AND o.order_date < @date_to
+  AND o.status = 'completed'
+GROUP BY c.customer_id
+ORDER BY revenue DESC;`,
+        columns: ['Client fictif', "Chiffre d'affaires"],
+        rows: [
+          ['Client 021', '2 840 €'],
+          ['Client 014', '2 410 €'],
+          ['Client 037', '2 260 €'],
+          ['Client 008', '1 980 €'],
+          ['Client 043', '1 870 €']
+        ],
+        summary: 'Le filtre utilise une borne incluse et une borne supérieure exclue.',
+        insight: "Point de contrôle : cette écriture est dite sargable, car aucune fonction n'est appliquée à la colonne filtrée. Un index peut alors être envisagé, puis évalué avec le plan d'exécution."
+      }
+    };
+
+    const scenarioSelect = document.getElementById('queryScenario');
+    const runButton = document.getElementById('runQuery');
+    const resetButton = document.getElementById('resetQuery');
+    const businessQuestion = document.getElementById('businessQuestion');
+    const queryCode = document.getElementById('queryCode');
+    const resultBadge = document.getElementById('resultBadge');
+    const resultPlaceholder = document.getElementById('resultPlaceholder');
+    const resultContent = document.getElementById('resultContent');
+    const resultSummary = document.getElementById('resultSummary');
+    const resultHead = document.getElementById('resultHead');
+    const resultBody = document.getElementById('resultBody');
+    const resultInsight = document.getElementById('resultInsight');
+
+    function loadExample() {
+      const example = examples[scenarioSelect.value];
+      businessQuestion.textContent = example.question;
+      queryCode.textContent = example.code;
+      resultBadge.textContent = 'En attente';
+      resultContent.hidden = true;
+      resultPlaceholder.hidden = false;
+      runButton.disabled = false;
+      runButton.textContent = 'Afficher le résultat';
+    }
+
+    function renderResult() {
+      const example = examples[scenarioSelect.value];
+      resultHead.replaceChildren();
+      resultBody.replaceChildren();
+
+      const headerRow = document.createElement('tr');
+      example.columns.forEach((column) => {
+        const cell = document.createElement('th');
+        cell.scope = 'col';
+        cell.textContent = column;
+        headerRow.appendChild(cell);
+      });
+      resultHead.appendChild(headerRow);
+
+      example.rows.forEach((row) => {
+        const tableRow = document.createElement('tr');
+        row.forEach((value) => {
+          const cell = document.createElement('td');
+          cell.textContent = value;
+          tableRow.appendChild(cell);
+        });
+        resultBody.appendChild(tableRow);
       });
 
-      function hide(){
-        modal.classList.remove('open');
-        modal.setAttribute('aria-hidden','true');
-        modalImg.src = '';
+      resultSummary.textContent = example.summary;
+      resultInsight.textContent = example.insight;
+      resultBadge.textContent = example.rows.length + ' lignes';
+      resultPlaceholder.hidden = true;
+      resultContent.hidden = false;
+      runButton.disabled = false;
+      runButton.textContent = 'Actualiser le résultat';
+    }
+
+    function runExample() {
+      runButton.disabled = true;
+      runButton.textContent = 'Préparation...';
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.setTimeout(renderResult, reduceMotion ? 0 : 220);
+    }
+
+    scenarioSelect.addEventListener('change', loadExample);
+    runButton.addEventListener('click', runExample);
+    resetButton.addEventListener('click', () => {
+      scenarioSelect.value = 'monthly';
+      loadExample();
+      scenarioSelect.focus();
+    });
+
+    loadExample();
+
+    const artifactTabs = Array.from(document.querySelectorAll('.artifact-tab'));
+    const artifactPanels = Array.from(document.querySelectorAll('.artifact-panel'));
+
+    function activateArtifactTab(tab) {
+      artifactTabs.forEach((item) => {
+        const isActive = item === tab;
+        item.setAttribute('aria-selected', String(isActive));
+        item.tabIndex = isActive ? 0 : -1;
+      });
+
+      artifactPanels.forEach((panel) => {
+        panel.hidden = panel.id !== 'panel-' + tab.dataset.panel;
+      });
+    }
+
+    artifactTabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activateArtifactTab(tab));
+      tab.addEventListener('keydown', (event) => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {
+          return;
+        }
+
+        event.preventDefault();
+        let targetIndex = index;
+        if (event.key === 'ArrowRight') targetIndex = (index + 1) % artifactTabs.length;
+        if (event.key === 'ArrowLeft') targetIndex = (index - 1 + artifactTabs.length) % artifactTabs.length;
+        if (event.key === 'Home') targetIndex = 0;
+        if (event.key === 'End') targetIndex = artifactTabs.length - 1;
+
+        activateArtifactTab(artifactTabs[targetIndex]);
+        artifactTabs[targetIndex].focus();
+      });
+    });
+
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('imageModalContent');
+    const modalClose = document.getElementById('imageModalClose');
+    const imageButtons = document.querySelectorAll('.artifact-image');
+    let lastFocusedElement = null;
+
+    function openModal(button) {
+      lastFocusedElement = button;
+      modalImage.src = button.dataset.image;
+      modalImage.alt = button.dataset.alt || '';
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      modalClose.focus();
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      modalImage.src = '';
+      document.body.style.overflow = '';
+      if (lastFocusedElement) lastFocusedElement.focus();
+    }
+
+    imageButtons.forEach((button) => {
+      button.addEventListener('click', () => openModal(button));
+    });
+
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) closeModal();
+    });
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && modal.classList.contains('open')) {
+        closeModal();
       }
-      close.addEventListener('click', hide);
-      modal.addEventListener('click', function(e){ if(e.target === modal) hide(); });
-      document.addEventListener('keydown', function(e){ if(e.key === 'Escape') hide(); });
-    })();
+    });
+
+    const yearElement = document.getElementById('y');
+    if (yearElement && !yearElement.textContent) {
+      yearElement.textContent = new Date().getFullYear();
+    }
   </script>
 </body>
 </html>
