@@ -3,236 +3,472 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Analyse & reporting Power BI | Jérôme Jeannin</title>
-  <meta name="description" content="Cas d’usage Power BI - analyse et reporting autour d’indicateurs clés, avec structuration des données, modélisation et visualisation.">
-  <link rel="icon" href="../../assets/logo.jpg">
-  <link rel="apple-touch-icon" href="../../assets/logo.jpg">
+  <title>Reporting décisionnel avec Power BI | Jérôme Jeannin</title>
+  <meta name="description" content="Démonstration Power BI appliquée au pilotage : préparation des données, modèle sémantique, indicateurs DAX et restitutions décisionnelles sur des données publiques.">
+  <meta property="og:title" content="Reporting décisionnel avec Power BI | Jérôme Jeannin">
+  <meta property="og:description" content="Du besoin métier à une restitution Power BI lisible, avec définitions d'indicateurs, contrôles et scénarios.">
+  <meta property="og:image" content="/assets/media/powerbi-executive-overview-v2.webp">
+
+  <link rel="icon" href="/assets/logo.jpg">
+  <link rel="apple-touch-icon" href="/assets/logo.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=powerbi-fr-v1">
-<link rel="stylesheet" href="/assets/css/demo.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=powerbi-fr-v2">
+  <link rel="stylesheet" href="/assets/css/demo.css">
 
   <style>
-.demo-page{
-  padding: 32px 0 68px;
-}
-
-    .demo-section{
-      margin-bottom: 42px;
+    :root {
+      --pbi-border: rgba(255,255,255,.09);
+      --pbi-panel: #0f1117;
+      --pbi-panel-2: #090d15;
+      --pbi-text: #e6eaf0;
+      --pbi-muted: #aeb6c4;
+      --pbi-accent: #9a5cff;
+      --pbi-blue: #557cff;
+      --pbi-cyan: #27c8f5;
+      --pbi-shadow: 0 14px 36px rgba(0,0,0,.24);
     }
 
-    .demo-section h2{
-      margin: 0 0 12px;
-      font-family: "Space Grotesk", Inter, system-ui, sans-serif;
-      font-size: 28px;
-      line-height: 1.08;
-      letter-spacing: -.03em;
+    .page-powerbi .brand-text { display:flex; flex-direction:column; gap:1px; line-height:1.05; }
+    .page-powerbi .brand-name { font-size:14px; font-weight:700; }
+    .page-powerbi .brand-label { color:#9da5b3; font-size:10px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; }
+    .powerbi-page { padding:32px 0 68px; }
+    .powerbi-page .demo-container { max-width:1100px; }
+    .powerbi-hero { margin-bottom:22px; }
+    .powerbi-hero h1 { max-width:980px; }
+
+    .report-flow {
+      margin-top:24px;
+      padding:22px;
+      overflow:hidden;
+      border:1px solid var(--pbi-border);
+      border-radius:24px;
+      background:
+        radial-gradient(circle at 84% 14%, rgba(154,92,255,.22), transparent 30%),
+        radial-gradient(circle at 14% 88%, rgba(39,200,245,.12), transparent 25%),
+        linear-gradient(145deg, rgba(8,11,20,.98), rgba(12,16,28,.96));
+      box-shadow:var(--pbi-shadow);
     }
 
-    .demo-section p,
-    .demo-section li{
-      color: #e5e7eb;
-      font-size: 17px;
-      line-height: 1.75;
+    .report-flow-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+    .report-flow-step {
+      position:relative;
+      min-height:148px;
+      padding:17px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:17px;
+      background:rgba(9,13,23,.76);
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+    .report-flow-step:not(:first-child)::before {
+      content:"";
+      position:absolute;
+      top:50%;
+      left:-13px;
+      width:12px;
+      height:2px;
+      background:linear-gradient(90deg, rgba(39,200,245,.35), rgba(154,92,255,.9));
+    }
+    .report-flow-step > span {
+      display:inline-flex;
+      width:27px;
+      height:27px;
+      margin-bottom:12px;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      background:linear-gradient(135deg, var(--pbi-accent), var(--pbi-blue));
+      color:#fff;
+      font-size:12px;
+      font-weight:800;
+    }
+    .report-flow-step strong {
+      display:block;
+      margin-bottom:7px;
+      font-family:"Space Grotesk",Inter,sans-serif;
+      font-size:17px;
+      line-height:1.2;
+    }
+    .report-flow-step p { margin:0; color:#c8ced8; font-size:13px; line-height:1.55; }
+
+    .case-section { margin-top:30px; }
+    .case-section h2,
+    .powerbi-cta h2 {
+      margin:0 0 10px;
+      font-family:"Space Grotesk",Inter,sans-serif;
+      font-size:29px;
+      line-height:1.1;
+      letter-spacing:-.025em;
+    }
+    .case-copy { max-width:980px; color:var(--pbi-text); font-size:17px; line-height:1.78; }
+    .case-copy p { margin:0; }
+    .case-copy p + p { margin-top:12px; }
+
+    .approach-grid,
+    .value-grid,
+    .production-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:13px; margin-top:16px; }
+    .approach-item,
+    .value-item,
+    .production-item {
+      padding:17px;
+      border:1px solid var(--pbi-border);
+      border-radius:17px;
+      background:var(--pbi-panel);
+      box-shadow:var(--pbi-shadow);
+    }
+    .approach-item strong,
+    .value-item strong,
+    .production-item strong { display:block; margin-bottom:7px; color:#fff; font-size:15px; line-height:1.35; }
+    .approach-item span,
+    .value-item span,
+    .production-item span { color:#c4cad4; font-size:14px; line-height:1.6; }
+
+    .demo-intro {
+      margin-top:14px;
+      padding:18px;
+      border:1px solid var(--pbi-border);
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(13,17,28,.98), rgba(9,13,22,.94));
+      box-shadow:var(--pbi-shadow);
+    }
+    .demo-intro strong { display:block; margin-bottom:8px; font-size:15px; }
+    .demo-intro p { margin:0; color:var(--pbi-text); font-size:16px; line-height:1.72; }
+
+    .report-shell {
+      margin-top:16px;
+      padding:20px;
+      border:1px solid var(--pbi-border);
+      border-radius:22px;
+      background:linear-gradient(145deg, rgba(12,15,24,.98), rgba(8,11,18,.98));
+      box-shadow:var(--pbi-shadow);
+    }
+    .report-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:17px; }
+    .report-tab {
+      min-height:40px;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;
+      padding:8px 13px;
+      background:rgba(255,255,255,.03);
+      color:#cbd2dc;
+      font:inherit;
+      font-size:13px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .report-tab[aria-selected="true"] { border-color:rgba(154,92,255,.65); background:rgba(154,92,255,.16); color:#fff; }
+    .report-panel[hidden] { display:none; }
+    .report-layout { display:grid; grid-template-columns:minmax(0,1fr) 285px; gap:15px; align-items:stretch; }
+    .report-preview {
+      display:block;
+      width:100%;
+      min-height:390px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:0;
+      background:#050913;
+      cursor:zoom-in;
+    }
+    .report-preview img { display:block; width:100%; height:100%; min-height:390px; object-fit:contain; background:#050913; }
+    .report-notes { padding:17px; border:1px solid rgba(255,255,255,.08); border-radius:16px; background:var(--pbi-panel-2); }
+    .report-notes h3 { margin:0 0 10px; font-family:"Space Grotesk",Inter,sans-serif; font-size:19px; }
+    .report-notes ul { margin:0; padding-left:18px; }
+    .report-notes li { color:#c6cdd8; font-size:13px; line-height:1.62; }
+    .report-notes li + li { margin-top:7px; }
+    .source-note,
+    .production-note {
+      margin-top:14px;
+      padding:16px 18px;
+      border-left:3px solid var(--pbi-cyan);
+      border-radius:0 14px 14px 0;
+      background:rgba(39,200,245,.07);
+      color:#dce1e8;
+      font-size:14px;
+      line-height:1.68;
+    }
+    .production-note { border-left-color:var(--pbi-accent); background:rgba(154,92,255,.08); font-size:15px; }
+    .stack-list { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+    .stack-chip { display:inline-flex; border:1px solid rgba(255,255,255,.13); border-radius:999px; padding:5px 9px; background:rgba(255,255,255,.03); color:#d6dbe3; font-size:12px; font-weight:700; }
+
+    .powerbi-cta {
+      margin-top:30px;
+      padding:22px;
+      border:1px solid var(--pbi-border);
+      border-radius:19px;
+      background:var(--pbi-panel);
+      box-shadow:var(--pbi-shadow);
+    }
+    .powerbi-cta p { max-width:900px; margin:0 0 17px; color:var(--pbi-text); font-size:16px; line-height:1.72; }
+    .powerbi-actions { display:flex; gap:10px; flex-wrap:wrap; }
+
+    .image-modal { position:fixed; inset:0; z-index:100; display:none; place-items:center; padding:28px; background:rgba(3,5,9,.94); }
+    .image-modal.open { display:grid; }
+    .image-modal img { display:block; max-width:min(1600px,95vw); max-height:86vh; border:1px solid rgba(255,255,255,.12); border-radius:12px; object-fit:contain; background:#050913; box-shadow:0 22px 60px rgba(0,0,0,.5); }
+    .image-modal-close { position:absolute; top:18px; right:20px; border:1px solid rgba(255,255,255,.18); border-radius:10px; padding:8px 11px; background:#111620; color:#fff; font:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+
+    @media (max-width:960px) {
+      .report-flow-grid,
+      .approach-grid,
+      .value-grid,
+      .production-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .report-flow-step:not(:first-child)::before { display:none; }
+      .report-layout { grid-template-columns:1fr; }
     }
 
-    .demo-section ul{
-      margin: 0;
-      padding-left: 22px;
+    @media (max-width:680px) {
+      .powerbi-page { padding-top:24px; }
+      .page-powerbi .nav a:not(.btn) { display:none; }
+      .report-flow { padding:16px; }
+      .report-flow-grid,
+      .approach-grid,
+      .value-grid,
+      .production-grid { grid-template-columns:1fr; }
+      .report-flow-step { min-height:0; }
+      .case-section h2,
+      .powerbi-cta h2 { font-size:25px; }
+      .case-copy { font-size:16px; line-height:1.7; }
+      .report-shell { padding:15px; }
+      .report-tabs { display:grid; }
+      .report-tab { width:100%; }
+      .report-preview,
+      .report-preview img { min-height:220px; }
+      .footer-inner { gap:10px; align-items:flex-start; flex-direction:column; }
     }
 
-    .demo-images{
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .demo-figure{
-      margin: 0;
-      background: #0f1117;
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 16px;
-      padding: 14px;
-      box-shadow: 0 8px 30px rgba(0,0,0,.22);
-    }
-
-    .demo-figure img{
-      display: block;
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: #0b0c10;
-    }
-
-    .demo-figure figcaption{
-      margin-top: 10px;
-      color: #c7ccd3;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .demo-cta{
-      margin-top: 60px;
-      padding: 24px;
-      background: #0f1117;
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 18px;
-      box-shadow: 0 8px 30px rgba(0,0,0,.22);
-    }
-
-    .demo-cta h2{
-      margin: 0 0 12px;
-      font-family: "Space Grotesk", Inter, system-ui, sans-serif;
-      font-size: 28px;
-      line-height: 1.08;
-      letter-spacing: -.03em;
-    }
-
-    .demo-cta p{
-      margin: 0 0 18px;
-      color: #e5e7eb;
-      font-size: 17px;
-      line-height: 1.75;
-    }
-
-    .demo-actions{
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    @media (max-width: 760px){
-      .demo-page{
-        padding: 40px 0 56px;
-      }
-
-      .demo-hero p,
-      .demo-section p,
-      .demo-section li,
-      .demo-cta p{
-        font-size: 16px;
-        line-height: 1.7;
-      }
-
-      .demo-section h2,
-      .demo-cta h2{
-        font-size: 24px;
-      }
+    @media (prefers-reduced-motion:reduce) {
+      .page-powerbi *,
+      .page-powerbi *::before,
+      .page-powerbi *::after { scroll-behavior:auto !important; transition:none !important; }
     }
   </style>
 </head>
 
-<body class="powerbi">
-<header class="site-header">
-  <div class="container header-inner">
-    <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
-      <img src="/assets/logo.jpg" alt="logo" class="brand-mark">
-      <span class="brand-text">
-        <span class="brand-name">Jérôme Jeannin</span>
-        <span class="brand-label">Hestia Aura</span>
-      </span>
-    </a>
+<body class="page-powerbi">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
+        <img src="/assets/logo.jpg" alt="" class="brand-mark">
+        <span class="brand-text">
+          <span class="brand-name">Jérôme Jeannin</span>
+          <span class="brand-label">Hestia Aura</span>
+        </span>
+      </a>
 
-    <nav class="nav">
-      <a href="/">Accueil</a>
-      <a href="/about.html">À propos</a>
-      <a href="/showcase.html">Showcase</a>
-      <a href="/en/demos/powerbi/" class="btn btn--sm">EN</a>
-    </nav>
-  </div>
-</header>
+      <nav class="nav" aria-label="Navigation principale">
+        <a href="/">Accueil</a>
+        <a href="/about.html">À propos</a>
+        <a href="/showcase.html">Showcase</a>
+        <a class="btn btn--sm" href="/en/demos/powerbi/">EN</a>
+      </nav>
+    </div>
+  </header>
 
-<main class="demo-page">
-  <div class="demo-container">
-    <section class="demo-hero">
-  <p class="section-kicker">BI & reporting · Power BI</p>
-  <h1>Analyse & reporting Power BI</h1>
-  <p>
-    Exemple de construction d’un reporting permettant de suivre des indicateurs clés
-    - population, chômage, PIB - sur plusieurs années, avec une approche structurée
-    de la donnée et de la modélisation.
-  </p>
-</section>
-        <section class="demo-section">
-          <h2>Contexte métier</h2>
-          <p>
-            Dans de nombreux cas, les données existent mais restent difficiles à exploiter :
-            sources multiples, formats hétérogènes, absence de structuration claire.
-            L’objectif est de transformer ces données en un outil de pilotage simple et lisible.
-          </p>
-        </section>
+  <main class="powerbi-page">
+    <div class="demo-container">
+      <section class="demo-hero powerbi-hero">
+        <p class="section-kicker">Business intelligence · Power BI</p>
+        <h1>Reporting décisionnel avec Power BI</h1>
+        <p>
+          Transformer des données publiques en indicateurs compréhensibles, organiser leur lecture
+          et proposer plusieurs niveaux d'analyse, de la vue exécutive au scénario détaillé.
+        </p>
 
-        <section class="demo-section">
-          <h2>Problématique</h2>
-          <p>
-            Comment construire un reporting fiable permettant de suivre plusieurs indicateurs
-            dans le temps, tout en garantissant la cohérence des données et la simplicité d’utilisation ?
-          </p>
-        </section>
-
-        <section class="demo-section">
-          <h2>Approche</h2>
-          <ul>
-            <li>Préparation et nettoyage des données avec Power Query</li>
-            <li>Harmonisation des sources et des formats</li>
-            <li>Modélisation des données pour faciliter les analyses</li>
-            <li>Création d’indicateurs avec DAX</li>
-            <li>Construction de visualisations lisibles et interactives</li>
-          </ul>
-        </section>
-
-        <section class="demo-section">
-          <h2>Démonstration</h2>
-          <p>
-            Exemple de restitution sous forme de dashboard Power BI.
-            Les visualisations permettent de suivre l’évolution des indicateurs,
-            d’explorer les données par segment et de comparer les périodes.
-          </p>
-
-                   <div class="demo-images">
-            <figure class="demo-figure">
-              <img src="../../assets/media/PBI P1.jpg" alt="Dashboard Power BI - vue d’ensemble">
-              <figcaption>Vue d’ensemble du reporting et des principaux indicateurs.</figcaption>
-            </figure>
-
-            <figure class="demo-figure">
-              <img src="../../assets/media/PBI P2.jpg" alt="Analyse des indicateurs - répartition par type de population">
-              <figcaption>Analyse détaillée des indicateurs et lecture des évolutions.</figcaption>
-            </figure>
-
-            <figure class="demo-figure">
-              <img src="../../assets/media/PBI P3.jpg" alt="Scénarios et indicateurs DAX">
-              <figcaption>Exemple de restitution complémentaire pour affiner la lecture métier.</figcaption>
-            </figure>
+        <div class="report-flow" aria-label="Flux simplifié de conception d'un rapport Power BI">
+          <div class="report-flow-grid">
+            <div class="report-flow-step">
+              <span>01</span>
+              <strong>Cadrage métier</strong>
+              <p>Définir les décisions à éclairer, le périmètre et les règles de calcul.</p>
+            </div>
+            <div class="report-flow-step">
+              <span>02</span>
+              <strong>Préparation</strong>
+              <p>Nettoyer les sources, harmoniser les formats et documenter les contrôles.</p>
+            </div>
+            <div class="report-flow-step">
+              <span>03</span>
+              <strong>Modélisation</strong>
+              <p>Structurer le modèle et construire des mesures cohérentes avec les définitions métier.</p>
+            </div>
+            <div class="report-flow-step">
+              <span>04</span>
+              <strong>Restitution</strong>
+              <p>Hiérarchiser les KPI, les tendances et les scénarios pour faciliter la lecture.</p>
+            </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section class="demo-section">
-          <h2>Valeur apportée</h2>
-          <ul>
-            <li>Meilleure lisibilité des indicateurs clés</li>
-            <li>Gain de temps dans l’analyse</li>
-            <li>Fiabilisation des données utilisées</li>
-            <li>Aide à la prise de décision</li>
-          </ul>
-        </section>
-
-        <section class="demo-cta">
-          <h2>Aller plus loin</h2>
+      <section class="case-section">
+        <h2>Contexte métier</h2>
+        <div class="case-copy">
           <p>
-            Ce type de reporting peut être adapté à de nombreux contextes métier :
-            finance, opérations, performance commerciale ou suivi d’activité.
+            Le cas porte sur l'évolution de la population, du produit intérieur brut et du chômage
+            en Île-de-France entre 2011 et 2022. Ces indicateurs n'ont pas la même unité ni la même
+            granularité, mais doivent rester lisibles dans une restitution commune.
           </p>
+        </div>
+      </section>
 
-          <div class="demo-actions">
-            <a href="mailto:contact@hestiaaura.com" class="btn">Me contacter</a>
-            <a href="../../showcase.html" class="btn btn--outline">Retour au showcase</a>
+      <section class="case-section">
+        <h2>Problématique</h2>
+        <div class="case-copy">
+          <p>
+            Comment passer de séries statistiques séparées à un rapport qui donne une vue d'ensemble,
+            permet de vérifier les composantes d'un indicateur et rend explicites les hypothèses d'un scénario ?
+          </p>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Approche</h2>
+        <div class="case-copy">
+          <p>
+            La démarche privilégie des définitions stables, un modèle simple à relire et une navigation
+            en trois niveaux. Chaque page répond à une question distincte pour éviter de concentrer
+            trop d'informations sur un seul écran.
+          </p>
+        </div>
+
+        <div class="approach-grid">
+          <div class="approach-item"><strong>Power Query</strong><span>Typage, renommage et harmonisation des millésimes avant leur utilisation.</span></div>
+          <div class="approach-item"><strong>Modèle sémantique</strong><span>Dimensions de temps et de territoire séparées des mesures observées.</span></div>
+          <div class="approach-item"><strong>Mesures DAX</strong><span>Indicateurs, écarts et paramètres de scénario regroupés par usage métier.</span></div>
+          <div class="approach-item"><strong>Hiérarchie visuelle</strong><span>KPI en tête, tendances au centre et détail disponible au niveau suivant.</span></div>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Ce que montre la démonstration</h2>
+        <div class="demo-intro">
+          <strong>Trois vues complémentaires</strong>
+          <p>
+            Utilisez les onglets pour passer de la synthèse au détail démographique puis au scénario.
+            Cliquez sur une restitution pour l'agrandir. Ces visuels statiques ont été conçus pour ce
+            portfolio : ils illustrent l'intention d'un rapport et ne constituent pas un rapport Power BI embarqué.
+          </p>
+        </div>
+
+        <div class="report-shell">
+          <div class="report-tabs" role="tablist" aria-label="Vues du prototype Power BI">
+            <button class="report-tab" id="tab-overview" type="button" role="tab" aria-selected="true" aria-controls="panel-overview" data-panel="overview">1. Vue exécutive</button>
+            <button class="report-tab" id="tab-demography" type="button" role="tab" aria-selected="false" aria-controls="panel-demography" data-panel="demography" tabindex="-1">2. Analyse démographique</button>
+            <button class="report-tab" id="tab-scenarios" type="button" role="tab" aria-selected="false" aria-controls="panel-scenarios" data-panel="scenarios" tabindex="-1">3. Scénarios</button>
           </div>
-        </section>
-      </div>
+
+          <section class="report-panel" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview">
+            <div class="report-layout">
+              <button class="report-preview" type="button" data-full="/assets/media/powerbi-executive-overview-v2.webp" aria-label="Agrandir la vue exécutive">
+                <img src="/assets/media/powerbi-executive-overview-v2.webp" alt="Vue exécutive sombre avec trois KPI, une carte de l'Île-de-France et les tendances de population, PIB et chômage">
+              </button>
+              <div class="report-notes">
+                <h3>Question traitée</h3>
+                <ul>
+                  <li>Quelle est la situation au dernier millésime disponible ?</li>
+                  <li>Comment les trois indicateurs évoluent-ils dans le temps ?</li>
+                  <li>Quel territoire et quelle période sont concernés ?</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="report-panel" id="panel-demography" role="tabpanel" aria-labelledby="tab-demography" hidden>
+            <div class="report-layout">
+              <button class="report-preview" type="button" data-full="/assets/media/powerbi-demographic-analysis-v2.webp" aria-label="Agrandir l'analyse démographique">
+                <img src="/assets/media/powerbi-demographic-analysis-v2.webp" alt="Analyse démographique sombre comparant population municipale et population comptée à part de 2011 à 2022">
+              </button>
+              <div class="report-notes">
+                <h3>Question traitée</h3>
+                <ul>
+                  <li>Comment se compose la population totale ?</li>
+                  <li>La part de chaque catégorie évolue-t-elle entre les millésimes ?</li>
+                  <li>Les valeurs détaillées confirment-elles la lecture du KPI ?</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="report-panel" id="panel-scenarios" role="tabpanel" aria-labelledby="tab-scenarios" hidden>
+            <div class="report-layout">
+              <button class="report-preview" type="button" data-full="/assets/media/powerbi-scenarios-v2.webp" aria-label="Agrandir la vue des scénarios">
+                <img src="/assets/media/powerbi-scenarios-v2.webp" alt="Vue sombre comparant un PIB de référence à un scénario de moins vingt pour cent et rappelant l'évolution du chômage">
+              </button>
+              <div class="report-notes">
+                <h3>Question traitée</h3>
+                <ul>
+                  <li>Quel est l'effet d'une hypothèse de moins 20 % sur chaque année ?</li>
+                  <li>La comparaison distingue-t-elle clairement référence et scénario ?</li>
+                  <li>Les totaux restent-ils réconciliables avec les valeurs annuelles ?</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <p class="source-note">
+            Source démographique : Insee, recensements 2011, 2016 et 2022, géographie au 01/01/2024.
+            Les séries de PIB et de chômage reprennent les valeurs d'illustration du prototype d'origine.
+            Les valeurs sont arrondies et le scénario de moins 20 % est une hypothèse pédagogique, non une prévision économique.
+          </p>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Livrables du prototype</h2>
+        <div class="approach-grid">
+          <div class="approach-item"><strong>Vue de pilotage</strong><span>Une synthèse des derniers KPI et de leur évolution sur la période.</span></div>
+          <div class="approach-item"><strong>Vue d'analyse</strong><span>Une décomposition qui relie les composantes aux totaux affichés.</span></div>
+          <div class="approach-item"><strong>Vue de scénario</strong><span>Une comparaison explicite entre valeurs observées et hypothèse ajustable.</span></div>
+          <div class="approach-item"><strong>Socle de mesure</strong><span>Une logique de préparation, de modélisation et de calcul documentable.</span></div>
+        </div>
+
+        <div class="stack-list" aria-label="Technologies et pratiques illustrées">
+          <span class="stack-chip">Power BI</span>
+          <span class="stack-chip">Power Query</span>
+          <span class="stack-chip">DAX</span>
+          <span class="stack-chip">Modèle sémantique</span>
+          <span class="stack-chip">KPI</span>
+          <span class="stack-chip">Scénarios</span>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Valeur apportée</h2>
+        <div class="value-grid">
+          <div class="value-item"><strong>Lecture immédiate</strong><span>Les indicateurs prioritaires et leur contexte sont visibles sans surcharger la page.</span></div>
+          <div class="value-item"><strong>Définitions partagées</strong><span>Chaque mesure peut être reliée à une règle de calcul et à une source identifiée.</span></div>
+          <div class="value-item"><strong>Analyse progressive</strong><span>La navigation part de la synthèse et conduit vers les composantes ou hypothèses.</span></div>
+          <div class="value-item"><strong>Décision traçable</strong><span>La séparation entre observation et scénario évite de confondre faits et projections.</span></div>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>De la démonstration à un usage en entreprise</h2>
+        <div class="production-grid">
+          <div class="production-item"><strong>Contrats d'indicateurs</strong><span>Formaliser source, périmètre, granularité, formule et propriétaire de chaque KPI.</span></div>
+          <div class="production-item"><strong>Rafraîchissement maîtrisé</strong><span>Planifier les mises à jour et, selon les sources, configurer passerelle et paramètres.</span></div>
+          <div class="production-item"><strong>Sécurité adaptée</strong><span>Définir les espaces, droits et règles RLS lorsque les audiences l'exigent.</span></div>
+          <div class="production-item"><strong>Cycle de publication</strong><span>Séparer développement, recette et production avec contrôles avant diffusion.</span></div>
+        </div>
+        <p class="production-note">
+          Pour un déploiement réel, ces dispositifs sont dimensionnés selon les sources, les volumes,
+          la fréquence de mise à jour et les profils utilisateurs. Le pliage de requêtes, les temps de
+          rafraîchissement et les droits d'accès se vérifient dans le contexte cible.
+        </p>
+      </section>
+
+      <section class="powerbi-cta">
+        <h2>Aller plus loin</h2>
+        <p>
+          Cette approche peut être adaptée à un reporting financier, commercial ou opérationnel,
+          avec des indicateurs définis avec les équipes métier et une restitution pensée pour ses utilisateurs.
+        </p>
+        <div class="powerbi-actions">
+          <a href="mailto:contact@hestiaaura.com" class="btn">Me contacter</a>
+          <a href="/showcase.html" class="btn btn--outline">Retour au showcase</a>
+        </div>
+      </section>
+    </div>
   </main>
 
   <footer class="site-footer">
@@ -242,6 +478,73 @@
     </div>
   </footer>
 
-  <script src="../../app.js?v=powerbi-fr-v1"></script>
+  <div class="image-modal" id="imageModal" role="dialog" aria-modal="true" aria-label="Aperçu agrandi" aria-hidden="true">
+    <button class="image-modal-close" id="imageModalClose" type="button">Fermer</button>
+    <img id="imageModalContent" alt="">
+  </div>
+
+  <script src="/app.js?v=powerbi-fr-v2"></script>
+  <script>
+    (() => {
+      const tabs = Array.from(document.querySelectorAll('.report-tab'));
+      const panels = Array.from(document.querySelectorAll('.report-panel'));
+      const modal = document.getElementById('imageModal');
+      const modalImage = document.getElementById('imageModalContent');
+      const modalClose = document.getElementById('imageModalClose');
+      let lastTrigger = null;
+
+      function selectTab(tab) {
+        tabs.forEach((item) => {
+          const active = item === tab;
+          item.setAttribute('aria-selected', String(active));
+          item.tabIndex = active ? 0 : -1;
+        });
+        panels.forEach((panel) => {
+          panel.hidden = panel.id !== 'panel-' + tab.dataset.panel;
+        });
+      }
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => selectTab(tab));
+        tab.addEventListener('keydown', (event) => {
+          if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+          event.preventDefault();
+          const direction = event.key === 'ArrowRight' ? 1 : -1;
+          const next = tabs[(index + direction + tabs.length) % tabs.length];
+          selectTab(next);
+          next.focus();
+        });
+      });
+
+      function closeModal() {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        modalImage.removeAttribute('src');
+        if (lastTrigger) lastTrigger.focus();
+      }
+
+      document.querySelectorAll('.report-preview').forEach((button) => {
+        button.addEventListener('click', () => {
+          lastTrigger = button;
+          modalImage.src = button.dataset.full;
+          modalImage.alt = button.querySelector('img').alt;
+          modal.classList.add('open');
+          modal.setAttribute('aria-hidden', 'false');
+          modalClose.focus();
+        });
+      });
+
+      modalClose.addEventListener('click', closeModal);
+      modal.addEventListener('click', (event) => {
+        if (event.target === modal) closeModal();
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && modal.classList.contains('open')) closeModal();
+      });
+
+      const year = document.getElementById('y');
+      if (year && !year.textContent) year.textContent = new Date().getFullYear();
+    })();
+  </script>
 </body>
 </html>

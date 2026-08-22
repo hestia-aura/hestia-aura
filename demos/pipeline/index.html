@@ -1,757 +1,707 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pipeline / Data Flow | Jérôme Jeannin</title>
-<meta name="description" content="Cas d’usage Pipeline / Data Flow - structuration de flux de données, transformation, cohérence et exploitation pour l’analyse.">
-<link rel="icon" href="/assets/logo.jpg">
-<link rel="apple-touch-icon" href="/assets/logo.jpg">
-<link rel="stylesheet" href="/styles.css?v=final3">
-<link rel="stylesheet" href="/assets/css/demo.css">
-<style>
-/* Page */
-.page { padding: 32px 0 68px; }
-.container.narrow { max-width: 1100px; }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pipeline de données pour le reporting | Jérôme Jeannin</title>
+  <meta name="description" content="Démonstration d'un pipeline de données appliqué au reporting : ingestion, standardisation, contrôles qualité, publication et traçabilité sur des données fictives.">
+  <meta property="og:title" content="Pipeline de données pour le reporting | Jérôme Jeannin">
+  <meta property="og:description" content="Un flux lisible de la source à la publication, avec contrats de données, contrôles et décision de mise à disposition.">
+  <meta property="og:image" content="/assets/logo.jpg">
 
-/* Sections de texte */
-.demo-section {
-  margin-bottom: 38px;
-}
-.demo-section h2 {
-  margin: 0 0 12px;
-  font-size: 28px;
-  line-height: 1.08;
-  letter-spacing: -.03em;
-  font-family: "Space Grotesk", Inter, system-ui, sans-serif;
-}
-.demo-section p,
-.demo-section li {
-  color: #e5e7eb;
-  font-size: 17px;
-  line-height: 1.75;
-}
-.demo-section ul {
-  margin: 0;
-  padding-left: 22px;
-}
+  <link rel="icon" href="/assets/logo.jpg">
+  <link rel="apple-touch-icon" href="/assets/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=pipeline-fr-v3">
+  <link rel="stylesheet" href="/assets/css/demo.css">
 
-/* Carte intro démo */
-.demo-note {
-  background: #0f1117;
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 18px;
-  padding: 18px 20px;
-  box-shadow: 0 8px 30px rgba(0,0,0,.22);
-}
-.demo-note strong {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 15px;
-}
+  <style>
+    :root {
+      --flow-border: rgba(255,255,255,.09);
+      --flow-panel: #0f1117;
+      --flow-panel-2: #090d15;
+      --flow-text: #e6eaf0;
+      --flow-muted: #aeb6c4;
+      --flow-accent: #7374ff;
+      --flow-cyan: #4fd2ff;
+      --flow-green: #55d6a6;
+      --flow-amber: #f4c95d;
+      --flow-shadow: 0 14px 36px rgba(0,0,0,.24);
+    }
 
-/* Header local démo */
-.header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-.header h2 {
-  font-size: 28px;
-  margin: 0 0 8px;
-  line-height: 1.08;
-  letter-spacing: -.03em;
-  font-family: "Space Grotesk", Inter, system-ui, sans-serif;
-}
-.header .muted {
-  opacity: .85;
-  color: #c7ccd3;
-}
-.actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.actions .btn {
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 10px;
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-}
-.actions .btn--dark {
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.08);
-  color: #fff;
-}
+    .page-pipeline .brand-text { display:flex; flex-direction:column; gap:1px; line-height:1.05; }
+    .page-pipeline .brand-name { font-size:14px; font-weight:700; }
+    .page-pipeline .brand-label { color:#9da5b3; font-size:10px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; }
+    .pipeline-page { padding:32px 0 68px; }
+    .pipeline-page .demo-container { max-width:1100px; }
+    .pipeline-hero { margin-bottom:22px; }
+    .pipeline-hero h1 { max-width:980px; }
 
-/* Toolbar */
-.toolbar {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-  margin: 10px 0 18px;
-}
-.stat {
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 10px;
-  padding: 6px 10px;
-  font-size: 12px;
-}
+    .flow-map {
+      margin-top:24px;
+      padding:22px;
+      overflow:hidden;
+      border:1px solid var(--flow-border);
+      border-radius:24px;
+      background:
+        radial-gradient(circle at 84% 14%, rgba(115,116,255,.2), transparent 30%),
+        radial-gradient(circle at 14% 88%, rgba(79,210,255,.11), transparent 25%),
+        linear-gradient(145deg, rgba(8,11,20,.98), rgba(12,16,28,.96));
+      box-shadow:var(--flow-shadow);
+    }
+    .flow-map-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+    .flow-map-step {
+      position:relative;
+      min-height:148px;
+      padding:17px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:17px;
+      background:rgba(9,13,23,.76);
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+    .flow-map-step:not(:first-child)::before {
+      content:"";
+      position:absolute;
+      top:50%;
+      left:-13px;
+      width:12px;
+      height:2px;
+      background:linear-gradient(90deg, rgba(79,210,255,.35), rgba(115,116,255,.9));
+    }
+    .flow-map-step > span {
+      display:inline-flex;
+      width:27px;
+      height:27px;
+      margin-bottom:12px;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      background:linear-gradient(135deg, var(--flow-accent), #8a5bff);
+      color:#fff;
+      font-size:12px;
+      font-weight:800;
+    }
+    .flow-map-step strong { display:block; margin-bottom:7px; font-family:"Space Grotesk",Inter,sans-serif; font-size:17px; line-height:1.2; }
+    .flow-map-step p { margin:0; color:#c8ced8; font-size:13px; line-height:1.55; }
 
-/* Grille démo */
-.grid-2-1 {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 18px;
-}
-@media (max-width: 960px) {
-  .grid-2-1 { grid-template-columns: 1fr; }
-}
+    .case-section { margin-top:30px; }
+    .case-section h2,
+    .pipeline-cta h2 { margin:0 0 10px; font-family:"Space Grotesk",Inter,sans-serif; font-size:29px; line-height:1.1; letter-spacing:-.025em; }
+    .case-copy { max-width:980px; color:var(--flow-text); font-size:17px; line-height:1.78; }
+    .case-copy p { margin:0; }
+    .case-copy p + p { margin-top:12px; }
 
-/* Cartes */
-.card {
-  position: relative;
-}
-.card:hover { transform: none !important; }
-.card::after { display: none !important; }
+    .approach-grid,
+    .value-grid,
+    .production-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:13px; margin-top:16px; }
+    .approach-item,
+    .value-item,
+    .production-item { padding:17px; border:1px solid var(--flow-border); border-radius:17px; background:var(--flow-panel); box-shadow:var(--flow-shadow); }
+    .approach-item strong,
+    .value-item strong,
+    .production-item strong { display:block; margin-bottom:7px; color:#fff; font-size:15px; line-height:1.35; }
+    .approach-item span,
+    .value-item span,
+    .production-item span { color:#c4cad4; font-size:14px; line-height:1.6; }
 
-/* Pipeline */
-.pipeline {
-  background: #0b0d12;
-  border: 1px solid rgba(255,255,255,.06);
-  border-radius: 16px;
-  padding: 16px;
-}
-.pipeline svg {
-  width: 100%;
-  height: 160px;
-  display: block;
-}
-.stage {
-  font-weight: 700;
-}
-.badge {
-  display: inline-block;
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.12);
-  padding: 4px 8px;
-  border-radius: 999px;
-  font-size: 12px;
-  margin-left: 8px;
-}
+    .demo-intro { margin-top:14px; padding:18px; border:1px solid var(--flow-border); border-radius:18px; background:linear-gradient(180deg, rgba(13,17,28,.98), rgba(9,13,22,.94)); box-shadow:var(--flow-shadow); }
+    .demo-intro strong { display:block; margin-bottom:8px; font-size:15px; }
+    .demo-intro p { margin:0; color:var(--flow-text); font-size:16px; line-height:1.72; }
 
-/* Tableau */
-.table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 8px;
-  margin-top: 10px;
-}
-.table th {
-  font-weight: 700;
-  text-align: left;
-  padding: 10px 12px;
-  border-bottom: 1px solid rgba(255,255,255,.12);
-}
-.table td {
-  padding: 8px 12px;
-  background: rgba(255,255,255,.04);
-}
-.table tr td:first-child {
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-}
-.table tr td:last-child {
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
-.table tfoot td {
-  background: transparent;
-  padding-top: 12px;
-}
+    .pipeline-lab { margin-top:16px; padding:20px; border:1px solid var(--flow-border); border-radius:22px; background:linear-gradient(145deg, rgba(12,15,24,.98), rgba(8,11,18,.98)); box-shadow:var(--flow-shadow); }
+    .lab-toolbar { display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; }
+    .scenario-field { display:flex; flex:1 1 360px; flex-direction:column; gap:8px; }
+    .scenario-field label { color:#fff; font-size:13px; font-weight:700; }
+    .scenario-field select { width:100%; min-height:46px; padding:10px 12px; border:1px solid rgba(255,255,255,.13); border-radius:11px; outline:none; background:#0a0e16; color:#eef1f5; font:inherit; }
+    .scenario-field select:focus { border-color:rgba(115,116,255,.85); box-shadow:0 0 0 3px rgba(115,116,255,.16); }
+    .lab-toolbar .btn { min-height:46px; padding:10px 17px; }
+    .local-note { margin:12px 0 0; color:#9ca5b4; font-size:12px; line-height:1.6; }
 
-/* KPI */
-.kpis {
-  display: grid;
-  grid-template-columns: repeat(3,1fr);
-  gap: 12px;
-}
-@media (max-width:960px) {
-  .kpis { grid-template-columns: 1fr; }
-}
-.kpi {
-  background: #0b0d12;
-  border: 1px solid rgba(255,255,255,.06);
-  border-radius: 16px;
-  padding: 14px;
-}
-.kpi .label {
-  opacity: .8;
-  font-size: 13px;
-}
-.kpi .value {
-  font-size: 22px;
-  font-weight: 800;
-  margin: 2px 0 8px;
-}
-.spark {
-  width: 100%;
-  height: 56px;
-  display: block;
-}
+    .run-track {
+      --progress:0%;
+      position:relative;
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:9px;
+      margin-top:17px;
+      padding-bottom:26px;
+    }
+    .run-rail {
+      position:absolute;
+      right:4%;
+      bottom:5px;
+      left:12.5%;
+      height:5px;
+      overflow:visible;
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:999px;
+      background:rgba(255,255,255,.045);
+      box-shadow:inset 0 1px 4px rgba(0,0,0,.45);
+    }
+    .run-progress {
+      position:absolute;
+      top:-1px;
+      left:-1px;
+      width:var(--progress);
+      height:5px;
+      border-radius:999px;
+      background:linear-gradient(90deg, var(--flow-accent), var(--flow-cyan), var(--flow-green));
+      box-shadow:0 0 8px rgba(79,210,255,.7), 0 0 18px rgba(115,116,255,.32);
+      transition:width .32s ease;
+    }
+    .run-progress::before {
+      content:"";
+      position:absolute;
+      inset:1px 0 auto;
+      height:1px;
+      border-radius:999px;
+      background:rgba(255,255,255,.7);
+    }
+    .run-progress::after {
+      content:"";
+      position:absolute;
+      top:50%;
+      right:-13px;
+      width:0;
+      height:0;
+      border-top:8px solid transparent;
+      border-bottom:8px solid transparent;
+      border-left:14px solid var(--flow-green);
+      filter:drop-shadow(0 0 5px rgba(85,214,166,.75));
+      transform:translateY(-50%);
+    }
+    .run-step {
+      position:relative;
+      z-index:1;
+      padding:12px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:13px;
+      background:var(--flow-panel-2);
+      transition:border-color .22s ease, background .22s ease, box-shadow .22s ease;
+    }
+    .run-step::after {
+      content:"";
+      position:absolute;
+      bottom:-25px;
+      left:50%;
+      z-index:3;
+      width:9px;
+      height:9px;
+      border:2px solid rgba(255,255,255,.18);
+      border-radius:50%;
+      background:#111621;
+      box-shadow:0 0 0 4px rgba(9,13,21,.95);
+      transform:translateX(-50%);
+    }
+    .run-step span { display:block; margin-bottom:5px; color:#8f98a8; font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .run-step strong { color:#d8dee8; font-size:13px; }
+    .run-step.active { border-color:rgba(79,210,255,.55); background:rgba(79,210,255,.08); box-shadow:0 8px 20px rgba(79,210,255,.08); }
+    .run-step.active strong { color:#a7ebff; }
+    .run-step.active::after { border-color:var(--flow-cyan); background:var(--flow-cyan); box-shadow:0 0 0 4px rgba(9,13,21,.95), 0 0 12px rgba(79,210,255,.72); }
+    .run-step.done { border-color:rgba(85,214,166,.38); background:rgba(85,214,166,.07); }
+    .run-step.done strong { color:#8ee8c2; }
+    .run-step.done::after { border-color:var(--flow-green); background:var(--flow-green); box-shadow:0 0 0 4px rgba(9,13,21,.95), 0 0 10px rgba(85,214,166,.55); }
 
-/* Légende */
-.legend {
-  margin-top: 12px;
-  background: #0b0d12;
-  border: 1px solid rgba(255,255,255,.06);
-  border-radius: 12px;
-  padding: 12px;
-}
-.legend h4 {
-  margin: 0 0 8px 0;
-  font-size: 14px;
-  opacity: .9;
-}
-.legend ul {
-  margin: 0;
-  padding-left: 18px;
-}
-.legend li {
-  margin: 4px 0;
-  opacity: .9;
-}
+    .lab-status { display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:12px; padding:12px 14px; border:1px solid rgba(255,255,255,.08); border-radius:13px; background:rgba(255,255,255,.025); }
+    .status-label { color:#aeb6c4; font-size:12px; }
+    .status-value { color:#fff; font-size:13px; font-weight:800; }
+    .status-badge { display:inline-flex; border:1px solid rgba(85,214,166,.34); border-radius:999px; padding:5px 9px; background:rgba(85,214,166,.1); color:#8ee8c2; font-size:11px; font-weight:800; }
 
-/* ROI */
-.roi {
-  background: #0b1018;
-  border: 1px dashed rgba(120,132,255,.5);
-  border-radius: 16px;
-  padding: 14px;
-}
-.roi strong {
-  font-size: 18px;
-}
+    .lab-grid { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(285px,.8fr); gap:13px; margin-top:13px; }
+    .data-panel,
+    .quality-panel { min-width:0; padding:16px; border:1px solid rgba(255,255,255,.08); border-radius:16px; background:var(--flow-panel-2); }
+    .panel-heading { display:flex; gap:10px; align-items:center; justify-content:space-between; margin-bottom:12px; }
+    .panel-heading h3 { margin:0; font-family:"Space Grotesk",Inter,sans-serif; font-size:18px; }
+    .row-badge { display:inline-flex; border:1px solid rgba(115,116,255,.35); border-radius:999px; padding:5px 9px; background:rgba(115,116,255,.1); color:#c8c9ff; font-size:11px; font-weight:800; }
+    .table-wrap { overflow-x:auto; border:1px solid rgba(255,255,255,.08); border-radius:12px; }
+    .data-table { width:100%; border-collapse:collapse; font-size:12px; }
+    .data-table th,
+    .data-table td { padding:9px 10px; border-bottom:1px solid rgba(255,255,255,.07); color:#dce1e8; text-align:left; white-space:nowrap; }
+    .data-table th { background:rgba(255,255,255,.04); color:#9ea7b7; font-size:10px; letter-spacing:.06em; text-transform:uppercase; }
+    .data-table tbody tr:last-child td { border-bottom:0; }
+    .metric-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-bottom:12px; }
+    .metric { padding:11px; border:1px solid rgba(255,255,255,.08); border-radius:12px; background:rgba(255,255,255,.025); }
+    .metric span { display:block; min-height:30px; color:#9ea7b7; font-size:10px; line-height:1.4; text-transform:uppercase; }
+    .metric strong { display:block; color:#fff; font-size:17px; line-height:1.2; }
+    .checks-title { margin:0 0 9px; color:#fff; font-size:13px; font-weight:800; }
+    .quality-list { display:grid; gap:7px; margin:0; padding:0; list-style:none; }
+    .quality-list li { display:flex; gap:8px; align-items:flex-start; color:#cbd2dc; font-size:12px; line-height:1.5; }
+    .quality-list li::before { content:"OK"; flex:0 0 auto; margin-top:1px; border-radius:999px; padding:2px 5px; background:rgba(85,214,166,.12); color:#8ee8c2; font-size:8px; font-weight:900; }
+    .decision-box { margin-top:12px; padding:13px; border-left:3px solid var(--flow-green); border-radius:0 12px 12px 0; background:rgba(85,214,166,.07); }
+    .decision-box strong { display:block; margin-bottom:5px; color:#8ee8c2; font-size:13px; }
+    .decision-box span { color:#cbd4dc; font-size:12px; line-height:1.55; }
 
-/* CTA */
-.demo-cta {
-  margin-top: 60px;
-  padding: 24px;
-  background: #0f1117;
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 18px;
-  box-shadow: 0 8px 30px rgba(0,0,0,.22);
-}
-.demo-cta h2 {
-  margin: 0 0 12px;
-  font-size: 28px;
-  line-height: 1.08;
-  letter-spacing: -.03em;
-  font-family: "Space Grotesk", Inter, system-ui, sans-serif;
-}
-.demo-cta p {
-  margin: 0 0 18px;
-  color: #e5e7eb;
-  font-size: 17px;
-  line-height: 1.75;
-}
-.demo-actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
+    .stack-list { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+    .stack-chip { display:inline-flex; border:1px solid rgba(255,255,255,.13); border-radius:999px; padding:5px 9px; background:rgba(255,255,255,.03); color:#d6dbe3; font-size:12px; font-weight:700; }
+    .production-note { margin-top:14px; padding:17px 18px; border-left:3px solid var(--flow-accent); border-radius:0 14px 14px 0; background:rgba(115,116,255,.08); color:#dce1e8; font-size:15px; line-height:1.7; }
 
-.back {
-  margin-top: 16px;
-  display: inline-block;
-}
+    .pipeline-cta { margin-top:30px; padding:22px; border:1px solid var(--flow-border); border-radius:19px; background:var(--flow-panel); box-shadow:var(--flow-shadow); }
+    .pipeline-cta p { max-width:900px; margin:0 0 17px; color:var(--flow-text); font-size:16px; line-height:1.72; }
+    .pipeline-actions { display:flex; gap:10px; flex-wrap:wrap; }
 
-@media (max-width: 760px) {
-  .page { padding: 24px 0 56px; }
-  .demo-hero h1 { font-size: 34px; }
-  .demo-hero p,
-  .demo-section p,
-  .demo-section li,
-  .demo-cta p {
-    font-size: 16px;
-    line-height: 1.7;
-  }
-  .demo-section h2,
-  .demo-cta h2,
-  .header h2 {
-    font-size: 24px;
-  }
-}
-</style>
+    @media (max-width:960px) {
+      .flow-map-grid,
+      .approach-grid,
+      .value-grid,
+      .production-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .flow-map-step:not(:first-child)::before { display:none; }
+      .lab-grid { grid-template-columns:1fr; }
+    }
+
+    @media (max-width:680px) {
+      .pipeline-page { padding-top:24px; }
+      .page-pipeline .nav a:not(.btn) { display:none; }
+      .flow-map,
+      .pipeline-lab { padding:15px; }
+      .flow-map-grid,
+      .approach-grid,
+      .value-grid,
+      .production-grid,
+      .metric-grid { grid-template-columns:1fr; }
+      .run-track { grid-template-columns:1fr; padding:0 0 0 22px; }
+      .run-rail { top:18px; right:auto; bottom:18px; left:3px; width:5px; height:auto; }
+      .run-progress { width:5px; height:var(--progress); transition:height .32s ease; }
+      .run-progress::after {
+        top:auto;
+        right:50%;
+        bottom:-9px;
+        border-top:10px solid var(--flow-green);
+        border-right:6px solid transparent;
+        border-bottom:0;
+        border-left:6px solid transparent;
+        transform:translateX(50%);
+      }
+      .run-step::after { top:50%; bottom:auto; left:-22px; transform:translate(-50%,-50%); }
+      .flow-map-step { min-height:0; }
+      .case-section h2,
+      .pipeline-cta h2 { font-size:25px; }
+      .case-copy { font-size:16px; line-height:1.7; }
+      .lab-toolbar { align-items:stretch; }
+      .lab-toolbar .btn { width:100%; }
+      .panel-heading { align-items:flex-start; flex-direction:column; }
+      .footer-inner { gap:10px; align-items:flex-start; flex-direction:column; }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      .page-pipeline *,
+      .page-pipeline *::before,
+      .page-pipeline *::after { scroll-behavior:auto !important; transition:none !important; }
+    }
+  </style>
 </head>
-<body>
-<header class="site-header">
-  <div class="container header-inner">
-    <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
-      <img src="/assets/logo.jpg" alt="logo" class="brand-mark">
-      <span class="brand-text">
-        <span class="brand-name">Jérôme Jeannin</span>
-        <span class="brand-label">Hestia Aura</span>
-      </span>
-    </a>
 
-    <nav class="nav">
-      <a href="/">Accueil</a>
-      <a href="/about.html">À propos</a>
-      <a href="/showcase.html">Showcase</a>
-      <a href="/en/demos/pipeline/" class="btn btn--sm">EN</a>
-    </nav>
-  </div>
-</header>
+<body class="page-pipeline">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
+        <img src="/assets/logo.jpg" alt="" class="brand-mark">
+        <span class="brand-text">
+          <span class="brand-name">Jérôme Jeannin</span>
+          <span class="brand-label">Hestia Aura</span>
+        </span>
+      </a>
 
-<main class="page">
-  <div class="demo-container">
-<section class="demo-hero">
-  <p class="section-kicker">Structuration des données · Data flow</p>
-  <h1>Pipeline / Data Flow</h1>
-  <p>
-    Exemple de structuration d’un flux de données permettant de transformer des sources brutes
-    ou hétérogènes en un flux cohérent, exploitable et prêt à être utilisé pour l’analyse.
-  </p>
-</section>
-
-    <div class="pv-label">Vue simplifiée du flux</div>
-    
-    <section class="pipeline-visual">
-  <div class="pipeline-visual-inner">
-    
-    <div class="pv-step">
-      <div class="pv-title">Sources</div>
-      <div class="pv-desc">
-        Données brutes, formats hétérogènes,<br>
-        multiples systèmes
-      </div>
+      <nav class="nav" aria-label="Navigation principale">
+        <a href="/">Accueil</a>
+        <a href="/about.html">À propos</a>
+        <a href="/showcase.html">Showcase</a>
+        <a class="btn btn--sm" href="/en/demos/pipeline/">EN</a>
+      </nav>
     </div>
+  </header>
 
-    <div class="pv-arrow"></div>
-
-    <div class="pv-step">
-      <div class="pv-title">Transformation</div>
-      <div class="pv-desc">
-        Nettoyage, structuration,<br>
-        harmonisation des données
-      </div>
-    </div>
-
-    <div class="pv-arrow"></div>
-
-    <div class="pv-step">
-      <div class="pv-title">Sortie exploitable</div>
-      <div class="pv-desc">
-        Flux cohérent prêt pour<br>
-        analyse et reporting
-      </div>
-    </div>
-
-  </div>
-</section>
-
-    <section class="demo-section">
-      <h2>Contexte métier</h2>
-      <p>
-        Dans beaucoup d’organisations, les données nécessaires au pilotage existent déjà,
-        mais restent dispersées entre plusieurs sources, formats ou étapes de traitement.
-        Avant même de parler de restitution, il faut donc organiser le flux, clarifier
-        les transformations et construire une base exploitable.
-      </p>
-    </section>
-
-    <section class="demo-section">
-      <h2>Problématique</h2>
-      <p>
-        Comment transformer des données hétérogènes en un flux structuré, cohérent
-        et suffisamment robuste pour alimenter une logique d’analyse ou de reporting fiable ?
-      </p>
-    </section>
-
-    <section class="demo-section">
-      <h2>Approche</h2>
-      <ul>
-        <li>Clarification des sources et du besoin de sortie</li>
-        <li>Organisation des étapes de traitement</li>
-        <li>Nettoyage et harmonisation des données</li>
-        <li>Structuration d’un flux lisible et maintenable</li>
-        <li>Production d’une sortie exploitable pour l’analyse ou le reporting</li>
-      </ul>
-    </section>
-
-    <section class="demo-section">
-      <h2>Ce que montre la démo</h2>
-      <div class="demo-note">
-        <strong>Ce que vous voyez ici</strong>
+  <main class="pipeline-page">
+    <div class="demo-container">
+      <section class="demo-hero pipeline-hero">
+        <p class="section-kicker">Data engineering appliqué · Flux et qualité</p>
+        <h1>Pipeline de données pour le reporting</h1>
         <p>
-          La démonstration ci-dessous illustre une logique simple de pipeline :
-          extraction, transformation puis chargement dans une structure exploitable.
-          Le but n’est pas de montrer un outil final, mais de rendre visible le cheminement
-          de la donnée et la façon dont un flux peut être organisé pour devenir utile.
+          Organiser le passage de sources hétérogènes vers une donnée standardisée, contrôlée
+          et publiable, avec un flux compréhensible par les équipes métier et techniques.
         </p>
-      </div>
-    </section>
 
-    <section class="demo-section">
-      <div class="header">
-        <div>
-          <h2>Démonstration interactive</h2>
-          <div class="muted">
-            ETL (Extract → Transform → Load) sur données fictives, table normalisée,
-            KPIs et graphiques. Export CSV.
+        <div class="flow-map" aria-label="Flux simplifié d'un pipeline de données">
+          <div class="flow-map-grid">
+            <div class="flow-map-step">
+              <span>01</span>
+              <strong>Sources</strong>
+              <p>Fichiers, exports ou applications arrivent avec leurs formats et fréquences propres.</p>
+            </div>
+            <div class="flow-map-step">
+              <span>02</span>
+              <strong>Standardisation</strong>
+              <p>Les noms, types, clés et règles métier sont alignés dans une structure commune.</p>
+            </div>
+            <div class="flow-map-step">
+              <span>03</span>
+              <strong>Contrôles</strong>
+              <p>Schéma, complétude, unicité et cohérence déterminent si le lot peut poursuivre.</p>
+            </div>
+            <div class="flow-map-step">
+              <span>04</span>
+              <strong>Publication</strong>
+              <p>Le lot validé alimente une table, un export ou un jeu de données de reporting.</p>
+            </div>
           </div>
         </div>
-        <div class="actions">
-          <button id="btnCsv" class="btn btn--dark">Télécharger CSV</button>
-          <a href="/showcase.html" class="btn">← Retour au Showcase</a>
+      </section>
+
+      <section class="case-section">
+        <h2>Contexte métier</h2>
+        <div class="case-copy">
+          <p>
+            Les données utiles au pilotage sont souvent produites par plusieurs systèmes et à des rythmes
+            différents. Le reporting dépend alors moins d'une transformation isolée que d'un enchaînement
+            fiable, observable et reproductible de bout en bout.
+          </p>
         </div>
-      </div>
+      </section>
 
-      <div class="toolbar">
-        <label for="ds">Exemple :</label>
-        <select id="ds" class="btn btn--dark">
-          <option value="sales">Ventes mensuelles (CH)</option>
-          <option value="tickets">Tickets support (SLA)</option>
-          <option value="invoices">Factures clients (DSO)</option>
-        </select>
-        <span id="statRows" class="stat">0 lignes</span>
-        <span id="statPeriod" class="stat">Période -</span>
-      </div>
+      <section class="case-section">
+        <h2>Problématique</h2>
+        <div class="case-copy">
+          <p>
+            Comment savoir qu'un lot reçu respecte la structure attendue, que ses contrôles essentiels
+            sont passés et qu'il peut être mis à disposition sans masquer les rejets ou les écarts ?
+          </p>
+        </div>
+      </section>
 
-      <div class="grid-2-1">
-        <section class="card">
-          <div class="pipeline">
-            <div class="stage">Pipeline <span class="badge" id="badgeStage">Prêt</span></div>
-            <svg viewBox="0 0 800 160" aria-label="Schéma ETL">
-              <defs>
-                <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0" stop-color="#7c74ff"></stop>
-                  <stop offset="1" stop-color="#49b1ff"></stop>
-                </linearGradient>
-                <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#7c74ff"></path>
-                </marker>
-              </defs>
+      <section class="case-section">
+        <h2>Approche</h2>
+        <div class="case-copy">
+          <p>
+            Le pipeline sépare clairement l'ingestion, la standardisation, les contrôles et la publication.
+            Cette séparation rend les responsabilités plus lisibles et permet de reprendre un lot sans
+            confondre données brutes, données intermédiaires et sortie validée.
+          </p>
+        </div>
 
-              <rect x="20" y="40" width="180" height="60" rx="12" fill="url(#g1)" opacity=".15"></rect>
-              <rect x="310" y="40" width="180" height="60" rx="12" fill="url(#g1)" opacity=".15"></rect>
-              <rect x="600" y="40" width="180" height="60" rx="12" fill="url(#g1)" opacity=".15"></rect>
+        <div class="approach-grid">
+          <div class="approach-item"><strong>Contrat d'entrée</strong><span>Colonnes, types, clés, fréquence et règles d'acceptation définis avant le traitement.</span></div>
+          <div class="approach-item"><strong>Étapes isolées</strong><span>Chaque transformation produit un résultat vérifiable et une responsabilité identifiable.</span></div>
+          <div class="approach-item"><strong>Qualité explicite</strong><span>Les contrôles bloquants sont distingués des avertissements et des informations.</span></div>
+          <div class="approach-item"><strong>Sortie versionnée</strong><span>Le lot publié conserve sa date, son périmètre et les traces utiles à son suivi.</span></div>
+        </div>
+      </section>
 
-              <text x="110" y="75" text-anchor="middle" fill="#fff" font-weight="700">Extract</text>
-              <text x="400" y="75" text-anchor="middle" fill="#fff" font-weight="700">Transform</text>
-              <text x="690" y="75" text-anchor="middle" fill="#fff" font-weight="700">Load</text>
+      <section class="case-section">
+        <h2>Ce que montre la démonstration</h2>
+        <div class="demo-intro">
+          <strong>Trois flux fictifs à explorer</strong>
+          <p>
+            Choisissez un cas puis exécutez le lot pour suivre les étapes, consulter la table standardisée
+            et lire la décision de publication. La simulation se déroule entièrement dans le navigateur :
+            aucun orchestrateur, entrepôt de données ou service externe n'est appelé.
+          </p>
+        </div>
 
-              <path d="M 200 70 L 310 70" stroke="url(#g1)" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
-              <path d="M 490 70 L 600 70" stroke="url(#g1)" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
-
-              <circle r="4" fill="#7c74ff">
-                <animateMotion dur="1.8s" repeatCount="indefinite" path="M 200 70 L 310 70"></animateMotion>
-              </circle>
-              <circle r="4" fill="#49b1ff">
-                <animateMotion dur="1.8s" repeatCount="indefinite" path="M 490 70 L 600 70"></animateMotion>
-              </circle>
-            </svg>
-
-            <table class="table" id="tbl">
-              <thead><tr id="thead"></tr></thead>
-              <tbody id="tbody"></tbody>
-              <tfoot><tr><td id="tfoot" colspan="6"></td></tr></tfoot>
-            </table>
-          </div>
-        </section>
-
-        <aside class="stack">
-          <div class="kpis">
-            <div class="kpi" title="">
-              <div class="label" id="klabel1">KPI #1</div>
-              <div class="value kpi-value" id="kpi1">-</div>
-              <svg id="sp1" class="spark"></svg>
+        <div class="pipeline-lab">
+          <div class="lab-toolbar">
+            <div class="scenario-field">
+              <label for="pipelineScenario">Flux à simuler</label>
+              <select id="pipelineScenario">
+                <option value="sales">Consolidation des ventes</option>
+                <option value="tickets">Tickets support et SLA</option>
+                <option value="invoices">Factures clients et DSO</option>
+              </select>
             </div>
-            <div class="kpi" title="">
-              <div class="label" id="klabel2">KPI #2</div>
-              <div class="value kpi-value" id="kpi2">-</div>
-              <svg id="sp2" class="spark"></svg>
-            </div>
-            <div class="kpi" title="">
-              <div class="label" id="klabel3">KPI #3</div>
-              <div class="value kpi-value" id="kpi3">-</div>
-              <svg id="sp3" class="spark"></svg>
-            </div>
+            <button id="runPipeline" class="btn" type="button">Exécuter le lot</button>
+            <button id="downloadCsv" class="btn btn--outline" type="button">Télécharger le CSV</button>
           </div>
 
-          <div class="legend" id="legend"></div>
+          <p class="local-note">
+            Données et résultats fictifs. Le bouton illustre l'enchaînement logique du flux, sans exécution côté serveur.
+          </p>
 
-          <div class="roi" id="roi">
-            <strong>Gain de temps estimé</strong>
-            <div class="muted">Processus manuel : <span id="tMan">-</span> → Automatisé : <span id="tAuto">-</span></div>
-            <div style="margin-top:6px">Économie : <span id="pct">-</span></div>
+          <div class="run-track" aria-label="État des étapes du pipeline">
+            <div class="run-rail" aria-hidden="true"><span class="run-progress"></span></div>
+            <div class="run-step" data-step="0"><span>Étape 1</span><strong>Ingestion</strong></div>
+            <div class="run-step" data-step="1"><span>Étape 2</span><strong>Standardisation</strong></div>
+            <div class="run-step" data-step="2"><span>Étape 3</span><strong>Contrôles</strong></div>
+            <div class="run-step" data-step="3"><span>Étape 4</span><strong>Publication</strong></div>
           </div>
-        </aside>
-      </div>
 
-      <a class="back" href="/showcase.html">← Retour au Showcase</a>
-    </section>
+          <div class="lab-status" aria-live="polite">
+            <div>
+              <span class="status-label">État du lot</span>
+              <div class="status-value" id="pipelineStatus">Prêt à exécuter</div>
+            </div>
+            <span class="status-badge" id="batchBadge">Prêt</span>
+          </div>
 
-    <section class="demo-section">
-      <h2>Valeur apportée</h2>
-      <ul>
-        <li>Clarification des flux de données</li>
-        <li>Réduction des erreurs et incohérences</li>
-        <li>Base plus fiable pour les analyses et le reporting</li>
-        <li>Meilleure maintenabilité des traitements</li>
-      </ul>
-    </section>
+          <div class="lab-grid">
+            <section class="data-panel">
+              <div class="panel-heading">
+                <h3>Sortie standardisée</h3>
+                <span class="row-badge" id="rowBadge">0 ligne</span>
+              </div>
+              <div class="table-wrap">
+                <table class="data-table">
+                  <thead id="dataHead"></thead>
+                  <tbody id="dataBody"></tbody>
+                </table>
+              </div>
+            </section>
 
-    <section class="demo-cta">
-      <h2>Aller plus loin</h2>
-      <p>
-        Ce type de logique s’applique à de nombreux contextes : consolidation de données,
-        préparation pour le reporting, structuration de traitements ou mise en place
-        de flux plus robustes entre sources et usages métier.
-      </p>
-      <div class="demo-actions">
-        <a href="mailto:contact@hestiaaura.com" class="btn">Me contacter</a>
-        <a href="/showcase.html" class="btn btn--outline">Retour au showcase</a>
-      </div>
-    </section>
-  </div>
-</main>
+            <aside class="quality-panel">
+              <div class="panel-heading">
+                <h3>Qualité du lot</h3>
+                <span class="status-badge" id="qualityBadge">À contrôler</span>
+              </div>
+              <div class="metric-grid">
+                <div class="metric"><span id="metricLabel1">Indicateur 1</span><strong id="metricValue1">-</strong></div>
+                <div class="metric"><span id="metricLabel2">Indicateur 2</span><strong id="metricValue2">-</strong></div>
+                <div class="metric"><span id="metricLabel3">Indicateur 3</span><strong id="metricValue3">-</strong></div>
+              </div>
+              <p class="checks-title">Contrôles appliqués</p>
+              <ul class="quality-list" id="qualityList"></ul>
+              <div class="decision-box">
+                <strong id="decisionTitle">Décision en attente</strong>
+                <span id="decisionCopy">Exécutez le lot pour afficher le résultat des contrôles.</span>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
 
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <span>© <span id="y"></span> Jérôme Jeannin</span>
-    <a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
-  </div>
-</footer>
+      <section class="case-section">
+        <h2>Livrables du prototype</h2>
+        <div class="approach-grid">
+          <div class="approach-item"><strong>Carte du flux</strong><span>Une lecture commune des étapes, entrées, sorties et points de contrôle.</span></div>
+          <div class="approach-item"><strong>Table standardisée</strong><span>Un schéma de sortie stable, directement exploitable par un usage analytique.</span></div>
+          <div class="approach-item"><strong>Rapport de qualité</strong><span>Des contrôles nommés et une décision de publication compréhensible.</span></div>
+          <div class="approach-item"><strong>Export de contrôle</strong><span>Un fichier CSV local pour examiner la structure présentée dans la démo.</span></div>
+        </div>
+        <div class="stack-list" aria-label="Technologies et pratiques illustrées">
+          <span class="stack-chip">ETL / ELT</span>
+          <span class="stack-chip">Contrats de données</span>
+          <span class="stack-chip">Contrôles qualité</span>
+          <span class="stack-chip">Traçabilité</span>
+          <span class="stack-chip">CSV</span>
+          <span class="stack-chip">Reporting</span>
+        </div>
+      </section>
 
-<script>
-/* ===== Helpers formatage ===== */
-const nfCH = new Intl.NumberFormat('fr-CH');
+      <section class="case-section">
+        <h2>Valeur apportée</h2>
+        <div class="value-grid">
+          <div class="value-item"><strong>Flux compréhensible</strong><span>Les équipes partagent une vision claire du chemin suivi par la donnée.</span></div>
+          <div class="value-item"><strong>Anomalies visibles</strong><span>Les lots non conformes sont identifiés avant d'alimenter le reporting.</span></div>
+          <div class="value-item"><strong>Reprise facilitée</strong><span>Une étape isolée peut être rejouée sans retraiter aveuglément tout le flux.</span></div>
+          <div class="value-item"><strong>Sortie maîtrisée</strong><span>La publication devient une décision contrôlée, pas une conséquence implicite.</span></div>
+        </div>
+      </section>
 
-/* Jeux de données (FR) */
-const datasets = {
-  sales: {
-    label: "Ventes mensuelles (CH)",
-    headers: ["mois","canal","montant_chf"],
-    rows: [
-      ["2024-01","Web",42150],["2024-02","Web",43890],["2024-03","Web",46500],["2024-04","Web",47820],
-      ["2024-01","Boutique",18200],["2024-02","Boutique",17650],["2024-03","Boutique",21500],["2024-04","Boutique",22800]
-    ],
-    kpis: (rows) => {
-      const byMonth = {};
-      rows.forEach(r => { byMonth[r[0]] = (byMonth[r[0]] || 0) + r[2]; });
-      const months = Object.keys(byMonth).sort();
-      const vals = months.map(m => byMonth[m]);
-      const total = vals.reduce((a,b) => a + b, 0);
-      const growth = vals.length > 1 ? (vals.at(-1) - vals.at(-2)) / vals.at(-2) : 0;
-      const avg = total / vals.length;
-      return {
-        k1: `${nfCH.format(total)} CHF`,
-        s1: vals,
-        k2: `${(growth * 100).toFixed(1)} % MoM`,
-        s2: vals.slice(-4),
-        k3: `${nfCH.format(Math.round(avg))} CHF/m`,
-        s3: vals
+      <section class="case-section">
+        <h2>De la démonstration à un usage en entreprise</h2>
+        <div class="production-grid">
+          <div class="production-item"><strong>Chargements incrémentaux</strong><span>Définir les clés de reprise et ne traiter que le périmètre nécessaire.</span></div>
+          <div class="production-item"><strong>Idempotence</strong><span>Garantir qu'une relance contrôlée ne duplique ni ne corrompt la sortie.</span></div>
+          <div class="production-item"><strong>Observabilité</strong><span>Journaliser volumes, durées, erreurs, rejets et version de chaque lot.</span></div>
+          <div class="production-item"><strong>Configuration sécurisée</strong><span>Séparer environnements, paramètres, secrets et droits d'accès.</span></div>
+        </div>
+        <p class="production-note">
+          L'outil d'orchestration, le mode de stockage et la fréquence sont choisis selon les contraintes du système cible.
+          Les seuils de qualité et les règles d'alerte doivent être définis avec les propriétaires métier avant la mise en production.
+        </p>
+      </section>
+
+      <section class="pipeline-cta">
+        <h2>Aller plus loin</h2>
+        <p>
+          Cette logique peut préparer un entrepôt de données, alimenter un rapport Power BI ou sécuriser
+          un échange entre applications, avec des contrôles adaptés au niveau de risque du processus.
+        </p>
+        <div class="pipeline-actions">
+          <a href="mailto:contact@hestiaaura.com" class="btn">Me contacter</a>
+          <a href="/showcase.html" class="btn btn--outline">Retour au showcase</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© <span id="y"></span> Jérôme Jeannin</span>
+      <a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+    </div>
+  </footer>
+
+  <script src="/app.js?v=pipeline-fr-v3"></script>
+  <script>
+    (() => {
+      const number = new Intl.NumberFormat('fr-FR');
+      const currency = new Intl.NumberFormat('fr-FR', { style:'currency', currency:'EUR', maximumFractionDigits:0 });
+
+      function formatNumber(value) {
+        return number.format(value).replace(/\u202f/g, ' ');
+      }
+
+      function formatCurrency(value) {
+        return currency.format(value).replace(/\u202f/g, ' ');
+      }
+
+      const datasets = {
+        sales: {
+          filename: 'ventes_standardisees.csv',
+          headers: ['Mois', 'Canal', 'Montant EUR'],
+          rows: [
+            ['2024-01','Web',42150], ['2024-02','Web',43890], ['2024-03','Web',46500], ['2024-04','Web',47820],
+            ['2024-01','Boutique',18200], ['2024-02','Boutique',17650], ['2024-03','Boutique',21500], ['2024-04','Boutique',22800]
+          ],
+          metrics: [['CA consolidé', formatCurrency(260510)], ['Lignes publiées', '8'], ['Lignes rejetées', '0']],
+          checks: ['Schéma et types conformes', 'Clé mois-canal unique', 'Montants renseignés et non négatifs'],
+          decision: 'Les huit lignes respectent le contrat de sortie et peuvent alimenter le reporting mensuel.'
+        },
+        tickets: {
+          filename: 'tickets_standardises.csv',
+          headers: ['Date', 'Priorité', 'Résolus'],
+          rows: [
+            ['2024-03-01','P1',3], ['2024-03-01','P2',12], ['2024-03-01','P3',21],
+            ['2024-03-02','P1',2], ['2024-03-02','P2',15], ['2024-03-02','P3',18],
+            ['2024-03-03','P1',1], ['2024-03-03','P2',9], ['2024-03-03','P3',17]
+          ],
+          metrics: [['Tickets résolus', formatNumber(98)], ['Tickets P1', '6'], ['Lignes rejetées', '0']],
+          checks: ['Schéma et types conformes', 'Priorités limitées à P1, P2 et P3', 'Volumes renseignés et non négatifs'],
+          decision: 'Les neuf lignes sont cohérentes et peuvent alimenter le suivi des volumes et du SLA.'
+        },
+        invoices: {
+          filename: 'factures_standardisees.csv',
+          headers: ['Date', 'Client', 'Montant EUR', 'Jours encours'],
+          rows: [
+            ['2024-01-15','Asteria Conseil',1490,35], ['2024-01-31','Nord Finance',2890,42],
+            ['2024-02-12','Orion Services',1320,28], ['2024-03-01','Nova Industrie',5100,31]
+          ],
+          metrics: [['Montant facturé', formatCurrency(10800)], ['DSO moyen', '34 jours'], ['Lignes rejetées', '0']],
+          checks: ['Schéma et types conformes', 'Couple date-client unique', 'Montants et délais renseignés'],
+          decision: 'Les quatre lignes passent les contrôles définis et peuvent rejoindre la table de suivi clients.'
+        }
       };
-    },
-    roi: { manual: "6 h / mois", auto: "20 min", pct: "−94 %" },
-    labels: [
-      { text: "CA total", tip: "Somme des ventes Web + Boutique sur la période." },
-      { text: "Croissance MoM", tip: "Variation du dernier mois vs mois précédent (Month-over-Month)." },
-      { text: "CA moyen mensuel", tip: "Moyenne mensuelle sur la période." }
-    ]
-  },
-  tickets: {
-    label: "Tickets support (SLA)",
-    headers: ["date","priorité","résolus"],
-    rows: [
-      ["2024-03-01","P1",3],["2024-03-01","P2",12],["2024-03-01","P3",21],
-      ["2024-03-02","P1",2],["2024-03-02","P2",15],["2024-03-02","P3",18],
-      ["2024-03-03","P1",1],["2024-03-03","P2",9],["2024-03-03","P3",17]
-    ],
-    kpis: (rows) => {
-      const total = rows.reduce((a,b) => a + b[2], 0);
-      const p1 = rows.filter(r => r[1] === "P1").reduce((a,b) => a + b[2], 0);
-      const p23 = total - p1;
-      return {
-        k1: `${nfCH.format(total)} résolus`,
-        s1: [p1, p23],
-        k2: `${nfCH.format(p1)} P1`,
-        s2: [p1],
-        k3: `${nfCH.format(p23)} P2/P3`,
-        s3: [p23]
+
+      const elements = {
+        scenario: document.getElementById('pipelineScenario'),
+        run: document.getElementById('runPipeline'),
+        download: document.getElementById('downloadCsv'),
+        status: document.getElementById('pipelineStatus'),
+        batchBadge: document.getElementById('batchBadge'),
+        rowBadge: document.getElementById('rowBadge'),
+        qualityBadge: document.getElementById('qualityBadge'),
+        head: document.getElementById('dataHead'),
+        body: document.getElementById('dataBody'),
+        qualityList: document.getElementById('qualityList'),
+        decisionTitle: document.getElementById('decisionTitle'),
+        decisionCopy: document.getElementById('decisionCopy'),
+        track: document.querySelector('.run-track'),
+        steps: Array.from(document.querySelectorAll('.run-step')),
+        metricLabels: [1,2,3].map((id) => document.getElementById('metricLabel' + id)),
+        metricValues: [1,2,3].map((id) => document.getElementById('metricValue' + id))
       };
-    },
-    roi: { manual: "3 h / semaine", auto: "10 min", pct: "−95 %" },
-    labels: [
-      { text: "Tickets résolus", tip: "Nombre total de tickets résolus sur la période." },
-      { text: "Tickets critiques (P1)", tip: "Tickets de priorité 1 résolus." },
-      { text: "Tickets P2+P3", tip: "Tickets de priorités 2 et 3 résolus." }
-    ]
-  },
-  invoices: {
-    label: "Factures clients (DSO)",
-    headers: ["date","client","montant_chf","jours_encours"],
-    rows: [
-      ["2024-01-15","HelvetiaTech",1490,35],
-      ["2024-01-31","LémanBank",2890,42],
-      ["2024-02-12","RomandieCom",1320,28],
-      ["2024-03-01","Alpine SA",5100,31]
-    ],
-    kpis: (rows) => {
-      const total = rows.reduce((a,b) => a + b[2], 0);
-      const dso = rows.reduce((a,b) => a + b[3], 0) / rows.length;
-      const top = rows.reduce((m,r) => r[2] > m ? r[2] : m, 0);
-      return {
-        k1: `${nfCH.format(total)} CHF`,
-        s1: rows.map(r => r[2]),
-        k2: `DSO ${dso.toFixed(0)} j`,
-        s2: rows.map(r => r[3]),
-        k3: `Ticket max ${nfCH.format(top)} CHF`,
-        s3: [top]
-      };
-    },
-    roi: { manual: "1 j / mois", auto: "30 min", pct: "−94 %" },
-    labels: [
-      { text: "Montant total facturé", tip: "Somme des montants de toutes les factures de la période." },
-      { text: "DSO moyen (jours)", tip: "Délai moyen de paiement (Days Sales Outstanding)." },
-      { text: "Plus gros ticket", tip: "Montant de la facture la plus élevée." }
-    ]
-  }
-};
+      let timers = [];
 
-/* Utils */
-function toCSV(headers, rows) {
-  const esc = v => `"${String(v).replaceAll('"','""')}"`;
-  return [headers.map(esc).join(","), ...rows.map(r => r.map(esc).join(","))].join("\\n");
-}
-function el(tag, attrs = {}, children = []) {
-  const e = document.createElement(tag);
-  Object.entries(attrs).forEach(([k,v]) => {
-    if (k === "text") e.textContent = v;
-    else e.setAttribute(k, v);
-  });
-  children.forEach(c => e.appendChild(c));
-  return e;
-}
-function renderSpark(svgId, series) {
-  const svg = document.getElementById(svgId);
-  const w = svg.clientWidth || 260;
-  const h = svg.clientHeight || 56;
-  const p = 6;
-  svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
-  if (!series || series.length === 0) {
-    svg.innerHTML = "";
-    return;
-  }
-  const min = Math.min(...series), max = Math.max(...series);
-  const span = max - min || 1;
-  const step = (w - 2 * p) / (series.length - 1 || 1);
-  const pts = series.map((v,i) => [p + i * step, h - p - ((v - min) / span) * (h - 2 * p)]);
-  const d = pts.map((pt,i) => (i ? "L" : "M") + pt[0].toFixed(1) + " " + pt[1].toFixed(1)).join(" ");
-  svg.innerHTML = `<path d="${d}" fill="none" stroke="#7c74ff" stroke-width="2"/>`;
-}
-function renderLegend(cfg) {
-  const node = document.getElementById("legend");
-  node.innerHTML = "";
-  const title = document.createElement("h4");
-  title.textContent = "Légende des indicateurs";
-  node.appendChild(title);
-  const ul = document.createElement("ul");
-  cfg.forEach(item => {
-    const li = document.createElement("li");
-    li.textContent = `${item.text} - ${item.tip}`;
-    ul.appendChild(li);
-  });
-  node.appendChild(ul);
-}
-const kl1 = document.getElementById("klabel1");
-const kl2 = document.getElementById("klabel2");
-const kl3 = document.getElementById("klabel3");
-function setKpiLabels(cfg) {
-  kl1.textContent = cfg[0].text; kl1.parentElement.title = cfg[0].tip;
-  kl2.textContent = cfg[1].text; kl2.parentElement.title = cfg[1].tip;
-  kl3.textContent = cfg[2].text; kl3.parentElement.title = cfg[2].tip;
-}
+      function clearTimers() {
+        timers.forEach((timer) => window.clearTimeout(timer));
+        timers = [];
+      }
 
-/* Réfs UI */
-const dsSel = document.getElementById("ds");
-const badge = document.getElementById("badgeStage");
-const thead = document.getElementById("thead");
-const tbody = document.getElementById("tbody");
-const tfoot = document.getElementById("tfoot");
-const statRows = document.getElementById("statRows");
-const statPeriod = document.getElementById("statPeriod");
-const k1 = document.getElementById("kpi1");
-const k2 = document.getElementById("kpi2");
-const k3 = document.getElementById("kpi3");
+      function escapeCsv(value) {
+        return '"' + String(value).replace(/"/g, '""') + '"';
+      }
 
-/* Chargement dataset */
-function load(dsKey) {
-  const ds = datasets[dsKey];
-  badge.textContent = "Extraction…";
-  setTimeout(() => {
-    badge.textContent = "Transformation…";
-    setTimeout(() => {
-      badge.textContent = "Chargement OK";
+      function buildCsv(dataset) {
+        return [dataset.headers, ...dataset.rows].map((row) => row.map(escapeCsv).join(',')).join('\n');
+      }
 
-      thead.innerHTML = "";
-      ds.headers.forEach(h => thead.appendChild(el("th", { text: h })));
+      function renderDataset(dataset) {
+        elements.head.innerHTML = '<tr>' + dataset.headers.map((header) => '<th scope="col">' + header + '</th>').join('') + '</tr>';
+        elements.body.innerHTML = '';
+        dataset.rows.forEach((row) => {
+          const tr = document.createElement('tr');
+          row.forEach((value, columnIndex) => {
+            const td = document.createElement('td');
+            const header = dataset.headers[columnIndex] || '';
+            td.textContent = typeof value === 'number' && header.toLowerCase().includes('montant')
+              ? formatNumber(value)
+              : value;
+            tr.appendChild(td);
+          });
+          elements.body.appendChild(tr);
+        });
+        elements.rowBadge.textContent = dataset.rows.length + (dataset.rows.length > 1 ? ' lignes' : ' ligne');
+        dataset.metrics.forEach((metric, index) => {
+          elements.metricLabels[index].textContent = metric[0];
+          elements.metricValues[index].textContent = metric[1];
+        });
+        elements.qualityList.innerHTML = '';
+        dataset.checks.forEach((check) => {
+          const li = document.createElement('li');
+          li.textContent = check;
+          elements.qualityList.appendChild(li);
+        });
+        elements.decisionTitle.textContent = 'Lot publiable';
+        elements.decisionCopy.textContent = dataset.decision;
+      }
 
-      tbody.innerHTML = "";
-      ds.rows.forEach(r => {
-        const tr = el("tr");
-        r.forEach(v => tr.appendChild(el("td", { text: v })));
-        tbody.appendChild(tr);
+      function prepare() {
+        clearTimers();
+        elements.steps.forEach((step) => step.classList.remove('active','done'));
+        elements.track.style.setProperty('--progress', '0%');
+        elements.status.textContent = 'Prêt à exécuter';
+        elements.batchBadge.textContent = 'Prêt';
+        elements.qualityBadge.textContent = 'À contrôler';
+        elements.decisionTitle.textContent = 'Décision en attente';
+        elements.decisionCopy.textContent = 'Exécutez le lot pour afficher le résultat des contrôles.';
+        elements.run.disabled = false;
+      }
+
+      function runPipeline() {
+        clearTimers();
+        elements.run.disabled = true;
+        elements.steps.forEach((step) => step.classList.remove('active','done'));
+        const labels = ['Ingestion des lignes', 'Standardisation du schéma', 'Exécution des contrôles', 'Publication de la sortie'];
+        const progress = ['0%', '30%', '60%', '90%'];
+        labels.forEach((label, index) => {
+          timers.push(window.setTimeout(() => {
+            elements.steps.forEach((step, stepIndex) => {
+              step.classList.toggle('done', stepIndex < index);
+              step.classList.toggle('active', stepIndex === index);
+            });
+            elements.track.style.setProperty('--progress', progress[index]);
+            elements.status.textContent = label;
+            elements.batchBadge.textContent = 'En cours';
+          }, index * 220));
+        });
+        timers.push(window.setTimeout(() => {
+          elements.steps.forEach((step) => { step.classList.remove('active'); step.classList.add('done'); });
+          elements.track.style.setProperty('--progress', '100%');
+          renderDataset(datasets[elements.scenario.value]);
+          elements.status.textContent = 'Lot contrôlé et publié dans la simulation';
+          elements.batchBadge.textContent = 'Publié';
+          elements.qualityBadge.textContent = 'Contrôles OK';
+          elements.run.disabled = false;
+        }, labels.length * 220));
+      }
+
+      elements.scenario.addEventListener('change', prepare);
+      elements.run.addEventListener('click', runPipeline);
+      elements.download.addEventListener('click', () => {
+        const dataset = datasets[elements.scenario.value];
+        const blob = new Blob([buildCsv(dataset)], { type:'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = dataset.filename;
+        link.click();
+        URL.revokeObjectURL(link.href);
       });
 
-      statRows.textContent = `${ds.rows.length} lignes`;
-      const first = ds.rows[0]?.[0] || "-";
-      const last = ds.rows.at(-1)?.[0] || "-";
-      statPeriod.textContent = `Période ${first} → ${last}`;
-      tfoot.textContent = ds.label;
-
-      const kp = ds.kpis(ds.rows);
-      k1.textContent = kp.k1;
-      k2.textContent = kp.k2;
-      k3.textContent = kp.k3;
-      renderSpark("sp1", kp.s1);
-      renderSpark("sp2", kp.s2);
-      renderSpark("sp3", kp.s3);
-
-      document.getElementById("tMan").textContent = ds.roi.manual;
-      document.getElementById("tAuto").textContent = ds.roi.auto;
-      document.getElementById("pct").textContent = ds.roi.pct;
-
-      setKpiLabels(ds.labels);
-      renderLegend(ds.labels);
-    }, 500);
-  }, 500);
-}
-
-/* Export CSV */
-document.getElementById("btnCsv").addEventListener("click", () => {
-  const ds = datasets[dsSel.value];
-  const csv = toCSV(ds.headers, ds.rows);
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "pipeline_export.csv";
-  a.click();
-  URL.revokeObjectURL(url);
-});
-
-dsSel.addEventListener("change", e => load(e.target.value));
-load("sales");
-document.getElementById("y").textContent = new Date().getFullYear();
-</script>
+      const initial = datasets.sales;
+      renderDataset(initial);
+      prepare();
+      const year = document.getElementById('y');
+      if (year && !year.textContent) year.textContent = new Date().getFullYear();
+    })();
+  </script>
 </body>
 </html>
