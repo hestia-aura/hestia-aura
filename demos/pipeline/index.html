@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=pipeline-fr-v2">
+  <link rel="stylesheet" href="/styles.css?v=pipeline-fr-v3">
   <link rel="stylesheet" href="/assets/css/demo.css">
 
   <style>
@@ -119,14 +119,90 @@
     .lab-toolbar .btn { min-height:46px; padding:10px 17px; }
     .local-note { margin:12px 0 0; color:#9ca5b4; font-size:12px; line-height:1.6; }
 
-    .run-track { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:9px; margin-top:17px; }
-    .run-step { padding:12px; border:1px solid rgba(255,255,255,.08); border-radius:13px; background:var(--flow-panel-2); }
+    .run-track {
+      --progress:0%;
+      position:relative;
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:9px;
+      margin-top:17px;
+      padding-bottom:26px;
+    }
+    .run-rail {
+      position:absolute;
+      right:12.5%;
+      bottom:5px;
+      left:12.5%;
+      height:5px;
+      overflow:visible;
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:999px;
+      background:rgba(255,255,255,.045);
+      box-shadow:inset 0 1px 4px rgba(0,0,0,.45);
+    }
+    .run-progress {
+      position:absolute;
+      top:-1px;
+      left:-1px;
+      width:var(--progress);
+      height:5px;
+      border-radius:999px;
+      background:linear-gradient(90deg, var(--flow-accent), var(--flow-cyan), var(--flow-green));
+      box-shadow:0 0 8px rgba(79,210,255,.7), 0 0 18px rgba(115,116,255,.32);
+      transition:width .32s ease;
+    }
+    .run-progress::before {
+      content:"";
+      position:absolute;
+      inset:1px 0 auto;
+      height:1px;
+      border-radius:999px;
+      background:rgba(255,255,255,.7);
+    }
+    .run-progress::after {
+      content:"";
+      position:absolute;
+      top:50%;
+      right:-9px;
+      width:0;
+      height:0;
+      border-top:6px solid transparent;
+      border-bottom:6px solid transparent;
+      border-left:10px solid var(--flow-green);
+      filter:drop-shadow(0 0 5px rgba(85,214,166,.75));
+      transform:translateY(-50%);
+    }
+    .run-step {
+      position:relative;
+      z-index:1;
+      padding:12px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:13px;
+      background:var(--flow-panel-2);
+      transition:border-color .22s ease, background .22s ease, box-shadow .22s ease;
+    }
+    .run-step::after {
+      content:"";
+      position:absolute;
+      bottom:-25px;
+      left:50%;
+      z-index:3;
+      width:9px;
+      height:9px;
+      border:2px solid rgba(255,255,255,.18);
+      border-radius:50%;
+      background:#111621;
+      box-shadow:0 0 0 4px rgba(9,13,21,.95);
+      transform:translateX(-50%);
+    }
     .run-step span { display:block; margin-bottom:5px; color:#8f98a8; font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
     .run-step strong { color:#d8dee8; font-size:13px; }
-    .run-step.active { border-color:rgba(79,210,255,.5); background:rgba(79,210,255,.08); }
+    .run-step.active { border-color:rgba(79,210,255,.55); background:rgba(79,210,255,.08); box-shadow:0 8px 20px rgba(79,210,255,.08); }
     .run-step.active strong { color:#a7ebff; }
+    .run-step.active::after { border-color:var(--flow-cyan); background:var(--flow-cyan); box-shadow:0 0 0 4px rgba(9,13,21,.95), 0 0 12px rgba(79,210,255,.72); }
     .run-step.done { border-color:rgba(85,214,166,.38); background:rgba(85,214,166,.07); }
     .run-step.done strong { color:#8ee8c2; }
+    .run-step.done::after { border-color:var(--flow-green); background:var(--flow-green); box-shadow:0 0 0 4px rgba(9,13,21,.95), 0 0 10px rgba(85,214,166,.55); }
 
     .lab-status { display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:12px; padding:12px 14px; border:1px solid rgba(255,255,255,.08); border-radius:13px; background:rgba(255,255,255,.025); }
     .status-label { color:#aeb6c4; font-size:12px; }
@@ -183,8 +259,21 @@
       .approach-grid,
       .value-grid,
       .production-grid,
-      .run-track,
       .metric-grid { grid-template-columns:1fr; }
+      .run-track { grid-template-columns:1fr; padding:0 0 0 22px; }
+      .run-rail { top:18px; right:auto; bottom:18px; left:3px; width:5px; height:auto; }
+      .run-progress { width:5px; height:var(--progress); transition:height .32s ease; }
+      .run-progress::after {
+        top:auto;
+        right:50%;
+        bottom:-9px;
+        border-top:10px solid var(--flow-green);
+        border-right:6px solid transparent;
+        border-bottom:0;
+        border-left:6px solid transparent;
+        transform:translateX(50%);
+      }
+      .run-step::after { top:50%; bottom:auto; left:-22px; transform:translate(-50%,-50%); }
       .flow-map-step { min-height:0; }
       .case-section h2,
       .pipeline-cta h2 { font-size:25px; }
@@ -328,6 +417,7 @@
           </p>
 
           <div class="run-track" aria-label="État des étapes du pipeline">
+            <div class="run-rail" aria-hidden="true"><span class="run-progress"></span></div>
             <div class="run-step" data-step="0"><span>Étape 1</span><strong>Ingestion</strong></div>
             <div class="run-step" data-step="1"><span>Étape 2</span><strong>Standardisation</strong></div>
             <div class="run-step" data-step="2"><span>Étape 3</span><strong>Contrôles</strong></div>
@@ -440,11 +530,20 @@
     </div>
   </footer>
 
-  <script src="/app.js?v=pipeline-fr-v2"></script>
+  <script src="/app.js?v=pipeline-fr-v3"></script>
   <script>
     (() => {
       const number = new Intl.NumberFormat('fr-FR');
       const currency = new Intl.NumberFormat('fr-FR', { style:'currency', currency:'EUR', maximumFractionDigits:0 });
+
+      function formatNumber(value) {
+        return number.format(value).replace(/\u202f/g, ' ');
+      }
+
+      function formatCurrency(value) {
+        return currency.format(value).replace(/\u202f/g, ' ');
+      }
+
       const datasets = {
         sales: {
           filename: 'ventes_standardisees.csv',
@@ -453,7 +552,7 @@
             ['2024-01','Web',42150], ['2024-02','Web',43890], ['2024-03','Web',46500], ['2024-04','Web',47820],
             ['2024-01','Boutique',18200], ['2024-02','Boutique',17650], ['2024-03','Boutique',21500], ['2024-04','Boutique',22800]
           ],
-          metrics: [['CA consolidé', currency.format(260510)], ['Lignes publiées', '8'], ['Lignes rejetées', '0']],
+          metrics: [['CA consolidé', formatCurrency(260510)], ['Lignes publiées', '8'], ['Lignes rejetées', '0']],
           checks: ['Schéma et types conformes', 'Clé mois-canal unique', 'Montants renseignés et non négatifs'],
           decision: 'Les huit lignes respectent le contrat de sortie et peuvent alimenter le reporting mensuel.'
         },
@@ -465,7 +564,7 @@
             ['2024-03-02','P1',2], ['2024-03-02','P2',15], ['2024-03-02','P3',18],
             ['2024-03-03','P1',1], ['2024-03-03','P2',9], ['2024-03-03','P3',17]
           ],
-          metrics: [['Tickets résolus', number.format(98)], ['Tickets P1', '6'], ['Lignes rejetées', '0']],
+          metrics: [['Tickets résolus', formatNumber(98)], ['Tickets P1', '6'], ['Lignes rejetées', '0']],
           checks: ['Schéma et types conformes', 'Priorités limitées à P1, P2 et P3', 'Volumes renseignés et non négatifs'],
           decision: 'Les neuf lignes sont cohérentes et peuvent alimenter le suivi des volumes et du SLA.'
         },
@@ -476,7 +575,7 @@
             ['2024-01-15','Asteria Conseil',1490,35], ['2024-01-31','Nord Finance',2890,42],
             ['2024-02-12','Orion Services',1320,28], ['2024-03-01','Nova Industrie',5100,31]
           ],
-          metrics: [['Montant facturé', currency.format(10800)], ['DSO moyen', '34 jours'], ['Lignes rejetées', '0']],
+          metrics: [['Montant facturé', formatCurrency(10800)], ['DSO moyen', '34 jours'], ['Lignes rejetées', '0']],
           checks: ['Schéma et types conformes', 'Couple date-client unique', 'Montants et délais renseignés'],
           decision: 'Les quatre lignes passent les contrôles définis et peuvent rejoindre la table de suivi clients.'
         }
@@ -495,6 +594,7 @@
         qualityList: document.getElementById('qualityList'),
         decisionTitle: document.getElementById('decisionTitle'),
         decisionCopy: document.getElementById('decisionCopy'),
+        track: document.querySelector('.run-track'),
         steps: Array.from(document.querySelectorAll('.run-step')),
         metricLabels: [1,2,3].map((id) => document.getElementById('metricLabel' + id)),
         metricValues: [1,2,3].map((id) => document.getElementById('metricValue' + id))
@@ -519,9 +619,12 @@
         elements.body.innerHTML = '';
         dataset.rows.forEach((row) => {
           const tr = document.createElement('tr');
-          row.forEach((value) => {
+          row.forEach((value, columnIndex) => {
             const td = document.createElement('td');
-            td.textContent = value;
+            const header = dataset.headers[columnIndex] || '';
+            td.textContent = typeof value === 'number' && header.toLowerCase().includes('montant')
+              ? formatNumber(value)
+              : value;
             tr.appendChild(td);
           });
           elements.body.appendChild(tr);
@@ -544,6 +647,7 @@
       function prepare() {
         clearTimers();
         elements.steps.forEach((step) => step.classList.remove('active','done'));
+        elements.track.style.setProperty('--progress', '0%');
         elements.status.textContent = 'Prêt à exécuter';
         elements.batchBadge.textContent = 'Prêt';
         elements.qualityBadge.textContent = 'À contrôler';
@@ -557,18 +661,21 @@
         elements.run.disabled = true;
         elements.steps.forEach((step) => step.classList.remove('active','done'));
         const labels = ['Ingestion des lignes', 'Standardisation du schéma', 'Exécution des contrôles', 'Publication de la sortie'];
+        const progress = ['0%', '33.333%', '66.666%', '100%'];
         labels.forEach((label, index) => {
           timers.push(window.setTimeout(() => {
             elements.steps.forEach((step, stepIndex) => {
               step.classList.toggle('done', stepIndex < index);
               step.classList.toggle('active', stepIndex === index);
             });
+            elements.track.style.setProperty('--progress', progress[index]);
             elements.status.textContent = label;
             elements.batchBadge.textContent = 'En cours';
           }, index * 220));
         });
         timers.push(window.setTimeout(() => {
           elements.steps.forEach((step) => { step.classList.remove('active'); step.classList.add('done'); });
+          elements.track.style.setProperty('--progress', '100%');
           renderDataset(datasets[elements.scenario.value]);
           elements.status.textContent = 'Lot contrôlé et publié dans la simulation';
           elements.batchBadge.textContent = 'Publié';

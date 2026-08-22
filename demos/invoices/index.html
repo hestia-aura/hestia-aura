@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=invoices-fr-v4">
+  <link rel="stylesheet" href="/styles.css?v=invoices-fr-v5">
 <link rel="stylesheet" href="/assets/css/demo.css">
 
   <style>
@@ -91,14 +91,19 @@
       position:relative;
       z-index:2;
       display:grid;
-      grid-template-columns:repeat(7,minmax(0,1fr));
+      grid-template-columns:
+        minmax(140px,1fr) minmax(44px,.34fr)
+        minmax(160px,1.08fr) minmax(44px,.34fr)
+        minmax(180px,1.2fr) minmax(44px,.34fr)
+        minmax(140px,1fr);
       gap:12px;
       align-items:center;
     }
 
     .hero-step{
-      min-height:162px;
-      padding:18px 16px 16px;
+      min-width:0;
+      min-height:170px;
+      padding:20px 18px 18px;
       border-radius:18px;
       background:rgba(10,14,25,.68);
       border:1px solid rgba(255,255,255,.08);
@@ -124,8 +129,9 @@
     .step-title{
       display:block;
       margin:0 0 8px;
-      font-size:24px;
-      line-height:1.02;
+      font-size:22px;
+      line-height:1.08;
+      letter-spacing:-.02em;
     }
 
     .hero-step p{
@@ -617,7 +623,7 @@
             <div class="hero-step">
               <span class="step-badge">01</span>
               <strong class="step-title">PDF</strong>
-              <p>Factures reçues dans des formats variés, avec des structures et des champs hétérogènes.</p>
+              <p>Factures reçues dans des formats et structures variés.</p>
             </div>
 
             <div class="hero-arrow"></div>
@@ -625,7 +631,7 @@
             <div class="hero-step">
               <span class="step-badge">02</span>
               <strong class="step-title">Extraction</strong>
-              <p>Lecture automatique des informations clés utiles au traitement métier.</p>
+              <p>Lecture automatique des champs utiles au traitement métier.</p>
             </div>
 
             <div class="hero-arrow"></div>
@@ -633,7 +639,7 @@
             <div class="hero-step">
               <span class="step-badge">03</span>
               <strong class="step-title">Structuration</strong>
-              <p>Mise en forme cohérente des données pour contrôle, exploitation et réutilisation.</p>
+              <p>Mise en forme cohérente pour contrôle et réutilisation.</p>
             </div>
 
             <div class="hero-arrow"></div>
@@ -641,7 +647,7 @@
             <div class="hero-step">
               <span class="step-badge">04</span>
               <strong class="step-title">Export</strong>
-              <p>Production d’un résultat exploitable dans un flux plus large de gestion, de contrôle ou de reporting.</p>
+              <p>Résultat exploitable dans un flux de gestion ou de reporting.</p>
             </div>
           </div>
         </div>
@@ -892,7 +898,7 @@
     </div>
   </footer>
 
-  <script src="/app.js?v=invoices-fr-v4"></script>
+  <script src="/app.js?v=invoices-fr-v5"></script>
   <script>
     const samples = {
       eu: {
@@ -966,10 +972,11 @@
     });
 
     function format(n){
-      return new Intl.NumberFormat('fr-CH', {
+      return new Intl.NumberFormat('fr-FR', {
+        useGrouping: true,
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
-      }).format(n);
+      }).format(n).replace(/\u202f/g, ' ');
     }
 
     function render(inv){
