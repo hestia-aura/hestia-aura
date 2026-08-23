@@ -1,0 +1,170 @@
+[
+  {
+    "id": "DOC-001",
+    "title": "Invoice processing automation",
+    "content": "Received invoices are uploaded to a secure location, after which their main fields are extracted and checked. Incomplete documents are routed for human validation before export to the accounting system.",
+    "tags": [
+      "Finance",
+      "Automation",
+      "Documents"
+    ],
+    "source": "Finance Procedure",
+    "date": "2026-05-14"
+  },
+  {
+    "id": "DOC-002",
+    "title": "Data pipeline quality checks",
+    "content": "Each load checks the schema, mandatory values, duplicates and expected volumes. Blocking anomalies interrupt the flow, while minor discrepancies are logged with an owner and correction date.",
+    "tags": [
+      "Data",
+      "Quality",
+      "Pipeline"
+    ],
+    "source": "Data Engineering Standard",
+    "date": "2026-04-28"
+  },
+  {
+    "id": "DOC-003",
+    "title": "Access to sensitive data",
+    "content": "Access to sensitive data follows the principle of least privilege: each user receives only the permissions required for their work. Multi-factor authentication, periodic access reviews and access logging are mandatory.",
+    "tags": [
+      "Security",
+      "Governance",
+      "Data"
+    ],
+    "source": "Security Policy",
+    "date": "2026-06-03"
+  },
+  {
+    "id": "DOC-004",
+    "title": "Incident classification and handling",
+    "content": "An incident is classified according to its business impact and the number of affected users. Critical incidents trigger immediate response, regular communication and root cause analysis with an action plan after service is restored.",
+    "tags": [
+      "IT",
+      "Support",
+      "Incidents"
+    ],
+    "source": "Operations Guide",
+    "date": "2026-03-19"
+  },
+  {
+    "id": "DOC-005",
+    "title": "Data retention and deletion",
+    "content": "Each data category has a retention period, an owner and a deletion rule. Data reaching the end of its retention period is deleted or anonymised unless a documented business or regulatory obligation applies.",
+    "tags": [
+      "Compliance",
+      "Governance",
+      "Data"
+    ],
+    "source": "Retention Standard",
+    "date": "2026-02-11"
+  },
+  {
+    "id": "DOC-006",
+    "title": "Deploying an AI model to production",
+    "content": "Before production, the model is evaluated on representative cases, edge cases and quality criteria defined with the business. The version, test data, results and rollback conditions are retained to ensure traceability.",
+    "tags": [
+      "AI",
+      "Quality",
+      "Governance"
+    ],
+    "source": "Responsible AI Framework",
+    "date": "2026-05-30"
+  },
+  {
+    "id": "DOC-007",
+    "title": "Power BI metric documentation",
+    "content": "Each metric must specify its business definition, formula, granularity, source, refresh frequency and owner. Every change is validated with users and added to the KPI dictionary.",
+    "tags": [
+      "Power BI",
+      "Reporting",
+      "KPI"
+    ],
+    "source": "BI Guide",
+    "date": "2026-04-07"
+  },
+  {
+    "id": "DOC-008",
+    "title": "Customer onboarding checks",
+    "content": "Onboarding collects the required identity information and supporting documents, then checks their consistency. Any compliance alert must be analysed, documented and approved before the customer record is activated.",
+    "tags": [
+      "Compliance",
+      "Finance",
+      "Onboarding"
+    ],
+    "source": "Compliance Procedure",
+    "date": "2026-01-22"
+  },
+  {
+    "id": "DOC-009",
+    "title": "Application change management",
+    "content": "A production release describes the change, risks, tests performed and rollback plan. High-impact changes require formal approval and are avoided during critical business periods.",
+    "tags": [
+      "IT",
+      "Production",
+      "Change"
+    ],
+    "source": "Change Process",
+    "date": "2026-03-05"
+  },
+  {
+    "id": "DOC-010",
+    "title": "Personal data protection",
+    "content": "The collection of personal data must serve an explicit purpose and be limited to information that is genuinely necessary. Data subjects are informed about its use, retention period and how to exercise their rights.",
+    "tags": [
+      "Compliance",
+      "Data",
+      "Privacy"
+    ],
+    "source": "Privacy Charter",
+    "date": "2026-02-26"
+  },
+  {
+    "id": "DOC-011",
+    "title": "Data flow monitoring",
+    "content": "Monitoring tracks processing status, duration, loaded volumes and encountered errors. An alert is sent when the flow fails, exceeds its usual duration or produces an inconsistent volume.",
+    "tags": [
+      "Data",
+      "Pipeline",
+      "Monitoring"
+    ],
+    "source": "Data Operations Guide",
+    "date": "2026-05-06"
+  },
+  {
+    "id": "DOC-012",
+    "title": "Customer master data quality",
+    "content": "The customer master applies uniqueness, completeness and consistency rules to identifiers, contact details and statuses. Potential duplicates are matched using documented criteria before any merge.",
+    "tags": [
+      "Data",
+      "Quality",
+      "CRM"
+    ],
+    "source": "CRM Quality Rules",
+    "date": "2026-04-16"
+  },
+  {
+    "id": "DOC-013",
+    "title": "Improving the reliability of a RAG assistant",
+    "content": "A RAG assistant must cite the documents used, limit its answer to retrieved information and flag when sources are insufficient. Quality is measured using a reference question set, business review and monitoring of unsupported answers.",
+    "tags": [
+      "AI",
+      "RAG",
+      "Quality"
+    ],
+    "source": "Applied AI Guide",
+    "date": "2026-06-12"
+  },
+  {
+    "id": "DOC-014",
+    "title": "KPI validation and governance",
+    "content": "A KPI is validated when its definition, source and calculation rules are shared by the relevant teams. A business owner arbitrates changes, and an automated check verifies data freshness and completeness.",
+    "tags": [
+      "Reporting",
+      "KPI",
+      "Governance"
+    ],
+    "source": "Data Steering Committee",
+    "date": "2026-05-21"
+  }
+]

@@ -3,176 +3,535 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Decision-focused reporting with Power BI | Jérôme Jeannin</title>
+  <meta name="description" content="Power BI decision-support demonstration: data preparation, semantic modelling, DAX measures and decision-focused reporting using public data.">
+  <meta property="og:title" content="Decision-focused reporting with Power BI | Jérôme Jeannin">
+  <meta property="og:description" content="From a business need to a clear Power BI report, with metric definitions, checks and scenarios.">
+  <meta property="og:image" content="/assets/media/powerbi-executive-overview-v2.webp">
 
-  <title>Power BI - Demographics & Economy Île-de-France (2011-2022) | Hestia Aura</title>
   <link rel="icon" href="/assets/logo.jpg">
   <link rel="apple-touch-icon" href="/assets/logo.jpg">
-  <link rel="stylesheet" href="/styles.css">
-  <meta name="description" content="Power BI report combining Power Query preparation and DAX model: P1 Evolution, P2 Distribution, P3 Scenarios & indicators. Zoomable screenshots.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=powerbi-en-v1">
+  <link rel="stylesheet" href="/assets/css/demo.css">
+
+  <style>
+    :root {
+      --pbi-border: rgba(255,255,255,.09);
+      --pbi-panel: #0f1117;
+      --pbi-panel-2: #090d15;
+      --pbi-text: #e6eaf0;
+      --pbi-muted: #aeb6c4;
+      --pbi-accent: #9a5cff;
+      --pbi-blue: #557cff;
+      --pbi-cyan: #27c8f5;
+      --pbi-shadow: 0 14px 36px rgba(0,0,0,.24);
+    }
+
+    .page-powerbi .brand-text { display:flex; flex-direction:column; gap:1px; line-height:1.05; }
+    .page-powerbi .brand-name { font-size:14px; font-weight:700; }
+    .page-powerbi .brand-label { color:#9da5b3; font-size:10px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; }
+    .powerbi-page { padding:32px 0 68px; }
+    .powerbi-page .demo-container { max-width:1100px; }
+    .powerbi-hero { margin-bottom:22px; }
+    .powerbi-hero h1 { max-width:980px; }
+
+    .report-flow {
+      margin-top:24px;
+      padding:22px;
+      overflow:hidden;
+      border:1px solid var(--pbi-border);
+      border-radius:24px;
+      background:
+        radial-gradient(circle at 84% 14%, rgba(154,92,255,.22), transparent 30%),
+        radial-gradient(circle at 14% 88%, rgba(39,200,245,.12), transparent 25%),
+        linear-gradient(145deg, rgba(8,11,20,.98), rgba(12,16,28,.96));
+      box-shadow:var(--pbi-shadow);
+    }
+
+    .report-flow-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+    .report-flow-step {
+      position:relative;
+      min-height:148px;
+      padding:17px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:17px;
+      background:rgba(9,13,23,.76);
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+    .report-flow-step:not(:first-child)::before {
+      content:"";
+      position:absolute;
+      top:50%;
+      left:-13px;
+      width:12px;
+      height:2px;
+      background:linear-gradient(90deg, rgba(39,200,245,.35), rgba(154,92,255,.9));
+    }
+    .report-flow-step > span {
+      display:inline-flex;
+      width:27px;
+      height:27px;
+      margin-bottom:12px;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      background:linear-gradient(135deg, var(--pbi-accent), var(--pbi-blue));
+      color:#fff;
+      font-size:12px;
+      font-weight:800;
+    }
+    .report-flow-step strong {
+      display:block;
+      margin-bottom:7px;
+      font-family:"Space Grotesk",Inter,sans-serif;
+      font-size:17px;
+      line-height:1.2;
+    }
+    .report-flow-step p { margin:0; color:#c8ced8; font-size:13px; line-height:1.55; }
+
+    .case-section { margin-top:30px; }
+    .case-section h2,
+    .powerbi-cta h2 {
+      margin:0 0 10px;
+      font-family:"Space Grotesk",Inter,sans-serif;
+      font-size:29px;
+      line-height:1.1;
+      letter-spacing:-.025em;
+    }
+    .case-copy { max-width:980px; color:var(--pbi-text); font-size:17px; line-height:1.78; }
+    .case-copy p { margin:0; }
+    .case-copy p + p { margin-top:12px; }
+
+    .approach-grid,
+    .value-grid,
+    .production-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:13px; margin-top:16px; }
+    .approach-item,
+    .value-item,
+    .production-item {
+      padding:17px;
+      border:1px solid var(--pbi-border);
+      border-radius:17px;
+      background:var(--pbi-panel);
+      box-shadow:var(--pbi-shadow);
+    }
+    .approach-item strong,
+    .value-item strong,
+    .production-item strong { display:block; margin-bottom:7px; color:#fff; font-size:15px; line-height:1.35; }
+    .approach-item span,
+    .value-item span,
+    .production-item span { color:#c4cad4; font-size:14px; line-height:1.6; }
+
+    .demo-intro {
+      margin-top:14px;
+      padding:18px;
+      border:1px solid var(--pbi-border);
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(13,17,28,.98), rgba(9,13,22,.94));
+      box-shadow:var(--pbi-shadow);
+    }
+    .demo-intro strong { display:block; margin-bottom:8px; font-size:15px; }
+    .demo-intro p { margin:0; color:var(--pbi-text); font-size:16px; line-height:1.72; }
+
+    .report-shell {
+      margin-top:16px;
+      padding:20px;
+      border:1px solid var(--pbi-border);
+      border-radius:22px;
+      background:linear-gradient(145deg, rgba(12,15,24,.98), rgba(8,11,18,.98));
+      box-shadow:var(--pbi-shadow);
+    }
+    .report-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:17px; }
+    .report-tab {
+      min-height:40px;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;
+      padding:8px 13px;
+      background:rgba(255,255,255,.03);
+      color:#cbd2dc;
+      font:inherit;
+      font-size:13px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .report-tab[aria-selected="true"] { border-color:rgba(154,92,255,.65); background:rgba(154,92,255,.16); color:#fff; }
+    .report-panel[hidden] { display:none; }
+    .report-layout { display:grid; grid-template-columns:minmax(0,1fr) 285px; gap:15px; align-items:stretch; }
+    .report-preview {
+      display:block;
+      width:100%;
+      min-height:390px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:0;
+      background:#050913;
+      cursor:zoom-in;
+    }
+    .report-preview img { display:block; width:100%; height:100%; min-height:390px; object-fit:contain; background:#050913; }
+    .report-notes { padding:17px; border:1px solid rgba(255,255,255,.08); border-radius:16px; background:var(--pbi-panel-2); }
+    .report-notes h3 { margin:0 0 10px; font-family:"Space Grotesk",Inter,sans-serif; font-size:19px; }
+    .report-notes ul { margin:0; padding-left:18px; }
+    .report-notes li { color:#c6cdd8; font-size:13px; line-height:1.62; }
+    .report-notes li + li { margin-top:7px; }
+    .source-note,
+    .production-note {
+      margin-top:14px;
+      padding:16px 18px;
+      border-left:3px solid var(--pbi-cyan);
+      border-radius:0 14px 14px 0;
+      background:rgba(39,200,245,.07);
+      color:#dce1e8;
+      font-size:14px;
+      line-height:1.68;
+    }
+    .production-note { border-left-color:var(--pbi-accent); background:rgba(154,92,255,.08); font-size:15px; }
+    .stack-list { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+    .stack-chip { display:inline-flex; border:1px solid rgba(255,255,255,.13); border-radius:999px; padding:5px 9px; background:rgba(255,255,255,.03); color:#d6dbe3; font-size:12px; font-weight:700; }
+
+    .powerbi-cta {
+      margin-top:30px;
+      padding:22px;
+      border:1px solid var(--pbi-border);
+      border-radius:19px;
+      background:var(--pbi-panel);
+      box-shadow:var(--pbi-shadow);
+    }
+    .powerbi-cta p { max-width:900px; margin:0 0 17px; color:var(--pbi-text); font-size:16px; line-height:1.72; }
+    .powerbi-actions { display:flex; gap:10px; flex-wrap:wrap; }
+
+    .image-modal { position:fixed; inset:0; z-index:100; display:none; place-items:center; padding:28px; background:rgba(3,5,9,.94); }
+    .image-modal.open { display:grid; }
+    .image-modal img { display:block; max-width:min(1600px,95vw); max-height:86vh; border:1px solid rgba(255,255,255,.12); border-radius:12px; object-fit:contain; background:#050913; box-shadow:0 22px 60px rgba(0,0,0,.5); }
+    .image-modal-close { position:absolute; top:18px; right:20px; border:1px solid rgba(255,255,255,.18); border-radius:10px; padding:8px 11px; background:#111620; color:#fff; font:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+
+    @media (max-width:960px) {
+      .report-flow-grid,
+      .approach-grid,
+      .value-grid,
+      .production-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .report-flow-step:not(:first-child)::before { display:none; }
+      .report-layout { grid-template-columns:1fr; }
+    }
+
+    @media (max-width:680px) {
+      .powerbi-page { padding-top:24px; }
+      .page-powerbi .nav a:not(.btn) { display:none; }
+      .report-flow { padding:16px; }
+      .report-flow-grid,
+      .approach-grid,
+      .value-grid,
+      .production-grid { grid-template-columns:1fr; }
+      .report-flow-step { min-height:0; }
+      .case-section h2,
+      .powerbi-cta h2 { font-size:25px; }
+      .case-copy { font-size:16px; line-height:1.7; }
+      .report-shell { padding:15px; }
+      .report-tabs { display:grid; }
+      .report-tab { width:100%; }
+      .report-preview,
+      .report-preview img { min-height:220px; }
+      .footer-inner { gap:10px; align-items:flex-start; flex-direction:column; }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      .page-powerbi *,
+      .page-powerbi *::before,
+      .page-powerbi *::after { scroll-behavior:auto !important; transition:none !important; }
+    }
+  </style>
 </head>
 
-<body class="powerbi">
-  <!-- Header -->
+<body class="page-powerbi">
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="/en/index.html">
-        <img src="/assets/logo.jpg" alt="Hestia Aura - logo" class="brand-mark">
-        <span class="brand-name">Hestia <strong>Aura</strong></span>
+      <a class="brand brand--personal" href="/en/" aria-label="Jérôme Jeannin">
+        <img src="/assets/logo.jpg" alt="" class="brand-mark">
+        <span class="brand-text">
+          <span class="brand-name">Jérôme Jeannin</span>
+          <span class="brand-label">Hestia Aura</span>
+        </span>
       </a>
-      <nav class="nav">
-        <a href="/en/index.html">Home</a>
+
+      <nav class="nav" aria-label="Main navigation">
+        <a href="/en/">Home</a>
         <a href="/en/about.html">About</a>
         <a href="/en/showcase.html">Showcase</a>
-        <a href="#" class="btn btn--sm lang-switch">FR</a>
+        <a class="btn btn--sm" href="/demos/powerbi/">FR</a>
       </nav>
     </div>
   </header>
 
-  <main id="main" class="container">
-    <h1>Power BI - Demographics & Economy Île-de-France (2011-2022)</h1>
+  <main class="powerbi-page">
+    <div class="demo-container">
+      <section class="demo-hero powerbi-hero">
+        <p class="section-kicker">Business intelligence · Power BI</p>
+        <h1>Decision-focused reporting with Power BI</h1>
+        <p>
+          Turn public data into understandable metrics, organise how they are read and provide several levels of analysis, from an executive overview to a detailed scenario.
+        </p>
 
-    <!-- Context -->
-    <section class="intro-context">
-      <h2>Context & scope</h2>
-      <p>Total population, average unemployment rate %, aggregated GDP 2011-2022. Temporal + geographic perspective.</p>
-    </section>
-
-    <p>Report combining <strong>Power Query</strong> preparation and <strong>DAX</strong> model. Three sections:
-      <em>P1 Evolution</em>, <em>P2 Distribution</em>, <em>P3 Scenarios & Indicators</em>.
-    </p>
-
-    <a class="btn" href="/en/showcase.html">← Back to Showcase</a>
-
-    <!-- Tags -->
-    <ul class="tags" aria-label="Technologies">
-      <li><span>Power BI</span></li>
-      <li><span>Power Query</span></li>
-      <li><span>DAX</span></li>
-    </ul>
-
-    <ul class="toc">
-      <li>→ P1 - Evolution</li>
-      <li>→ P2 - Distribution</li>
-      <li>→ P3 - Scenarios & Indicators</li>
-    </ul>
-
-    <!-- P1 -->
-    <section>
-      <h2>P1 - Census & Economic Evolution in Île-de-France (2011-2022)</h2>
-      <div class="capsule capsule--lr">
-        <figure class="capsule-media zoomable">
-          <img src="/assets/media/PBI%20P1.jpg"
-               alt="Overview: population, unemployment and GDP in Île-de-France (2011-2022)"
-               loading="lazy">
-          <figcaption>Overview (time-series, map centered on Paris, year/type segments).</figcaption>
-        </figure>
-
-        <div class="capsule-body">
-          <h3>Preparation (Power Query)</h3>
-          <ul>
-            <li>Import RP2011/2016/2022, average unemployment rate %, annual GDP.</li>
-            <li>Harmonization of vintages, label normalization, column typing.</li>
-            <li>Controls: uniqueness year-value, handling missing data.</li>
-          </ul>
-
-          <h3>DAX Model (Indicators)</h3>
-          <ul>
-            <li><em>Total population</em>, <em>Average unemployment rate %</em>, <em>Total GDP</em>.</li>
-            <li>Annual and average aggregations on selected period.</li>
-          </ul>
-
-          <h3>Visualizations & Interactions</h3>
-          <ul>
-            <li>Population evolution curve.</li>
-            <li>Proportional bubble map centered on Paris.</li>
-            <li>Horizontal bars by population type.</li>
-            <li>Evolution lines for unemployment % and GDP sum.</li>
-            <li>Year and type segments.</li>
-          </ul>
+        <div class="report-flow" aria-label="Simplified Power BI report design flow">
+          <div class="report-flow-grid">
+            <div class="report-flow-step">
+              <span>01</span>
+              <strong>Business framing</strong>
+              <p>Define the decisions to support, the scope and calculation rules.</p>
+            </div>
+            <div class="report-flow-step">
+              <span>02</span>
+              <strong>Preparation</strong>
+              <p>Clean the sources, harmonise formats and document the checks.</p>
+            </div>
+            <div class="report-flow-step">
+              <span>03</span>
+              <strong>Modelling</strong>
+              <p>Structure the model and build measures consistent with business definitions.</p>
+            </div>
+            <div class="report-flow-step">
+              <span>04</span>
+              <strong>Delivery</strong>
+              <p>Prioritise KPIs, trends and scenarios to make the report easier to read.</p>
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- P2 -->
-    <section>
-      <h2>P2 - Exploration & Details: Population Distribution (2011-2022)</h2>
-      <div class="capsule capsule--lr">
-        <figure class="capsule-media zoomable">
-          <img src="/assets/media/PBI%20P2.jpg"
-               alt="Detailed distribution by population type (2011-2022)"
-               loading="lazy">
-          <figcaption>Distribution by type, departmental focus, zoom on extremes.</figcaption>
-        </figure>
-
-        <div class="capsule-body">
-          <h3>Preparation (Power Query)</h3>
-          <ul>
-            <li>Harmonization of categories across vintages, label normalization.</li>
-            <li>Derived columns for inter-annual comparisons.</li>
-            <li>Quality checks: duplicates, missing values, total consistency.</li>
-          </ul>
-
-          <h3>DAX Model (Indicators)</h3>
-          <ul>
-            <li>Averages and shares (%) by type over selected period.</li>
-            <li>YoY variations (value &amp; %), ratios vs total.</li>
-            <li>Measures ready for decomposition tree.</li>
-          </ul>
-
-          <h3>Visualizations & Interactions</h3>
-          <ul>
-            <li>Donut chart by type + bars by type/year.</li>
-            <li>Population/GDP curve for trends.</li>
-            <li>Year &amp; Type segments, cross-selection and tooltips.</li>
-          </ul>
+      <section class="case-section">
+        <h2>Business context</h2>
+        <div class="case-copy">
+          <p>
+            The case examines changes in population, gross domestic product and unemployment in the Île-de-France region between 2011 and 2022. These indicators do not share the same unit or granularity, but must remain clear within a common report.
+          </p>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- P3 -->
-    <section>
-      <h2>P3 - Scenarios & Indicators</h2>
-      <div class="capsule capsule--lr">
-        <figure class="capsule-media zoomable">
-          <img src="/assets/media/PBI%20P3.jpg"
-               alt="Scenarios and key indicators (cards & graphs)"
-               loading="lazy">
-          <figcaption>Scenario parameters + indicators (documented DAX measures).</figcaption>
-        </figure>
-
-        <div class="capsule-body">
-          <h3>Preparation (Parameters)</h3>
-          <ul>
-            <li><em>GDP % Variation</em> parameter table (what-if) exposed as segment.</li>
-            <li>Year and Type segments for context.</li>
-            <li>Consistent formats &amp; units across KPIs.</li>
-          </ul>
-
-          <h3>DAX Model (Indicators)</h3>
-          <ul>
-            <li><strong>Total GDP (scenario)</strong> = GDP adjusted by parameter.</li>
-            <li>KPIs: Total GDP, Population (selected year), GDP CAGR %, Population CAGR %, Average unemployment %.</li>
-            <li>YoY dynamics (GDP/Population) and PCA % share.</li>
-          </ul>
-
-          <h3>Visualizations & Interactions</h3>
-          <ul>
-            <li>KPI cards + combo column/line chart (GDP vs scenario).</li>
-            <li>Synthesis table by year (values, YoY, shares).</li>
-            <li><em>GDP % Variation</em> segment: instant update of all visuals.</li>
-          </ul>
+      <section class="case-section">
+        <h2>Challenge</h2>
+        <div class="case-copy">
+          <p>
+            How can separate statistical series be turned into a report that provides an overview, allows users to check the components of a metric and makes scenario assumptions explicit?
+          </p>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section class="case-section">
+        <h2>Approach</h2>
+        <div class="case-copy">
+          <p>
+            The approach favours stable definitions, a model that is easy to review and three levels of navigation. Each page answers a distinct question to avoid concentrating too much information on one screen.
+          </p>
+        </div>
+
+        <div class="approach-grid">
+          <div class="approach-item"><strong>Power Query</strong><span>Typing, renaming and harmonisation of reporting years before use.</span></div>
+          <div class="approach-item"><strong>Semantic model</strong><span>Time and geographic dimensions separated from observed measures.</span></div>
+          <div class="approach-item"><strong>DAX measures</strong><span>Metrics, variances and scenario parameters grouped by business use.</span></div>
+          <div class="approach-item"><strong>Visual hierarchy</strong><span>KPIs at the top, trends in the centre and detail available at the next level.</span></div>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>What the demo shows</h2>
+        <div class="demo-intro">
+          <strong>Three complementary views</strong>
+          <p>
+            Use the tabs to move from the overview to demographic detail and then to the scenario. Click a view to enlarge it. These static visuals were designed for this portfolio: they illustrate the intent of a report and are not an embedded Power BI report.
+          </p>
+        </div>
+
+        <div class="report-shell">
+          <div class="report-tabs" role="tablist" aria-label="Power BI prototype views">
+            <button class="report-tab" id="tab-overview" type="button" role="tab" aria-selected="true" aria-controls="panel-overview" data-panel="overview">1. Executive overview</button>
+            <button class="report-tab" id="tab-demography" type="button" role="tab" aria-selected="false" aria-controls="panel-demography" data-panel="demography" tabindex="-1">2. Demographic analysis</button>
+            <button class="report-tab" id="tab-scenarios" type="button" role="tab" aria-selected="false" aria-controls="panel-scenarios" data-panel="scenarios" tabindex="-1">3. Scenarios</button>
+          </div>
+
+          <section class="report-panel" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview">
+            <div class="report-layout">
+              <button class="report-preview" type="button" data-full="/assets/media/powerbi-executive-overview-v2.webp" aria-label="Enlarge the executive overview">
+                <img src="/assets/media/powerbi-executive-overview-v2.webp" alt="Dark executive overview with three KPIs, an Île-de-France map and population, GDP and unemployment trends">
+              </button>
+              <div class="report-notes">
+                <h3>Question addressed</h3>
+                <ul>
+                  <li>What is the situation in the latest available year?</li>
+                  <li>How do the three indicators change over time?</li>
+                  <li>Which geography and period are covered?</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="report-panel" id="panel-demography" role="tabpanel" aria-labelledby="tab-demography" hidden>
+            <div class="report-layout">
+              <button class="report-preview" type="button" data-full="/assets/media/powerbi-demographic-analysis-v2.webp" aria-label="Enlarge the demographic analysis">
+                <img src="/assets/media/powerbi-demographic-analysis-v2.webp" alt="Dark demographic analysis comparing municipal population and separately counted population from 2011 to 2022">
+              </button>
+              <div class="report-notes">
+                <h3>Question addressed</h3>
+                <ul>
+                  <li>How is the total population composed?</li>
+                  <li>Does the share of each category change between reporting years?</li>
+                  <li>Do the detailed values confirm the KPI interpretation?</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="report-panel" id="panel-scenarios" role="tabpanel" aria-labelledby="tab-scenarios" hidden>
+            <div class="report-layout">
+              <button class="report-preview" type="button" data-full="/assets/media/powerbi-scenarios-v2.webp" aria-label="Enlarge the scenario view">
+                <img src="/assets/media/powerbi-scenarios-v2.webp" alt="Dark view comparing baseline GDP with a 20% reduction scenario and showing the unemployment trend">
+              </button>
+              <div class="report-notes">
+                <h3>Question addressed</h3>
+                <ul>
+                  <li>What is the effect of a 20% reduction assumption on each year?</li>
+                  <li>Does the comparison clearly distinguish the baseline and scenario?</li>
+                  <li>Can the totals still be reconciled with the annual values?</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <p class="source-note">
+            Demographic source: Insee, 2011, 2016 and 2022 censuses, geography as of 1 January 2024. The GDP and unemployment series reuse the illustrative values from the original prototype. Values are rounded and the 20% reduction scenario is an educational assumption, not an economic forecast.
+          </p>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Prototype deliverables</h2>
+        <div class="approach-grid">
+          <div class="approach-item"><strong>Decision-support view</strong><span>An overview of the latest KPIs and their evolution over the period.</span></div>
+          <div class="approach-item"><strong>Analysis view</strong><span>A breakdown linking components to the displayed totals.</span></div>
+          <div class="approach-item"><strong>Scenario view</strong><span>An explicit comparison between observed values and an adjustable assumption.</span></div>
+          <div class="approach-item"><strong>Measurement foundation</strong><span>A preparation, modelling and calculation logic that can be documented.</span></div>
+        </div>
+
+        <div class="stack-list" aria-label="Technologies and practices illustrated">
+          <span class="stack-chip">Power BI</span>
+          <span class="stack-chip">Power Query</span>
+          <span class="stack-chip">DAX</span>
+          <span class="stack-chip">Semantic model</span>
+          <span class="stack-chip">KPI</span>
+          <span class="stack-chip">Scenarios</span>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Business value</h2>
+        <div class="value-grid">
+          <div class="value-item"><strong>Immediate insight</strong><span>Priority metrics and their context are visible without overloading the page.</span></div>
+          <div class="value-item"><strong>Shared definitions</strong><span>Each measure can be linked to a calculation rule and an identified source.</span></div>
+          <div class="value-item"><strong>Progressive analysis</strong><span>Navigation starts from the overview and leads to components or assumptions.</span></div>
+          <div class="value-item"><strong>Traceable decision</strong><span>Separating observations from scenarios avoids confusing facts with projections.</span></div>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>From demo to enterprise use</h2>
+        <div class="production-grid">
+          <div class="production-item"><strong>Metric contracts</strong><span>Formalise the source, scope, granularity, formula and owner of each KPI.</span></div>
+          <div class="production-item"><strong>Controlled refresh</strong><span>Schedule updates and, depending on the sources, configure the gateway and parameters.</span></div>
+          <div class="production-item"><strong>Appropriate security</strong><span>Define workspaces, permissions and RLS rules where audiences require them.</span></div>
+          <div class="production-item"><strong>Publication lifecycle</strong><span>Separate development, testing and production with checks before release.</span></div>
+        </div>
+        <p class="production-note">
+          For a real deployment, these mechanisms are sized according to sources, volumes, refresh frequency and user profiles. Query folding, refresh times and access rights must be verified in the target context.
+        </p>
+      </section>
+
+      <section class="powerbi-cta">
+        <h2>Going further</h2>
+        <p>
+          This approach can be adapted to financial, sales or operational reporting, with metrics defined together with business teams and an output designed for its users.
+        </p>
+        <div class="powerbi-actions">
+          <a href="mailto:contact@hestiaaura.com" class="btn">Contact me</a>
+          <a href="/en/showcase.html" class="btn btn--outline">Back to the showcase</a>
+        </div>
+      </section>
+    </div>
   </main>
 
-  <!-- Lightbox -->
-  <div class="image-modal" id="imgModal" aria-hidden="true">
-    <button class="close" id="imgModalClose" aria-label="Close image">×</button>
-    <img id="imgModalImg" alt="">
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© <span id="y"></span> Jérôme Jeannin</span>
+      <a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+    </div>
+  </footer>
+
+  <div class="image-modal" id="imageModal" role="dialog" aria-modal="true" aria-label="Enlarged preview" aria-hidden="true">
+    <button class="image-modal-close" id="imageModalClose" type="button">Close</button>
+    <img id="imageModalContent" alt="">
   </div>
 
-  <script src="/app.js"></script>
+  <script src="/app.js?v=powerbi-fr-v2"></script>
+  <script>
+    (() => {
+      const tabs = Array.from(document.querySelectorAll('.report-tab'));
+      const panels = Array.from(document.querySelectorAll('.report-panel'));
+      const modal = document.getElementById('imageModal');
+      const modalImage = document.getElementById('imageModalContent');
+      const modalClose = document.getElementById('imageModalClose');
+      let lastTrigger = null;
+
+      function selectTab(tab) {
+        tabs.forEach((item) => {
+          const active = item === tab;
+          item.setAttribute('aria-selected', String(active));
+          item.tabIndex = active ? 0 : -1;
+        });
+        panels.forEach((panel) => {
+          panel.hidden = panel.id !== 'panel-' + tab.dataset.panel;
+        });
+      }
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => selectTab(tab));
+        tab.addEventListener('keydown', (event) => {
+          if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+          event.preventDefault();
+          const direction = event.key === 'ArrowRight' ? 1 : -1;
+          const next = tabs[(index + direction + tabs.length) % tabs.length];
+          selectTab(next);
+          next.focus();
+        });
+      });
+
+      function closeModal() {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        modalImage.removeAttribute('src');
+        if (lastTrigger) lastTrigger.focus();
+      }
+
+      document.querySelectorAll('.report-preview').forEach((button) => {
+        button.addEventListener('click', () => {
+          lastTrigger = button;
+          modalImage.src = button.dataset.full;
+          modalImage.alt = button.querySelector('img').alt;
+          modal.classList.add('open');
+          modal.setAttribute('aria-hidden', 'false');
+          modalClose.focus();
+        });
+      });
+
+      modalClose.addEventListener('click', closeModal);
+      modal.addEventListener('click', (event) => {
+        if (event.target === modal) closeModal();
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && modal.classList.contains('open')) closeModal();
+      });
+
+      const year = document.getElementById('y');
+      if (year && !year.textContent) year.textContent = new Date().getFullYear();
+    })();
+  </script>
 </body>
 </html>
-

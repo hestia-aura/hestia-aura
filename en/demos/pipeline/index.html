@@ -1,334 +1,697 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pipeline & Dashboard - Hestia Aura</title>
-<link rel="icon" href="/assets/logo.jpg">
-<link rel="apple-touch-icon" href="/assets/logo.jpg">
-<link rel="stylesheet" href="/styles.css?v=final3">
-<style>
-.page {padding: 24px 0}
-.container.narrow{max-width:1060px}
-.header {display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
-.header h1{font-size:28px;margin:0}
-.header .muted{opacity:.8}
-.actions{display:flex;gap:8px;flex-wrap:wrap}
-.actions .btn{height:40px;padding:0 16px;border-radius:10px;font-weight:700;display:inline-flex;align-items:center}
-.actions .btn--dark{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:#fff}
-.grid-2-1{display:grid;grid-template-columns: 1.5fr 1fr;gap:18px}
-@media (max-width: 960px){.grid-2-1{grid-template-columns:1fr;}}
-.card{position:relative}
-/* Disable hover lift + hide decorative arrow on this page only */
-.card:hover{transform:none!important}
-.card::after{display:none!important}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data pipeline for reporting | Jérôme Jeannin</title>
+  <meta name="description" content="Reporting data pipeline demonstration: ingestion, standardisation, quality checks, publication and traceability using fictitious data.">
+  <meta property="og:title" content="Data pipeline for reporting | Jérôme Jeannin">
+  <meta property="og:description" content="A clear flow from source to publication, with data contracts, checks and a controlled release decision.">
+  <meta property="og:image" content="/assets/logo.jpg">
 
-.pipeline{background:#0b0d12;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px}
-.pipeline svg{width:100%;height:160px;display:block}
-.stage{font-weight:700}
-.badge{display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:4px 8px;border-radius:999px;font-size:12px;margin-left:8px}
+  <link rel="icon" href="/assets/logo.jpg">
+  <link rel="apple-touch-icon" href="/assets/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=pipeline-en-v1">
+  <link rel="stylesheet" href="/assets/css/demo.css">
 
-.table{width:100%;border-collapse:separate;border-spacing:0 8px;margin-top:10px}
-.table th{font-weight:700;text-align:left;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.12)}
-.table td{padding:8px 12px;background:rgba(255,255,255,.04)}
-.table tr td:first-child{border-top-left-radius:10px;border-bottom-left-radius:10px}
-.table tr td:last-child{border-top-right-radius:10px;border-bottom-right-radius:10px}
-.table tfoot td{background:transparent;padding-top:12px}
+  <style>
+    :root {
+      --flow-border: rgba(255,255,255,.09);
+      --flow-panel: #0f1117;
+      --flow-panel-2: #090d15;
+      --flow-text: #e6eaf0;
+      --flow-muted: #aeb6c4;
+      --flow-accent: #7374ff;
+      --flow-cyan: #4fd2ff;
+      --flow-green: #55d6a6;
+      --flow-amber: #f4c95d;
+      --flow-shadow: 0 14px 36px rgba(0,0,0,.24);
+    }
 
-.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-@media (max-width:960px){.kpis{grid-template-columns:1fr}}
-.kpi{background:#0b0d12;border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px}
-.kpi .label{opacity:.8;font-size:13px}
-.kpi .value{font-size:22px;font-weight:800;margin:2px 0 8px}
-.spark{width:100%;height:56px;display:block}
+    .page-pipeline .brand-text { display:flex; flex-direction:column; gap:1px; line-height:1.05; }
+    .page-pipeline .brand-name { font-size:14px; font-weight:700; }
+    .page-pipeline .brand-label { color:#9da5b3; font-size:10px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; }
+    .pipeline-page { padding:32px 0 68px; }
+    .pipeline-page .demo-container { max-width:1100px; }
+    .pipeline-hero { margin-bottom:22px; }
+    .pipeline-hero h1 { max-width:980px; }
 
-.legend{margin-top:12px;background:#0b0d12;border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:12px}
-.legend h4{margin:0 0 8px 0;font-size:14px;opacity:.9}
-.legend ul{margin:0;padding-left:18px}
-.legend li{margin:4px 0;opacity:.9}
+    .flow-map {
+      margin-top:24px;
+      padding:22px;
+      overflow:hidden;
+      border:1px solid var(--flow-border);
+      border-radius:24px;
+      background:
+        radial-gradient(circle at 84% 14%, rgba(115,116,255,.2), transparent 30%),
+        radial-gradient(circle at 14% 88%, rgba(79,210,255,.11), transparent 25%),
+        linear-gradient(145deg, rgba(8,11,20,.98), rgba(12,16,28,.96));
+      box-shadow:var(--flow-shadow);
+    }
+    .flow-map-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+    .flow-map-step {
+      position:relative;
+      min-height:148px;
+      padding:17px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:17px;
+      background:rgba(9,13,23,.76);
+      box-shadow:0 10px 24px rgba(0,0,0,.18);
+    }
+    .flow-map-step:not(:first-child)::before {
+      content:"";
+      position:absolute;
+      top:50%;
+      left:-13px;
+      width:12px;
+      height:2px;
+      background:linear-gradient(90deg, rgba(79,210,255,.35), rgba(115,116,255,.9));
+    }
+    .flow-map-step > span {
+      display:inline-flex;
+      width:27px;
+      height:27px;
+      margin-bottom:12px;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      background:linear-gradient(135deg, var(--flow-accent), #8a5bff);
+      color:#fff;
+      font-size:12px;
+      font-weight:800;
+    }
+    .flow-map-step strong { display:block; margin-bottom:7px; font-family:"Space Grotesk",Inter,sans-serif; font-size:17px; line-height:1.2; }
+    .flow-map-step p { margin:0; color:#c8ced8; font-size:13px; line-height:1.55; }
 
-.roi{background:#0b1018;border:1px dashed rgba(120,132,255,.5);border-radius:16px;padding:14px}
-.roi strong{font-size:18px}
+    .case-section { margin-top:30px; }
+    .case-section h2,
+    .pipeline-cta h2 { margin:0 0 10px; font-family:"Space Grotesk",Inter,sans-serif; font-size:29px; line-height:1.1; letter-spacing:-.025em; }
+    .case-copy { max-width:980px; color:var(--flow-text); font-size:17px; line-height:1.78; }
+    .case-copy p { margin:0; }
+    .case-copy p + p { margin-top:12px; }
 
-.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}
-.stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:6px 10px;font-size:12px}
-.back{margin-top:16px;display:inline-block}
-</style>
-</head><body>
-<header class="site-header"><div class="container header-inner">
-  <a class="brand" href="/en/" aria-label="Hestia Aura">
-    <img src="/assets/logo.jpg" alt="logo" class="brand-mark"><span class="brand-name">Hestia <strong>Aura</strong></span>
-  </a>
-  <nav class="nav">
-    <a href="/en/">Home</a>
-    <a href="/en/about.html">About</a>
-    <a href="/en/showcase.html">Showcase</a>
-    <a class="btn btn--sm" href="/demos/pipeline/">FR</a>
-  </nav>
-</div></header>
+    .approach-grid,
+    .value-grid,
+    .production-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:13px; margin-top:16px; }
+    .approach-item,
+    .value-item,
+    .production-item { padding:17px; border:1px solid var(--flow-border); border-radius:17px; background:var(--flow-panel); box-shadow:var(--flow-shadow); }
+    .approach-item strong,
+    .value-item strong,
+    .production-item strong { display:block; margin-bottom:7px; color:#fff; font-size:15px; line-height:1.35; }
+    .approach-item span,
+    .value-item span,
+    .production-item span { color:#c4cad4; font-size:14px; line-height:1.6; }
 
-<main class="page">
-  <div class="container narrow">
-    <div class="header">
-      <div>
-        <h1>Pipeline & Dashboard</h1>
-        <div class="muted">ETL (Extract → Transform → Load) on mock data, normalized table, KPIs and charts. CSV export.</div>
-      </div>
-      <div class="actions">
-        <button id="btnCsv" class="btn btn--dark">Download CSV</button>
-        <a href="/en/showcase.html" class="btn">← Back to Showcase</a>
-      </div>
+    .demo-intro { margin-top:14px; padding:18px; border:1px solid var(--flow-border); border-radius:18px; background:linear-gradient(180deg, rgba(13,17,28,.98), rgba(9,13,22,.94)); box-shadow:var(--flow-shadow); }
+    .demo-intro strong { display:block; margin-bottom:8px; font-size:15px; }
+    .demo-intro p { margin:0; color:var(--flow-text); font-size:16px; line-height:1.72; }
+
+    .pipeline-lab { margin-top:16px; padding:20px; border:1px solid var(--flow-border); border-radius:22px; background:linear-gradient(145deg, rgba(12,15,24,.98), rgba(8,11,18,.98)); box-shadow:var(--flow-shadow); }
+    .lab-toolbar { display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; }
+    .scenario-field { display:flex; flex:1 1 360px; flex-direction:column; gap:8px; }
+    .scenario-field label { color:#fff; font-size:13px; font-weight:700; }
+    .scenario-field select { width:100%; min-height:46px; padding:10px 12px; border:1px solid rgba(255,255,255,.13); border-radius:11px; outline:none; background:#0a0e16; color:#eef1f5; font:inherit; }
+    .scenario-field select:focus { border-color:rgba(115,116,255,.85); box-shadow:0 0 0 3px rgba(115,116,255,.16); }
+    .lab-toolbar .btn { min-height:46px; padding:10px 17px; }
+    .local-note { margin:12px 0 0; color:#9ca5b4; font-size:12px; line-height:1.6; }
+
+    .run-track {
+      --progress:0%;
+      position:relative;
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:9px;
+      margin-top:17px;
+      padding-bottom:26px;
+    }
+    .run-rail {
+      position:absolute;
+      right:4%;
+      bottom:5px;
+      left:12.5%;
+      height:5px;
+      overflow:visible;
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:999px;
+      background:rgba(255,255,255,.045);
+      box-shadow:inset 0 1px 4px rgba(0,0,0,.45);
+    }
+    .run-progress {
+      position:absolute;
+      top:-1px;
+      left:-1px;
+      width:var(--progress);
+      height:5px;
+      border-radius:999px;
+      background:linear-gradient(90deg, var(--flow-accent), var(--flow-cyan), var(--flow-green));
+      box-shadow:0 0 8px rgba(79,210,255,.7), 0 0 18px rgba(115,116,255,.32);
+      transition:width .32s ease;
+    }
+    .run-progress::before {
+      content:"";
+      position:absolute;
+      inset:1px 0 auto;
+      height:1px;
+      border-radius:999px;
+      background:rgba(255,255,255,.7);
+    }
+    .run-progress::after {
+      content:"";
+      position:absolute;
+      top:50%;
+      right:-13px;
+      width:0;
+      height:0;
+      border-top:8px solid transparent;
+      border-bottom:8px solid transparent;
+      border-left:14px solid var(--flow-green);
+      filter:drop-shadow(0 0 5px rgba(85,214,166,.75));
+      transform:translateY(-50%);
+    }
+    .run-step {
+      position:relative;
+      z-index:1;
+      padding:12px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:13px;
+      background:var(--flow-panel-2);
+      transition:border-color .22s ease, background .22s ease, box-shadow .22s ease;
+    }
+    .run-step::after {
+      content:"";
+      position:absolute;
+      bottom:-25px;
+      left:50%;
+      z-index:3;
+      width:9px;
+      height:9px;
+      border:2px solid rgba(255,255,255,.18);
+      border-radius:50%;
+      background:#111621;
+      box-shadow:0 0 0 4px rgba(9,13,21,.95);
+      transform:translateX(-50%);
+    }
+    .run-step span { display:block; margin-bottom:5px; color:#8f98a8; font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .run-step strong { color:#d8dee8; font-size:13px; }
+    .run-step.active { border-color:rgba(79,210,255,.55); background:rgba(79,210,255,.08); box-shadow:0 8px 20px rgba(79,210,255,.08); }
+    .run-step.active strong { color:#a7ebff; }
+    .run-step.active::after { border-color:var(--flow-cyan); background:var(--flow-cyan); box-shadow:0 0 0 4px rgba(9,13,21,.95), 0 0 12px rgba(79,210,255,.72); }
+    .run-step.done { border-color:rgba(85,214,166,.38); background:rgba(85,214,166,.07); }
+    .run-step.done strong { color:#8ee8c2; }
+    .run-step.done::after { border-color:var(--flow-green); background:var(--flow-green); box-shadow:0 0 0 4px rgba(9,13,21,.95), 0 0 10px rgba(85,214,166,.55); }
+
+    .lab-status { display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:12px; padding:12px 14px; border:1px solid rgba(255,255,255,.08); border-radius:13px; background:rgba(255,255,255,.025); }
+    .status-label { color:#aeb6c4; font-size:12px; }
+    .status-value { color:#fff; font-size:13px; font-weight:800; }
+    .status-badge { display:inline-flex; border:1px solid rgba(85,214,166,.34); border-radius:999px; padding:5px 9px; background:rgba(85,214,166,.1); color:#8ee8c2; font-size:11px; font-weight:800; }
+
+    .lab-grid { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(285px,.8fr); gap:13px; margin-top:13px; }
+    .data-panel,
+    .quality-panel { min-width:0; padding:16px; border:1px solid rgba(255,255,255,.08); border-radius:16px; background:var(--flow-panel-2); }
+    .panel-heading { display:flex; gap:10px; align-items:center; justify-content:space-between; margin-bottom:12px; }
+    .panel-heading h3 { margin:0; font-family:"Space Grotesk",Inter,sans-serif; font-size:18px; }
+    .row-badge { display:inline-flex; border:1px solid rgba(115,116,255,.35); border-radius:999px; padding:5px 9px; background:rgba(115,116,255,.1); color:#c8c9ff; font-size:11px; font-weight:800; }
+    .table-wrap { overflow-x:auto; border:1px solid rgba(255,255,255,.08); border-radius:12px; }
+    .data-table { width:100%; border-collapse:collapse; font-size:12px; }
+    .data-table th,
+    .data-table td { padding:9px 10px; border-bottom:1px solid rgba(255,255,255,.07); color:#dce1e8; text-align:left; white-space:nowrap; }
+    .data-table th { background:rgba(255,255,255,.04); color:#9ea7b7; font-size:10px; letter-spacing:.06em; text-transform:uppercase; }
+    .data-table tbody tr:last-child td { border-bottom:0; }
+    .metric-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-bottom:12px; }
+    .metric { padding:11px; border:1px solid rgba(255,255,255,.08); border-radius:12px; background:rgba(255,255,255,.025); }
+    .metric span { display:block; min-height:30px; color:#9ea7b7; font-size:10px; line-height:1.4; text-transform:uppercase; }
+    .metric strong { display:block; color:#fff; font-size:17px; line-height:1.2; }
+    .checks-title { margin:0 0 9px; color:#fff; font-size:13px; font-weight:800; }
+    .quality-list { display:grid; gap:7px; margin:0; padding:0; list-style:none; }
+    .quality-list li { display:flex; gap:8px; align-items:flex-start; color:#cbd2dc; font-size:12px; line-height:1.5; }
+    .quality-list li::before { content:"OK"; flex:0 0 auto; margin-top:1px; border-radius:999px; padding:2px 5px; background:rgba(85,214,166,.12); color:#8ee8c2; font-size:8px; font-weight:900; }
+    .decision-box { margin-top:12px; padding:13px; border-left:3px solid var(--flow-green); border-radius:0 12px 12px 0; background:rgba(85,214,166,.07); }
+    .decision-box strong { display:block; margin-bottom:5px; color:#8ee8c2; font-size:13px; }
+    .decision-box span { color:#cbd4dc; font-size:12px; line-height:1.55; }
+
+    .stack-list { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+    .stack-chip { display:inline-flex; border:1px solid rgba(255,255,255,.13); border-radius:999px; padding:5px 9px; background:rgba(255,255,255,.03); color:#d6dbe3; font-size:12px; font-weight:700; }
+    .production-note { margin-top:14px; padding:17px 18px; border-left:3px solid var(--flow-accent); border-radius:0 14px 14px 0; background:rgba(115,116,255,.08); color:#dce1e8; font-size:15px; line-height:1.7; }
+
+    .pipeline-cta { margin-top:30px; padding:22px; border:1px solid var(--flow-border); border-radius:19px; background:var(--flow-panel); box-shadow:var(--flow-shadow); }
+    .pipeline-cta p { max-width:900px; margin:0 0 17px; color:var(--flow-text); font-size:16px; line-height:1.72; }
+    .pipeline-actions { display:flex; gap:10px; flex-wrap:wrap; }
+
+    @media (max-width:960px) {
+      .flow-map-grid,
+      .approach-grid,
+      .value-grid,
+      .production-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+      .flow-map-step:not(:first-child)::before { display:none; }
+      .lab-grid { grid-template-columns:1fr; }
+    }
+
+    @media (max-width:680px) {
+      .pipeline-page { padding-top:24px; }
+      .page-pipeline .nav a:not(.btn) { display:none; }
+      .flow-map,
+      .pipeline-lab { padding:15px; }
+      .flow-map-grid,
+      .approach-grid,
+      .value-grid,
+      .production-grid,
+      .metric-grid { grid-template-columns:1fr; }
+      .run-track { grid-template-columns:1fr; padding:0 0 0 22px; }
+      .run-rail { top:18px; right:auto; bottom:18px; left:3px; width:5px; height:auto; }
+      .run-progress { width:5px; height:var(--progress); transition:height .32s ease; }
+      .run-progress::after {
+        top:auto;
+        right:50%;
+        bottom:-9px;
+        border-top:10px solid var(--flow-green);
+        border-right:6px solid transparent;
+        border-bottom:0;
+        border-left:6px solid transparent;
+        transform:translateX(50%);
+      }
+      .run-step::after { top:50%; bottom:auto; left:-22px; transform:translate(-50%,-50%); }
+      .flow-map-step { min-height:0; }
+      .case-section h2,
+      .pipeline-cta h2 { font-size:25px; }
+      .case-copy { font-size:16px; line-height:1.7; }
+      .lab-toolbar { align-items:stretch; }
+      .lab-toolbar .btn { width:100%; }
+      .panel-heading { align-items:flex-start; flex-direction:column; }
+      .footer-inner { gap:10px; align-items:flex-start; flex-direction:column; }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      .page-pipeline *,
+      .page-pipeline *::before,
+      .page-pipeline *::after { scroll-behavior:auto !important; transition:none !important; }
+    }
+  </style>
+</head>
+
+<body class="page-pipeline">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand brand--personal" href="/en/" aria-label="Jérôme Jeannin">
+        <img src="/assets/logo.jpg" alt="" class="brand-mark">
+        <span class="brand-text">
+          <span class="brand-name">Jérôme Jeannin</span>
+          <span class="brand-label">Hestia Aura</span>
+        </span>
+      </a>
+
+      <nav class="nav" aria-label="Main navigation">
+        <a href="/en/">Home</a>
+        <a href="/en/about.html">About</a>
+        <a href="/en/showcase.html">Showcase</a>
+        <a class="btn btn--sm" href="/demos/pipeline/">FR</a>
+      </nav>
     </div>
+  </header>
 
-    <div class="toolbar">
-      <label for="ds">Dataset:</label>
-      <select id="ds" class="btn btn--dark">
-        <option value="sales">Monthly sales (CH)</option>
-        <option value="tickets">Support tickets (SLA)</option>
-        <option value="invoices">Customer invoices (DSO)</option>
-      </select>
-      <span id="statRows" class="stat">0 rows</span>
-      <span id="statPeriod" class="stat">Period -</span>
-    </div>
+  <main class="pipeline-page">
+    <div class="demo-container">
+      <section class="demo-hero pipeline-hero">
+        <p class="section-kicker">Applied data engineering · Flow and quality</p>
+        <h1>Data pipeline for reporting</h1>
+        <p>
+          Organise the transition from heterogeneous sources to standardised, controlled and publishable data through a flow that business and technical teams can understand.
+        </p>
 
-    <div class="grid-2-1">
-      <section class="card">
-        <div class="pipeline">
-          <div class="stage">Pipeline <span class="badge" id="badgeStage">Ready</span></div>
-          <svg viewBox="0 0 800 160" aria-label="ETL diagram">
-            <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7c74ff"/><stop offset="1" stop-color="#49b1ff"/></linearGradient></defs>
-            <rect x="20"  y="40" width="180" height="60" rx="12" fill="url(#g1)" opacity=".15"></rect>
-            <rect x="310" y="40" width="180" height="60" rx="12" fill="url(#g1)" opacity=".15"></rect>
-            <rect x="600" y="40" width="180" height="60" rx="12" fill="url(#g1)" opacity=".15"></rect>
-            <text x="110" y="75" text-anchor="middle" fill="#fff" font-weight="700">Extract</text>
-            <text x="400" y="75" text-anchor="middle" fill="#fff" font-weight="700">Transform</text>
-            <text x="690" y="75" text-anchor="middle" fill="#fff" font-weight="700">Load</text>
-            <path d="M 200 70 L 310 70" stroke="url(#g1)" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
-            <path d="M 490 70 L 600 70" stroke="url(#g1)" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
-            <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7c74ff"></path></marker></defs>
-            <circle r="4" fill="#7c74ff"><animateMotion dur="1.8s" repeatCount="indefinite" path="M 200 70 L 310 70"></animateMotion></circle>
-            <circle r="4" fill="#49b1ff"><animateMotion dur="1.8s" repeatCount="indefinite" path="M 490 70 L 600 70"></animateMotion></circle>
-          </svg>
-
-          <table class="table" id="tbl">
-            <thead><tr id="thead"></tr></thead>
-            <tbody id="tbody"></tbody>
-            <tfoot><tr><td id="tfoot" colspan="6"></td></tr></tfoot>
-          </table>
+        <div class="flow-map" aria-label="Simplified data pipeline flow">
+          <div class="flow-map-grid">
+            <div class="flow-map-step">
+              <span>01</span>
+              <strong>Sources</strong>
+              <p>Files, exports or applications arrive with their own formats and frequencies.</p>
+            </div>
+            <div class="flow-map-step">
+              <span>02</span>
+              <strong>Standardisation</strong>
+              <p>Names, types, keys and business rules are aligned in a common structure.</p>
+            </div>
+            <div class="flow-map-step">
+              <span>03</span>
+              <strong>Checks</strong>
+              <p>Schema, completeness, uniqueness and consistency determine whether the batch can proceed.</p>
+            </div>
+            <div class="flow-map-step">
+              <span>04</span>
+              <strong>Publication</strong>
+              <p>The validated batch feeds a table, export or reporting dataset.</p>
+            </div>
+          </div>
         </div>
       </section>
 
-      <aside class="stack">
-        <div class="kpis">
-          <div class="kpi" title="">
-            <div class="label" id="klabel1">KPI #1</div>
-            <div class="value kpi-value" id="kpi1">-</div>
-            <svg id="sp1" class="spark"></svg>
-          </div>
-          <div class="kpi" title="">
-            <div class="label" id="klabel2">KPI #2</div>
-            <div class="value kpi-value" id="kpi2">-</div>
-            <svg id="sp2" class="spark"></svg>
-          </div>
-          <div class="kpi" title="">
-            <div class="label" id="klabel3">KPI #3</div>
-            <div class="value kpi-value" id="kpi3">-</div>
-            <svg id="sp3" class="spark"></svg>
-          </div>
+      <section class="case-section">
+        <h2>Business context</h2>
+        <div class="case-copy">
+          <p>
+            Data used for decision support is often produced by several systems at different frequencies. Reporting therefore depends less on an isolated transformation than on a reliable, observable and reproducible end-to-end sequence.
+          </p>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Challenge</h2>
+        <div class="case-copy">
+          <p>
+            How can we know that an incoming batch matches the expected structure, has passed its essential checks and can be made available without hiding rejections or discrepancies?
+          </p>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Approach</h2>
+        <div class="case-copy">
+          <p>
+            The pipeline clearly separates ingestion, standardisation, checks and publication. This separation makes responsibilities clearer and allows a batch to be resumed without confusing raw data, intermediate data and validated output.
+          </p>
         </div>
 
-        <div class="legend" id="legend"></div>
-
-        <div class="roi" id="roi">
-          <strong>Estimated time saved</strong>
-          <div class="muted">Manual process: <span id="tMan">-</span> → Automated: <span id="tAuto">-</span></div>
-          <div style="margin-top:6px">Savings: <span id="pct">-</span></div>
+        <div class="approach-grid">
+          <div class="approach-item"><strong>Input contract</strong><span>Columns, types, keys, frequency and acceptance rules defined before processing.</span></div>
+          <div class="approach-item"><strong>Isolated stages</strong><span>Each transformation produces a verifiable result with clear ownership.</span></div>
+          <div class="approach-item"><strong>Explicit quality</strong><span>Blocking checks are distinguished from warnings and information.</span></div>
+          <div class="approach-item"><strong>Versioned output</strong><span>The published batch retains its date, scope and the records needed for monitoring.</span></div>
         </div>
-      </aside>
+      </section>
+
+      <section class="case-section">
+        <h2>What the demo shows</h2>
+        <div class="demo-intro">
+          <strong>Three fictitious flows to explore</strong>
+          <p>
+            Choose a case and run the batch to follow the stages, inspect the standardised table and review the publication decision. The simulation runs entirely in the browser: no orchestrator, data warehouse or external service is called.
+          </p>
+        </div>
+
+        <div class="pipeline-lab">
+          <div class="lab-toolbar">
+            <div class="scenario-field">
+              <label for="pipelineScenario">Flow to simulate</label>
+              <select id="pipelineScenario">
+                <option value="sales">Sales consolidation</option>
+                <option value="tickets">Support tickets and SLA</option>
+                <option value="invoices">Customer invoices and DSO</option>
+              </select>
+            </div>
+            <button id="runPipeline" class="btn" type="button">Run the batch</button>
+            <button id="downloadCsv" class="btn btn--outline" type="button">Download CSV</button>
+          </div>
+
+          <p class="local-note">
+            Fictitious data and results. The button illustrates the logical sequence of the flow without server-side execution.
+          </p>
+
+          <div class="run-track" aria-label="Pipeline stage status">
+            <div class="run-rail" aria-hidden="true"><span class="run-progress"></span></div>
+            <div class="run-step" data-step="0"><span>Stage 1</span><strong>Ingestion</strong></div>
+            <div class="run-step" data-step="1"><span>Stage 2</span><strong>Standardisation</strong></div>
+            <div class="run-step" data-step="2"><span>Stage 3</span><strong>Checks</strong></div>
+            <div class="run-step" data-step="3"><span>Stage 4</span><strong>Publication</strong></div>
+          </div>
+
+          <div class="lab-status" aria-live="polite">
+            <div>
+              <span class="status-label">Batch status</span>
+              <div class="status-value" id="pipelineStatus">Ready to run</div>
+            </div>
+            <span class="status-badge" id="batchBadge">Ready</span>
+          </div>
+
+          <div class="lab-grid">
+            <section class="data-panel">
+              <div class="panel-heading">
+                <h3>Standardised output</h3>
+                <span class="row-badge" id="rowBadge">0 rows</span>
+              </div>
+              <div class="table-wrap">
+                <table class="data-table">
+                  <thead id="dataHead"></thead>
+                  <tbody id="dataBody"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <aside class="quality-panel">
+              <div class="panel-heading">
+                <h3>Batch quality</h3>
+                <span class="status-badge" id="qualityBadge">To be checked</span>
+              </div>
+              <div class="metric-grid">
+                <div class="metric"><span id="metricLabel1">Metric 1</span><strong id="metricValue1">-</strong></div>
+                <div class="metric"><span id="metricLabel2">Metric 2</span><strong id="metricValue2">-</strong></div>
+                <div class="metric"><span id="metricLabel3">Metric 3</span><strong id="metricValue3">-</strong></div>
+              </div>
+              <p class="checks-title">Applied checks</p>
+              <ul class="quality-list" id="qualityList"></ul>
+              <div class="decision-box">
+                <strong id="decisionTitle">Decision pending</strong>
+                <span id="decisionCopy">Run the batch to display the check results.</span>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Prototype deliverables</h2>
+        <div class="approach-grid">
+          <div class="approach-item"><strong>Flow map</strong><span>A shared view of stages, inputs, outputs and control points.</span></div>
+          <div class="approach-item"><strong>Standardised table</strong><span>A stable output schema that can be used directly for analytics.</span></div>
+          <div class="approach-item"><strong>Quality report</strong><span>Named checks and an understandable publication decision.</span></div>
+          <div class="approach-item"><strong>Control export</strong><span>A local CSV file for examining the structure shown in the demo.</span></div>
+        </div>
+        <div class="stack-list" aria-label="Technologies and practices illustrated">
+          <span class="stack-chip">ETL / ELT</span>
+          <span class="stack-chip">Data contracts</span>
+          <span class="stack-chip">Quality checks</span>
+          <span class="stack-chip">Traceability</span>
+          <span class="stack-chip">CSV</span>
+          <span class="stack-chip">Reporting</span>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>Business value</h2>
+        <div class="value-grid">
+          <div class="value-item"><strong>Understandable flow</strong><span>Teams share a clear view of the path followed by the data.</span></div>
+          <div class="value-item"><strong>Visible anomalies</strong><span>Non-compliant batches are identified before they feed reporting.</span></div>
+          <div class="value-item"><strong>Easier recovery</strong><span>An isolated stage can be replayed without blindly reprocessing the entire flow.</span></div>
+          <div class="value-item"><strong>Controlled output</strong><span>Publication becomes a controlled decision, not an implicit consequence.</span></div>
+        </div>
+      </section>
+
+      <section class="case-section">
+        <h2>From demo to enterprise use</h2>
+        <div class="production-grid">
+          <div class="production-item"><strong>Incremental loads</strong><span>Define restart keys and process only the required scope.</span></div>
+          <div class="production-item"><strong>Idempotency</strong><span>Ensure that a controlled rerun neither duplicates nor corrupts the output.</span></div>
+          <div class="production-item"><strong>Observability</strong><span>Log volumes, durations, errors, rejections and the version of each batch.</span></div>
+          <div class="production-item"><strong>Secure configuration</strong><span>Separate environments, parameters, secrets and access rights.</span></div>
+        </div>
+        <p class="production-note">
+          The orchestration tool, storage method and frequency are selected according to the constraints of the target system. Quality thresholds and alert rules must be defined with business owners before production.
+        </p>
+      </section>
+
+      <section class="pipeline-cta">
+        <h2>Going further</h2>
+        <p>
+          This logic can prepare a data warehouse, feed a Power BI report or secure an exchange between applications, with checks suited to the level of process risk.
+        </p>
+        <div class="pipeline-actions">
+          <a href="mailto:contact@hestiaaura.com" class="btn">Contact me</a>
+          <a href="/en/showcase.html" class="btn btn--outline">Back to the showcase</a>
+        </div>
+      </section>
     </div>
+  </main>
 
-    <a class="back" href="/en/showcase.html">← Back to Showcase</a>
-  </div>
-</main>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© <span id="y"></span> Jérôme Jeannin</span>
+      <a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
+    </div>
+  </footer>
 
-<footer class="site-footer"><div class="container footer-inner">
-  <span>© <span id="y"></span> Jérôme Jeannin</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
-</div></footer>
+  <script src="/app.js?v=pipeline-fr-v3"></script>
+  <script>
+    (() => {
+      const number = new Intl.NumberFormat('en-GB');
+      const currency = new Intl.NumberFormat('en-GB', { style:'currency', currency:'EUR', maximumFractionDigits:0 });
 
-<script>
-const nfCH = new Intl.NumberFormat('de-CH'); // séparateur ’ (CH), affichage côté EN
+      function formatNumber(value) {
+        return number.format(value).replace(/,/g, ' ');
+      }
 
-const datasets = {
-  sales: {
-    label: "Monthly sales (CH)",
-    headers: ["month","channel","amount_chf"],
-    rows: [
-      ["2024-01","Web", 42150],["2024-02","Web", 43890],["2024-03","Web", 46500],["2024-04","Web", 47820],
-      ["2024-01","Store", 18200],["2024-02","Store", 17650],["2024-03","Store", 21500],["2024-04","Store", 22800]
-    ],
-    kpis:(rows)=>{
-      const byMonth={}; rows.forEach(r=>{byMonth[r[0]]=(byMonth[r[0]]||0)+r[2];});
-      const months=Object.keys(byMonth).sort(); const vals=months.map(m=>byMonth[m]);
-      const total=vals.reduce((a,b)=>a+b,0);
-      const growth=vals.length>1?(vals.at(-1)-vals.at(-2))/vals.at(-2):0;
-      const avg=total/vals.length;
-      return {
-        k1:`${nfCH.format(total)} CHF`,         s1:vals,
-        k2:`${(growth*100).toFixed(1)} % MoM`,  s2:vals.slice(-4),
-        k3:`${nfCH.format(Math.round(avg))} CHF/m`, s3:vals
+      function formatCurrency(value) {
+        return currency.format(value).replace(/,/g, ' ');
+      }
+
+      const datasets = {
+        sales: {
+          filename: 'standardised_sales.csv',
+          headers: ['Month', 'Channel', 'Amount EUR'],
+          rows: [
+            ['2024-01','Web',42150], ['2024-02','Web',43890], ['2024-03','Web',46500], ['2024-04','Web',47820],
+            ['2024-01','Store',18200], ['2024-02','Store',17650], ['2024-03','Store',21500], ['2024-04','Store',22800]
+          ],
+          metrics: [['Consolidated revenue', formatCurrency(260510)], ['Published rows', '8'], ['Rejected rows', '0']],
+          checks: ['Compliant schema and types', 'Unique month-channel key', 'Amounts provided and non-negative'],
+          decision: 'The eight rows comply with the output contract and can feed monthly reporting.'
+        },
+        tickets: {
+          filename: 'standardised_tickets.csv',
+          headers: ['Date', 'Priority', 'Resolved'],
+          rows: [
+            ['2024-03-01','P1',3], ['2024-03-01','P2',12], ['2024-03-01','P3',21],
+            ['2024-03-02','P1',2], ['2024-03-02','P2',15], ['2024-03-02','P3',18],
+            ['2024-03-03','P1',1], ['2024-03-03','P2',9], ['2024-03-03','P3',17]
+          ],
+          metrics: [['Resolved tickets', formatNumber(98)], ['P1 tickets', '6'], ['Rejected rows', '0']],
+          checks: ['Compliant schema and types', 'Priorities limited to P1, P2 and P3', 'Volumes provided and non-negative'],
+          decision: 'The nine rows are consistent and can feed volume and SLA monitoring.'
+        },
+        invoices: {
+          filename: 'standardised_invoices.csv',
+          headers: ['Date', 'Customer', 'Amount EUR', 'Days outstanding'],
+          rows: [
+            ['2024-01-15','Asteria Conseil',1490,35], ['2024-01-31','Nord Finance',2890,42],
+            ['2024-02-12','Orion Services',1320,28], ['2024-03-01','Nova Industrie',5100,31]
+          ],
+          metrics: [['Invoiced amount', formatCurrency(10800)], ['Average DSO', '34 days'], ['Rejected rows', '0']],
+          checks: ['Compliant schema and types', 'Unique date-customer pair', 'Amounts and time periods provided'],
+          decision: 'The four rows pass the defined checks and can be added to the customer monitoring table.'
+        }
       };
-    },
-    roi:{manual:"6 h / month", auto:"20 min", pct:"−94 %"},
-    labels:[
-      {text:"Total revenue", tip:"Sum of Web + Store sales over the period."},
-      {text:"MoM growth", tip:"Last month vs previous month (Month-over-Month)."},
-      {text:"Avg. monthly revenue", tip:"Average monthly revenue over the period."}
-    ]
-  },
-  tickets:{
-    label:"Support tickets (SLA)",
-    headers:["date","priority","resolved"],
-    rows:[
-      ["2024-03-01","P1",3],["2024-03-01","P2",12],["2024-03-01","P3",21],
-      ["2024-03-02","P1",2],["2024-03-02","P2",15],["2024-03-02","P3",18],
-      ["2024-03-03","P1",1],["2024-03-03","P2",9],["2024-03-03","P3",17]
-    ],
-    kpis:(rows)=>{
-      const total=rows.reduce((a,b)=>a+b[2],0);
-      const p1=rows.filter(r=>r[1]==="P1").reduce((a,b)=>a+b[2],0);
-      const p23=total-p1;
-      return {
-        k1:`${nfCH.format(total)} resolved`, s1:[p1,p23],
-        k2:`${nfCH.format(p1)} P1`,          s2:[p1],
-        k3:`${nfCH.format(p23)} P2/P3`,      s3:[p23]
+
+      const elements = {
+        scenario: document.getElementById('pipelineScenario'),
+        run: document.getElementById('runPipeline'),
+        download: document.getElementById('downloadCsv'),
+        status: document.getElementById('pipelineStatus'),
+        batchBadge: document.getElementById('batchBadge'),
+        rowBadge: document.getElementById('rowBadge'),
+        qualityBadge: document.getElementById('qualityBadge'),
+        head: document.getElementById('dataHead'),
+        body: document.getElementById('dataBody'),
+        qualityList: document.getElementById('qualityList'),
+        decisionTitle: document.getElementById('decisionTitle'),
+        decisionCopy: document.getElementById('decisionCopy'),
+        track: document.querySelector('.run-track'),
+        steps: Array.from(document.querySelectorAll('.run-step')),
+        metricLabels: [1,2,3].map((id) => document.getElementById('metricLabel' + id)),
+        metricValues: [1,2,3].map((id) => document.getElementById('metricValue' + id))
       };
-    },
-    roi:{manual:"3 h / week", auto:"10 min", pct:"−95 %"},
-    labels:[
-      {text:"Resolved tickets", tip:"Total resolved tickets over the period."},
-      {text:"Critical tickets (P1)", tip:"Resolved tickets with priority 1."},
-      {text:"Tickets P2+P3", tip:"Resolved tickets with priorities 2 and 3."}
-    ]
-  },
-  invoices:{
-    label:"Customer invoices (DSO)",
-    headers:["date","customer","amount_chf","days_outstanding"],
-    rows:[
-      ["2024-01-15","HelvetiaTech",1490,35],
-      ["2024-01-31","LemanBank",   2890,42],
-      ["2024-02-12","RomandieCom", 1320,28],
-      ["2024-03-01","Alpine SA",   5100,31]
-    ],
-    kpis:(rows)=>{
-      const total=rows.reduce((a,b)=>a+b[2],0);
-      const dso=rows.reduce((a,b)=>a+b[3],0)/rows.length;
-      const top=rows.reduce((m,r)=>r[2]>m?r[2]:m,0);
-      return {
-        k1:`${nfCH.format(total)} CHF`, s1:rows.map(r=>r[2]),
-        k2:`Avg. DSO ${dso.toFixed(0)} d`, s2:rows.map(r=>r[3]),
-        k3:`Largest invoice ${nfCH.format(top)} CHF`, s3:[top]
-      };
-    },
-    roi:{manual:"1 d / month", auto:"30 min", pct:"−94 %"},
-    labels:[
-      {text:"Total invoiced amount", tip:"Sum of all invoice amounts for the period."},
-      {text:"Avg. DSO (days)",       tip:"Average Days Sales Outstanding."},
-      {text:"Largest invoice",       tip:"Highest single invoice amount."}
-    ]
-  }
-};
+      let timers = [];
 
-/* Utils */
-function toCSV(headers, rows){
-  const esc = v => `"${String(v).replaceAll(`"`,`""`)}"`;
-  return [headers.map(esc).join(","), ...rows.map(r=>r.map(esc).join(","))].join("\n");
-}
-function el(tag, attrs={}, children=[]){
-  const e=document.createElement(tag);
-  Object.entries(attrs).forEach(([k,v])=>{ if(k==="text") e.textContent=v; else e.setAttribute(k,v); });
-  children.forEach(c=>e.appendChild(c));
-  return e;
-}
-function renderSpark(svgId, series){
-  const svg = document.getElementById(svgId);
-  const w=svg.clientWidth||260, h=svg.clientHeight||56, p=6;
-  svg.setAttribute("viewBox",`0 0 ${w} ${h}`);
-  if(!series || series.length===0){ svg.innerHTML=""; return; }
-  const min=Math.min(...series), max=Math.max(...series); const span=max-min||1;
-  const step=(w-2*p)/(series.length-1||1);
-  const pts = series.map((v,i)=>[p+i*step, h-p-((v-min)/span)*(h-2*p)]);
-  const d = pts.map((p,i)=> (i? "L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
-  svg.innerHTML = `<path d="${d}" fill="none" stroke="#7c74ff" stroke-width="2"/>`;
-}
+      function clearTimers() {
+        timers.forEach((timer) => window.clearTimeout(timer));
+        timers = [];
+      }
 
-/* Legend */
-function renderLegend(cfg){
-  const el = document.getElementById('legend');
-  el.innerHTML = '';
-  const title = document.createElement('h4');
-  title.textContent = 'KPI legend';
-  el.appendChild(title);
-  const ul = document.createElement('ul');
-  cfg.forEach(item=>{
-    const li = document.createElement('li');
-    li.textContent = `${item.text} - ${item.tip}`;
-    ul.appendChild(li);
-  });
-  el.appendChild(ul);
-}
+      function escapeCsv(value) {
+        return '"' + String(value).replace(/"/g, '""') + '"';
+      }
 
-/* KPI labels + tooltips */
-const kl1=document.getElementById('klabel1'), kl2=document.getElementById('klabel2'), kl3=document.getElementById('klabel3');
-function setKpiLabels(cfg){
-  kl1.textContent = cfg[0].text; kl1.parentElement.title = cfg[0].tip;
-  kl2.textContent = cfg[1].text; kl2.parentElement.title = cfg[1].tip;
-  kl3.textContent = cfg[2].text; kl3.parentElement.title = cfg[2].tip;
-}
+      function buildCsv(dataset) {
+        return [dataset.headers, ...dataset.rows].map((row) => row.map(escapeCsv).join(',')).join('\n');
+      }
 
-const dsSel = document.getElementById('ds');
-const badge = document.getElementById('badgeStage');
-const thead = document.getElementById('thead');
-const tbody = document.getElementById('tbody');
-const tfoot = document.getElementById('tfoot');
-const statRows = document.getElementById('statRows');
-const statPeriod = document.getElementById('statPeriod');
-const k1 = document.getElementById('kpi1'), k2=document.getElementById('kpi2'), k3=document.getElementById('kpi3');
+      function renderDataset(dataset) {
+        elements.head.innerHTML = '<tr>' + dataset.headers.map((header) => '<th scope="col">' + header + '</th>').join('') + '</tr>';
+        elements.body.innerHTML = '';
+        dataset.rows.forEach((row) => {
+          const tr = document.createElement('tr');
+          row.forEach((value, columnIndex) => {
+            const td = document.createElement('td');
+            const header = dataset.headers[columnIndex] || '';
+            td.textContent = typeof value === 'number' && header.toLowerCase().includes('amount')
+              ? formatNumber(value)
+              : value;
+            tr.appendChild(td);
+          });
+          elements.body.appendChild(tr);
+        });
+        elements.rowBadge.textContent = dataset.rows.length + (dataset.rows.length > 1 ? ' rows' : ' row');
+        dataset.metrics.forEach((metric, index) => {
+          elements.metricLabels[index].textContent = metric[0];
+          elements.metricValues[index].textContent = metric[1];
+        });
+        elements.qualityList.innerHTML = '';
+        dataset.checks.forEach((check) => {
+          const li = document.createElement('li');
+          li.textContent = check;
+          elements.qualityList.appendChild(li);
+        });
+        elements.decisionTitle.textContent = 'Publishable batch';
+        elements.decisionCopy.textContent = dataset.decision;
+      }
 
-function load(dsKey){
-  const ds = datasets[dsKey];
-  badge.textContent="Extracting…";
-  setTimeout(()=>{ badge.textContent="Transforming…";
-    setTimeout(()=>{ badge.textContent="Loaded";
-      thead.innerHTML=""; ds.headers.forEach(h=>thead.appendChild(el("th",{text:h})));
-      tbody.innerHTML=""; ds.rows.forEach(r=>{ const tr=el("tr"); r.forEach(v=>tr.appendChild(el("td",{text:v}))); tbody.appendChild(tr); });
-      statRows.textContent = `${ds.rows.length} rows`;
-      const first=ds.rows[0]?.[0]||"-", last=ds.rows.at(-1)?.[0]||"-";
-      statPeriod.textContent = `Period ${first} → ${last}`;
-      tfoot.textContent = ds.label;
+      function prepare() {
+        clearTimers();
+        elements.steps.forEach((step) => step.classList.remove('active','done'));
+        elements.track.style.setProperty('--progress', '0%');
+        elements.status.textContent = 'Ready to run';
+        elements.batchBadge.textContent = 'Ready';
+        elements.qualityBadge.textContent = 'To be checked';
+        elements.decisionTitle.textContent = 'Decision pending';
+        elements.decisionCopy.textContent = 'Run the batch to display the check results.';
+        elements.run.disabled = false;
+      }
 
-      const kp = ds.kpis(ds.rows);
-      k1.textContent = kp.k1; k2.textContent = kp.k2; k3.textContent = kp.k3;
-      renderSpark("sp1", kp.s1); renderSpark("sp2", kp.s2); renderSpark("sp3", kp.s3);
+      function runPipeline() {
+        clearTimers();
+        elements.run.disabled = true;
+        elements.steps.forEach((step) => step.classList.remove('active','done'));
+        const labels = ['Row ingestion', 'Schema standardisation', 'Running checks', 'Output publication'];
+        const progress = ['0%', '30%', '60%', '90%'];
+        labels.forEach((label, index) => {
+          timers.push(window.setTimeout(() => {
+            elements.steps.forEach((step, stepIndex) => {
+              step.classList.toggle('done', stepIndex < index);
+              step.classList.toggle('active', stepIndex === index);
+            });
+            elements.track.style.setProperty('--progress', progress[index]);
+            elements.status.textContent = label;
+            elements.batchBadge.textContent = 'In progress';
+          }, index * 220));
+        });
+        timers.push(window.setTimeout(() => {
+          elements.steps.forEach((step) => { step.classList.remove('active'); step.classList.add('done'); });
+          elements.track.style.setProperty('--progress', '100%');
+          renderDataset(datasets[elements.scenario.value]);
+          elements.status.textContent = 'Batch checked and published in the simulation';
+          elements.batchBadge.textContent = 'Published';
+          elements.qualityBadge.textContent = 'Checks passed';
+          elements.run.disabled = false;
+        }, labels.length * 220));
+      }
 
-      document.getElementById('tMan').textContent = ds.roi.manual;
-      document.getElementById('tAuto').textContent = ds.roi.auto;
-      document.getElementById('pct').textContent = ds.roi.pct;
+      elements.scenario.addEventListener('change', prepare);
+      elements.run.addEventListener('click', runPipeline);
+      elements.download.addEventListener('click', () => {
+        const dataset = datasets[elements.scenario.value];
+        const blob = new Blob([buildCsv(dataset)], { type:'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = dataset.filename;
+        link.click();
+        URL.revokeObjectURL(link.href);
+      });
 
-      setKpiLabels(ds.labels);
-      renderLegend(ds.labels);
-    }, 500);
-  }, 500);
-}
-
-document.getElementById('btnCsv').addEventListener('click', ()=>{
-  const ds = datasets[dsSel.value];
-  const csv = toCSV(ds.headers, ds.rows);
-  const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href=url; a.download = "pipeline_export.csv"; a.click();
-  URL.revokeObjectURL(url);
-});
-
-dsSel.addEventListener('change', e=>load(e.target.value));
-load('sales');
-document.getElementById('y').textContent = new Date().getFullYear();
-</script>
-</body></html>
+      const initial = datasets.sales;
+      renderDataset(initial);
+      prepare();
+      const year = document.getElementById('y');
+      if (year && !year.textContent) year.textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>

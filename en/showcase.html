@@ -514,33 +514,6 @@
     .case-card--wide{grid-column:1/-1;min-height:285px;}
 
 
-    .case-card--pending{
-      cursor:default;
-      opacity:.84;
-    }
-
-    .case-card--pending:hover{
-      transform:none;
-      border-color:rgba(255,255,255,.08);
-      box-shadow:none;
-    }
-
-    .case-status{
-      display:inline-flex;
-      align-items:center;
-      min-height:27px;
-      padding:0 10px;
-      border:1px solid color-mix(in srgb,var(--stage-color) 30%,transparent);
-      border-radius:999px;
-      color:color-mix(in srgb,var(--stage-color) 78%,#fff 22%);
-      background:color-mix(in srgb,var(--stage-color) 8%,transparent);
-      font-size:9px;
-      font-weight:800;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      white-space:nowrap;
-    }
-
     .case-head{
       position:relative;
       z-index:1;
@@ -1018,11 +991,10 @@
             </div>
 
             <div class="stage-cards">
-              <!-- TODO: replace this pending card with an active link to /en/demos/python/ when the English demo is finalised. -->
-              <article class="case-card case-card--pending" data-case="python" aria-label="Analytical pipeline in Python - English demo coming soon">
+              <a class="case-card" href="/en/demos/python/" data-case="python">
                 <div class="case-head">
                   <span class="case-kind">Programmatic processing</span>
-                  <span class="case-status">English demo coming soon</span>
+                  <span class="case-arrow" aria-hidden="true">↗</span>
                 </div>
                 <h3 class="case-title">Analytical pipeline in Python</h3>
                 <p class="case-description">Clean, enrich and aggregate an e-commerce dataset before reporting.</p>
@@ -1038,7 +1010,7 @@
                   <span class="case-tag">Pandas</span>
                   <span class="case-tag">Data quality</span>
                 </div>
-              </article>
+              </a>
 
               <a class="case-card" href="/en/demos/sql/" data-case="sql">
                 <div class="case-head">
