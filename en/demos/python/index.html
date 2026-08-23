@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pipeline analytique en Python | Jérôme Jeannin</title>
-  <meta name="description" content="Démonstration d'un pipeline analytique en Python : ingestion, nettoyage, contrôles qualité, calcul de KPI et restitution dans une application légère.">
-  <meta property="og:title" content="Pipeline analytique en Python | Jérôme Jeannin">
-  <meta property="og:description" content="Un cas d'usage Python appliqué à la préparation, au contrôle et à la restitution de données e-commerce fictives.">
+  <title>Analytics pipeline in Python | Jérôme Jeannin</title>
+  <meta name="description" content="Python analytics pipeline demonstration: ingestion, cleaning, quality checks, KPI calculation and delivery through a lightweight application.">
+  <meta property="og:title" content="Analytics pipeline in Python | Jérôme Jeannin">
+  <meta property="og:description" content="A Python use case applied to the preparation, control and delivery of fictitious e-commerce data.">
   <meta property="og:image" content="/assets/logo.jpg">
 
   <link rel="icon" href="/assets/logo.jpg">
@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css?v=python-fr-v1">
+  <link rel="stylesheet" href="/styles.css?v=python-en-v1">
   <link rel="stylesheet" href="/assets/css/demo.css">
 
   <style>
@@ -777,7 +777,7 @@
 <body class="page-python">
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
+      <a class="brand brand--personal" href="/en/" aria-label="Jérôme Jeannin">
         <img src="/assets/logo.jpg" alt="" class="brand-mark">
         <span class="brand-text">
           <span class="brand-name">Jérôme Jeannin</span>
@@ -785,11 +785,11 @@
         </span>
       </a>
 
-      <nav class="nav" aria-label="Navigation principale">
-        <a href="/">Accueil</a>
-        <a href="/about.html">À propos</a>
-        <a href="/showcase.html">Showcase</a>
-        <a class="btn btn--sm" href="/en/demos/python/">EN</a>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="/en/">Home</a>
+        <a href="/en/about.html">About</a>
+        <a href="/en/showcase.html">Showcase</a>
+        <a class="btn btn--sm" href="/demos/python/">FR</a>
       </nav>
     </div>
   </header>
@@ -797,153 +797,144 @@
   <main class="python-page">
     <div class="demo-container">
       <section class="demo-hero python-hero">
-        <p class="section-kicker">Python appliqué · Data engineering</p>
-        <h1>Pipeline analytique e-commerce en Python</h1>
+        <p class="section-kicker">Applied Python · Data engineering</p>
+        <h1>E-commerce analytics pipeline in Python</h1>
         <p>
-          Transformer des fichiers bruts en données contrôlées, calculer des indicateurs fiables
-          et publier une restitution légère pour rapprocher préparation technique et usage métier.
+          Turn raw files into controlled data, calculate reliable indicators and publish a lightweight output to bring technical preparation closer to business use.
         </p>
 
-        <div class="pipeline-flow" aria-label="Flux simplifié du pipeline Python">
+        <div class="pipeline-flow" aria-label="Simplified Python pipeline flow">
           <div class="pipeline-flow-grid">
             <div class="pipeline-flow-step">
               <span>01</span>
-              <strong>Sources brutes</strong>
-              <p>Des fichiers clients, commandes, produits et paiements alimentent le traitement.</p>
+              <strong>Raw sources</strong>
+              <p>Customer, order, product and payment files feed the process.</p>
             </div>
             <div class="pipeline-flow-step">
               <span>02</span>
-              <strong>Préparation</strong>
-              <p>Pandas standardise les noms, les types, les dates et les montants.</p>
+              <strong>Preparation</strong>
+              <p>Pandas standardises names, types, dates and amounts.</p>
             </div>
             <div class="pipeline-flow-step">
               <span>03</span>
-              <strong>Contrôles</strong>
-              <p>Les doublons, valeurs manquantes et références incohérentes sont mesurés.</p>
+              <strong>Checks</strong>
+              <p>Duplicates, missing values and inconsistent references are measured.</p>
             </div>
             <div class="pipeline-flow-step">
               <span>04</span>
-              <strong>Indicateurs</strong>
-              <p>Les ventes, commandes, clients actifs et paniers moyens sont agrégés.</p>
+              <strong>Metrics</strong>
+              <p>Revenue, orders, active customers and average order values are aggregated.</p>
             </div>
             <div class="pipeline-flow-step">
               <span>05</span>
-              <strong>Restitution</strong>
-              <p>Les résultats sont exportés puis rendus consultables dans une mini-application.</p>
+              <strong>Output</strong>
+              <p>Results are exported and made available in a lightweight application.</p>
             </div>
           </div>
         </div>
       </section>
 
       <section class="case-section">
-        <h2>Contexte métier</h2>
+        <h2>Business context</h2>
         <div class="case-copy">
           <p>
-            Une équipe e-commerce reçoit plusieurs fichiers opérationnels dont les formats et la qualité
-            peuvent varier. Avant tout reporting, ces données doivent être harmonisées, reliées entre elles
-            et contrôlées de façon reproductible.
+            An e-commerce team receives several operational files whose formats and quality can vary. Before any reporting, the data must be harmonised, linked and checked in a reproducible way.
           </p>
         </div>
       </section>
 
       <section class="case-section">
-        <h2>Problématique</h2>
+        <h2>Challenge</h2>
         <div class="case-copy">
           <p>
-            Comment passer de fichiers hétérogènes à des indicateurs exploitables sans multiplier les
-            manipulations manuelles, tout en conservant une trace des anomalies et de chaque exécution ?
+            How can heterogeneous files be turned into usable metrics without multiplying manual operations, while retaining a record of anomalies and each execution?
           </p>
         </div>
       </section>
 
       <section class="case-section">
-        <h2>Approche</h2>
+        <h2>Approach</h2>
         <div class="case-copy">
           <p>
-            Le prototype sépare clairement la préparation, le contrôle, le calcul et la restitution.
-            Pandas traite les données, Parquet fournit un format analytique compact, SQLite permet des
-            requêtes simples et Streamlit expose les résultats dans une interface légère.
+            The prototype clearly separates preparation, control, calculation and delivery. Pandas processes the data, Parquet provides a compact analytical format, SQLite supports simple queries and Streamlit exposes the results in a lightweight interface.
           </p>
         </div>
 
         <div class="approach-grid">
           <div class="approach-item">
-            <strong>Pipeline reproductible</strong>
-            <span>Les mêmes règles sont rejouées à chaque exécution au lieu d'être appliquées manuellement.</span>
+            <strong>Reproducible pipeline</strong>
+            <span>The same rules are replayed on every run instead of being applied manually.</span>
           </div>
           <div class="approach-item">
-            <strong>Qualité mesurable</strong>
-            <span>Chaque contrôle retourne un volume affecté et un niveau de sévérité explicite.</span>
+            <strong>Measurable quality</strong>
+            <span>Each check returns an affected volume and an explicit severity level.</span>
           </div>
           <div class="approach-item">
-            <strong>Sorties polyvalentes</strong>
-            <span>Parquet pour l'analyse, SQLite pour le SQL et CSV pour l'échange avec d'autres outils.</span>
+            <strong>Versatile outputs</strong>
+            <span>Parquet for analysis, SQLite for SQL and CSV for exchange with other tools.</span>
           </div>
           <div class="approach-item">
-            <strong>Exécution traçable</strong>
-            <span>Un journal conserve le statut, les anomalies détectées et le message de chaque traitement.</span>
+            <strong>Traceable execution</strong>
+            <span>A log retains the status, detected anomalies and message for each run.</span>
           </div>
         </div>
       </section>
 
       <section class="case-section">
-        <h2>Ce que montre la démo</h2>
+        <h2>What the demo shows</h2>
         <div class="demo-intro">
-          <strong>Explorez trois comportements possibles du pipeline</strong>
+          <strong>Explore three possible pipeline behaviours</strong>
           <p>
-            La simulation illustre un traitement nominal, un lot contenant plusieurs anomalies et un arrêt
-            provoqué par une source indisponible. Elle met en évidence les indicateurs, les contrôles et la
-            journalisation attendus autour d'un pipeline Python.
+            The simulation illustrates a normal run, a batch containing several anomalies and a controlled stop caused by an unavailable source. It highlights the metrics, checks and logging expected around a Python pipeline.
           </p>
         </div>
 
         <div class="lab-shell">
           <div class="lab-toolbar">
             <div class="lab-field">
-              <label for="scenario">Scénario de traitement</label>
+              <label for="scenario">Processing scenario</label>
               <select id="scenario">
-                <option value="nominal">Flux nominal</option>
-                <option value="quality">Anomalies de qualité</option>
-                <option value="source">Source de paiements indisponible</option>
+                <option value="nominal">Normal flow</option>
+                <option value="quality">Quality anomalies</option>
+                <option value="source">Payment source unavailable</option>
               </select>
             </div>
-            <button id="runPipeline" class="btn" type="button">Lancer la simulation</button>
-            <button id="resetPipeline" class="btn btn--outline" type="button">Réinitialiser</button>
+            <button id="runPipeline" class="btn" type="button">Run the simulation</button>
+            <button id="resetPipeline" class="btn btn--outline" type="button">Reset</button>
           </div>
 
           <p class="local-note">
-            Simulation front-end locale : elle reproduit les états et contrôles du prototype sans exécuter
-            Python sur ce serveur ni envoyer de données à un service externe.
+            Local front-end simulation: it reproduces the prototype states and checks without running Python on this server or sending data to an external service.
           </p>
 
           <div id="runPlaceholder" class="run-placeholder">
-            Choisissez un scénario puis lancez la simulation pour afficher les étapes, les contrôles et le journal.
+            Choose a scenario and run the simulation to display the stages, checks and log.
           </div>
 
           <div id="runOutput" class="run-output" aria-live="polite" hidden>
             <div class="run-summary">
-              <h3 id="runTitle">Résultat du traitement</h3>
-              <span id="runBadge" class="run-badge">Terminé</span>
+              <h3 id="runTitle">Processing result</h3>
+              <span id="runBadge" class="run-badge">Completed</span>
             </div>
 
             <div class="metric-grid">
               <div class="metric-card">
-                <span class="metric-label">Lignes reçues</span>
+                <span class="metric-label">Rows received</span>
                 <span id="rowsReceived" class="metric-value">0</span>
                 <span id="rowsReceivedDetail" class="metric-detail"></span>
               </div>
               <div class="metric-card">
-                <span class="metric-label">Lignes retenues</span>
+                <span class="metric-label">Rows retained</span>
                 <span id="rowsKept" class="metric-value">0</span>
                 <span id="rowsKeptDetail" class="metric-detail"></span>
               </div>
               <div class="metric-card">
-                <span class="metric-label">Commandes</span>
+                <span class="metric-label">Orders</span>
                 <span id="ordersCount" class="metric-value">0</span>
                 <span id="ordersDetail" class="metric-detail"></span>
               </div>
               <div class="metric-card">
-                <span class="metric-label">Panier moyen</span>
+                <span class="metric-label">Average order value</span>
                 <span id="averageOrder" class="metric-value">0 €</span>
                 <span id="averageOrderDetail" class="metric-detail"></span>
               </div>
@@ -951,59 +942,58 @@
 
             <div class="run-grid">
               <section class="run-panel">
-                <h4>Progression du pipeline</h4>
+                <h4>Pipeline progress</h4>
                 <ol id="stepList" class="step-list"></ol>
               </section>
 
               <section class="run-panel">
-                <h4>Contrôles qualité</h4>
+                <h4>Quality checks</h4>
                 <ul id="issueList" class="issue-list"></ul>
               </section>
 
-              <pre id="runLog" class="log-console" aria-label="Journal d'exécution"></pre>
+              <pre id="runLog" class="log-console" aria-label="Execution log"></pre>
             </div>
           </div>
         </div>
       </section>
 
       <section class="case-section">
-        <h2>Livrables du prototype</h2>
+        <h2>Prototype deliverables</h2>
         <div class="case-copy">
           <p>
-            Les captures ci-dessous proviennent du prototype Python initial. Elles documentent le code,
-            les sorties analytiques, les contrôles et l'application Streamlit. Les données sont entièrement fictives.
+            The screenshots below come from the original Python prototype. They document the code, analytical outputs, checks and Streamlit application. All data is fictitious.
           </p>
         </div>
 
         <div class="artifact-shell">
-          <div class="artifact-tabs" role="tablist" aria-label="Étapes du prototype Python">
-            <button class="artifact-tab" id="tab-prepare" type="button" role="tab" aria-selected="true" aria-controls="panel-prepare" data-panel="prepare">1. Préparer</button>
-            <button class="artifact-tab" id="tab-measure" type="button" role="tab" aria-selected="false" aria-controls="panel-measure" data-panel="measure" tabindex="-1">2. Mesurer</button>
-            <button class="artifact-tab" id="tab-control" type="button" role="tab" aria-selected="false" aria-controls="panel-control" data-panel="control" tabindex="-1">3. Contrôler</button>
-            <button class="artifact-tab" id="tab-publish" type="button" role="tab" aria-selected="false" aria-controls="panel-publish" data-panel="publish" tabindex="-1">4. Restituer</button>
+          <div class="artifact-tabs" role="tablist" aria-label="Python prototype stages">
+            <button class="artifact-tab" id="tab-prepare" type="button" role="tab" aria-selected="true" aria-controls="panel-prepare" data-panel="prepare">1. Prepare</button>
+            <button class="artifact-tab" id="tab-measure" type="button" role="tab" aria-selected="false" aria-controls="panel-measure" data-panel="measure" tabindex="-1">2. Measure</button>
+            <button class="artifact-tab" id="tab-control" type="button" role="tab" aria-selected="false" aria-controls="panel-control" data-panel="control" tabindex="-1">3. Check</button>
+            <button class="artifact-tab" id="tab-publish" type="button" role="tab" aria-selected="false" aria-controls="panel-publish" data-panel="publish" tabindex="-1">4. Deliver</button>
           </div>
 
           <section class="artifact-panel" id="panel-prepare" role="tabpanel" aria-labelledby="tab-prepare">
             <div class="artifact-copy">
-              <p>Le script force les types attendus, produit les tables propres et les persiste en Parquet et dans SQLite.</p>
+              <p>The script enforces the expected types, produces clean tables and persists them in Parquet and SQLite.</p>
             </div>
             <div class="artifact-grid">
               <article class="artifact-card">
-                <button class="artifact-image" type="button" data-image="/assets/media/PY_P1_CLEAN_SAMPLE.jpg" data-alt="Extrait du script Python de préparation des données">
-                  <img src="/assets/media/PY_P1_CLEAN_SAMPLE.jpg" alt="Extrait du script Python de préparation des données" loading="lazy">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P1_CLEAN_SAMPLE.jpg" data-alt="Excerpt from the Python data preparation script">
+                  <img src="/assets/media/PY_P1_CLEAN_SAMPLE.jpg" alt="Excerpt from the Python data preparation script" loading="lazy">
                 </button>
                 <div class="artifact-caption">
-                  <strong>Préparation et persistance</strong>
-                  <span>Conversion des types, écriture des fichiers Parquet et chargement des tables propres dans SQLite.</span>
+                  <strong>Preparation and persistence</strong>
+                  <span>Type conversion, Parquet file creation and loading of clean tables into SQLite.</span>
                 </div>
               </article>
               <article class="artifact-card">
-                <button class="artifact-image" type="button" data-image="/assets/media/PY_P1_SCHEMA.jpg" data-alt="Liste des fichiers Parquet générés par le pipeline">
-                  <img src="/assets/media/PY_P1_SCHEMA.jpg" alt="Liste des fichiers Parquet générés par le pipeline" loading="lazy">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P1_SCHEMA.jpg" data-alt="List of Parquet files generated by the pipeline">
+                  <img src="/assets/media/PY_P1_SCHEMA.jpg" alt="List of Parquet files generated by the pipeline" loading="lazy">
                 </button>
                 <div class="artifact-caption">
-                  <strong>Sorties Parquet</strong>
-                  <span>Cinq fichiers séparent clients, commandes, lignes de commande, produits et paiements pour les analyses suivantes.</span>
+                  <strong>Parquet outputs</strong>
+                  <span>Five files separate customers, orders, order lines, products and payments for downstream analysis.</span>
                 </div>
               </article>
             </div>
@@ -1011,43 +1001,43 @@
 
           <section class="artifact-panel" id="panel-measure" role="tabpanel" aria-labelledby="tab-measure" hidden>
             <div class="artifact-copy">
-              <p>Les agrégations mensuelles alimentent des exports réutilisables dans un rapport, une présentation ou un outil BI.</p>
+              <p>Monthly aggregations feed exports that can be reused in a report, presentation or BI tool.</p>
             </div>
             <div class="artifact-grid">
               <article class="artifact-card">
-                <button class="artifact-image" type="button" data-image="/assets/media/PY_P2_REVENUE.png" data-alt="Courbe du chiffre d'affaires mensuel fictif">
-                  <img src="/assets/media/PY_P2_REVENUE.png" alt="Courbe du chiffre d'affaires mensuel fictif" loading="lazy">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P2_REVENUE.png" data-alt="Fictitious monthly revenue chart">
+                  <img src="/assets/media/PY_P2_REVENUE.png" alt="Fictitious monthly revenue chart" loading="lazy">
                 </button>
                 <div class="artifact-caption">
-                  <strong>Évolution du chiffre d'affaires</strong>
-                  <span>Une série mensuelle permet d'identifier les variations et de préparer une analyse de tendance.</span>
+                  <strong>Revenue trend</strong>
+                  <span>A monthly series helps identify variations and prepare a trend analysis.</span>
                 </div>
               </article>
               <article class="artifact-card">
-                <button class="artifact-image" type="button" data-image="/assets/media/PY_P2_ORDERS.png" data-alt="Histogramme du volume mensuel de commandes fictives">
-                  <img src="/assets/media/PY_P2_ORDERS.png" alt="Histogramme du volume mensuel de commandes fictives" loading="lazy">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P2_ORDERS.png" data-alt="Fictitious monthly order volume chart">
+                  <img src="/assets/media/PY_P2_ORDERS.png" alt="Fictitious monthly order volume chart" loading="lazy">
                 </button>
                 <div class="artifact-caption">
-                  <strong>Volume de commandes</strong>
-                  <span>Le suivi parallèle du volume aide à distinguer un effet de fréquence d'un effet de panier moyen.</span>
+                  <strong>Order volume</strong>
+                  <span>Tracking volume in parallel helps distinguish a frequency effect from an average order value effect.</span>
                 </div>
               </article>
               <article class="artifact-card">
-                <button class="artifact-image" type="button" data-image="/assets/media/PY_P2_CSV.jpg" data-alt="Extrait CSV des indicateurs mensuels">
-                  <img src="/assets/media/PY_P2_CSV.jpg" alt="Extrait CSV des indicateurs mensuels" loading="lazy">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P2_CSV.jpg" data-alt="CSV extract of monthly metrics">
+                  <img src="/assets/media/PY_P2_CSV.jpg" alt="CSV extract of monthly metrics" loading="lazy">
                 </button>
                 <div class="artifact-caption">
-                  <strong>Export des KPI</strong>
-                  <span>Le fichier mensuel conserve les ventes, les commandes, les clients actifs et le panier moyen.</span>
+                  <strong>KPI export</strong>
+                  <span>The monthly file retains revenue, orders, active customers and average order value.</span>
                 </div>
               </article>
               <article class="artifact-card">
-                <button class="artifact-image" type="button" data-image="/assets/media/PY_P2_RUN.jpg" data-alt="Trace console de l'exécution des agrégations">
-                  <img src="/assets/media/PY_P2_RUN.jpg" alt="Trace console de l'exécution des agrégations" loading="lazy">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P2_RUN.jpg" data-alt="Console trace of the aggregation run">
+                  <img src="/assets/media/PY_P2_RUN.jpg" alt="Console trace of the aggregation run" loading="lazy">
                 </button>
                 <div class="artifact-caption">
-                  <strong>Trace d'exécution</strong>
-                  <span>Les chemins des sorties et un aperçu des résultats facilitent le contrôle rapide du traitement.</span>
+                  <strong>Execution trace</strong>
+                  <span>Output paths and a preview of the results make the run easier to review.</span>
                 </div>
               </article>
             </div>
@@ -1055,25 +1045,25 @@
 
           <section class="artifact-panel" id="panel-control" role="tabpanel" aria-labelledby="tab-control" hidden>
             <div class="artifact-copy">
-              <p>Les règles de qualité rendent visibles les anomalies avant qu'elles ne contaminent les indicateurs ou la restitution.</p>
+              <p>Quality rules make anomalies visible before they affect metrics or outputs.</p>
             </div>
             <div class="artifact-grid">
               <article class="artifact-card">
-                <button class="artifact-image" type="button" data-image="/assets/media/PY_P3_QUALITY.jpg" data-alt="Synthèse des contrôles qualité du prototype">
-                  <img src="/assets/media/PY_P3_QUALITY.jpg" alt="Synthèse des contrôles qualité du prototype" loading="lazy">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P3_QUALITY.jpg" data-alt="Summary of prototype quality checks">
+                  <img src="/assets/media/PY_P3_QUALITY.jpg" alt="Summary of prototype quality checks" loading="lazy">
                 </button>
                 <div class="artifact-caption">
-                  <strong>Règles et sévérités</strong>
-                  <span>Doublons, valeurs manquantes, montants négatifs et références orphelines sont comptabilisés.</span>
+                  <strong>Rules and severities</strong>
+                  <span>Duplicates, missing values, negative amounts and orphan references are counted.</span>
                 </div>
               </article>
               <article class="artifact-card">
-                <button class="artifact-image" type="button" data-image="/assets/media/PY_P3_LOGS.jpg" data-alt="Extrait du journal des traitements Python">
-                  <img src="/assets/media/PY_P3_LOGS.jpg" alt="Extrait du journal des traitements Python" loading="lazy">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P3_LOGS.jpg" data-alt="Excerpt from the Python processing log">
+                  <img src="/assets/media/PY_P3_LOGS.jpg" alt="Excerpt from the Python processing log" loading="lazy">
                 </button>
                 <div class="artifact-caption">
-                  <strong>Journal des traitements</strong>
-                  <span>Le statut, le nombre d'anomalies et le message sont conservés pour l'audit et le diagnostic.</span>
+                  <strong>Processing log</strong>
+                  <span>Status, anomaly count and message are retained for audit and diagnosis.</span>
                 </div>
               </article>
             </div>
@@ -1082,43 +1072,42 @@
           <section class="artifact-panel" id="panel-publish" role="tabpanel" aria-labelledby="tab-publish" hidden>
             <div class="artifact-copy">
               <p>
-                La mini-application regroupe les KPI et le journal. Elle montre également les échecs d'appels externes,
-                afin que la supervision ne masque pas les traitements incomplets.
+                The lightweight application brings together the KPIs and log. It also shows failures in external calls so that monitoring does not hide incomplete processing.
               </p>
             </div>
             <div class="artifact-grid">
               <article class="artifact-card">
-                <button class="artifact-image" type="button" data-image="/assets/media/PY_P4_APP_HOME.jpg" data-alt="Vue principale de la mini-application Streamlit">
-                  <img src="/assets/media/PY_P4_APP_HOME.jpg" alt="Vue principale de la mini-application Streamlit" loading="lazy">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P4_APP_HOME.jpg" data-alt="Main view of the Streamlit application">
+                  <img src="/assets/media/PY_P4_APP_HOME.jpg" alt="Main view of the Streamlit application" loading="lazy">
                 </button>
                 <div class="artifact-caption">
-                  <strong>Application Streamlit</strong>
-                  <span>Table mensuelle, graphiques et journal réunis dans une interface de consultation légère.</span>
+                  <strong>Streamlit application</strong>
+                  <span>Monthly table, charts and log brought together in a lightweight interface.</span>
                 </div>
               </article>
               <article class="artifact-card">
-                <button class="artifact-image" type="button" data-image="/assets/media/PY_P4_APP_API.jpg" data-alt="Message de retour après un appel d'API dans Streamlit">
-                  <img src="/assets/media/PY_P4_APP_API.jpg" alt="Message de retour après un appel d'API dans Streamlit" loading="lazy">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P4_APP_API.jpg" data-alt="Response message after an API call in Streamlit">
+                  <img src="/assets/media/PY_P4_APP_API.jpg" alt="Response message after an API call in Streamlit" loading="lazy">
                 </button>
                 <div class="artifact-caption">
-                  <strong>Intégration externe</strong>
-                  <span>Un appel d'API enrichit le flux et renvoie un message compréhensible dans l'interface.</span>
+                  <strong>External integration</strong>
+                  <span>An API call enriches the flow and returns a clear message in the interface.</span>
                 </div>
               </article>
               <article class="artifact-card">
-                <button class="artifact-image" type="button" data-image="/assets/media/PY_P4_LOGS_AFTER.jpg" data-alt="Journal après l'appel d'API externe">
-                  <img src="/assets/media/PY_P4_LOGS_AFTER.jpg" alt="Journal après l'appel d'API externe" loading="lazy">
+                <button class="artifact-image" type="button" data-image="/assets/media/PY_P4_LOGS_AFTER.jpg" data-alt="Log after the external API call">
+                  <img src="/assets/media/PY_P4_LOGS_AFTER.jpg" alt="Log after the external API call" loading="lazy">
                 </button>
                 <div class="artifact-caption">
-                  <strong>Écriture du résultat</strong>
-                  <span>Le journal conserve le statut de l'intégration pour rendre les erreurs visibles et diagnosticables.</span>
+                  <strong>Writing the result</strong>
+                  <span>The log retains the integration status to make errors visible and diagnosable.</span>
                 </div>
               </article>
             </div>
           </section>
         </div>
 
-        <div class="stack-list" aria-label="Technologies utilisées">
+        <div class="stack-list" aria-label="Technologies used">
           <span class="stack-chip">Python</span>
           <span class="stack-chip">Pandas</span>
           <span class="stack-chip">Parquet</span>
@@ -1129,73 +1118,67 @@
       </section>
 
       <section class="case-section">
-        <h2>Valeur apportée</h2>
+        <h2>Business value</h2>
         <div class="value-grid">
           <div class="value-item">
-            <strong>Préparation homogène</strong>
-            <span>Les règles de typage et de nettoyage sont documentées puis appliquées de façon constante.</span>
+            <strong>Consistent preparation</strong>
+            <span>Typing and cleaning rules are documented and then applied consistently.</span>
           </div>
           <div class="value-item">
-            <strong>Reporting plus fiable</strong>
-            <span>Les anomalies sont détectées avant le calcul et la diffusion des indicateurs.</span>
+            <strong>More reliable reporting</strong>
+            <span>Anomalies are detected before metrics are calculated and distributed.</span>
           </div>
           <div class="value-item">
-            <strong>Analyse réutilisable</strong>
-            <span>Les sorties standardisées peuvent alimenter Python, SQL, Excel ou une solution BI.</span>
+            <strong>Reusable analysis</strong>
+            <span>Standardised outputs can feed Python, SQL, Excel or a BI solution.</span>
           </div>
           <div class="value-item">
-            <strong>Diagnostic facilité</strong>
-            <span>Le journal permet de comprendre un échec et d'identifier l'étape concernée.</span>
+            <strong>Easier diagnosis</strong>
+            <span>The log helps explain a failure and identify the affected stage.</span>
           </div>
         </div>
       </section>
 
       <section class="case-section">
-        <h2>De la démonstration à la production</h2>
+        <h2>From demo to production</h2>
         <div class="case-copy">
           <p>
-            Pour un usage réel, le choix d'architecture dépend surtout du volume, de la fréquence et du niveau
-            de disponibilité attendu. Un traitement modéré peut être conteneurisé et orchestré dans Azure.
-            Des volumes plus importants peuvent justifier un moteur distribué comme Spark.
+            For real-world use, the architecture mainly depends on volume, frequency and the required level of availability. Moderate processing can be containerised and orchestrated in Azure. Larger volumes may justify a distributed engine such as Spark.
           </p>
         </div>
 
         <div class="production-grid">
           <div class="production-item">
-            <strong>Ingestion orchestrée</strong>
-            <span>Azure Data Factory ou Fabric Data Factory collecte les fichiers et planifie les dépendances.</span>
+            <strong>Orchestrated ingestion</strong>
+            <span>Azure Data Factory or Fabric Data Factory collects files and schedules dependencies.</span>
           </div>
           <div class="production-item">
-            <strong>Traitement industrialisé</strong>
-            <span>Le code Python est testé, versionné et exécuté dans un conteneur ou un service adapté au volume.</span>
+            <strong>Industrialised processing</strong>
+            <span>Python code is tested, versioned and executed in a container or a service suited to the volume.</span>
           </div>
           <div class="production-item">
-            <strong>Qualité et supervision</strong>
-            <span>Pandera ou Great Expectations formalise les règles, tandis qu'Azure Monitor centralise les alertes.</span>
+            <strong>Quality and monitoring</strong>
+            <span>Pandera or Great Expectations formalises the rules, while Azure Monitor centralises alerts.</span>
           </div>
           <div class="production-item">
-            <strong>Consommation maîtrisée</strong>
-            <span>Lakehouse, base SQL, Power BI ou application métier exposent uniquement les données validées.</span>
+            <strong>Controlled consumption</strong>
+            <span>A lakehouse, SQL database, Power BI or business application exposes only validated data.</span>
           </div>
         </div>
 
         <div class="production-note">
-          Pandas et SQLite sont adaptés à ce prototype local. Ils ne constituent pas une recommandation universelle :
-          la volumétrie, la concurrence, la sécurité, la reprise sur incident et les coûts doivent guider
-          le choix d'une architecture de production.
+          Pandas and SQLite suit this local prototype. They are not a universal recommendation: data volume, concurrency, security, disaster recovery and cost must guide the choice of production architecture.
         </div>
       </section>
 
       <section class="python-cta">
-        <h2>Aller plus loin</h2>
+        <h2>Going further</h2>
         <p>
-          Ce type de pipeline peut soutenir un reporting opérationnel, un contrôle de facturation,
-          une préparation de données BI ou l'automatisation d'un suivi métier, avec des règles de qualité
-          adaptées aux décisions prises en aval.
+          This type of pipeline can support operational reporting, billing control, BI data preparation or the automation of business monitoring, with quality rules suited to downstream decisions.
         </p>
         <div class="python-actions">
-          <a href="mailto:contact@hestiaaura.com" class="btn">Me contacter</a>
-          <a href="/showcase.html" class="btn btn--outline">Retour au showcase</a>
+          <a href="mailto:contact@hestiaaura.com" class="btn">Contact me</a>
+          <a href="/en/showcase.html" class="btn btn--outline">Back to the showcase</a>
         </div>
       </section>
     </div>
@@ -1208,8 +1191,8 @@
     </div>
   </footer>
 
-  <div class="image-modal" id="imageModal" role="dialog" aria-modal="true" aria-label="Aperçu agrandi" aria-hidden="true" tabindex="-1">
-    <button class="image-modal-close" id="imageModalClose" type="button">Fermer</button>
+  <div class="image-modal" id="imageModal" role="dialog" aria-modal="true" aria-label="Enlarged preview" aria-hidden="true" tabindex="-1">
+    <button class="image-modal-close" id="imageModalClose" type="button">Close</button>
     <img id="imageModalContent" alt="">
   </div>
 
@@ -1217,98 +1200,98 @@
   <script>
     const scenarios = {
       nominal: {
-        title: 'Flux nominal',
-        badge: 'Terminé',
+        title: 'Normal flow',
+        badge: 'Completed',
         badgeClass: '',
         rowsReceived: '12 480',
-        rowsReceivedDetail: '5 sources chargées',
+        rowsReceivedDetail: '5 sources loaded',
         rowsKept: '12 394',
-        rowsKeptDetail: '99,3 % du lot',
+        rowsKeptDetail: '99.3% of the batch',
         orders: '842',
-        ordersDetail: 'Période courante',
+        ordersDetail: 'Current period',
         averageOrder: '388 €',
-        averageOrderDetail: 'Valeur fictive',
+        averageOrderDetail: 'Fictitious value',
         steps: [
-          ['Sources chargées', 'Terminé', 'done'],
-          ['Types et colonnes contrôlés', 'Terminé', 'done'],
-          ['Tables propres écrites', 'Terminé', 'done'],
-          ['KPI mensuels calculés', 'Terminé', 'done'],
-          ['Restitution actualisée', 'Terminé', 'done']
+          ['Sources loaded', 'Completed', 'done'],
+          ['Types and columns checked', 'Completed', 'done'],
+          ['Clean tables written', 'Completed', 'done'],
+          ['Monthly KPIs calculated', 'Completed', 'done'],
+          ['Output refreshed', 'Completed', 'done']
         ],
         issues: [
-          ['42', 'Lignes sans identifiant client isolées'],
-          ['31', 'Doublons de commande écartés'],
-          ['13', 'Montants non numériques mis en quarantaine']
+          ['42', 'Rows without a customer ID isolated'],
+          ['31', 'Duplicate orders removed'],
+          ['13', 'Non-numeric amounts quarantined']
         ],
         log: [
-          '09:30:01  INFO   ingestion      12 480 lignes reçues',
-          '09:30:02  INFO   validation     schéma conforme',
-          '09:30:04  WARN   quality        86 lignes isolées',
-          '09:30:05  INFO   aggregation    842 commandes calculées',
-          '09:30:06  INFO   publication    traitement terminé'
+          '09:30:01  INFO   ingestion      12 480 rows received',
+          '09:30:02  INFO   validation     schema compliant',
+          '09:30:04  WARN   quality        86 rows isolated',
+          '09:30:05  INFO   aggregation    842 orders calculated',
+          '09:30:06  INFO   publication    processing completed'
         ]
       },
       quality: {
-        title: 'Lot avec anomalies de qualité',
-        badge: 'À corriger',
+        title: 'Batch with quality anomalies',
+        badge: 'Needs review',
         badgeClass: 'warning',
         rowsReceived: '12 480',
-        rowsReceivedDetail: '5 sources chargées',
+        rowsReceivedDetail: '5 sources loaded',
         rowsKept: '11 692',
-        rowsKeptDetail: '93,7 % du lot',
+        rowsKeptDetail: '93.7% of the batch',
         orders: '791',
-        ordersDetail: 'Après exclusion',
+        ordersDetail: 'After exclusions',
         averageOrder: '390 €',
-        averageOrderDetail: 'Valeur fictive',
+        averageOrderDetail: 'Fictitious value',
         steps: [
-          ['Sources chargées', 'Terminé', 'done'],
-          ['Types et colonnes contrôlés', 'Alerte', 'warning'],
-          ['Lignes non conformes isolées', 'Terminé', 'done'],
-          ['KPI provisoires calculés', 'Alerte', 'warning'],
-          ['Publication suspendue', 'Bloqué', 'blocked']
+          ['Sources loaded', 'Completed', 'done'],
+          ['Types and columns checked', 'Warning', 'warning'],
+          ['Non-compliant rows isolated', 'Completed', 'done'],
+          ['Provisional KPIs calculated', 'Warning', 'warning'],
+          ['Publication suspended', 'Blocked', 'blocked']
         ],
         issues: [
-          ['318', 'Références client absentes'],
-          ['221', 'Doublons de commande détectés'],
-          ['164', 'Paiements négatifs ou non numériques'],
-          ['85', 'Lignes de commande orphelines']
+          ['318', 'Missing customer references'],
+          ['221', 'Duplicate orders detected'],
+          ['164', 'Negative or non-numeric payments'],
+          ['85', 'Orphan order lines']
         ],
         log: [
-          '09:42:10  INFO   ingestion      12 480 lignes reçues',
-          '09:42:12  WARN   validation     788 lignes non conformes',
-          '09:42:13  WARN   quality        seuil critique dépassé',
-          '09:42:15  INFO   quarantine     anomalies isolées',
-          '09:42:16  ERROR  publication    validation métier requise'
+          '09:42:10  INFO   ingestion      12 480 rows received',
+          '09:42:12  WARN   validation     788 non-compliant rows',
+          '09:42:13  WARN   quality        critical threshold exceeded',
+          '09:42:15  INFO   quarantine     anomalies isolated',
+          '09:42:16  ERROR  publication    business validation required'
         ]
       },
       source: {
-        title: 'Source indisponible',
-        badge: 'Bloqué',
+        title: 'Source unavailable',
+        badge: 'Blocked',
         badgeClass: 'blocked',
         rowsReceived: '8 206',
-        rowsReceivedDetail: '4 sources sur 5',
+        rowsReceivedDetail: '4 of 5 sources',
         rowsKept: '0',
-        rowsKeptDetail: 'Traitement interrompu',
-        orders: 'Non calculé',
-        ordersDetail: 'Source incomplète',
-        averageOrder: 'Non calculé',
-        averageOrderDetail: 'Aucune publication',
+        rowsKeptDetail: 'Processing interrupted',
+        orders: 'Not calculated',
+        ordersDetail: 'Incomplete source',
+        averageOrder: 'Not calculated',
+        averageOrderDetail: 'No publication',
         steps: [
-          ['Clients, commandes et produits chargés', 'Terminé', 'done'],
-          ['Source paiements indisponible', 'Bloqué', 'blocked'],
-          ['Contrôles inter-tables', 'En attente', ''],
-          ['KPI mensuels', 'En attente', ''],
-          ['Restitution', 'En attente', '']
+          ['Customers, orders and products loaded', 'Completed', 'done'],
+          ['Payment source unavailable', 'Blocked', 'blocked'],
+          ['Cross-table checks', 'Pending', ''],
+          ['Monthly KPIs', 'Pending', ''],
+          ['Output', 'Pending', '']
         ],
         issues: [
-          ['1', 'Fichier paiements introuvable'],
-          ['0', 'Aucune donnée partielle publiée']
+          ['1', 'Payment file not found'],
+          ['0', 'No partial data published']
         ],
         log: [
-          '10:05:21  INFO   ingestion      4 sources chargées',
-          '10:05:23  ERROR  ingestion      payments.csv introuvable',
-          '10:05:23  INFO   safeguard      arrêt contrôlé du pipeline',
-          '10:05:24  INFO   publication    aucune sortie remplacée'
+          '10:05:21  INFO   ingestion      4 sources loaded',
+          '10:05:23  ERROR  ingestion      payments.csv not found',
+          '10:05:23  INFO   safeguard      controlled pipeline stop',
+          '10:05:24  INFO   publication    no output replaced'
         ]
       }
     };
@@ -1381,13 +1364,13 @@
       runOutput.hidden = false;
       runOutput.setAttribute('aria-busy', 'false');
       runButton.disabled = false;
-      runButton.textContent = 'Relancer la simulation';
+      runButton.textContent = 'Run again';
     }
 
     function runSimulation() {
       const data = scenarios[scenarioSelect.value];
       runButton.disabled = true;
-      runButton.textContent = 'Traitement en cours...';
+      runButton.textContent = 'Processing...';
       runOutput.setAttribute('aria-busy', 'true');
 
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1400,7 +1383,7 @@
       runOutput.setAttribute('aria-busy', 'false');
       runPlaceholder.hidden = false;
       runButton.disabled = false;
-      runButton.textContent = 'Lancer la simulation';
+      runButton.textContent = 'Run the simulation';
     }
 
     runButton.addEventListener('click', runSimulation);

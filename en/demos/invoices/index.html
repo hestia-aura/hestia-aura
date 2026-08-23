@@ -1,221 +1,1022 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Invoice → JSON → CSV</title>
-<link rel="icon" href="/assets/logo.jpg">
-<link rel="apple-touch-icon" href="/assets/logo.jpg">
-<link rel="stylesheet" href="/styles.css?v=final3">
-<style>
-  .wrap{max-width:1180px;margin:0 auto;padding:24px 20px}
-  h1{font-size:34px;margin:10px 0 8px}
-  .muted{opacity:.85;margin:0 0 16px}
-  .toolbar{display:flex;gap:12px;align-items:center;margin:8px 0 18px}
-  .toolbar select{background:#0f1117;color:#e6edf3;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:8px 10px}
-  .grid{display:grid;grid-template-columns:1fr 1.2fr;gap:28px}
-  .panel{background:#0f1117;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px}
-  .thumb{width:100%;border-radius:12px;border:1px solid rgba(255,255,255,.08);object-fit:cover}
-  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
-  .kpi{background:#0b0c10;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px}
-  .kpi .label{color:#c7ccd3;font-size:12px}
-  .kpi .val{font-weight:700}
-  table{width:100%;border-collapse:collapse;margin-top:10px}
-  th,td{border-bottom:1px solid rgba(255,255,255,.08);padding:8px 6px;text-align:left}
-  th{color:#c7ccd3;font-weight:600}
-  .actions{display:flex;gap:10px;margin-top:12px}
-  .btn{display:inline-block;background:#6366f1;color:#fff;border:none;border-radius:12px;padding:10px 14px;font-weight:600;box-shadow:0 6px 20px rgba(99,102,241,.35);cursor:pointer}
-  .btn.outline{background:transparent;border:1px solid rgba(255,255,255,.14);color:#e6edf3}
-  pre{margin:10px 0 0;white-space:pre-wrap;word-break:break-word;color:#e6edf3}
-  .json-wrap{margin-top:8px}
-  .json-wrap[hidden]{display:none}
-  @media (max-width:900px){.grid{grid-template-columns:1fr}}
-</style>
-</head><body>
-<header class="site-header"><div class="container header-inner">
-  <a class="brand" href="/en/" aria-label="Hestia Aura">
-    <img src="/assets/logo.jpg" alt="Hestia Aura - logo" class="brand-mark"><span class="brand-name">Hestia <strong>Aura</strong></span>
-  </a>
-<nav class="nav">
-  <a href="/en/">Home</a>
-  <a href="/en/about.html">About</a>
-  <a href="/en/showcase.html">Showcase</a>
-  <a class="btn btn--sm" href="/demos/invoices/">FR</a>
-</nav>
-</div></header>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Automated invoice extraction with Azure | Jérôme Jeannin</title>
+  <meta name="description" content="Azure document automation demonstration: invoice extraction, data structuring, control and usable export using fictitious examples.">
+  <meta property="og:title" content="Automated invoice extraction with Azure | Jérôme Jeannin">
+  <meta property="og:description" content="From an incoming document to structured, verifiable data ready for integration into a business process.">
+  <meta property="og:image" content="/assets/media/invoice-eu.svg">
+  <link rel="icon" href="/assets/logo.jpg">
+  <link rel="apple-touch-icon" href="/assets/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=invoices-en-v1">
+<link rel="stylesheet" href="/assets/css/demo.css">
 
-<main class="wrap">
-  <h1>Invoice → JSON → CSV</h1>
-  <p class="muted">Pick an example to see the extracted JSON, a quick summary, and CSV-ready line items.</p>
-  <div class="toolbar">
-    <label for="sample">Sample:</label>
-    <select id="sample" aria-label="Choose an invoice sample">
-      <option value="ch">Swiss invoice (QR-bill)</option>
-      <option value="eu">EU invoice (VAT)</option>
-      <option value="us">US invoice (sales tax)</option>
-    </select>
-    <button id="dl" class="btn">Download CSV</button>
-    <button id="toggleJson" class="btn outline">Show JSON</button>
+  <style>
+    :root{
+      --page-max:1180px;
+      --demo-border:rgba(255,255,255,.08);
+      --demo-panel:#0f1117;
+      --demo-panel-2:#0b0d12;
+      --demo-text:#e6edf3;
+      --demo-muted:#c7ccd3;
+      --demo-accent:#6366f1;
+      --demo-accent-2:#4fd2ff;
+      --demo-accent-3:#8a5bff;
+      --demo-shadow:0 12px 30px rgba(0,0,0,.22);
+    }
+
+    .demo-page{
+      padding:32px 0 68px;
+    }
+
+    .demo-hero{
+      margin-bottom:24px;
+    }
+
+    .section-kicker{
+      display:inline-block;
+      margin:0 0 12px;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:#aeb6c4;
+    }
+
+    .page-title{
+      margin:0 0 14px;
+      max-width:900px;
+      font-size:clamp(36px,5vw,60px);
+      line-height:.98;
+    }
+
+    .page-subtitle{
+      margin:0;
+      max-width:960px;
+      color:var(--demo-text);
+      font-size:18px;
+      line-height:1.78;
+    }
+
+    .hero-visual{
+      position:relative;
+      margin-top:24px;
+      background:
+        radial-gradient(circle at 84% 18%, rgba(138,91,255,.20) 0, transparent 26%),
+        radial-gradient(circle at 24% 78%, rgba(79,210,255,.12) 0, transparent 24%),
+        linear-gradient(140deg, rgba(8,11,22,.98), rgba(11,17,31,.95));
+      border:1px solid var(--demo-border);
+      border-radius:26px;
+      padding:24px;
+      box-shadow:var(--demo-shadow);
+      overflow:hidden;
+    }
+
+    .hero-visual::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 78% 16%, rgba(138,91,255,.14) 0, transparent 18%),
+        radial-gradient(circle at 32% 72%, rgba(79,210,255,.10) 0, transparent 18%);
+      pointer-events:none;
+    }
+
+    .hero-flow{
+      position:relative;
+      z-index:2;
+      display:grid;
+      grid-template-columns:
+        minmax(140px,1fr) minmax(44px,.34fr)
+        minmax(160px,1.08fr) minmax(44px,.34fr)
+        minmax(180px,1.2fr) minmax(44px,.34fr)
+        minmax(140px,1fr);
+      gap:12px;
+      align-items:stretch;
+    }
+
+    .hero-step{
+      min-width:0;
+      min-height:170px;
+      padding:20px 18px 18px;
+      border-radius:18px;
+      background:rgba(10,14,25,.68);
+      border:1px solid rgba(255,255,255,.08);
+      backdrop-filter:blur(8px);
+      box-shadow:0 8px 24px rgba(0,0,0,.24);
+    }
+
+    .step-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:26px;
+      height:26px;
+      border-radius:999px;
+      background:linear-gradient(90deg, rgba(108,108,255,.94), rgba(118,90,255,.92));
+      color:#fff;
+      font-size:12px;
+      font-weight:700;
+      margin-bottom:12px;
+      box-shadow:0 0 16px rgba(108,108,255,.18);
+    }
+
+    .step-title{
+      display:block;
+      margin:0 0 8px;
+      font-size:22px;
+      line-height:1.08;
+      letter-spacing:-.02em;
+    }
+
+    .hero-step p{
+      margin:0;
+      color:#d6dbe4;
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .hero-arrow{
+      position:relative;
+      align-self:center;
+      height:4px;
+      border-radius:999px;
+      background:linear-gradient(90deg, rgba(79,210,255,.18), rgba(79,210,255,.95), rgba(138,91,255,.82));
+      box-shadow:0 0 16px rgba(79,210,255,.24);
+    }
+
+    .hero-arrow::after{
+      content:"";
+      position:absolute;
+      right:-2px;
+      top:50%;
+      width:10px;
+      height:10px;
+      margin-top:-5px;
+      border-radius:50%;
+      background:#9ee9ff;
+      box-shadow:0 0 18px rgba(79,210,255,.55);
+    }
+
+    .section{
+      margin-top:26px;
+    }
+
+    .section-title{
+      margin:0 0 10px;
+      font-size:30px;
+      line-height:1.08;
+    }
+
+    .section-copy{
+      color:var(--demo-text);
+      font-size:17px;
+      line-height:1.8;
+      max-width:980px;
+    }
+
+    .section-copy p{
+      margin:0;
+    }
+
+    .section-copy p + p{
+      margin-top:14px;
+    }
+
+    .approach-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:14px;
+      margin-top:16px;
+    }
+
+    .approach-card{
+      padding:18px 16px;
+      border-radius:18px;
+      background:var(--demo-panel);
+      border:1px solid var(--demo-border);
+      box-shadow:var(--demo-shadow);
+    }
+
+    .approach-card strong{
+      display:block;
+      margin-bottom:8px;
+      font-size:16px;
+      color:#fff;
+    }
+
+    .approach-card span{
+      color:var(--demo-muted);
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .demo-intro{
+      margin-top:14px;
+      padding:18px 18px 16px;
+      border-radius:18px;
+      background:linear-gradient(180deg, rgba(11,15,27,.96), rgba(9,13,22,.92));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:var(--demo-shadow);
+    }
+
+    .demo-intro strong{
+      display:block;
+      margin-bottom:8px;
+      color:#fff;
+      font-size:15px;
+    }
+
+    .demo-intro p{
+      margin:0;
+      color:var(--demo-text);
+      font-size:16px;
+      line-height:1.75;
+    }
+
+    .local-note{
+      margin:10px 0 0;
+      color:#9ca5b4;
+      font-size:12px;
+      line-height:1.6;
+    }
+
+    .demo-shell{
+      margin-top:18px;
+    }
+
+    .demo-toolbar{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+
+    .demo-toolbar label{
+      font-size:14px;
+      font-weight:600;
+      color:#fff;
+    }
+
+    .demo-toolbar select{
+      background:#0f1117;
+      color:var(--demo-text);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:10px;
+      padding:10px 12px;
+      font:inherit;
+      min-width:230px;
+    }
+
+    .demo-toolbar .btn{
+      min-height:44px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .demo-grid{
+      display:grid;
+      grid-template-columns:1fr 1.18fr;
+      gap:20px;
+      align-items:start;
+    }
+
+    .panel{
+      background:var(--demo-panel);
+      border:1px solid var(--demo-border);
+      border-radius:20px;
+      padding:18px;
+      box-shadow:var(--demo-shadow);
+    }
+
+    .invoice-preview{
+      width:100%;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.08);
+      object-fit:cover;
+      background:#0b0d12;
+      display:block;
+    }
+
+    .preview-caption{
+      margin-top:12px;
+      color:var(--demo-muted);
+      font-size:14px;
+      line-height:1.65;
+    }
+
+    .kpis{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .kpi{
+      background:var(--demo-panel-2);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .kpi .label{
+      color:var(--demo-muted);
+      font-size:12px;
+      line-height:1.35;
+      margin-bottom:4px;
+    }
+
+    .kpi .val{
+      font-weight:800;
+      font-size:18px;
+      line-height:1.2;
+    }
+
+    .lines-title{
+      margin:14px 0 8px;
+      font-size:15px;
+      font-weight:700;
+      color:#fff;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:6px;
+    }
+
+    th,td{
+      border-bottom:1px solid rgba(255,255,255,.08);
+      padding:9px 6px;
+      text-align:left;
+      vertical-align:top;
+    }
+
+    th{
+      color:var(--demo-muted);
+      font-weight:600;
+      font-size:14px;
+    }
+
+    td{
+      color:var(--demo-text);
+      font-size:15px;
+    }
+
+    .json-wrap{
+      margin-top:14px;
+      border-top:1px solid rgba(255,255,255,.08);
+      padding-top:14px;
+    }
+
+    .json-wrap[hidden]{
+      display:none;
+    }
+
+    .json-label{
+      display:block;
+      margin-bottom:8px;
+      color:#aeb6c4;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+    }
+
+    pre{
+      margin:0;
+      padding:14px;
+      border-radius:14px;
+      background:#0b0d12;
+      border:1px solid rgba(255,255,255,.08);
+      white-space:pre-wrap;
+      word-break:break-word;
+      color:var(--demo-text);
+      font-size:13px;
+      line-height:1.65;
+      overflow:auto;
+    }
+
+    .value-grid,
+    .production-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:14px;
+      margin-top:16px;
+    }
+
+    .value-card,
+    .production-card{
+      padding:18px 16px;
+      border-radius:18px;
+      background:var(--demo-panel);
+      border:1px solid var(--demo-border);
+      box-shadow:var(--demo-shadow);
+    }
+
+    .value-card strong,
+    .production-card strong{
+      display:block;
+      margin-bottom:8px;
+      font-size:16px;
+      color:#fff;
+    }
+
+    .value-card span,
+    .production-card span{
+      color:var(--demo-muted);
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    .production-note{
+      margin-top:14px;
+      padding:17px 18px;
+      border-left:3px solid var(--demo-accent);
+      border-radius:0 14px 14px 0;
+      background:rgba(99,102,241,.08);
+      color:#dce1e8;
+      font-size:15px;
+      line-height:1.7;
+    }
+
+    .demo-cta{
+      margin-top:24px;
+      padding:24px;
+      background:linear-gradient(180deg, rgba(11,15,27,.96), rgba(9,13,22,.92));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      box-shadow:var(--demo-shadow);
+    }
+
+    .demo-cta h2{
+      margin:0 0 12px;
+      font-size:28px;
+      line-height:1.08;
+      letter-spacing:-.03em;
+      font-family:"Space Grotesk",Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    }
+
+    .demo-cta p{
+      margin:0 0 14px;
+      color:var(--demo-text);
+      font-size:17px;
+      line-height:1.75;
+    }
+
+    .demo-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    @media (max-width:1100px){
+      .hero-flow{
+        grid-template-columns:repeat(4,minmax(0,1fr));
+      }
+
+      .hero-arrow{
+        display:none;
+      }
+
+      .approach-grid,
+      .value-grid,
+      .production-grid{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .demo-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width:760px){
+      .demo-wrap{
+        padding:0 18px;
+      }
+
+      .demo-page{
+        padding:24px 0 56px;
+      }
+
+      .page-subtitle,
+      .section-copy,
+      .demo-intro p,
+      .demo-cta p{
+        font-size:16px;
+        line-height:1.72;
+      }
+
+      .hero-flow,
+      .approach-grid,
+      .value-grid,
+      .production-grid,
+      .kpis{
+        grid-template-columns:1fr;
+      }
+
+      .page-title{
+        font-size:34px;
+      }
+
+      .section-title,
+      .demo-cta h2{
+        font-size:24px;
+      }
+
+      .hero-visual,
+      .panel,
+      .demo-cta{
+        padding:18px;
+      }
+
+      .demo-toolbar{
+        align-items:stretch;
+      }
+
+      .demo-toolbar select,
+      .demo-toolbar .btn{
+        width:100%;
+      }
+    }
+      /* Local spacing adjustment - invoices page only */
+    .page-invoices .section{
+      padding: 10px 0 0 !important;
+      margin-top: 18px !important;
+    }
+
+    .page-invoices .demo-hero{
+      margin-bottom: 18px !important;
+    }
+
+    .page-invoices .hero-visual{
+      margin-top: 18px !important;
+    }
+
+    .page-invoices .section-title{
+      margin: 0 0 8px !important;
+    }
+
+    .page-invoices .section-copy p + p{
+      margin-top: 10px !important;
+    }
+
+    .page-invoices .approach-grid,
+    .page-invoices .value-grid,
+    .page-invoices .production-grid{
+      margin-top: 12px !important;
+    }
+
+    .page-invoices .demo-intro{
+      margin-top: 10px !important;
+    }
+
+    .page-invoices .demo-shell{
+      margin-top: 12px !important;
+    }
+
+    .page-invoices .demo-cta{
+      margin-top: 18px !important;
+    }
+  </style>
+</head>
+<body class="page-invoices">
+  <header class="site-header">
+  <div class="container header-inner">
+    <a class="brand brand--personal" href="/en/" aria-label="Jérôme Jeannin">
+      <img src="/assets/logo.jpg" alt="" class="brand-mark">
+      <span class="brand-text">
+        <span class="brand-name">Jérôme Jeannin</span>
+        <span class="brand-label">Hestia Aura</span>
+      </span>
+    </a>
+
+    <nav class="nav" aria-label="Main navigation">
+      <a href="/en/">Home</a>
+      <a href="/en/about.html">About</a>
+      <a href="/en/showcase.html">Showcase</a>
+      <a href="/demos/invoices/" class="btn btn--sm">FR</a>
+    </nav>
   </div>
+</header>
 
-  <div class="grid">
-    <div class="panel">
-      <img id="thumb" src="/assets/media/sample1.jpg" alt="Invoice preview" class="thumb">
+<main class="demo-page">
+  <div class="demo-container">
+      <section class="demo-hero">
+        <p class="section-kicker">Document automation · Azure AI</p>
+        <h1 class="page-title">Automated invoice extraction with Azure</h1>
+        <p class="page-subtitle">
+          Automate the processing of PDF invoices to produce structured, usable data that can be integrated directly into management, control or reporting tools.
+        </p>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="hero-flow">
+            <div class="hero-step">
+              <span class="step-badge">01</span>
+              <strong class="step-title">PDF</strong>
+              <p>Invoices received in a variety of formats and structures.</p>
+            </div>
+
+            <div class="hero-arrow"></div>
+
+            <div class="hero-step">
+              <span class="step-badge">02</span>
+              <strong class="step-title">Extraction</strong>
+              <p>Automatically read the fields needed for business processing.</p>
+            </div>
+
+            <div class="hero-arrow"></div>
+
+            <div class="hero-step">
+              <span class="step-badge">03</span>
+              <strong class="step-title">Structuring</strong>
+              <p>Consistent formatting for control and reuse.</p>
+            </div>
+
+            <div class="hero-arrow"></div>
+
+            <div class="hero-step">
+              <span class="step-badge">04</span>
+              <strong class="step-title">Export</strong>
+              <p>A usable result for a management or reporting flow.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Business context</h2>
+        <div class="section-copy">
+          <p>
+            In many organisations, invoices arrive as PDFs and must then be reviewed, re-entered or reformatted before they can be used. This work is repetitive, time-consuming and prone to error, especially when formats vary by supplier, geography or billing practice.
+          </p>
+          <p>
+            The challenge is therefore not simply to read a document, but to turn unstructured content into usable data that is consistent enough to be checked, consolidated and reused.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Challenge</h2>
+        <div class="section-copy">
+          <p>
+            How can an incoming document be turned into reliable, structured and ready-to-use data without relying on systematic manual entry?
+          </p>
+          <p>
+            The difficulty lies both in the diversity of formats and in the need to produce a usable output: amounts, dates, suppliers, invoice lines, taxes and control fields must be extracted, checked and reused in a consistent format.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Approach</h2>
+        <div class="section-copy">
+          <p>
+            The process consists of uploading documents, automatically extracting the useful fields, structuring the results and generating a usable format. In this use case, Azure supports the document automation chain through a simple sequence: upload, process, check, reject where necessary, then export.
+          </p>
+          <p>
+            In practice, Azure Blob Storage provides the entry and exit points for documents and exports, Logic Apps orchestrates the processing stages, and Document Intelligence automatically extracts the key fields needed for business use.
+          </p>
+        </div>
+
+        <div class="approach-grid">
+          <div class="approach-card">
+            <strong>Document upload</strong>
+            <span>PDF invoices are uploaded to a dedicated entry point to start processing.</span>
+          </div>
+          <div class="approach-card">
+            <strong>Automated extraction</strong>
+            <span>Key information is read automatically to reduce data entry and manual handling.</span>
+          </div>
+          <div class="approach-card">
+            <strong>Structuring & checks</strong>
+            <span>Extracted data is reorganised into a consistent format, including the handling of rejected cases.</span>
+          </div>
+          <div class="approach-card">
+            <strong>Usable export</strong>
+            <span>The result can be retrieved in a reusable format for control, reporting or downstream integration.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">What the demo shows</h2>
+        <div class="demo-intro">
+          <strong>What you see here</strong>
+          <p>
+            The demonstration below illustrates the transition from a raw document to structured data. It shows a sample invoice, the main detected fields, the extracted lines and, optionally, the output JSON. The aim is not to detail the full implementation, but to make the business logic visible: turning a document into usable data.
+          </p>
+        </div>
+
+        <p class="local-note">
+          Front-end simulation using fictitious invoices: no real document is transmitted and this page does not call Azure or any other external service.
+        </p>
+
+        <div class="demo-shell">
+          <div class="demo-toolbar">
+            <label for="sample">Example:</label>
+            <select id="sample" aria-label="Choose an invoice example">
+              <option value="eu">EU invoice (VAT)</option>
+              <option value="us">US invoice (sales tax)</option>
+              <option value="ch">Swiss invoice (QR-bill)</option>
+            </select>
+            <button id="dl" class="btn">Download CSV</button>
+            <button id="toggleJson" class="btn btn--outline">Show JSON</button>
+          </div>
+
+          <div class="demo-grid">
+            <div class="panel">
+              <img id="thumb" src="/assets/media/invoice-eu.svg" alt="Invoice preview" class="invoice-preview">
+              <div class="preview-caption">
+                Example of a source document used as input. Its structure varies by case, but the business logic remains the same: retrieve the right information, then produce a consistent and reusable output.
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="kpis">
+                <div class="kpi">
+                  <div class="label">Supplier</div>
+                  <div class="val" id="k_supplier">-</div>
+                </div>
+                <div class="kpi">
+                  <div class="label">Invoice no.</div>
+                  <div class="val" id="k_num">-</div>
+                </div>
+                <div class="kpi">
+                  <div class="label">Date</div>
+                  <div class="val" id="k_date">-</div>
+                </div>
+              </div>
+
+              <div class="kpis">
+                <div class="kpi">
+                  <div class="label">Total</div>
+                  <div class="val" id="k_total">-</div>
+                </div>
+                <div class="kpi">
+                  <div class="label">VAT / Tax</div>
+                  <div class="val" id="k_vat">-</div>
+                </div>
+                <div class="kpi">
+                  <div class="label">Currency</div>
+                  <div class="val" id="k_currency">-</div>
+                </div>
+              </div>
+
+              <div class="lines-title">Detected lines</div>
+              <table id="lines">
+                <thead>
+                  <tr>
+                    <th>Description</th>
+                    <th>Qty</th>
+                    <th>Unit</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+
+              <div id="jsonWrap" class="json-wrap" hidden>
+                <span class="json-label">Structured output</span>
+                <pre id="json"></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Business value</h2>
+        <div class="section-copy">
+          <p>
+            This type of automation first reduces manual workload and limits errors caused by re-entry. It also improves data standardisation, making checks, consolidation and downstream use easier.
+          </p>
+          <p>
+            In practice, the value lies not only in extraction itself, but in making the data immediately reusable within a wider process: accounting, operational monitoring, control or reporting.
+          </p>
+        </div>
+
+        <div class="value-grid">
+          <div class="value-card">
+            <strong>Less manual work</strong>
+            <span>Less re-entry and fewer repetitive operations for teams.</span>
+          </div>
+          <div class="value-card">
+            <strong>More consistent data</strong>
+            <span>Standardised key information for easier control and use.</span>
+          </div>
+          <div class="value-card">
+            <strong>Smoother processing</strong>
+            <span>A faster transition from the source document to a ready-to-use format.</span>
+          </div>
+          <div class="value-card">
+            <strong>Reusable foundation</strong>
+            <span>A usable export for accounting, reporting, monitoring or broader integration.</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">From demo to enterprise use</h2>
+        <div class="production-grid">
+          <div class="production-card">
+            <strong>Confidence thresholds</strong>
+            <span>Identify critical fields and route them for human validation when their score is insufficient.</span>
+          </div>
+          <div class="production-card">
+            <strong>Exception handling</strong>
+            <span>Isolate rejected documents, retain the reason and allow controlled reprocessing.</span>
+          </div>
+          <div class="production-card">
+            <strong>Document security</strong>
+            <span>Restrict access, protect storage and apply the required retention period.</span>
+          </div>
+          <div class="production-card">
+            <strong>Monitoring and audit</strong>
+            <span>Log volumes, statuses, corrections and the processing version for each document.</span>
+          </div>
+        </div>
+        <p class="production-note">
+          Thresholds, validation rules and access levels depend on the accounting process and the associated risk. They must be tested on a representative sample before any production automation.
+        </p>
+      </section>
+
+      <section class="demo-cta">
+        <h2>Going further</h2>
+        <p>
+          This use case can form part of a wider chain: document automation, data pipeline ingestion, operational control or preparation of a dashboard output.
+        </p>
+        <p>
+          This also makes it a useful meeting point between automation, data structuring and broader analytical uses.
+        </p>
+        <div class="demo-actions">
+          <a href="mailto:contact@hestiaaura.com" class="btn">Contact me</a>
+          <a href="/en/showcase.html" class="btn btn--outline">Back to the showcase</a>
+        </div>
+      </section>
     </div>
-    <div class="panel">
-      <div class="kpis">
-        <div class="kpi"><div class="label">Supplier</div><div class="val" id="k_supplier">-</div></div>
-        <div class="kpi"><div class="label">Invoice #</div><div class="val" id="k_num">-</div></div>
-        <div class="kpi"><div class="label">Date</div><div class="val" id="k_date">-</div></div>
-      </div>
-      <div class="kpis">
-        <div class="kpi"><div class="label">Total</div><div class="val" id="k_total">-</div></div>
-        <div class="kpi"><div class="label">VAT</div><div class="val" id="k_vat">-</div></div>
-        <div class="kpi"><div class="label">Currency</div><div class="val" id="k_currency">-</div></div>
-      </div>
+  </main>
 
-      <table id="lines">
-        <thead><tr><th>Description</th><th>Qty</th><th>Unit</th><th>Amount</th></tr></thead>
-        <tbody></tbody>
-      </table>
-
-      <div id="jsonWrap" class="json-wrap" hidden>
-        <pre id="json"></pre>
-      </div>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>© <span id="y"></span> Jérôme Jeannin</span>
+      <a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
     </div>
-  </div>
-</main>
+  </footer>
 
-<footer class="site-footer"><div class="container footer-inner">
-  <span>© <span id="y"></span> Jérôme Jeannin</span><a href="mailto:contact@hestiaaura.com">contact@hestiaaura.com</a>
-</div></footer>
+  <script src="/app.js?v=invoices-fr-v5"></script>
+  <script>
+    const samples = {
+      eu: {
+        img: '/assets/media/invoice-eu.svg',
+        data: {
+          supplier: 'ACME SAS',
+          invoice_number: 'FV-2024-031',
+          date: '2024-08-01',
+          total: 1290.50,
+          vat: 107.54,
+          currency: 'EUR',
+          lines: [
+            {desc:'Support package', qty:1, unit:800, amount:800},
+            {desc:'Licenses (3)', qty:3, unit:140.17, amount:420.51},
+            {desc:'Shipping', qty:1, unit:69.99, amount:69.99}
+          ]
+        }
+      },
+      us: {
+        img: '/assets/media/invoice-us.svg',
+        data: {
+          supplier: 'Northwind LLC',
+          invoice_number: 'INV-2024-905',
+          date: '2024-07-18',
+          total: 980.00,
+          vat: 78.40,
+          currency: 'USD',
+          lines: [
+            {desc:'Data pipeline setup', qty:1, unit:820.00, amount:820.00},
+            {desc:'Cloud storage (month 1)', qty:1, unit:160.00, amount:160.00}
+          ]
+        }
+      },
+      ch: {
+        img: '/assets/media/invoice-ch.svg',
+        data: {
+          supplier: 'HelvetiaTech SA',
+          invoice_number: 'QR-2024-118',
+          date: '2024-09-01',
+          total: 2150.30,
+          vat: 166.20,
+          currency: 'CHF',
+          reference: 'RF18539007547034',
+          lines: [
+            {desc:'Platform subscription', qty:1, unit:1490.00, amount:1490.00},
+            {desc:'Integration hours (6h)', qty:6, unit:85.05, amount:510.30},
+            {desc:'Administrative fees', qty:1, unit:150.00, amount:150.00}
+          ]
+        }
+      }
+    };
 
-<script>
-const samples = {
-  ch: {
-    img: '/assets/media/invoice-ch.svg',
-    data: {
-      supplier: 'HelvetiaTech SA',
-      invoice_number: 'QR-2024-118',
-      date: '2024-09-01',
-      total: 2150.30,
-      vat: 166.20,
-      currency: 'CHF',
-      reference: 'RF18539007547034',
-      lines: [
-        {desc:'Platform subscription', qty:1, unit:1490.00, amount:1490.00},
-        {desc:'Integration hours (6)', qty:6, unit:85.05, amount:510.30},
-        {desc:'Admin fees', qty:1, unit:150.00, amount:150.00}
-      ]
+    const els = {
+      sample: document.getElementById('sample'),
+      thumb: document.getElementById('thumb'),
+      k_supplier: document.getElementById('k_supplier'),
+      k_num: document.getElementById('k_num'),
+      k_date: document.getElementById('k_date'),
+      k_total: document.getElementById('k_total'),
+      k_vat: document.getElementById('k_vat'),
+      k_currency: document.getElementById('k_currency'),
+      lines: document.querySelector('#lines tbody'),
+      json: document.getElementById('json'),
+      jsonWrap: document.getElementById('jsonWrap'),
+      dl: document.getElementById('dl'),
+      toggleJson: document.getElementById('toggleJson')
+    };
+
+    els.thumb.addEventListener('error', () => {
+      els.thumb.src = '/assets/media/invoice-eu.svg';
+    });
+
+    function format(n){
+      return new Intl.NumberFormat('en-GB', {
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(n).replace(/,/g, ' ');
     }
-  },
-  eu: {
-    img: '/assets/media/invoice-eu.svg',
-    data: {
-      supplier: 'ACME SAS',
-      invoice_number: 'FV-2024-031',
-      date: '2024-08-01',
-      total: 1290.50,
-      vat: 107.54,
-      currency: 'EUR',
-      lines: [
-        {desc:'Support package', qty:1, unit:800, amount:800},
-        {desc:'Licenses (3)', qty:3, unit:140.17, amount:420.51},
-        {desc:'Shipping', qty:1, unit:69.99, amount:69.99}
-      ]
+
+    function render(inv){
+      els.k_supplier.textContent = inv.supplier || '-';
+      els.k_num.textContent = inv.invoice_number || '-';
+      els.k_date.textContent = inv.date || '-';
+      els.k_total.textContent = (inv.total != null ? format(inv.total) : '-') + (inv.currency ? ' ' + inv.currency : '');
+      els.k_vat.textContent = inv.vat != null ? format(inv.vat) : '-';
+      els.k_currency.textContent = inv.currency || '-';
+
+      els.lines.innerHTML = '';
+      (inv.lines || []).forEach(l => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td>' + l.desc + '</td><td>' + l.qty + '</td><td>' + format(l.unit) + '</td><td>' + format(l.amount) + '</td>';
+        els.lines.appendChild(tr);
+      });
+
+      els.json.textContent = JSON.stringify(inv, null, 2);
     }
-  },
-  us: {
-    img: '/assets/media/invoice-us.svg',
-    data: {
-      supplier: 'Northwind LLC',
-      invoice_number: 'INV-2024-905',
-      date: '2024-07-18',
-      total: 980.00,
-      vat: 0.00,
-      currency: 'USD',
-      sales_tax: 78.40,
-      lines: [
-        {desc:'Data pipeline setup', qty:1, unit:820.00, amount:820.00},
-        {desc:'Cloud storage (month 1)', qty:1, unit:160.00, amount:160.00}
-      ]
+
+    function toCSV(inv){
+      const rows = [['desc','qty','unit','amount']];
+      for (const l of inv.lines || []) {
+        rows.push([l.desc, l.qty, l.unit, l.amount]);
+      }
+      return rows.map(r => r.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',')).join('\n');
     }
-  }
-};
 
-const els = {
-  sample: document.getElementById('sample'),
-  thumb: document.getElementById('thumb'),
-  k_supplier: document.getElementById('k_supplier'),
-  k_num: document.getElementById('k_num'),
-  k_date: document.getElementById('k_date'),
-  k_total: document.getElementById('k_total'),
-  k_vat: document.getElementById('k_vat'),
-  k_currency: document.getElementById('k_currency'),
-  lines: document.querySelector('#lines tbody'),
-  json: document.getElementById('json'),
-  jsonWrap: document.getElementById('jsonWrap'),
-  dl: document.getElementById('dl'),
-  toggleJson: document.getElementById('toggleJson'),
-};
-// Fallback si l'aperçu image échoue à se charger
-els.thumb.addEventListener('error', () => {
-  els.thumb.src = '/assets/media/invoice-ch.svg';
-});
+    let current = samples.eu;
 
-function format(n){ return new Intl.NumberFormat('en-CH',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n); }
+    function applySample(key){
+      current = samples[key];
+      els.thumb.src = current.img;
+      render(current.data);
+    }
 
-function render(inv){
-  els.k_supplier.textContent = inv.supplier || '-';
-  els.k_num.textContent = inv.invoice_number || '-';
-  els.k_date.textContent = inv.date || '-';
-  els.k_total.textContent = (inv.total!=null? format(inv.total):'-') + (inv.currency?' '+inv.currency:'');
-  els.k_vat.textContent = inv.vat!=null? format(inv.vat):'-';
-  els.k_currency.textContent = inv.currency || '-';
+    els.sample.addEventListener('change', e => applySample(e.target.value));
 
-  els.lines.innerHTML = '';
-  (inv.lines||[]).forEach(l=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML = '<td>'+l.desc+'</td><td>'+l.qty+'</td><td>'+format(l.unit)+'</td><td>'+format(l.amount)+'</td>';
-    els.lines.appendChild(tr);
-  });
+    els.toggleJson.addEventListener('click', () => {
+      const hidden = els.jsonWrap.hasAttribute('hidden');
+      if (hidden) {
+        els.jsonWrap.removeAttribute('hidden');
+        els.toggleJson.textContent = 'Hide JSON';
+      } else {
+        els.jsonWrap.setAttribute('hidden', '');
+        els.toggleJson.textContent = 'Show JSON';
+      }
+    });
 
-  els.json.textContent = JSON.stringify(inv, null, 2);
-}
+    els.dl.addEventListener('click', () => {
+      const csv = toCSV(current.data);
+      const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'invoice_lines.csv';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
 
-function toCSV(inv){
-  const rows = [['desc','qty','unit','amount']];
-  for(const l of inv.lines||[]){ rows.push([l.desc,l.qty,l.unit,l.amount]); }
-  return rows.map(r => r.map(v => '\"'+String(v).replace(/\"/g,'\"\"')+'\"').join(',')).join('\\n');
-}
+    const urlSample = new URLSearchParams(location.search).get('sample');
+    const valid = ['eu','us','ch'];
+    const initial = valid.includes(urlSample) ? urlSample : 'eu';
+    els.sample.value = initial;
+    applySample(initial);
 
-let current = samples.ch;
-
-function applySample(key){
-  current = samples[key];
-  els.thumb.src = current.img;
-  render(current.data);
-}
-
-els.sample.addEventListener('change',e=>applySample(e.target.value));
-els.toggleJson.addEventListener('click',()=>{
-  const h = els.jsonWrap.hasAttribute('hidden');
-  if(h){ els.jsonWrap.removeAttribute('hidden'); els.toggleJson.textContent='Hide JSON'; }
-  else { els.jsonWrap.setAttribute('hidden',''); els.toggleJson.textContent='Show JSON'; }
-});
-els.dl.addEventListener('click',()=>{
-  const csv = toCSV(current.data);
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'invoice_lines.csv';
-  a.click();
-  URL.revokeObjectURL(a.href);
-});
-
-// init (avec lecture du paramètre ?sample=ch|eu|us)
-const urlSample = new URLSearchParams(location.search).get('sample');
-const valid = ['ch','eu','us'];
-const initial = valid.includes(urlSample) ? urlSample : 'eu';
-els.sample.value = initial;
-applySample(initial);
-
-</script>
-</body></html>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
