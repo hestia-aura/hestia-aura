@@ -24,6 +24,33 @@ a{color:#fff;text-decoration:none}.container{max-width:1080px;margin:0 auto;padd
 .contact-card input,.contact-card textarea{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:#0b0c10;color:#fff}
 .btn{display:inline-block;background:#6366f1;color:#fff;border:none;border-radius:12px;padding:12px 16px;font-weight:600;box-shadow:0 6px 20px rgba(99,102,241,.35);cursor:pointer}
 .btn:hover{transform:translateY(-1px)}
+
+/* LinkedIn icon link - shared across the main pages */
+.linkedin-icon-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:46px;
+  height:46px;
+  flex:0 0 46px;
+  padding:0;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:12px;
+  background:linear-gradient(180deg,rgba(18,23,34,.96),rgba(8,11,18,.98));
+  color:#87b9e9;
+  text-decoration:none;
+  box-shadow:0 8px 22px rgba(0,0,0,.28),0 0 0 1px rgba(10,102,194,.06);
+  transition:transform .2s ease,border-color .2s ease,color .2s ease,box-shadow .2s ease;
+}
+.linkedin-icon-link svg{display:block;width:23px;height:23px;fill:currentColor;}
+.linkedin-icon-link:hover{
+  transform:translateY(-2px);
+  color:#70b5f9;
+  border-color:rgba(10,102,194,.68);
+  box-shadow:0 10px 26px rgba(0,0,0,.32),0 0 18px rgba(10,102,194,.18);
+}
+.linkedin-icon-link:focus-visible{outline:2px solid #8be5ff;outline-offset:3px;}
+@media (prefers-reduced-motion:reduce){.linkedin-icon-link{transition:none;}}
 .site-footer{padding:22px 0;border-top:1px solid rgba(255,255,255,.06)}.footer-inner{display:flex;align-items:center;justify-content:space-between}
 /* -------- Intro video -------- */
 .intro{position:fixed;inset:0;z-index:9999;background:#000;
