@@ -401,26 +401,27 @@
 </head>
 
 <body>
+  <a class="skip-link" href="#main-content">Aller au contenu principal</a>
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
-        <img src="/assets/logo.jpg" alt="logo" class="brand-mark">
+        <img src="/assets/logo.jpg" alt="" class="brand-mark">
         <span class="brand-text">
           <span class="brand-name">Jérôme Jeannin</span>
           <span class="brand-label">Hestia Aura</span>
         </span>
       </a>
 
-      <nav class="nav">
+      <nav class="nav" aria-label="Navigation principale">
         <a href="/">Accueil</a>
-        <a href="/about.html">À propos</a>
+        <a href="/about.html" aria-current="page">À propos</a>
         <a href="/showcase.html">Showcase</a>
         <a href="/en/about.html" class="btn btn--sm">EN</a>
       </nav>
     </div>
   </header>
 
-  <main id="top">
+  <main id="main-content" tabindex="-1">
     <section class="about-hero">
       <div class="container hero-grid">
         <div>

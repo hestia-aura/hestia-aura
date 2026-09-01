@@ -1065,14 +1065,15 @@
 </head>
 
 <body>
+  <a class="skip-link" href="#main-content">Aller au contenu principal</a>
   <section class="intro-screen" id="intro-screen" aria-label="Introduction du site">
-    <video class="intro-video" id="intro-video" autoplay muted playsinline preload="auto">
+    <video class="intro-video" id="intro-video" autoplay muted playsinline preload="auto" aria-hidden="true">
       <source src="/assets/intro.webm" type="video/webm">
       <source src="/assets/intro.mp4" type="video/mp4">
     </video>
 
     <div class="intro-content">
-      <h1 class="intro-claim"><span>Lire le réel</span><span>par la donnée</span></h1>
+      <p class="intro-claim"><span>Lire le réel</span><span>par la donnée</span></p>
     </div>
 
     <p class="intro-quote">"Le grand livre de l'univers est écrit en langue mathématique." Galilée</p>
@@ -1083,15 +1084,15 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand brand--personal" href="/" aria-label="Jérôme Jeannin">
-        <img src="/assets/logo.jpg" alt="logo" class="brand-mark">
+        <img src="/assets/logo.jpg" alt="" class="brand-mark">
         <span class="brand-text">
           <span class="brand-name">Jérôme Jeannin</span>
           <span class="brand-label">Hestia Aura</span>
         </span>
       </a>
 
-      <nav class="nav">
-        <a href="/">Accueil</a>
+      <nav class="nav" aria-label="Navigation principale">
+        <a href="/" aria-current="page">Accueil</a>
         <a href="/about.html">À propos</a>
         <a href="/showcase.html">Showcase</a>
         <a href="/en/" class="btn btn--sm">EN</a>
@@ -1099,7 +1100,7 @@
     </div>
   </header>
 
-  <main id="contenu">
+  <main id="main-content" tabindex="-1">
     <section class="editorial-hero">
       <div class="container editorial-grid">
         <div>
@@ -1366,10 +1367,14 @@
             <input type="hidden" name="subject" value="Nouveau message - Hestia Aura">
             <input type="hidden" name="from_name" value="Portfolio Hestia Aura">
             <input type="checkbox" name="botcheck" class="hidden" style="display:none">
-            <input type="text" name="name" placeholder="Nom" autocomplete="name" required>
-            <input type="email" name="email" placeholder="E-mail" autocomplete="email" required>
-            <input type="text" name="Objet" placeholder="Sujet">
-            <textarea name="message" placeholder="Votre message" required></textarea>
+            <label class="sr-only" for="contact-name">Nom</label>
+            <input id="contact-name" type="text" name="name" placeholder="Nom" autocomplete="name" required>
+            <label class="sr-only" for="contact-email">E-mail</label>
+            <input id="contact-email" type="email" name="email" placeholder="E-mail" autocomplete="email" required>
+            <label class="sr-only" for="contact-subject">Sujet</label>
+            <input id="contact-subject" type="text" name="Objet" placeholder="Sujet">
+            <label class="sr-only" for="contact-message">Votre message</label>
+            <textarea id="contact-message" name="message" placeholder="Votre message" required></textarea>
             <button class="btn" type="submit">Envoyer</button>
             <p class="form-status" aria-live="polite"></p>
           </form>
@@ -1391,7 +1396,8 @@
       const intro = document.getElementById('intro-screen');
       const video = document.getElementById('intro-video');
       const scrollBtn = document.querySelector('.intro-scroll');
-      const target = document.getElementById('contenu');
+      const skipLink = document.querySelector('.skip-link');
+      const target = document.getElementById('main-content');
       const seenKey = 'hestia_intro_seen';
 
       if (!intro || !target) return;
@@ -1407,6 +1413,13 @@
             target.scrollIntoView({ behavior: 'smooth' });
           }, 250);
         }
+      }
+
+      if (skipLink) {
+        skipLink.addEventListener('click', function () {
+          closeIntro(false);
+          setTimeout(function () { target.focus({ preventScroll: true }); }, 0);
+        });
       }
 
       if (sessionStorage.getItem(seenKey) === '1') {
